@@ -1,0 +1,359 @@
+<body>
+
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <ul>
+     <li><a href="index.html">Početna</a></li>
+      <li><a href="#">Mapa</a></li>
+      <li><a href="#">Chat</a></li>
+      <a href="login.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Prijavi se</a>
+      <a href="prijava-prodavca.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Postani prodavac</a>
+    </ul>
+  </nav>
+</header>
+
+
+  ...
+
+<style>
+  :root {
+    --zelena: #2e7d32;
+    --zelena-svetla: #4caf50;
+    --zemlja: #5d4037;
+    --siva: #757575;
+    --svetlo: #f8f9f5;
+    --belo: #ffffff;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: url('https://images.unsplash.com/photo-1606857521015-7f9fcf423740?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(248, 249, 245, 0.88); /* malo svetlije da tekst bude čitljiviji */
+    z-index: -1;
+  }
+
+  header {
+    background: rgba(46, 125, 50, 0.94);
+    color: white;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .logo { font-size: 1.8rem; font-weight: 700; }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2.5rem;
+  }
+
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  nav a:hover { color: #c8e6c9; }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 5rem;
+  }
+
+  h1 {
+    color: var(--zemlja);
+    text-align: center;
+    margin: 1.5rem 0 2.5rem;
+    font-size: 2.6rem;
+  }
+
+  .intro {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+    font-size: 1.15rem;
+    color: #444;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .product-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+    transition: all 0.3s ease;
+    text-align: center;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 14px 38px rgba(0,0,0,0.15);
+  }
+
+  .product-img {
+    height: 200px;          /* manje slike, preglednije */
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+  }
+
+  .product-card:hover .product-img img {
+    transform: scale(1.08);
+  }
+
+  .product-info {
+    padding: 1.3rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .product-title {
+    font-size: 1.32rem;
+    margin-bottom: 0.8rem;
+    color: var(--zemlja);
+    line-height: 1.3;
+  }
+
+  .btn {
+    background: var(--zelena-svetla);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+    margin-top: auto;
+  }
+
+  .btn:hover {
+    background: var(--zelena);
+  }
+
+  footer {
+    background: var(--zemlja);
+    color: white;
+    text-align: center;
+    padding: 4rem 1rem 2.5rem;
+    margin-top: 6rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 2.2rem; }
+    .products-grid { gap: 1.6rem; }
+  }
+</style>
+
+<!-- ... header ostaje isti ... -->
+
+<div class="container">
+
+  <h1>Povrće direktno sa imanja</h1>
+
+  <div class="intro">
+    Sveže, sezonsko povrće uzgojeno u Srbiji – direktno sa polja i plastenika do vaše kuhinje.
+  </div>
+
+  <div class="products-grid">
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="blitva.jpg" alt="Blitva">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Blitva</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="cvekla.jpg" alt="Cvekla">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Cvekla</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="crni i beli luk.jpg" alt="Crni i beli luk">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Crni i beli luk</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="krastavac.jpg" alt="Krastavac">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Krastavac</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="krompir.jpg" alt="Krompir">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Krompir</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="kupus.jpg" alt="Kupus">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Kupus</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="paprika.jpg" alt="Paprika">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Paprika</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="paradajz.jpg" alt="Paradajz">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Paradajz</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+  <div class="product-card">
+  <div class="product-img">
+    <img src="images.jpg" alt="Patlidžan">
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Patlidžan</h3>
+    <a href="#" class="btn">Pogledaj proizvođače</a>
+  </div>
+</div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="sargarepa.jpg" alt="Šargarepa">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Šargarepa</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="spanac.jpg" alt="Spanać">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Spanać</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="tikvice.jpg" alt="Tikvice">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">Tikvice</h3>
+        <a href="#" class="btn">Pogledaj proizvođače</a>
+      </div>
+    </div>
+<div class="product-card">
+  <div class="product-img">
+    <img src="boranija.jpg" alt="Boranija">
+  </div>
+  
+<div class="product-info">
+    <h3 class="product-title">Boranija</h3>
+    <a href="#" class="btn">Pogledaj proizvođače</a>
+  </div>
+</div>
+
+<div class="product-card">
+  <div class="product-img">
+    <img src="grasak.jpg" alt="Grašak">
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Grašak</h3>
+    <a href="#" class="btn">Pogledaj proizvođače</a>
+  </div>
+</div>
+
+<div class="product-card">
+  <div class="product-img">
+    <img src="pasulj.jpg" alt="Pasulj">
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Pasulj</h3>
+    <a href="#" class="btn">Pogledaj proizvođače</a>
+  </div>
+</div>
+
+<div class="product-card">
+  <div class="product-img">
+    <img src="rotkvice.jpg" alt="Rotkvice">
+  </div>
+  <div class="product-info">
+    <h3 class="product-title">Rotkvice</h3>
+    <a href="#" class="btn">Pogledaj proizvođače</a>
+  </div>
+</div>
