@@ -230,20 +230,44 @@
       <input type="url" name="instagram" placeholder="Instagram link" style="margin-top:0.8rem;">
     </div>
 
-    <div class="form-group">
-      <label>Niše koje prodajete <span style="color:red;">*</span></label>
-      <select multiple name="nise" required style="height:140px;">
-        <option>Povrće</option>
-        <option>Voće</option>
-        <option>Mlečni proizvodi</option>
-        <option>Meso i mesne prerađevine</option>
-        <option>Med i pčelinji proizvodi</option>
-        <option>Jaja</option>
-        <option>Bilje i zdravlje</option>
-        <option>Žitarice</option>
-        <option>Gotova jela</option>
-      </select>
-    </div>
+<div class="form-group">
+  <label>Niše koje prodajete <span style="color:red;">*</span></label>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin-top: 0.5rem;">
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Povrće" required> Povrće
+    </label>
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Voće"> Voće
+    </label>
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Mlečni proizvodi"> Mlečni proizvodi
+    </label>
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Meso i mesne prerađevine"> Meso i mesne prerađevine
+    </label>
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Med i pčelinji proizvodi"> Med i pčelinji proizvodi
+    </label>
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Jaja"> Jaja
+    </label>
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Bilje i zdravlje"> Bilje i zdravlje
+    </label>
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Žitarice"> Žitarice
+    </label>
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <input type="checkbox" name="nise" value="Gotova jela"> Gotova jela
+    </label>
+  </div>
+</div>
+
+<!-- Dodaj polje za lokaciju (npr. iznad niša) -->
+<div class="form-group">
+  <label for="lokacija">Lokacija (grad/selo, okolina) <span style="color:red;">*</span></label>
+  <input type="text" id="lokacija" name="lokacija" placeholder="npr. Selo Banovo Polje, okolina Mačve" required>
+</div>
 
     <div class="form-group">
       <label for="opis">Opis domaćinstva i proizvoda</label>
@@ -316,5 +340,6 @@
 </body>
 
 </html>
+
 
 
