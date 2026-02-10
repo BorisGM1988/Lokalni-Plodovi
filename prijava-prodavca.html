@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registracija prodavca – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
- <style>
+  <style>
     :root {
       --zelena: #2e7d32;
       --zelena-svetla: #4caf50;
@@ -63,22 +63,6 @@
 
     nav a:hover { color: #c8e6c9; }
 
-    .btn-login {
-      background: white;
-      color: var(--zelena);
-      border: 2px solid var(--zelena-svetla);
-      padding: 0.6rem 1.4rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-
-    .btn-login:hover {
-      background: var(--zelena-svetla);
-      color: white;
-    }
-
     .container {
       max-width: 900px;
       margin: 2rem auto;
@@ -96,6 +80,8 @@
       padding: 2.5rem;
       border-radius: 16px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .form-group {
@@ -113,14 +99,13 @@
     input[type="email"],
     input[type="tel"],
     input[type="password"],
-    input[type="url"],
-    textarea,
-    select {
+    textarea {
       width: 100%;
       padding: 0.9rem;
       border: 1px solid #ddd;
       border-radius: 8px;
       font-size: 1rem;
+      box-sizing: border-box;
     }
 
     textarea {
@@ -129,7 +114,10 @@
     }
 
     .checkbox-group {
-      margin: 1.5rem 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.5rem;
     }
 
     .submit-btn {
@@ -185,10 +173,9 @@
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="prodavci.html">Svi prodavci</a></li>
-      <li><a href="#">Mapa</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
       <li><a href="#">Chat</a></li>
 
-      <!-- Prikazuje se SAMO ako je ulogovan -->
       <li id="moj-profil-li" style="display:none;">
         <a href="moj-profil.html">Moj profil</a>
       </li>
@@ -196,7 +183,6 @@
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
 
-      <!-- Prikazuje se SAMO ako NIJE ulogovan -->
       <li id="prijavi-se-li">
         <a href="login.html">Prijavi se</a>
       </li>
@@ -207,54 +193,38 @@
   </nav>
 </header>
 
-<script>
-  // Proveri da li je korisnik ulogovan
-  const korisnik = localStorage.getItem('trenutniKorisnik');
-
-  if (korisnik) {
-    document.getElementById('moj-profil-li').style.display = 'list-item';
-    document.getElementById('odjavi-se-li').style.display = 'list-item';
-    document.getElementById('prijavi-se-li').style.display = 'none';
-    document.getElementById('postani-prodavac-li').style.display = 'none';
-  } else {
-    document.getElementById('moj-profil-li').style.display = 'none';
-    document.getElementById('odjavi-se-li').style.display = 'none';
-    document.getElementById('prijavi-se-li').style.display = 'list-item';
-    document.getElementById('postani-prodavac-li').style.display = 'list-item';
-  }
-
-  function odjaviSe() {
-    localStorage.removeItem('trenutniKorisnik');
-    window.location.href = 'index.html';
-  }
-</script>
-
 <div class="container">
 
   <h1>Registracija prodavca</h1>
-  <form id="registration-form" action="https://script.google.com/macros/s/AKfycbyTs53qtSRxsUlBeEq28l3jAxkDsZ_V2NE_PEc2SfaBlyEP-6a7Se_HChXFxIOM38gl-w/exec" method="POST">
+
+  <form id="registration-form">
     <div class="form-group">
       <label for="ime">Ime i prezime / Naziv domaćinstva <span style="color:red;">*</span></label>
-      <input type="text" id="ime" name="ime" required>
+      <input type="text" id="ime" required>
     </div>
 
     <div class="form-group">
       <label for="email">Email <span style="color:red;">*</span></label>
-      <input type="email" id="email" name="email" required>
+      <input type="email" id="email" required>
     </div>
 
     <div class="form-group">
       <label for="lozinka">Lozinka <span style="color:red;">*</span></label>
-      <input type="password" id="lozinka" name="lozinka" required>
+      <input type="password" id="lozinka" required minlength="6">
     </div>
 
     <div class="form-group">
       <label for="telefon">Telefon <span style="color:red;">*</span></label>
-      <input type="tel" id="telefon" name="telefon" required>
+      <input type="tel" id="telefon" required>
     </div>
 
     <div class="form-group">
-      <label>Kontakt opcije (označi koje koristiš)</label>
+      <label for="lokacija">Lokacija (grad, selo, okolina...) <span style="color:red;">*</span></label>
+      <input type="text" id="lokacija" required placeholder="npr. Kragujevac, selo Banovo Polje...">
+    </div>
+
+    <div class="form-group">
+      <label>Kontakt opcije</label>
       <div class="checkbox-group">
         <label><input type="checkbox" name="viber"> Viber</label>
         <label><input type="checkbox" name="whatsapp"> WhatsApp</label>
@@ -263,77 +233,21 @@
     </div>
 
     <div class="form-group">
-      <label>Socijalne mreže</label>
-      <input type="url" name="facebook" placeholder="Facebook link">
-      <input type="url" name="instagram" placeholder="Instagram link" style="margin-top:0.8rem;">
+      <label>Niše koje prodajete <span style="color:red;">*</span></label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="nise" value="Povrće"> Povrće</label>
+        <label><input type="checkbox" name="nise" value="Voće"> Voće</label>
+        <label><input type="checkbox" name="nise" value="Mlečni proizvodi"> Mlečni proizvodi</label>
+        <label><input type="checkbox" name="nise" value="Meso i mesne prerađevine"> Meso i mesne prerađevine</label>
+        <label><input type="checkbox" name="nise" value="Med i pčelinji proizvodi"> Med i pčelinji proizvodi</label>
+        <label><input type="checkbox" name="nise" value="Jaja"> Jaja</label>
+        <label><input type="checkbox" name="nise" value="Bilje i zdravlje"> Bilje i zdravlje</label>
+      </div>
     </div>
-
-<!-- Nova lokacija (slobodan unos) -->
-<div class="form-group">
-  <label for="lokacija">Lokacija (grad, selo, okolina...) <span style="color:red;">*</span></label>
-  <input type="text" id="lokacija" name="lokacija" placeholder="npr. Kragujevac, selo Banovo Polje, okolina Mačve..." required>
-</div>
-
-<!-- Niše – kvadratići (checkbox-ovi) -->
-<div class="form-group">
-  <label>Niše koje prodajete <span style="color:red;">*</span></label>
-  <div class="checkbox-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; margin-top: 0.5rem;">
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Povrće</span>
-      <input type="checkbox" name="nise" value="Povrće">
-    </label>
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Voće</span>
-      <input type="checkbox" name="nise" value="Voće">
-    </label>
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Mlečni proizvodi</span>
-      <input type="checkbox" name="nise" value="Mlečni proizvodi">
-    </label>
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Meso i mesne prerađevine</span>
-      <input type="checkbox" name="nise" value="Meso i mesne prerađevine">
-    </label>
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Med i pčelinji proizvodi</span>
-      <input type="checkbox" name="nise" value="Med i pčelinji proizvodi">
-    </label>
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Jaja</span>
-      <input type="checkbox" name="nise" value="Jaja">
-    </label>
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Bilje i zdravlje</span>
-      <input type="checkbox" name="nise" value="Bilje i zdravlje">
-    </label>
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Žitarice</span>
-      <input type="checkbox" name="nise" value="Žitarice">
-    </label>
-    <label style="display: flex; justify-content: space-between; align-items: center; background: #f8f9f5; padding: 0.8rem; border-radius: 8px; cursor: pointer;">
-      <span>Gotova jela</span>
-      <input type="checkbox" name="nise" value="Gotova jela">
-    </label>
-  </div>
-</div>
 
     <div class="form-group">
       <label for="opis">Opis domaćinstva i proizvoda</label>
-      <textarea id="opis" name="opis" placeholder="Napišite nešto o sebi, vašim proizvodima, tradiciji..."></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Slike (profilna, farma, proizvodi)</label>
-      <input type="file" multiple accept="image/*" name="slika_linkovi">
-    </div>
-
-    <div style="margin:1.5rem 0;">
-      <label>
-        <input type="checkbox" name="uslovi" required> Slažem se sa 
-        <a href="#" style="color:var(--zelena);">uslovima korišćenja</a> i 
-        <a href="#" style="color:var(--zelena);">politikama privatnosti</a> 
-        <span style="color:red;">*</span>
-      </label>
+      <textarea id="opis" placeholder="Napišite nešto o sebi, proizvodima, tradiciji..."></textarea>
     </div>
 
     <button type="submit" class="submit-btn">Pošalji zahtev za verifikaciju</button>
@@ -344,10 +258,6 @@
       Hvala što želite da budete deo LokalniPlodovi!
     </div>
   </form>
-
-  <div class="note">
-    Već imate nalog? <a href="prijava.html" style="color:var(--zelena);">Prijavite se ovde</a>
-  </div>
 
 </div>
 
@@ -364,32 +274,29 @@
     e.preventDefault();
 
     if (!this.checkValidity()) {
-      alert('Molimo popunite sva obavezna polja i čekirajte uslove!');
+      alert('Molimo popunite sva obavezna polja!');
       return;
     }
 
-    // Prikazujemo poruku
+    const podaci = {
+      ime: document.getElementById('ime').value,
+      email: document.getElementById('email').value,
+      telefon: document.getElementById('telefon').value,
+      lokacija: document.getElementById('lokacija').value,
+      nise: Array.from(document.querySelectorAll('input[name="nise"]:checked')).map(cb => cb.value),
+      opis: document.getElementById('opis').value,
+      registeredAt: new Date().toISOString()
+    };
+
+    localStorage.setItem('trenutniKorisnik', JSON.stringify(podaci));
+
     document.getElementById('success-message').style.display = 'block';
-    document.getElementById('success-message').scrollIntoView({ behavior: 'smooth' });
 
-    // Očisti formu
-    this.reset();
-
-    // Simuliramo slanje – vidiš podatke u konzoli (F12 → Console)
-    const formData = new FormData(this);
-    const data = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-    console.log('Podaci koji bi bili poslati:', data);
+    setTimeout(() => {
+      window.location.href = 'moj-profil.html';
+    }, 2000);
   });
 </script>
 
 </body>
-
 </html>
-
-
-
-
-
