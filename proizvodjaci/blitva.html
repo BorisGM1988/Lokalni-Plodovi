@@ -132,8 +132,48 @@
     window.location.href = '../index.html';
   }
 </script>
+
+<footer>
+  <div class="container">
+    <h2>LokalniPlodovi</h2>
+    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
+  </div>
+</footer>
+
+<script>
+  // Logika za prikazivanje/sakrivanje opcija u header-u
+  const korisnik = localStorage.getItem('trenutniKorisnik');
+
+  if (korisnik) {
+    document.getElementById('moj-profil-li').style.display = 'list-item';
+    document.getElementById('odjavi-se-li').style.display = 'list-item';
+    document.getElementById('prijavi-se-li').style.display = 'none';
+    document.getElementById('postani-prodavac-li').style.display = 'none';
+  } else {
+    document.getElementById('moj-profil-li').style.display = 'none';
+    document.getElementById('odjavi-se-li').style.display = 'none';
+    document.getElementById('prijavi-se-li').style.display = 'list-item';
+    document.getElementById('postani-prodavac-li').style.display = 'list-item';
+  }
+
+  function odjaviSe() {
+    localStorage.removeItem('trenutniKorisnik');
+    window.location.href = 'index.html';
+  }
+
+  // Automatski naslov na osnovu imena fajla
+  const fajlIme = window.location.pathname.split('/').pop().replace('.html', '');
+  const proizvod = fajlIme.replace('proizvodjaci-', '').replace(/-/g, ' ');
+  const prviVeliki = proizvod.charAt(0).toUpperCase() + proizvod.slice(1);
+  document.getElementById('naslov').textContent = `Proizvođači ${prviVeliki}`;
+  document.title = `Proizvođači ${prviVeliki} – LokalniPlodovi`;
+</script>
+
+
 </body>
 </html>
+
 
 
 
