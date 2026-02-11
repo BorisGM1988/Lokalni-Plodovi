@@ -112,6 +112,27 @@
   </nav>
 </header>
 
+<script>
+  const korisnik = localStorage.getItem('trenutniKorisnik');
+
+  if (korisnik) {
+    document.getElementById('moj-profil-li').style.display = 'list-item';
+    document.getElementById('odjavi-se-li').style.display = 'list-item';
+    document.getElementById('prijavi-se-li').style.display = 'none';
+    document.getElementById('postani-prodavac-li').style.display = 'none';
+  } else {
+    document.getElementById('moj-profil-li').style.display = 'none';
+    document.getElementById('odjavi-se-li').style.display = 'none';
+    document.getElementById('prijavi-se-li').style.display = 'list-item';
+    document.getElementById('postani-prodavac-li').style.display = 'list-item';
+  }
+
+  function odjaviSe() {
+    localStorage.removeItem('trenutniKorisnik');
+    window.location.href = '/';
+  }
+</script>
+
 <div class="container">
   <h1>Proizvođači blitva</h1>
   <p>Ova stranica je za sada prazna. Kasnije će ovde biti lista proizvođača blitva, njihovi profili, proizvodi i kontakt.</p>
@@ -149,3 +170,4 @@
 
 </body>
 </html>
+
