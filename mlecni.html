@@ -186,14 +186,18 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="Prodavci.html">Svi prodavci</a></li>
-      <li><a href="#">Mapa</a></li>
-      <li><a href="#">Chat</a></li>
+     <li><a href="../../index.html">Početna</a></li>
+      <li><a href="../../Prodavci.html">Svi prodavci</a></li>
+      <li><a href="../../mape.html">Mapa</a></li>
+      <li><a href="../../chat.html">Chat</a></li>
 
       <!-- Prikazuje se SAMO ako je ulogovan -->
       <li id="moj-profil-li" style="display:none;">
         <a href="moj-profil.html">Moj profil</a>
+
+      <!-- Prikazuje se SAMO ako je ulogovan -->
+      <li id="moj-profil-li" style="display:none;">
+        <a href="../../moj-profil.html">Moj profil</a>
       </li>
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
@@ -201,10 +205,10 @@
 
       <!-- Prikazuje se SAMO ako NIJE ulogovan -->
       <li id="prijavi-se-li">
-        <a href="login.html">Prijavi se</a>
+        <a href="../../login.html">Prijavi se</a>
       </li>
       <li id="postani-prodavac-li">
-        <a href="registracija.html">Postani prodavac</a>
+        <a href="../../registracija.html">Postani prodavac</a>
       </li>
     </ul>
   </nav>
@@ -228,7 +232,7 @@
 
   function odjaviSe() {
     localStorage.removeItem('trenutniKorisnik');
-    window.location.href = 'index.html';
+    window.location.href = '../../index.html';
   }
 </script>
 
@@ -249,7 +253,7 @@
       </div>
       <div class="product-info">
         <h3 class="product-title">Kajmak</h3>
-        <a href="#" class="btn">Pogledaj proizvođače</a>
+        <a href="proizvodjaci/mleko/kajmak.html" class="btn">Pogledaj proizvođače</a>
       </div>
     </div>
 
@@ -259,7 +263,7 @@
       </div>
       <div class="product-info">
         <h3 class="product-title">Sir</h3>
-        <a href="#" class="btn">Pogledaj proizvođače</a>
+        <a href="proizvodjaci/mleko/sir.html" class="btn">Pogledaj proizvođače</a>
       </div>
     </div>
 
@@ -269,7 +273,7 @@
       </div>
       <div class="product-info">
         <h3 class="product-title">Pavlaka</h3>
-        <a href="#" class="btn">Pogledaj proizvođače</a>
+        <a href="proizvodjaci/mleko/pavlaka.html" class="btn">Pogledaj proizvođače</a>
       </div>
     </div>
 
@@ -279,7 +283,7 @@
       </div>
       <div class="product-info">
         <h3 class="product-title">Mleko</h3>
-        <a href="#" class="btn">Pogledaj proizvođače</a>
+        <a href="proizvodjaci/mleko/mleko.html" class="btn">Pogledaj proizvođače</a>
       </div>
     </div>
 
@@ -289,7 +293,7 @@
       </div>
       <div class="product-info">
         <h3 class="product-title">Jogurt</h3>
-        <a href="#" class="btn">Pogledaj proizvođače</a>
+        <a href="proizvodjaci/mleko/jogurt.html" class="btn">Pogledaj proizvođače</a>
       </div>
     </div>
 
@@ -299,7 +303,7 @@
       </div>
       <div class="product-info">
         <h3 class="product-title">Maslac</h3>
-        <a href="#" class="btn">Pogledaj proizvođače</a>
+        <a href="proizvodjaci/mleko/maslac.html" class="btn">Pogledaj proizvođače</a>
       </div>
     </div>
 
@@ -318,5 +322,6 @@
 </body>
 
 </html>
+
 
 
