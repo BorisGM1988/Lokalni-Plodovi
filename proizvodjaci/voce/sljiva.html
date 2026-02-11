@@ -1,0 +1,46 @@
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <ul>
+      <li><a href="../../index.html">Početna</a></li>
+      <li><a href="../../Prodavci.html">Svi prodavci</a></li>
+      <li><a href="../../mapa.html">Mapa</a></li>
+      <li><a href="../../chat.html">Chat</a></li>
+
+      <li id="moj-profil-li" style="display:none;">
+        <a href="../../moj-profil.html">Moj profil</a>
+      </li>
+      <li id="odjavi-se-li" style="display:none;">
+        <a href="#" onclick="odjaviSe()">Odjavi se</a>
+      </li>
+
+      <li id="prijavi-se-li">
+        <a href="../../login.html">Prijavi se</a>
+      </li>
+      <li id="postani-prodavac-li">
+        <a href="../../registracija.html">Postani prodavac</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const korisnik = localStorage.getItem('trenutniKorisnik');
+
+  if (korisnik) {
+    document.getElementById('moj-profil-li').style.display = 'list-item';
+    document.getElementById('odjavi-se-li').style.display = 'list-item';
+    document.getElementById('prijavi-se-li').style.display = 'none';
+    document.getElementById('postani-prodavac-li').style.display = 'none';
+  } else {
+    document.getElementById('moj-profil-li').style.display = 'none';
+    document.getElementById('odjavi-se-li').style.display = 'none';
+    document.getElementById('prijavi-se-li').style.display = 'list-item';
+    document.getElementById('postani-prodavac-li').style.display = 'list-item';
+  }
+
+  function odjaviSe() {
+    localStorage.removeItem('trenutniKorisnik');
+    window.location.href = '../../index.html';
+  }
+</script>
