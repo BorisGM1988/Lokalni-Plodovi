@@ -90,43 +90,29 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="prodavci.html">Svi prodavci</a></li>
-      <li><a href="mapa.html">Mapa</a></li>
-      <li><a href="#">Chat</a></li>
+      <li><a href="../index.html">Početna</a></li>
+      <li><a href="../prodavci.html">Svi prodavci</a></li>
+      <li><a href="../mapa.html">Mapa</a></li>
+      <li><a href="../chat.html">Chat</a></li>
 
       <li id="moj-profil-li" style="display:none;">
-        <a href="moj-profil.html">Moj profil</a>
+        <a href="../moj-profil.html">Moj profil</a>
       </li>
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
 
       <li id="prijavi-se-li">
-        <a href="login.html">Prijavi se</a>
+        <a href="../login.html">Prijavi se</a>
       </li>
       <li id="postani-prodavac-li">
-        <a href="prijava-prodavca.html">Postani prodavac</a>
+        <a href="../registracija.html">Postani prodavac</a>
       </li>
     </ul>
   </nav>
 </header>
 
-<div class="container">
-  <h1 id="naslov">Proizvođači</h1>
-  <p>Ova stranica je za sada prazna. Kasnije će ovde biti lista proizvođača ovog proizvoda, njihovi profili, proizvodi i kontakt.</p>
-</div>
-
-<footer>
-  <div class="container">
-    <h2>LokalniPlodovi</h2>
-    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
-    <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
-  </div>
-</footer>
-
 <script>
-  // Logika za prikazivanje/sakrivanje opcija u header-u
   const korisnik = localStorage.getItem('trenutniKorisnik');
 
   if (korisnik) {
@@ -143,16 +129,10 @@
 
   function odjaviSe() {
     localStorage.removeItem('trenutniKorisnik');
-    window.location.href = 'index.html';
+    window.location.href = '../index.html';
   }
-
-  // Automatski naslov na osnovu imena fajla
-  const fajlIme = window.location.pathname.split('/').pop().replace('.html', '');
-  const proizvod = fajlIme.replace('proizvodjaci-', '').replace(/-/g, ' ');
-  const prviVeliki = proizvod.charAt(0).toUpperCase() + proizvod.slice(1);
-  document.getElementById('naslov').textContent = `Proizvođači ${prviVeliki}`;
-  document.title = `Proizvođači ${prviVeliki} – LokalniPlodovi`;
 </script>
 
 </body>
+
 </html>
