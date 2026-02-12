@@ -216,7 +216,7 @@
     <div class="messages" id="messages"></div>
     <div class="input-area">
       <input type="text" id="message-input" placeholder="Napiši poruku...">
-      <button onclick="sendMessage()">Pošalji</button>
+     <button onclick="posaljiPoruku()">Pošalji</button>
     </div>
   </div>
 </div>
@@ -271,7 +271,13 @@ const firebaseConfig = {
   }
 
   // Pošalji poruku
-  function sendMessage() {
+  function sendMessage(){
+    document.getElementById('message-input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // spreči novi red
+    sendMessage();
+  }
+});
     const input = document.getElementById('message-input');
     if (input.value.trim() === '') return;
 
@@ -334,4 +340,5 @@ s0.parentNode.insertBefore(s1,s0);
 <!--End of Tawk.to Script-->
 
 </body>
+
 </html>
