@@ -116,42 +116,22 @@
 </footer>
 
 <script>
-  // Kreiraj mapu
   var map = L.map('map').setView([44.0165, 21.0059], 8);
 
-  // Besplatni satelitski sloj (Esri World Imagery)
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-    maxZoom: 18
+    attribution: 'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
   }).addTo(map);
 
-  // Ograniči na Srbiju
   map.setMinZoom(7);
   map.setMaxBounds([
-    [40.8, 18.1], // jugozapad
-    [46.2, 23.0]  // severoistok
+    [40.8, 18.1],
+    [46.2, 23.0]
   ]);
 
-  // Dodaj pinove (klik otvara popup sa profilom)
   var prodavci = [
-    {
-      ime: "Pčelarstvo Jovanović",
-      lat: 44.85,
-      lng: 19.35,
-      link: "profil-pcelar.html"
-    },
-    {
-      ime: "Domaćinstvo Marković",
-      lat: 43.35,
-      lng: 22.58,
-      link: "profil-kajmak.html"
-    },
-    {
-      ime: "Mesara Petrović",
-      lat: 43.71,
-      lng: 19.70,
-      link: "profil-meso.html"
-    }
+    { ime: "Pčelarstvo Jovanović", lat: 44.85, lng: 19.35, link: "profil-pcelar.html" },
+    { ime: "Domaćinstvo Marković", lat: 43.35, lng: 22.58, link: "profil-kajmak.html" },
+    { ime: "Mesara Petrović", lat: 43.71, lng: 19.70, link: "profil-meso.html" }
   ];
 
   prodavci.forEach(p => {
