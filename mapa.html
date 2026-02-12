@@ -118,16 +118,21 @@
 <script>
   var map = L.map('map').setView([44.0165, 21.0059], 8);
 
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+  // Najbolji besplatni satelitski/terrain sloj (CartoDB DarkMatter ili Stamen Terrain)
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
   }).addTo(map);
 
+  // Ograniči na Srbiju
   map.setMinZoom(7);
   map.setMaxBounds([
     [40.8, 18.1],
     [46.2, 23.0]
   ]);
 
+  // Pinovi
   var prodavci = [
     { ime: "Pčelarstvo Jovanović", lat: 44.85, lng: 19.35, link: "profil-pcelar.html" },
     { ime: "Domaćinstvo Marković", lat: 43.35, lng: 22.58, link: "profil-kajmak.html" },
@@ -143,6 +148,3 @@
       `);
   });
 </script>
-
-</body>
-</html>
