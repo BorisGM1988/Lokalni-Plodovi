@@ -214,7 +214,7 @@
     <div class="messages" id="messages"></div>
     <div class="input-area">
       <input type="text" id="message-input" placeholder="Napiši poruku...">
-      <button onclick="sendMessage()">Pošalji</button>
+      <button id="send-btn">Pošalji</button>
     </div>
   </div>
 </div>
@@ -227,29 +227,29 @@
   </div>
 </footer>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+<!-- Firebase SDK (kompatibilna verzija bez module grešaka) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
   // Zameni sa TVOJIM Firebase config-om
   const firebaseConfig = {
-    apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
-    authDomain: "lokalni-plodovi.firebaseapp.com",
-    databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "lokalni-plodovi",
-    storageBucket: "lokalni-plodovi.firebasestorage.app",
-    messagingSenderId: "302190046418",
-    appId:  "1:302190046418:web:840ed24ca4307732f7110b",
-     measurementId: "G-XDE6GFM8YY"
-   };
+     apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
+  authDomain: "lokalni-plodovi.firebaseapp.com",
+  databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "lokalni-plodovi",
+  storageBucket: "lokalni-plodovi.firebasestorage.app",
+  messagingSenderId: "302190046418",
+  appId: "1:302190046418:web:840ed24ca4307732f7110b",
+  measurementId: "G-XDE6GFM8YY"
+  };
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
   let currentChannel = 'opsta';
 
-  // Učitaj poruke za trenutni kanal
+  // Učitaj poruke
   function loadMessages(channel) {
     const messagesDiv = document.getElementById('messages');
     messagesDiv.innerHTML = '';
@@ -331,4 +331,5 @@
 
 </body>
 </html>
+
 
