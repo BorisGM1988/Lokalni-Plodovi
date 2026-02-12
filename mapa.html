@@ -7,20 +7,74 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5gg7fNY5F0=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <style>
-    body { margin:0; padding:0; font-family: 'Segoe UI', sans-serif; background: #f8f9f5; }
-    #map { height: calc(100vh - 80px); }
-    .header {
-      background: #2e7d32;
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+      --siva: #757575;
+      --svetlo: #f8f9f5;
+      --belo: #ffffff;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--svetlo);
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: rgba(46, 125, 50, 0.94);
       color: white;
-      padding: 1rem;
-      text-align: center;
+      padding: 1rem 2rem;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      width: 100%;
     }
-    .header a { color: white; margin: 0 1rem; text-decoration: none; font-weight: 500; }
-    .header a:hover { text-decoration: underline; }
+
+    .logo { font-size: 1.8rem; font-weight: 700; }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    nav a:hover { color: #c8e6c9; }
+
+    #map {
+      height: calc(100vh - 80px);
+    }
+
+    footer {
+      background: var(--zemlja);
+      color: white;
+      text-align: center;
+      padding: 4rem 1rem 2.5rem;
+      margin-top: 0;
+    }
   </style>
 </head>
 <body>
@@ -32,29 +86,37 @@
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
-      <li><a href="#">Chat</a></li>
+      <li><a href="chat.html">Chat</a></li>
 
-      <!-- Prikazuje se SAMO ako je ulogovan -->
       <li id="moj-profil-li" style="display:none;">
-        <a href="moj-profil.html">Moj profil</a>
+        <a href="/moj-profil">Moj profil</a>
       </li>
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
 
-      <!-- Prikazuje se SAMO ako NIJE ulogovan -->
       <li id="prijavi-se-li">
-        <a href="login.html">Prijavi se</a>
+        <a href="/login.html">Prijavi se</a>
       </li>
       <li id="postani-prodavac-li">
-        <a href="registracija.html">Postani prodavac</a>
+        <a href="/registracija.html">Postani prodavac</a>
       </li>
     </ul>
   </nav>
 </header>
 
+<div id="map"></div>
+
+<footer>
+  <div class="container">
+    <h2>LokalniPlodovi</h2>
+    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
+  </div>
+</footer>
+
 <script>
-  // Proveri da li je korisnik ulogovan
+  // Logika za prikazivanje/sakrivanje opcija u header-u (isto kao na ostalim stranicama)
   const korisnik = localStorage.getItem('trenutniKorisnik');
 
   if (korisnik) {
@@ -73,48 +135,41 @@
     localStorage.removeItem('trenutniKorisnik');
     window.location.href = 'index.html';
   }
-</script>
 
-<div id="map"></div>
-
-<script>
-  // Kreiraj mapu – centar na Srbiju
+  // Kreiraj mapu
   var map = L.map('map').setView([44.0165, 21.0059], 8);
 
-  // Satelitski sloj (Esri World Imagery – besplatno)
+  // Besplatni satelitski sloj (Esri World Imagery – izgleda kao Google Maps satelit)
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
   }).addTo(map);
 
-  // Ograniči na Srbiju
+  // Ograniči na Srbiju (zoom i granice)
   map.setMinZoom(7);
   map.setMaxBounds([
-    [40.8, 18.1], // jugozapad
-    [46.2, 23.0]  // severoistok
+    [40.8, 18.1], // jugozapad Srbije
+    [46.2, 23.0]  // severoistok Srbije
   ]);
 
-  // Pinovi za prodavce
+  // Pinovi za prodavce (klik otvara popup sa linkom ka profilu)
   var prodavci = [
     {
       ime: "Pčelarstvo Jovanović",
-      lokacija: "Selo Banovo Polje, okolina Mačve",
       lat: 44.85,
       lng: 19.35,
-      link: "profil-pcelar.html"
+      link: "/profil-pcelar.html"
     },
     {
       ime: "Domaćinstvo Marković",
-      lokacija: "Stara Planina, okolina Pirota",
       lat: 43.35,
       lng: 22.58,
-      link: "profil-kajmak.html"
+      link: "/profil-kajmak.html"
     },
     {
       ime: "Mesara Petrović",
-      lokacija: "Zlatibor, okolina Čajetine",
       lat: 43.71,
       lng: 19.70,
-      link: "profil-meso.html"
+      link: "/profil-meso.html"
     }
   ];
 
@@ -123,7 +178,6 @@
       .addTo(map)
       .bindPopup(`
         <b>${p.ime}</b><br>
-        ${p.lokacija}<br>
         <a href="${p.link}">Pogledaj profil</a>
       `);
   });
