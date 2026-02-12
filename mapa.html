@@ -116,60 +116,41 @@
 </footer>
 
 <script>
-  // Logika za prikazivanje/sakrivanje opcija u header-u (isto kao na ostalim stranicama)
-  const korisnik = localStorage.getItem('trenutniKorisnik');
-
-  if (korisnik) {
-    document.getElementById('moj-profil-li').style.display = 'list-item';
-    document.getElementById('odjavi-se-li').style.display = 'list-item';
-    document.getElementById('prijavi-se-li').style.display = 'none';
-    document.getElementById('postani-prodavac-li').style.display = 'none';
-  } else {
-    document.getElementById('moj-profil-li').style.display = 'none';
-    document.getElementById('odjavi-se-li').style.display = 'none';
-    document.getElementById('prijavi-se-li').style.display = 'list-item';
-    document.getElementById('postani-prodavac-li').style.display = 'list-item';
-  }
-
-  function odjaviSe() {
-    localStorage.removeItem('trenutniKorisnik');
-    window.location.href = 'index.html';
-  }
-
   // Kreiraj mapu
   var map = L.map('map').setView([44.0165, 21.0059], 8);
 
-  // Besplatni satelitski sloj (Esri World Imagery – izgleda kao Google Maps satelit)
+  // Besplatni satelitski sloj (Esri World Imagery)
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    maxZoom: 18
   }).addTo(map);
 
-  // Ograniči na Srbiju (zoom i granice)
+  // Ograniči na Srbiju
   map.setMinZoom(7);
   map.setMaxBounds([
-    [40.8, 18.1], // jugozapad Srbije
-    [46.2, 23.0]  // severoistok Srbije
+    [40.8, 18.1], // jugozapad
+    [46.2, 23.0]  // severoistok
   ]);
 
-  // Pinovi za prodavce (klik otvara popup sa linkom ka profilu)
+  // Dodaj pinove (klik otvara popup sa profilom)
   var prodavci = [
     {
       ime: "Pčelarstvo Jovanović",
       lat: 44.85,
       lng: 19.35,
-      link: "/profil-pcelar.html"
+      link: "profil-pcelar.html"
     },
     {
       ime: "Domaćinstvo Marković",
       lat: 43.35,
       lng: 22.58,
-      link: "/profil-kajmak.html"
+      link: "profil-kajmak.html"
     },
     {
       ime: "Mesara Petrović",
       lat: 43.71,
       lng: 19.70,
-      link: "/profil-meso.html"
+      link: "profil-meso.html"
     }
   ];
 
