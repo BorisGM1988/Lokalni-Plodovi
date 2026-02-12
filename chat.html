@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chat – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
   <style>
     :root {
       --zelena: #2e7d32;
@@ -174,23 +172,23 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="Prodavci.html">Svi prodavci</a></li>
-      <li><a href="mapa.html">Mapa</a></li>
-      <li><a href="chat.html">Chat</a></li>
+      <li><a href="/">Početna</a></li>
+      <li><a href="/prodavci">Svi prodavci</a></li>
+      <li><a href="/mapa">Mapa</a></li>
+      <li><a href="/chat">Chat</a></li>
 
       <li id="moj-profil-li" style="display:none;">
-        <a href="moj-profil.html">Moj profil</a>
+        <a href="/moj-profil">Moj profil</a>
       </li>
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
 
       <li id="prijavi-se-li">
-        <a href="login.html">Prijavi se</a>
+        <a href="/login">Prijavi se</a>
       </li>
       <li id="postani-prodavac-li">
-        <a href="registracija.html">Postani prodavac</a>
+        <a href="/prijava-prodavca">Postani prodavac</a>
       </li>
     </ul>
   </nav>
@@ -216,7 +214,7 @@
     <div class="messages" id="messages"></div>
     <div class="input-area">
       <input type="text" id="message-input" placeholder="Napiši poruku...">
-     <button onclick="posaljiPoruku()">Pošalji</button>
+      <button onclick="sendMessage()">Pošalji</button>
     </div>
   </div>
 </div>
@@ -234,18 +232,16 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 
 <script>
-  // Zameni sa tvojim Firebase config-om
+  // Zameni sa TVOJIM Firebase config-om
   const firebaseConfig = {
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
-  authDomain: "lokalni-plodovi.firebaseapp.com",
-  databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "lokalni-plodovi",
-  storageBucket: "lokalni-plodovi.firebasestorage.app",
-  messagingSenderId: "302190046418",
-  appId: "1:302190046418:web:840ed24ca4307732f7110b",
-  measurementId: "G-XDE6GFM8YY"
+    apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
+    authDomain: "lokalni-plodovi.firebaseapp.com",
+    databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "lokalni-plodovi",
+    storageBucket: "lokalni-plodovi.firebasestorage.app",
+    messagingSenderId: "302190046418",
+    appId:  "1:302190046418:web:840ed24ca4307732f7110b",
+     measurementId: "G-XDE6GFM8YY"
    };
 
   firebase.initializeApp(firebaseConfig);
@@ -271,25 +267,32 @@ const firebaseConfig = {
   }
 
   // Pošalji poruku
-  function sendMessage(){
-    document.getElementById('message-input').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault(); // spreči novi red
-    sendMessage();
-  }
-});
+  function sendMessage() {
     const input = document.getElementById('message-input');
-    if (input.value.trim() === '') return;
+    const text = input.value.trim();
+
+    if (text === '') return;
 
     const user = korisnik ? korisnik.ime : 'Gost';
+
     db.ref('channels/' + currentChannel).push({
       user: user,
-      text: input.value,
+      text: text,
       timestamp: Date.now()
     });
 
     input.value = '';
+    input.focus();
   }
+
+  // Poveži dugme i Enter
+  document.getElementById('send-btn').onclick = sendMessage;
+  document.getElementById('message-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
 
   // Promena kanala
   document.querySelectorAll('.channel').forEach(channel => {
@@ -305,7 +308,7 @@ const firebaseConfig = {
   // Učitaj prvi kanal
   loadMessages(currentChannel);
 
-  // Logika za header (prikaz/sakrivanje opcija)
+  // Header logika
   const korisnik = localStorage.getItem('trenutniKorisnik');
 
   if (korisnik) {
@@ -325,20 +328,7 @@ const firebaseConfig = {
     window.location.href = '/';
   }
 </script>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
 
 </body>
-
 </html>
+
