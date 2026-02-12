@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat – LokalniPlodovi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+  <style>
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+      --siva: #757575;
+      --svetlo: #f8f9f5;
+      --belo: #ffffff;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--svetlo);
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(46, 125, 50, 0.94);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      width: 100%;
+    }
+
+    .logo { font-size: 1.8rem; font-weight: 700; }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    nav a:hover { color: #c8e6c9; }
+
+    .chat-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .channels {
+      width: 250px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .channels h3 {
+      margin: 0 0 1rem;
+      color: var(--zemlja);
+    }
+
+    .channel {
+      padding: 0.8rem;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .channel:hover, .channel.active {
+      background: var(--zelena-svetla);
+      color: white;
+    }
+
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 1rem;
+      background: #f0f0f0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background: #fafafa;
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+      border-radius: 12px;
+      max-width: 70%;
+    }
+
+    .message.sent {
+      background: var(--zelena);
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .message.received {
+      background: #e0e0e0;
+      align-self: flex-start;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 1rem;
+      background: white;
+      border-top: 1px solid #ddd;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 50px;
+      margin-right: 1rem;
+    }
+
+    .input-area button {
+      background: var(--zelena);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+
+    footer {
+      background: var(--zemlja);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <ul>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="Prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
+
+      <li id="moj-profil-li" style="display:none;">
+        <a href="moj-profil.html">Moj profil</a>
+      </li>
+      <li id="odjavi-se-li" style="display:none;">
+        <a href="#" onclick="odjaviSe()">Odjavi se</a>
+      </li>
+
+      <li id="prijavi-se-li">
+        <a href="login.html">Prijavi se</a>
+      </li>
+      <li id="postani-prodavac-li">
+        <a href="registracija.html">Postani prodavac</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<div class="chat-container">
+  <div class="channels">
+    <h3>Kanali</h3>
+    <div class="channel active" data-channel="opsta">Opšta diskusija</div>
+    <div class="channel" data-channel="povrce">Povrće</div>
+    <div class="channel" data-channel="voce">Voće</div>
+    <div class="channel" data-channel="mleko">Mlečni proizvodi</div>
+    <div class="channel" data-channel="meso">Meso</div>
+    <div class="channel" data-channel="med">Med</div>
+    <div class="channel" data-channel="jaja">Jaja</div>
+    <div class="channel" data-channel="zdravlje">Bilje i zdravlje</div>
+  </div>
+
+  <div class="chat-area">
+    <div class="chat-header">
+      <h3 id="current-channel">Opšta diskusija</h3>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <input type="text" id="message-input" placeholder="Napiši poruku...">
+      <button onclick="sendMessage()">Pošalji</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <h2>LokalniPlodovi</h2>
+    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
+  </div>
+</footer>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+
+<script>
+  // Zameni sa tvojim Firebase config-om
+  const firebaseConfig = {
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
+  authDomain: "lokalni-plodovi.firebaseapp.com",
+  databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "lokalni-plodovi",
+  storageBucket: "lokalni-plodovi.firebasestorage.app",
+  messagingSenderId: "302190046418",
+  appId: "1:302190046418:web:840ed24ca4307732f7110b",
+  measurementId: "G-XDE6GFM8YY"
+   };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  let currentChannel = 'opsta';
+
+  // Učitaj poruke za trenutni kanal
+  function loadMessages(channel) {
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.innerHTML = '';
+    db.ref('channels/' + channel).on('value', snapshot => {
+      messagesDiv.innerHTML = '';
+      snapshot.forEach(child => {
+        const msg = child.val();
+        const div = document.createElement('div');
+        div.className = 'message ' + (msg.user === (korisnik ? korisnik.ime : 'Gost') ? 'sent' : 'received');
+        div.innerHTML = `<strong>${msg.user}:</strong> ${msg.text}`;
+        messagesDiv.appendChild(div);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+  }
+
+  // Pošalji poruku
+  function sendMessage() {
+    const input = document.getElementById('message-input');
+    if (input.value.trim() === '') return;
+
+    const user = korisnik ? korisnik.ime : 'Gost';
+    db.ref('channels/' + currentChannel).push({
+      user: user,
+      text: input.value,
+      timestamp: Date.now()
+    });
+
+    input.value = '';
+  }
+
+  // Promena kanala
+  document.querySelectorAll('.channel').forEach(channel => {
+    channel.addEventListener('click', () => {
+      document.querySelector('.channel.active').classList.remove('active');
+      channel.classList.add('active');
+      currentChannel = channel.dataset.channel;
+      document.getElementById('current-channel').textContent = channel.textContent;
+      loadMessages(currentChannel);
+    });
+  });
+
+  // Učitaj prvi kanal
+  loadMessages(currentChannel);
+
+  // Logika za header (prikaz/sakrivanje opcija)
+  const korisnik = localStorage.getItem('trenutniKorisnik');
+
+  if (korisnik) {
+    document.getElementById('moj-profil-li').style.display = 'list-item';
+    document.getElementById('odjavi-se-li').style.display = 'list-item';
+    document.getElementById('prijavi-se-li').style.display = 'none';
+    document.getElementById('postani-prodavac-li').style.display = 'none';
+  } else {
+    document.getElementById('moj-profil-li').style.display = 'none';
+    document.getElementById('odjavi-se-li').style.display = 'none';
+    document.getElementById('prijavi-se-li').style.display = 'list-item';
+    document.getElementById('postani-prodavac-li').style.display = 'list-item';
+  }
+
+  function odjaviSe() {
+    localStorage.removeItem('trenutniKorisnik');
+    window.location.href = '/';
+  }
+</script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+
+</body>
+</html>
