@@ -316,9 +316,15 @@ s0.parentNode.insertBefore(s1,s0);
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 
 <script>
-  // Tvoj Firebase config – KOPIRAJ GA IZ FIREBASE KONZOLE (Project Settings → Your apps → Web app → firebaseConfig)
+ <!-- Firebase compat SDK (radi bez module grešaka – isto kao sinoć za chat) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+  // Tvoj Firebase config (kopiraj iz Firebase konzole – Project Settings → Your apps → Web app → firebaseConfig)
   const firebaseConfig = {
-    apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
+   apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
   authDomain: "lokalni-plodovi.firebaseapp.com",
   databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "lokalni-plodovi",
@@ -328,12 +334,11 @@ s0.parentNode.insertBefore(s1,s0);
   measurementId: "G-XDE6GFM8YY",
   };
 
-  // Inicijalizuj Firebase (ovo je najvažnije – bez ovoga nema firebase objekta)
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.database();
 
-  // Registracija – ovo se pokreće kad klikneš submit
+  // Registracija
   document.getElementById('registration-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -350,12 +355,10 @@ s0.parentNode.insertBefore(s1,s0);
       return;
     }
 
-    // Kreiraj korisnika u Firebase Auth
     auth.createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
         const user = userCredential.user;
 
-        // Sačuvaj dodatne podatke u Realtime Database
         db.ref('users/' + user.uid).set({
           ime: ime,
           telefon: telefon,
@@ -366,23 +369,22 @@ s0.parentNode.insertBefore(s1,s0);
           registeredAt: firebase.database.ServerValue.TIMESTAMP
         });
 
-        // Sačuvaj u localStorage za brzi pristup (header logika)
         localStorage.setItem('trenutniKorisnik', JSON.stringify({ uid: user.uid, ime, email }));
 
-        // Pokaži poruku i preusmeri
         alert('Registracija uspešna! Preusmeravamo na profil...');
         setTimeout(() => {
           window.location.href = 'moj-profil.html';
         }, 1500);
       })
       .catch(error => {
-        console.error('Greška pri registraciji:', error);
-        alert('Greška: ' + error.message);
+        console.error('Greška pri registraciji:', error.code, error.message);
+        alert('Greška: ' + error.message + ' (kod: ' + error.code + ')');
       });
   });
 </script>
 </body>
 </html>
+
 
 
 
