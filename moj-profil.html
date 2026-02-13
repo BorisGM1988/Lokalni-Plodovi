@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moj profil – LokalniPlodovi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+      --siva: #757575;
+      --svetlo: #f8f9f5;
+      --belo: #ffffff;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--svetlo);
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(46, 125, 50, 0.94);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      width: 100%;
+    }
+
+    .logo { font-size: 1.8rem; font-weight: 700; }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    nav a:hover { color: #c8e6c9; }
+
+    .container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 2rem 1.5rem;
+    }
+
+    h1 {
+      color: var(--zemlja);
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    #profil-info {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #profil-info h2 {
+      color: var(--zelena);
+      margin-bottom: 1rem;
+    }
+
+    #profil-info p {
+      margin: 0.8rem 0;
+      font-size: 1.1rem;
+    }
+
+    button {
+      background: var(--zelena);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-top: 2rem;
+    }
+
+    button:hover {
+      background: var(--zelena-svetla);
+    }
+
+    footer {
+      background: var(--zemlja);
+      color: white;
+      text-align: center;
+      padding: 4rem 1rem 2.5rem;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <ul>
+      <li><a href="/">Početna</a></li>
+      <li><a href="/prodavci">Svi prodavci</a></li>
+      <li><a href="/mapa">Mapa</a></li>
+      <li><a href="/chat">Chat</a></li>
+
+      <li id="moj-profil-li" style="display:none;">
+        <a href="/moj-profil">Moj profil</a>
+      </li>
+      <li id="odjavi-se-li" style="display:none;">
+        <a href="#" onclick="odjaviSe()">Odjavi se</a>
+      </li>
+
+      <li id="prijavi-se-li">
+        <a href="/login">Prijavi se</a>
+      </li>
+      <li id="postani-prodavac-li">
+        <a href="/prijava-prodavca">Postani prodavac</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<div class="container">
+  <h1>Moj profil</h1>
+
+  <div id="profil-info">
+    Učitavanje podataka...
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <h2>LokalniPlodovi</h2>
+    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
+  </div>
+</footer>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+
+<script>
+  // Tvoj Firebase config (kopiraj iz Firebase konzole – isti kao za chat)
+  const firebaseConfig = {
+    apiKey: "AIzaSy...",
+    authDomain: "lokalni-plodovi-chat.firebaseapp.com",
+    databaseURL: "https://lokalni-plodovi-chat-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "lokalni-plodovi-chat",
+    storageBucket: "lokalni-plodovi-chat.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef123456"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  // Proveri ulogovanog korisnika i prikaži podatke
+  auth.onAuthStateChanged(user => {
+    const profilInfo = document.getElementById('profil-info');
+
+    if (user) {
+      db.ref('users/' + user.uid).once('value').then(snapshot => {
+        const data = snapshot.val() || {};
+
+        profilInfo.innerHTML = `
+          <h2>${data.ime || 'Korisnik'}</h2>
+          <p><strong>Email:</strong> ${user.email}</p>
+          <p><strong>Telefon:</strong> ${data.telefon || 'Nije navedeno'}</p>
+          <p><strong>Lokacija:</strong> ${data.lokacija || 'Nije navedeno'}</p>
+          <p><strong>Niše:</strong> ${data.nise ? data.nise.join(', ') : 'Nijedna'}</p>
+          <p><strong>Opis:</strong> ${data.opis || 'Nema opisa'}</p>
+          <p><strong>Registrovan:</strong> ${data.registeredAt ? new Date(data.registeredAt).toLocaleString() : 'N/A'}</p>
+          <button onclick="odjaviSe()">Odjavi se</button>
+        `;
+      });
+    } else {
+      profilInfo.innerHTML = '<p>Niste ulogovani. <a href="registracija.html">Registrujte se</a> ili <a href="login.html">prijavite</a>.</p>';
+    }
+  });
+
+  function odjaviSe() {
+    auth.signOut().then(() => {
+      localStorage.removeItem('trenutniKorisnik');
+      window.location.href = '/';
+    }).catch(error => {
+      alert('Greška pri odjavi: ' + error.message);
+    });
+  }
+</script>
+
+</body>
+</html>
