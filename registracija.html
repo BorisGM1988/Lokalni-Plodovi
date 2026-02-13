@@ -5,13 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registracija prodavca – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' https://www.gstatic.com https://cdnjs.cloudflare.com 'unsafe-inline' 'unsafe-eval';
-  style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline';
-  connect-src 'self' https://*.firebaseio.com https://*.googleapis.com;
-  img-src 'self' data:;
-">
+
   <style>
     :root {
       --zelena: #2e7d32;
@@ -319,30 +313,16 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 <!--End of Tawk.to Script-->
 
-<script>
-<!-- Firebase compat SDK (radi bez module grešaka) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // Tvoj Firebase config (zameni sa pravim)
-  const firebaseConfig = {
-   apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
-  authDomain: "lokalni-plodovi.firebaseapp.com",
-  databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "lokalni-plodovi",
-  storageBucket: "lokalni-plodovi.firebasestorage.app",
-  messagingSenderId: "302190046418",
-  appId: "1:302190046418:web:840ed24ca4307732f7110b",
-  measurementId: "G-XDE6GFM8YY"
-  };
+  // Zameni sa tvojim Supabase URL i anon key-om
+  const supabaseUrl = 'https://Lokalni-Plodovi.supabase.co';
+  const supabaseKey = sb_secret_W_AOZZsphuDXJ2cysu3zuA_sUBg9SrP
+  const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
-
-  // Registracija
-  document.getElementById('registration-form').addEventListener('submit', function(e) {
+  document.getElementById('registration-form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const email = document.getElementById('email').value.trim();
@@ -358,35 +338,36 @@ s0.parentNode.insertBefore(s1,s0);
       return;
     }
 
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
+    // Registracija
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          ime,
+          telefon,
+          lokacija,
+          nise,
+          opis
+        }
+      }
+    });
 
-        db.ref('users/' + user.uid).set({
-          ime: ime,
-          telefon: telefon,
-          lokacija: lokacija,
-          nise: nise,
-          opis: opis,
-          email: email,
-          registeredAt: firebase.database.ServerValue.TIMESTAMP
-        });
+    if (error) {
+      alert('Greška pri registraciji: ' + error.message);
+      console.error(error);
+      return;
+    }
 
-        localStorage.setItem('trenutniKorisnik', JSON.stringify({ uid: user.uid, ime, email }));
-
-        alert('Registracija uspešna! Preusmeravamo na profil...');
-        setTimeout(() => {
-          window.location.href = 'moj-profil.html';
-        }, 1500);
-      })
-      .catch(error => {
-        console.error('Greška pri registraciji:', error.code, error.message);
-        alert('Greška: ' + error.message + ' (kod: ' + error.code + ')');
-      });
+    alert('Registracija uspešna! Preusmeravamo na profil...');
+    setTimeout(() => {
+      window.location.href = 'moj-profil.html';
+    }, 1500);
   });
 </script>
 </body>
 </html>
+
 
 
 
