@@ -310,9 +310,74 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 
+<script>
+  // Tvoj Firebase config – kopiraj ga iz Firebase konzole (Project Settings → Your apps → Web app → firebaseConfig)
+  const firebaseConfig = {
+    apiKey: "AIzaSy...",
+    authDomain: "tvoj-projekat.firebaseapp.com",
+    databaseURL: "https://tvoj-projekat-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "tvoj-projekat",
+    storageBucket: "tvoj-projekat.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef123456"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  // Registracija
+  document.getElementById('registration-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('lozinka').value.trim();
+    const ime = document.getElementById('ime').value.trim();
+    const telefon = document.getElementById('telefon').value.trim();
+    const lokacija = document.getElementById('lokacija').value.trim();
+    const nise = Array.from(document.querySelectorAll('input[name="nise"]:checked')).map(cb => cb.value);
+    const opis = document.getElementById('opis').value.trim();
+
+    if (!email || !password || !ime || !telefon || !lokacija) {
+      alert('Molimo popunite sva obavezna polja!');
+      return;
+    }
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+
+        db.ref('users/' + user.uid).set({
+          ime: ime,
+          telefon: telefon,
+          lokacija: lokacija,
+          nise: nise,
+          opis: opis,
+          email: email,
+          registeredAt: firebase.database.ServerValue.TIMESTAMP
+        });
+
+        localStorage.setItem('trenutniKorisnik', JSON.stringify({ uid: user.uid, ime, email }));
+
+        document.getElementById('success-message').style.display = 'block';
+
+        setTimeout(() => {
+          window.location.href = 'moj-profil.html';
+        }, 2000);
+      })
+      .catch(error => {
+        alert('Greška pri registraciji: ' + error.message);
+      });
+  });
+</script>
 </body>
 </html>
+
 
 
 
