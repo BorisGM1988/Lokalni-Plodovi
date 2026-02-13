@@ -312,14 +312,12 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
-
-<!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // Zameni sa tvojim Supabase URL i anon key-om
-  const supabaseUrl = 'https://Lokalni-Plodovi.supabase.co';
-  const supabaseKey = sb_secret_W_AOZZsphuDXJ2cysu3zuA_sUBg9SrP
+  // Tvoj Supabase URL i anon key (iz Supabase konzole → Project Settings → API)
+  const supabaseUrl = 'https:/lokalniplodovi.supabase.co';
+  const supabaseKey = sb_publishable_kt62uzZKTy9KdH6dxnLteQ_oCvy6Hkp
   const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 
   document.getElementById('registration-form').addEventListener('submit', async function(e) {
@@ -338,7 +336,6 @@ s0.parentNode.insertBefore(s1,s0);
       return;
     }
 
-    // Registracija
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -365,8 +362,11 @@ s0.parentNode.insertBefore(s1,s0);
     }, 1500);
   });
 </script>
+
+
 </body>
 </html>
+
 
 
 
