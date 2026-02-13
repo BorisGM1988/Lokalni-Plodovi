@@ -164,10 +164,10 @@
   </div>
 </footer>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+<!-- Firebase compat SDK (radi bez module grešaka) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
   // Tvoj Firebase config (kopiraj iz Firebase konzole – isti kao za chat)
@@ -203,6 +203,8 @@
           <p><strong>Registrovan:</strong> ${data.registeredAt ? new Date(data.registeredAt).toLocaleString() : 'N/A'}</p>
           <button onclick="odjaviSe()">Odjavi se</button>
         `;
+      }).catch(error => {
+        profilInfo.innerHTML = '<p>Greška pri učitavanju podataka: ' + error.message + '</p>';
       });
     } else {
       profilInfo.innerHTML = '<p>Niste ulogovani. <a href="registracija.html">Registrujte se</a> ili <a href="login.html">prijavite</a>.</p>';
