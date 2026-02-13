@@ -14,7 +14,13 @@
       --svetlo: #f8f9f5;
       --belo: #ffffff;
     }
-
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' https://www.gstatic.com https://cdnjs.cloudflare.com 'unsafe-inline' 'unsafe-eval';
+  style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline';
+  connect-src 'self' https://*.firebaseio.com https://*.googleapis.com;
+  img-src 'self' data:;
+">
     * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
@@ -223,3 +229,4 @@
 
 </body>
 </html>
+
