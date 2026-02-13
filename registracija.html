@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moj profil – LokalniPlodovi</title>
+  <title>Registracija prodavca – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     :root {
@@ -23,8 +23,6 @@
       color: #333;
       line-height: 1.6;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
     header {
@@ -66,9 +64,9 @@
     nav a:hover { color: #c8e6c9; }
 
     .container {
-      max-width: 1400px;
+      max-width: 900px;
       margin: 2rem auto;
-      padding: 2rem 1.5rem;
+      padding: 0 1.5rem;
     }
 
     h1 {
@@ -77,38 +75,85 @@
       margin: 2rem 0;
     }
 
-    #profil-info {
+    form {
       background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
       max-width: 600px;
       margin: 0 auto;
     }
 
-    #profil-info h2 {
-      color: var(--zelena);
-      margin-bottom: 1rem;
+    .form-group {
+      margin-bottom: 1.5rem;
     }
 
-    #profil-info p {
-      margin: 0.8rem 0;
-      font-size: 1.1rem;
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--zemlja);
     }
 
-    button {
-      background: var(--zelena);
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      padding: 0.9rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .submit-btn {
+      background: var(--zelena-svetla);
       color: white;
+      padding: 1rem;
       border: none;
-      padding: 1rem 2rem;
       border-radius: 50px;
       font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
-      margin-top: 2rem;
+      transition: 0.2s;
+      width: 100%;
+      margin-top: 1rem;
     }
 
-    button:hover {
-      background: var(--zelena-svetla);
+    .submit-btn:hover {
+      background: var(--zelena);
+    }
+
+    #success-message {
+      display: none;
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: #e8f5e9;
+      border-radius: 12px;
+      color: #2e7d32;
+      text-align: center;
+      border: 1px solid #c8e6c9;
+    }
+
+    .note {
+      color: var(--siva);
+      font-size: 0.95rem;
+      text-align: center;
+      margin-top: 1rem;
     }
 
     footer {
@@ -116,7 +161,7 @@
       color: white;
       text-align: center;
       padding: 4rem 1rem 2.5rem;
-      margin-top: auto;
+      margin-top: 6rem;
     }
   </style>
 </head>
@@ -126,34 +171,94 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="/">Početna</a></li>
-      <li><a href="/prodavci">Svi prodavci</a></li>
-      <li><a href="/mapa">Mapa</a></li>
-      <li><a href="/chat">Chat</a></li>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="Prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">mapa</a></li>
+      <li><a href="chat.html">chat</a></li>
 
       <li id="moj-profil-li" style="display:none;">
-        <a href="/moj-profil">Moj profil</a>
+        <a href="moj-profil.html">Moj profil</a>
       </li>
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
 
       <li id="prijavi-se-li">
-        <a href="/login">Prijavi se</a>
+        <a href="login.html">Prijavi se</a>
       </li>
       <li id="postani-prodavac-li">
-        <a href="/prijava-prodavca">Postani prodavac</a>
+        <a href="registracija-prodavca.html">Postani prodavac</a>
       </li>
     </ul>
   </nav>
 </header>
 
 <div class="container">
-  <h1>Moj profil</h1>
 
-  <div id="profil-info">
-    Učitavanje podataka...
-  </div>
+  <h1>Registracija prodavca</h1>
+
+  <form id="registration-form">
+    <div class="form-group">
+      <label for="ime">Ime i prezime / Naziv domaćinstva <span style="color:red;">*</span></label>
+      <input type="text" id="ime" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email <span style="color:red;">*</span></label>
+      <input type="email" id="email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="lozinka">Lozinka <span style="color:red;">*</span></label>
+      <input type="password" id="lozinka" required minlength="6">
+    </div>
+
+    <div class="form-group">
+      <label for="telefon">Telefon <span style="color:red;">*</span></label>
+      <input type="tel" id="telefon" required>
+    </div>
+
+    <div class="form-group">
+      <label for="lokacija">Lokacija (grad, selo, okolina...) <span style="color:red;">*</span></label>
+      <input type="text" id="lokacija" required placeholder="npr. Kragujevac, selo Banovo Polje...">
+    </div>
+
+    <div class="form-group">
+      <label>Kontakt opcije</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="viber"> Viber</label>
+        <label><input type="checkbox" name="whatsapp"> WhatsApp</label>
+        <label><input type="checkbox" name="telegram"> Telegram</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Niše koje prodajete <span style="color:red;">*</span></label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="nise" value="Povrće"> Povrće</label>
+        <label><input type="checkbox" name="nise" value="Voće"> Voće</label>
+        <label><input type="checkbox" name="nise" value="Mlečni proizvodi"> Mlečni proizvodi</label>
+        <label><input type="checkbox" name="nise" value="Meso i mesne prerađevine"> Meso i mesne prerađevine</label>
+        <label><input type="checkbox" name="nise" value="Med i pčelinji proizvodi"> Med i pčelinji proizvodi</label>
+        <label><input type="checkbox" name="nise" value="Jaja"> Jaja</label>
+        <label><input type="checkbox" name="nise" value="Bilje i zdravlje"> Bilje i zdravlje</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="opis">Opis domaćinstva i proizvoda</label>
+      <textarea id="opis" placeholder="Napišite nešto o sebi, proizvodima, tradiciji..."></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">Pošalji zahtev za verifikaciju</button>
+
+    <div id="success-message" style="display:none; margin-top:2rem; padding:1.5rem; background:#e8f5e9; border-radius:12px; color:#2e7d32; text-align:center; border:1px solid #c8e6c9;">
+      <strong>Zahtev je uspešno poslat!</strong><br>
+      Admin će pregledati vaš zahtev u roku od 1–3 dana i kontaktirati vas email-om ili telefonom.<br>
+      Hvala što želite da budete deo LokalniPlodovi!
+    </div>
+  </form>
+
 </div>
 
 <footer>
@@ -164,62 +269,50 @@
   </div>
 </footer>
 
-<!-- Firebase compat SDK (radi bez module grešaka) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
 <script>
-  // Tvoj Firebase config (kopiraj iz Firebase konzole – isti kao za chat)
-  const firebaseConfig = {
-    apiKey: "AIzaSy...",
-    authDomain: "lokalni-plodovi-chat.firebaseapp.com",
-    databaseURL: "https://lokalni-plodovi-chat-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "lokalni-plodovi-chat",
-    storageBucket: "lokalni-plodovi-chat.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef123456"
-  };
+  document.getElementById('registration-form').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
-
-  // Proveri ulogovanog korisnika i prikaži podatke
-  auth.onAuthStateChanged(user => {
-    const profilInfo = document.getElementById('profil-info');
-
-    if (user) {
-      db.ref('users/' + user.uid).once('value').then(snapshot => {
-        const data = snapshot.val() || {};
-
-        profilInfo.innerHTML = `
-          <h2>${data.ime || 'Korisnik'}</h2>
-          <p><strong>Email:</strong> ${user.email}</p>
-          <p><strong>Telefon:</strong> ${data.telefon || 'Nije navedeno'}</p>
-          <p><strong>Lokacija:</strong> ${data.lokacija || 'Nije navedeno'}</p>
-          <p><strong>Niše:</strong> ${data.nise ? data.nise.join(', ') : 'Nijedna'}</p>
-          <p><strong>Opis:</strong> ${data.opis || 'Nema opisa'}</p>
-          <p><strong>Registrovan:</strong> ${data.registeredAt ? new Date(data.registeredAt).toLocaleString() : 'N/A'}</p>
-          <button onclick="odjaviSe()">Odjavi se</button>
-        `;
-      }).catch(error => {
-        profilInfo.innerHTML = '<p>Greška pri učitavanju podataka: ' + error.message + '</p>';
-      });
-    } else {
-      profilInfo.innerHTML = '<p>Niste ulogovani. <a href="registracija.html">Registrujte se</a> ili <a href="login.html">prijavite</a>.</p>';
+    if (!this.checkValidity()) {
+      alert('Molimo popunite sva obavezna polja!');
+      return;
     }
-  });
 
-  function odjaviSe() {
-    auth.signOut().then(() => {
-      localStorage.removeItem('trenutniKorisnik');
-      window.location.href = '/';
-    }).catch(error => {
-      alert('Greška pri odjavi: ' + error.message);
-    });
-  }
+    const podaci = {
+      ime: document.getElementById('ime').value,
+      email: document.getElementById('email').value,
+      telefon: document.getElementById('telefon').value,
+      lokacija: document.getElementById('lokacija').value,
+      nise: Array.from(document.querySelectorAll('input[name="nise"]:checked')).map(cb => cb.value),
+      opis: document.getElementById('opis').value,
+      registeredAt: new Date().toISOString()
+    };
+
+    localStorage.setItem('trenutniKorisnik', JSON.stringify(podaci));
+
+    document.getElementById('success-message').style.display = 'block';
+
+    setTimeout(() => {
+      window.location.href = 'moj-profil.html';
+    }, 2000);
+  });
 </script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 
 </body>
 </html>
+
+
+
