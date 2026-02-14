@@ -312,60 +312,37 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 
 <script>
-  // Tvoj Supabase URL i anon key (iz Supabase konzole → Project Settings → API)
-  const supabaseUrl = 'https:/lokalniplodovi.supabase.co';
-  const supabaseKey = sb_publishable_kt62uzZKTy9KdH6dxnLteQ_oCvy6Hkp
-  const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
+  // OVO JE DEO KOJI MENJAŠ – STAVI SVOJ PRAVI CONFIG OVDE
+  const firebaseConfig = {
+     apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
+  authDomain: "lokalni-plodovi.firebaseapp.com",
+  databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "lokalni-plodovi",
+  storageBucket: "lokalni-plodovi.firebasestorage.app",
+  messagingSenderId: "302190046418",
+  appId: "1:302190046418:web:840ed24ca4307732f7110b",
+  measurementId: "G-XDE6GFM8YY"
+  // Inicijalizacija Firebase-a (obavezno posle config-a)
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
 
-  document.getElementById('registration-form').addEventListener('submit', async function(e) {
+  // Ovde ide tvoj kod za registraciju (submit forme)...
+  document.getElementById('registration-form').addEventListener('submit', function(e) {
     e.preventDefault();
-
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('lozinka').value.trim();
-    const ime = document.getElementById('ime').value.trim();
-    const telefon = document.getElementById('telefon').value.trim();
-    const lokacija = document.getElementById('lokacija').value.trim();
-    const nise = Array.from(document.querySelectorAll('input[name="nise"]:checked')).map(cb => cb.value);
-    const opis = document.getElementById('opis').value.trim();
-
-    if (!email || !password || !ime || !telefon || !lokacija) {
-      alert('Molimo popunite sva obavezna polja!');
-      return;
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          ime,
-          telefon,
-          lokacija,
-          nise,
-          opis
-        }
-      }
-    });
-
-    if (error) {
-      alert('Greška pri registraciji: ' + error.message);
-      console.error(error);
-      return;
-    }
-
-    alert('Registracija uspešna! Preusmeravamo na profil...');
-    setTimeout(() => {
-      window.location.href = 'moj-profil.html';
-    }, 1500);
+    // ... tvoj kod za registraciju ...
   });
 </script>
 
 
 </body>
 </html>
+
 
 
 
