@@ -227,9 +227,37 @@
     });
   }
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 
+<script>
+  // OVO JE DEO KOJI MENJAŠ – STAVI SVOJ PRAVI CONFIG OVDE
+  const firebaseConfig = {
+      apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
+  authDomain: "lokalni-plodovi.firebaseapp.com",
+  databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "lokalni-plodovi",
+  storageBucket: "lokalni-plodovi.firebasestorage.app",
+  messagingSenderId: "302190046418",
+  appId: "1:302190046418:web:840ed24ca4307732f7110b",
+  measurementId: "G-XDE6GFM8YY"
+  };
+
+  // Inicijalizacija Firebase-a (obavezno posle config-a)
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  // Ovde ide tvoj kod za registraciju (submit forme)...
+  document.getElementById('registration-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // ... tvoj kod za registraciju ...
+  });
+</script>
 </body>
 </html>
+
 
 
 
