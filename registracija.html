@@ -253,6 +253,8 @@
     </div>
 
     <button type="submit" class="submit-btn">Pošalji zahtev za verifikaciju</button>
+     <p id="poruka"></p>
+
 
     <div id="success-message" style="display:none; margin-top:2rem; padding:1.5rem; background:#e8f5e9; border-radius:12px; color:#2e7d32; text-align:center; border:1px solid #c8e6c9;">
       <strong>Zahtev je uspešno poslat!</strong><br>
@@ -313,65 +315,55 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 <!--End of Tawk.to Script-->
 <script>
-  // Dodaj ovo na kraj fajla
-  document.getElementById('registration-form').addEventListener('submit', async function(e) {
-    e.preventDefault(); // sprečava reload stranice
+document.getElementById('registration-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    const poruka = document.getElementById('poruka') || document.createElement('p');
-    poruka.textContent = 'Registrujem...';
-    poruka.style.color = 'blue';
+  const poruka = document.getElementById('poruka') || document.createElement('p');
+  poruka.textContent = 'Šaljem...';
+  poruka.style.color = 'blue';
 
-    const podaci = {
-      ime: document.getElementById('ime')?.value.trim() || '',
-      email: document.getElementById('email')?.value.trim() || '',
-      lozinka: document.getElementById('lozinka')?.value || '',
-      telefon: document.getElementById('telefon')?.value.trim() || '',
-      lokacija: document.getElementById('lokacija')?.value.trim() || '',
-      nise: [], // ako imaš checkbox-ove za nise, sakupi ih ovde
-      opis: document.getElementById('opis')?.value.trim() || ''
-    };
+  const data = {
+    ime: document.getElementById('ime')?.value.trim(),
+    email: document.getElementById('email')?.value.trim(),
+    lozinka: document.getElementById('lozinka')?.value,
+    telefon: document.getElementById('telefon')?.value.trim(),
+    lokacija: document.getElementById('lokacija')?.value.trim(),
+    nise: [], // ako imaš checkbox-ove, sakupi ovde
+    opis: document.getElementById('opis')?.value.trim() || ''
+  };
 
-    // Proveri obavezna polja
-    if (!podaci.ime || !podaci.email || !podaci.lozinka || !podaci.telefon || !podaci.lokacija) {
-      poruka.textContent = 'Popunite sva obavezna polja!';
-      poruka.style.color = 'red';
-      return;
-    }
+  if (!data.ime || !data.email || !data.lozinka || !data.telefon || !data.lokacija) {
+    poruka.textContent = 'Popuni sva obavezna polja!';
+    poruka.style.color = 'red';
+    return;
+  }
 
-    try {
-      const response = await fetch('https://lokalni-backend.onrender.com/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(podaci)
-      });
+  try {
+    const res = await fetch('https://lokalni-backend.onrender.com/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
 
-      const data = await response.json();
+    const result = await res.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Greška na serveru');
-      }
+    if (!res.ok) throw new Error(result.error || 'Greška');
 
-      poruka.style.color = 'green';
-      poruka.textContent = data.message + ' – Dobrodošao! Token sačuvan.';
+    poruka.style.color = 'green';
+    poruka.textContent = result.message + ' – Dobrodošao!';
+    localStorage.setItem('authToken', result.token);
+    localStorage.setItem('user', JSON.stringify(result.user));
 
-      // Sačuvaj token u localStorage za kasnije (login, profil...)
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
-      // Opcionalno preusmeri na profil posle 2 sekunde
-      setTimeout(() => {
-        window.location.href = 'moj-profil.html';
-      }, 2000);
-
-    } catch (err) {
-      poruka.style.color = 'red';
-      poruka.textContent = err.message;
-      console.error(err);
-    }
-  });
+    setTimeout(() => location.href = 'moj-profil.html', 1500);
+  } catch (err) {
+    poruka.style.color = 'red';
+    poruka.textContent = err.message;
+  }
+});
 </script>
 </body>
 </html>
+
 
 
 
