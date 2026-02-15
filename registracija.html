@@ -254,7 +254,7 @@
 
     <button type="submit" class="submit-btn">Pošalji zahtev za verifikaciju</button>
      <p id="poruka"></p>
-
+<p id="poruka" style="color: red; min-height: 20px; margin-top: 10px;"></p>
 
     <div id="success-message" style="display:none; margin-top:2rem; padding:1.5rem; background:#e8f5e9; border-radius:12px; color:#2e7d32; text-align:center; border:1px solid #c8e6c9;">
       <strong>Zahtev je uspešno poslat!</strong><br>
@@ -274,95 +274,64 @@
 </footer>
 
 <script>
-  document.getElementById('registration-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    if (!this.checkValidity()) {
-      alert('Molimo popunite sva obavezna polja!');
-      return;
-    }
-
-    const podaci = {
-      ime: document.getElementById('ime').value,
-      email: document.getElementById('email').value,
-      telefon: document.getElementById('telefon').value,
-      lokacija: document.getElementById('lokacija').value,
-      nise: Array.from(document.querySelectorAll('input[name="nise"]:checked')).map(cb => cb.value),
-      opis: document.getElementById('opis').value,
-      registeredAt: new Date().toISOString()
-    };
-
-    localStorage.setItem('trenutniKorisnik', JSON.stringify(podaci));
-
-    document.getElementById('success-message').style.display = 'block';
-
-    setTimeout(() => {
-      window.location.href = 'moj-profil.html';
-    }, 2000);
-  });
-</script>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-<script>
-document.getElementById('registration-form').addEventListener('submit', async (e) => {
+document.getElementById('registration-form').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  const poruka = document.getElementById('poruka') || document.createElement('p');
-  poruka.textContent = 'Šaljem...';
-  poruka.style.color = 'blue';
-
-  const data = {
-    ime: document.getElementById('ime')?.value.trim(),
-    email: document.getElementById('email')?.value.trim(),
-    lozinka: document.getElementById('lozinka')?.value,
-    telefon: document.getElementById('telefon')?.value.trim(),
-    lokacija: document.getElementById('lokacija')?.value.trim(),
-    nise: [], // ako imaš checkbox-ove, sakupi ovde
-    opis: document.getElementById('opis')?.value.trim() || ''
-  };
-
-  if (!data.ime || !data.email || !data.lozinka || !data.telefon || !data.lokacija) {
-    poruka.textContent = 'Popuni sva obavezna polja!';
-    poruka.style.color = 'red';
+  // Ako forma ima HTML5 validaciju, možeš zadržati ovo
+  if (!this.checkValidity()) {
+    alert('Molimo popunite sva obavezna polja!');
     return;
   }
 
+  const poruka = document.getElementById('poruka') || document.createElement('p');
+  poruka.textContent = 'Šaljem na server...';
+  poruka.style.color = 'blue';
+
+  const podaci = {
+    ime: document.getElementById('ime').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    lozinka: document.getElementById('lozinka').value,
+    telefon: document.getElementById('telefon').value.trim(),
+    lokacija: document.getElementById('lokacija').value.trim(),
+    nise: Array.from(document.querySelectorAll('input[name="nise"]:checked')).map(cb => cb.value),
+    opis: document.getElementById('opis').value.trim() || ''
+  };
+
+  console.log('Podaci za slanje:', podaci); // vidi se u konzoli
+
   try {
-    const res = await fetch('https://lokalni-backend.onrender.com/register', {
+    const response = await fetch('https://lokalni-backend.onrender.com/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(podaci)
     });
 
-    const result = await res.json();
+    const data = await response.json();
 
-    if (!res.ok) throw new Error(result.error || 'Greška');
+    if (!response.ok) {
+      throw new Error(data.error || 'Greška na serveru');
+    }
 
     poruka.style.color = 'green';
-    poruka.textContent = result.message + ' – Dobrodošao!';
-    localStorage.setItem('authToken', result.token);
-    localStorage.setItem('user', JSON.stringify(result.user));
+    poruka.textContent = data.message || 'Registracija uspešna!';
 
-    setTimeout(() => location.href = 'moj-profil.html', 1500);
+    localStorage.setItem('authToken', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+
+    setTimeout(() => {
+      window.location.href = 'moj-profil.html';
+    }, 1500);
+
   } catch (err) {
     poruka.style.color = 'red';
     poruka.textContent = err.message;
+    console.error('Greška pri registraciji:', err);
   }
 });
 </script>
 </body>
 </html>
+
 
 
 
