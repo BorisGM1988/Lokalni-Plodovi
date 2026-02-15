@@ -158,16 +158,13 @@
 <div class="container">
   <h1>Moj profil</h1>
 
-  <div id="profil-info">
-    Učitavanje podataka...
-  </div>
-  <div>
+<p id="loading-text">Učitavanje podataka...</p>
+
+<div id="profil-podaci" style="display: none;">
   <p>Ime: <span id="user-ime">---</span></p>
   <p>Email: <span id="user-email">---</span></p>
-  
- <p>Telefon: <span id="user-telefon">---</span></p> -->
- <p>Lokacija: <span id="user-lokacija">---</span></p> -->
-</div>
+  <!-- Dodaj još ako želiš -->
+  <!-- <p>Telefon: <span id="user-telefon">---</span></p> -->
 </div>
 
 <footer>
@@ -179,17 +176,18 @@
 </footer>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Profil stranica učitana – proveravam da li je korisnik prijavljen');
+  console.log('Profil stranica učitana');
 
   const token = localStorage.getItem('authToken');
   const userStr = localStorage.getItem('user');
 
-  const loading = document.getElementById('loading-text') || document.querySelector('p');
+  const loading = document.getElementById('loading-text');
+  const podaciDiv = document.getElementById('profil-podaci');
 
   if (loading) loading.textContent = 'Proveravam prijavu...';
 
   if (!token || !userStr) {
-    console.log('Nema tokena ili user podataka – korisnik nije prijavljen');
+    console.log('Nema tokena ili user-a');
     if (loading) loading.textContent = 'Niste prijavljeni. Preusmeravam na login...';
     setTimeout(() => window.location.href = 'login.html', 2000);
     return;
@@ -198,22 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const user = JSON.parse(userStr);
   console.log('Korisnik pronađen:', user);
 
-  if (loading) loading.textContent = ''; // ukloni loading tekst
+  if (loading) loading.textContent = ''; // briše loading
+  if (podaciDiv) podaciDiv.style.display = 'block'; // prikazuje podatke
 
-  // Prikaz podataka (promeni ID-ove ako su ti drugačiji u HTML-u)
-  if (document.getElementById('user-ime')) {
-    document.getElementById('user-ime').textContent = user.ime || user.email.split('@')[0] || 'Korisnik';
-  }
-  if (document.getElementById('user-email')) {
-    document.getElementById('user-email').textContent = user.email || 'Nema emaila';
-  }
-
-  // Dodaj još polja ako želiš (telefon, lokacija...)
-  // npr. document.getElementById('user-telefon').textContent = user.telefon || 'Nema telefona';
+  document.getElementById('user-ime')?.textContent = user.ime || user.email.split('@')[0] || 'Korisnik';
+  document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
 });
 </script>
 </body>
 </html>
+
 
 
 
