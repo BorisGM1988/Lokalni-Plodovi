@@ -171,92 +171,18 @@
   </div>
 </footer>
 
-<!-- Firebase compat SDK (radi bez module grešaka) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<!-- Ovo stavi samo jednom po fajlu, na dnu pre </body> -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // Tvoj Firebase config (kopiraj iz Firebase konzole – isti kao za chat)
-  const firebaseConfig = {
-    apiKey: "AIzaSy...",
-    authDomain: "lokalni-plodovi-chat.firebaseapp.com",
-    databaseURL: "https://lokalni-plodovi-chat-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "lokalni-plodovi-chat",
-    storageBucket: "lokalni-plodovi-chat.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef123456"
-  };
+  const supabaseUrl = 'https://smpbjhrafmxgqjpgxsbf.supabase.co';
+  const supabaseKey = 'sb_publishable_kt62uzZKTy9KdH6dxnLteQ_oCvy6Hkp';  // ili tvoj drugi publishable key, ceo string!
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
-
-  // Proveri ulogovanog korisnika i prikaži podatke
-  auth.onAuthStateChanged(user => {
-    const profilInfo = document.getElementById('profil-info');
-
-    if (user) {
-      db.ref('users/' + user.uid).once('value').then(snapshot => {
-        const data = snapshot.val() || {};
-
-        profilInfo.innerHTML = `
-          <h2>${data.ime || 'Korisnik'}</h2>
-          <p><strong>Email:</strong> ${user.email}</p>
-          <p><strong>Telefon:</strong> ${data.telefon || 'Nije navedeno'}</p>
-          <p><strong>Lokacija:</strong> ${data.lokacija || 'Nije navedeno'}</p>
-          <p><strong>Niše:</strong> ${data.nise ? data.nise.join(', ') : 'Nijedna'}</p>
-          <p><strong>Opis:</strong> ${data.opis || 'Nema opisa'}</p>
-          <p><strong>Registrovan:</strong> ${data.registeredAt ? new Date(data.registeredAt).toLocaleString() : 'N/A'}</p>
-          <button onclick="odjaviSe()">Odjavi se</button>
-        `;
-      }).catch(error => {
-        profilInfo.innerHTML = '<p>Greška pri učitavanju podataka: ' + error.message + '</p>';
-      });
-    } else {
-      profilInfo.innerHTML = '<p>Niste ulogovani. <a href="registracija.html">Registrujte se</a> ili <a href="login.html">prijavite</a>.</p>';
-    }
-  });
-
-  function odjaviSe() {
-    auth.signOut().then(() => {
-      localStorage.removeItem('trenutniKorisnik');
-      window.location.href = '/';
-    }).catch(error => {
-      alert('Greška pri odjavi: ' + error.message);
-    });
-  }
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
-
-<script>
-  // OVO JE DEO KOJI MENJAŠ – STAVI SVOJ PRAVI CONFIG OVDE
-  const firebaseConfig = {
-      apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
-  authDomain: "lokalni-plodovi.firebaseapp.com",
-  databaseURL: "https://lokalni-plodovi-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "lokalni-plodovi",
-  storageBucket: "lokalni-plodovi.firebasestorage.app",
-  messagingSenderId: "302190046418",
-  appId: "1:302190046418:web:840ed24ca4307732f7110b",
-  measurementId: "G-XDE6GFM8YY"
-  };
-
-  // Inicijalizacija Firebase-a (obavezno posle config-a)
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
-
-  // Ovde ide tvoj kod za registraciju (submit forme)...
-  document.getElementById('registration-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    // ... tvoj kod za registraciju ...
-  });
+  const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 </script>
 </body>
 </html>
+
 
 
 
