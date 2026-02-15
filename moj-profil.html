@@ -161,6 +161,13 @@
   <div id="profil-info">
     Učitavanje podataka...
   </div>
+  <div>
+  <p>Ime: <span id="user-ime">---</span></p>
+  <p>Email: <span id="user-email">---</span></p>
+  
+ <p>Telefon: <span id="user-telefon">---</span></p> -->
+ <p>Lokacija: <span id="user-lokacija">---</span></p> -->
+</div>
 </div>
 
 <footer>
@@ -172,7 +179,7 @@
 </footer>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Profil stranica učitana – proveravam token');
+  console.log('Profil stranica učitana – proveravam da li je korisnik prijavljen');
 
   const token = localStorage.getItem('authToken');
   const userStr = localStorage.getItem('user');
@@ -182,27 +189,32 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loading) loading.textContent = 'Proveravam prijavu...';
 
   if (!token || !userStr) {
-    console.log('Nema tokena – preusmeravam na login');
+    console.log('Nema tokena ili user podataka – korisnik nije prijavljen');
     if (loading) loading.textContent = 'Niste prijavljeni. Preusmeravam na login...';
     setTimeout(() => window.location.href = 'login.html', 2000);
     return;
   }
 
   const user = JSON.parse(userStr);
-  console.log('Korisnik pronađen u storage-u:', user);
+  console.log('Korisnik pronađen:', user);
 
   if (loading) loading.textContent = ''; // ukloni loading tekst
 
-  // Prikaz podataka (prilagodi ID-ove ako su ti drugačiji)
-  document.getElementById('user-ime')?.textContent = user.ime || user.email.split('@')[0] || 'Korisnik';
-  document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
+  // Prikaz podataka (promeni ID-ove ako su ti drugačiji u HTML-u)
+  if (document.getElementById('user-ime')) {
+    document.getElementById('user-ime').textContent = user.ime || user.email.split('@')[0] || 'Korisnik';
+  }
+  if (document.getElementById('user-email')) {
+    document.getElementById('user-email').textContent = user.email || 'Nema emaila';
+  }
 
-  // Ako želiš još polja (telefon, lokacija...) – možeš dodati fetch na /profile rutu kasnije
-  console.log('Profil učitan za korisnika:', user.ime);
+  // Dodaj još polja ako želiš (telefon, lokacija...)
+  // npr. document.getElementById('user-telefon').textContent = user.telefon || 'Nema telefona';
 });
 </script>
 </body>
 </html>
+
 
 
 
