@@ -312,84 +312,67 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Tvoji ključevi – proveri da li je key tačan (ceo publishable sa dashboarda)
-  const supabaseUrl = 'https://smpbjhrafmxgqjpgxsbf.supabase.co';
-  const supabaseKey = 'sb_publishable_kQK5uwXgU89JW2f81Ez68w_35bSwFMv';  // PROMENI AKO IMAŠ DRUGI!
+  // Dodaj ovo na kraj fajla
+  document.getElementById('registration-form').addEventListener('submit', async function(e) {
+    e.preventDefault(); // sprečava reload stranice
 
-  const supabase = supabase.createClient(supabaseUrl, supabaseKey);  // MALO 's' !!!
+    const poruka = document.getElementById('poruka') || document.createElement('p');
+    poruka.textContent = 'Registrujem...';
+    poruka.style.color = 'blue';
 
-  // Čekamo da se DOM učita da bi forma bila dostupna
-  document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('registration-form');  // proveri da li je ID forme tačno 'registration-form'
+    const podaci = {
+      ime: document.getElementById('ime')?.value.trim() || '',
+      email: document.getElementById('email')?.value.trim() || '',
+      lozinka: document.getElementById('lozinka')?.value || '',
+      telefon: document.getElementById('telefon')?.value.trim() || '',
+      lokacija: document.getElementById('lokacija')?.value.trim() || '',
+      nise: [], // ako imaš checkbox-ove za nise, sakupi ih ovde
+      opis: document.getElementById('opis')?.value.trim() || ''
+    };
 
-    if (!form) {
-      console.error("Forma nije pronađena – proveri id='registration-form' u HTML-u!");
+    // Proveri obavezna polja
+    if (!podaci.ime || !podaci.email || !podaci.lozinka || !podaci.telefon || !podaci.lokacija) {
+      poruka.textContent = 'Popunite sva obavezna polja!';
+      poruka.style.color = 'red';
       return;
     }
 
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
+    try {
+      const response = await fetch('https://lokalni-backend.onrender.com/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(podaci)
+      });
 
-      // Dodaj element za poruke ako ga nemaš (dodaj u HTML ispod button-a: <p id="poruka" style="color:red;"></p>)
-      const poruka = document.getElementById('poruka') || { textContent: '' };
+      const data = await response.json();
 
-      poruka.textContent = 'Šaljem podatke...';
-      poruka.style.color = 'blue';
-
-      // Uzmi vrednosti – prilagodi ID-ove ako nisu tačni u tvom HTML-u!
-      const email    = document.getElementById('email')?.value.trim() || '';
-      const password = document.getElementById('lozinka')?.value || '';
-      const ime      = document.getElementById('ime')?.value.trim() || '';
-      const telefon  = document.getElementById('telefon')?.value.trim() || '';
-      const lokacija = document.getElementById('lokacija')?.value.trim() || '';
-
-      // Checkbox-ovi za nise (ako imaš više input[type=checkbox] sa name='nise')
-      const niseInputs = document.querySelectorAll('input[name="nise"]:checked');
-      const nise = Array.from(niseInputs).map(input => input.value);
-
-      const kontaktOpcije = document.getElementById('opis')?.value.trim() || '';  // ako je textarea ili input
-
-      if (!email || !password || password.length < 6 || !ime || !telefon || !lokacija) {
-        poruka.textContent = 'Molimo popunite sva obavezna polja! Lozinka min 6 karaktera.';
-        poruka.style.color = 'red';
-        return;
+      if (!response.ok) {
+        throw new Error(data.error || 'Greška na serveru');
       }
 
-      try {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              ime,
-              telefon,
-              lokacija,
-              nise,             // array
-              kontakt_opcije: kontaktOpcije
-            }
-          }
-        });
+      poruka.style.color = 'green';
+      poruka.textContent = data.message + ' – Dobrodošao! Token sačuvan.';
 
-        console.log('Supabase odgovor:', { data, error });  // vidi u konzoli šta se desilo!
+      // Sačuvaj token u localStorage za kasnije (login, profil...)
+      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
 
-        if (error) throw error;
+      // Opcionalno preusmeri na profil posle 2 sekunde
+      setTimeout(() => {
+        window.location.href = 'moj-profil.html';
+      }, 2000);
 
-        poruka.style.color = 'green';
-        poruka.textContent = 'Registracija uspešna! ' + 
-          (data.session ? 'Sad možeš da se uloguješ.' : 'Proveri email za potvrdu.');
-      } catch (err) {
-        console.error('Greška pri registraciji:', err);
-        poruka.textContent = 'Greška: ' + (err.message || 'Nešto nije u redu sa serverom.');
-        poruka.style.color = 'red';
-      }
-    });
+    } catch (err) {
+      poruka.style.color = 'red';
+      poruka.textContent = err.message;
+      console.error(err);
+    }
   });
 </script>
 </body>
 </html>
+
 
 
 
