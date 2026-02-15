@@ -170,34 +170,43 @@
     <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
   </div>
 </footer>
-
-<!-- Ovo stavi samo jednom po fajlu, na dnu pre </body> -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-  const supabaseUrl = 'https://smpbjhrafmxgqjpgxsbf.supabase.co';
-  const supabaseKey = 'sb_publishable_kt62uzZKTy9KdH6dxnLteQ_oCvy6Hkp';  // ili tvoj drugi publishable key, ceo string!
+  // Proveri da li korisnik ima token (sačuvan pri registraciji/login)
+  document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('authToken');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
-</script>
-<script>
-  // ... isti inicijalizacioni blok kao gore ...
+    const loadingText = document.getElementById('loading-text') || document.querySelector('p'); // prilagodi ID ako imaš
 
-  // Provera ulogovanog korisnika
-  supabase.auth.getUser().then(({ data: { user } }) => {
-    if (!user) {
-      // nije ulogovan → preusmeri na login
-      window.location.href = 'login.html';
-    } else {
-      // prikaži podatke
-      document.getElementById('user-ime').textContent = user.user_metadata?.ime || 'Korisnik';
-      document.getElementById('user-email').textContent = user.email;
-      // možeš dodati i telefon, lokaciju... ako si ih sačuvao u metadata
+    if (!token || !user.id) {
+      loadingText.textContent = 'Niste prijavljeni. Molimo prijavite se.';
+      setTimeout(() => {
+        window.location.href = 'login.html'; // ili registracija.html
+      }, 2000);
+      return;
     }
+
+    // Ako ima token – prikaži podatke korisnika
+    loadingText.textContent = ''; // sakrij loading
+
+    document.getElementById('user-ime')?.textContent = user.ime || 'Korisnik';
+    document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
+    // Dodaj još polja ako imaš (telefon, lokacija itd.)
+
+    console.log('Ulogovan korisnik:', user);
+  });
+
+  // Dodaj logout dugme (ako imaš button id="logout-btn")
+  document.getElementById('logout-btn')?.addEventListener('click', function() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    window.location.href = 'login.html';
   });
 </script>
+
 </body>
 </html>
+
 
 
 
