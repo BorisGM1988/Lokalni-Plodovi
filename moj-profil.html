@@ -180,8 +180,25 @@
 
   const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 </script>
+<script>
+  // ... isti inicijalizacioni blok kao gore ...
+
+  // Provera ulogovanog korisnika
+  supabase.auth.getUser().then(({ data: { user } }) => {
+    if (!user) {
+      // nije ulogovan → preusmeri na login
+      window.location.href = 'login.html';
+    } else {
+      // prikaži podatke
+      document.getElementById('user-ime').textContent = user.user_metadata?.ime || 'Korisnik';
+      document.getElementById('user-email').textContent = user.email;
+      // možeš dodati i telefon, lokaciju... ako si ih sačuvao u metadata
+    }
+  });
+</script>
 </body>
 </html>
+
 
 
 
