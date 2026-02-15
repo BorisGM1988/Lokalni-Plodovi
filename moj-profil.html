@@ -5,88 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Moj profil - Lokalni Plodovi</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f8f8f8;
-      color: #333;
-    }
-    header {
-      background: #4CAF50;
-      color: white;
-      padding: 15px;
-      text-align: center;
-    }
-    nav ul {
-      list-style: none;
-      padding: 0;
-      margin: 10px 0;
-    }
-    nav li {
-      display: inline;
-      margin: 0 15px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    main {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: #4CAF50;
-      text-align: center;
-    }
-    #loading-text {
-      text-align: center;
-      font-size: 1.2em;
-      color: #777;
-      margin: 40px 0;
-    }
-    .profil-info {
-      font-size: 1.1em;
-      line-height: 1.6;
-    }
-    .profil-info p {
-      margin: 10px 0;
-    }
-    .profil-info strong {
-      color: #4CAF50;
-    }
-    .nise-list {
-      margin-left: 20px;
-    }
-    #logout-btn {
-      display: block;
-      margin: 30px auto;
-      padding: 12px 30px;
-      background: #e74c3c;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.1em;
-      cursor: pointer;
-    }
-    #logout-btn:hover {
-      background: #c0392b;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #333;
-      color: white;
-      margin-top: 40px;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
+    header { background: #4CAF50; color: white; padding: 15px; text-align: center; }
+    nav ul { list-style: none; padding: 0; margin: 10px 0; }
+    nav li { display: inline; margin: 0 15px; }
+    nav a { color: white; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 800px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { color: #4CAF50; text-align: center; }
+    #loading-text { text-align: center; font-size: 1.2em; color: #777; margin: 40px 0; }
+    .profil-info { font-size: 1.1em; line-height: 1.6; }
+    .profil-info p { margin: 10px 0; }
+    .profil-info strong { color: #4CAF50; }
+    #logout-btn { display: block; margin: 30px auto; padding: 12px 30px; background: #e74c3c; color: white; border: none; border-radius: 6px; font-size: 1.1em; cursor: pointer; }
+    #logout-btn:hover { background: #c0392b; }
+    footer { text-align: center; padding: 20px; background: #333; color: white; margin-top: 40px; }
   </style>
 </head>
 <body>
@@ -116,8 +49,7 @@
       <p><strong>Telefon:</strong> <span id="user-telefon">---</span></p>
       <p><strong>Lokacija:</strong> <span id="user-lokacija">---</span></p>
       <p><strong>Opis:</strong> <span id="user-opis">---</span></p>
-      <p><strong>Niše / proizvodi:</strong></p>
-      <ul id="user-nise" class="nise-list"></ul>
+      <p><strong>Niše:</strong> <ul id="user-nise"></ul></p>
     </div>
 
     <button id="logout-btn">Odjavi se</button>
@@ -140,7 +72,7 @@
       if (loading) loading.textContent = 'Proveravam prijavu...';
 
       if (!token || !userStr) {
-        console.log('Nema tokena ili user podataka');
+        console.log('Nema tokena – preusmeravam na login');
         if (loading) loading.textContent = 'Niste prijavljeni. Preusmeravam na login...';
         setTimeout(() => window.location.href = 'prijavi-se.html', 2000);
         return;
@@ -151,7 +83,7 @@
         user = JSON.parse(userStr);
         console.log('Korisnik pronađen:', user);
       } catch (err) {
-        console.error('Greška pri parsiranju user podataka:', err);
+        console.error('Greška pri parsiranju user-a:', err);
         if (loading) loading.textContent = 'Greška pri učitavanju profila';
         return;
       }
@@ -159,22 +91,19 @@
       if (loading) loading.textContent = '';
       if (podaciDiv) podaciDiv.style.display = 'block';
 
-      // Popunjavanje podataka
-      document.getElementById('user-ime')?.textContent = user.ime || user.email?.split('@')[0] || 'Korisnik';
+      document.getElementById('user-ime')?.textContent = user.ime || 'Korisnik';
       document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
       document.getElementById('user-telefon')?.textContent = user.telefon || '---';
       document.getElementById('user-lokacija')?.textContent = user.lokacija || '---';
       document.getElementById('user-opis')?.textContent = user.opis || 'Nema opisa';
 
-      // Prikaz nise (ako postoje)
+      // Prikaz nise ako postoje
       const niseList = document.getElementById('user-nise');
       if (niseList && user.nise) {
-        let niseArray;
+        let niseArray = [];
         try {
           niseArray = JSON.parse(user.nise);
-        } catch {
-          niseArray = [];
-        }
+        } catch {}
         niseArray.forEach(n => {
           const li = document.createElement('li');
           li.textContent = n;
@@ -182,7 +111,7 @@
         });
       }
 
-      // Logout dugme
+      // Logout
       document.getElementById('logout-btn')?.addEventListener('click', () => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
@@ -194,4 +123,5 @@
 </body>
 </html>
   
+
 
