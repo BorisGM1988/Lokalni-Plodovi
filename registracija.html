@@ -288,12 +288,14 @@ s0.parentNode.insertBefore(s1,s0);
 <script>
 document.getElementById('registration-form').addEventListener('submit', async function(e) {
   e.preventDefault();
-  e.stopPropagation(); // dodatno sprečava default submit
+  console.log('Submit događaj pokrenut – preventDefault uspeo');
 
   const poruka = document.getElementById('poruka');
   if (poruka) {
     poruka.textContent = 'Šaljem na server...';
     poruka.style.color = 'blue';
+  } else {
+    console.warn('Element #poruka ne postoji – dodaj ga u HTML!');
   }
 
   const podaci = {
@@ -306,17 +308,20 @@ document.getElementById('registration-form').addEventListener('submit', async fu
     opis: document.getElementById('opis')?.value.trim() || ''
   };
 
-  console.log('Podaci za slanje:', podaci); // vidi se u konzoli – proveri da li su OK
+  console.log('Podaci koji se šalju:', podaci);
 
   try {
+    console.log('Šaljem fetch na backend...');
     const response = await fetch('https://lokalni-backend.onrender.com/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(podaci)
     });
 
+    console.log('Fetch završen, status:', response.status);
+
     const data = await response.json();
-    console.log('Odgovor od servera:', data); // vidi u konzoli
+    console.log('Odgovor od servera:', data);
 
     if (!response.ok) {
       throw new Error(data.error || 'Greška na serveru (status ' + response.status + ')');
@@ -329,25 +334,26 @@ document.getElementById('registration-form').addEventListener('submit', async fu
 
     localStorage.setItem('authToken', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
+    console.log('Token i user sačuvani u localStorage');
 
-    console.log('Token sačuvan:', data.token); // vidi u konzoli
-
+    console.log('Čekam 1.5 sekundi pa preusmeravam...');
     setTimeout(() => {
-      console.log('Preusmeravam na profil...');
+      console.log('Preusmeravanje pokrenuto');
       window.location.href = 'moj-profil.html';
     }, 1500);
 
   } catch (err) {
-    console.error('Greška:', err);
+    console.error('Greška u fetch-u ili obradi:', err);
     if (poruka) {
       poruka.style.color = 'red';
-      poruka.textContent = err.message;
+      poruka.textContent = err.message || 'Nešto nije u redu';
     }
   }
 });
 </script>
 </body>
 </html>
+
 
 
 
