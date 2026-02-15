@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Moj profil - Lokalni Plodovi</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo="> <!-- sprečava favicon 404 -->
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
     header { background: #4CAF50; color: white; padding: 15px; text-align: center; }
@@ -72,7 +73,7 @@
       if (loading) loading.textContent = 'Proveravam prijavu...';
 
       if (!token || !userStr) {
-        console.log('Nema tokena – preusmeravam na login');
+        console.log('Nema tokena ili user podataka');
         if (loading) loading.textContent = 'Niste prijavljeni. Preusmeravam na login...';
         setTimeout(() => window.location.href = 'prijavi-se.html', 2000);
         return;
@@ -91,13 +92,12 @@
       if (loading) loading.textContent = '';
       if (podaciDiv) podaciDiv.style.display = 'block';
 
-      document.getElementById('user-ime')?.textContent = user.ime || 'Korisnik';
+      document.getElementById('user-ime')?.textContent = user.ime || user.email?.split('@')[0] || 'Korisnik';
       document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
       document.getElementById('user-telefon')?.textContent = user.telefon || '---';
       document.getElementById('user-lokacija')?.textContent = user.lokacija || '---';
       document.getElementById('user-opis')?.textContent = user.opis || 'Nema opisa';
 
-      // Prikaz nise ako postoje
       const niseList = document.getElementById('user-nise');
       if (niseList && user.nise) {
         let niseArray = [];
@@ -111,7 +111,6 @@
         });
       }
 
-      // Logout
       document.getElementById('logout-btn')?.addEventListener('click', () => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
@@ -122,6 +121,6 @@
 
 </body>
 </html>
-  
+
 
 
