@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Moj profil - Lokalni Plodovi</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">  <!-- sprečava 404 za favicon -->
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
     header { background: #4CAF50; color: white; padding: 15px; text-align: center; }
@@ -12,7 +13,7 @@
     nav a { color: white; text-decoration: none; font-weight: bold; }
     nav a:hover { text-decoration: underline; }
     main { max-width: 800px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h1, h2 { color: #4CAF50; text-align: center; }
+    h1 { color: #4CAF50; text-align: center; }
     #loading-text { text-align: center; font-size: 1.2em; color: #777; margin: 40px 0; }
     .profil-info { font-size: 1.1em; line-height: 1.6; margin-bottom: 30px; }
     .profil-info p { margin: 10px 0; }
@@ -25,7 +26,9 @@
     button:hover { background: #45a049; }
     #logout-btn { background: #e74c3c; }
     #logout-btn:hover { background: #c0392b; }
-    #slika-preview { max-width: 200px; margin-top: 10px; }
+    #slika-preview { max-width: 200px; margin-top: 10px; display: block; }
+    #proizvodi-list { margin-top: 30px; }
+    .proizvod-item { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 6px; background: #f8f8f8; }
     footer { text-align: center; padding: 20px; background: #333; color: white; margin-top: 40px; }
   </style>
 </head>
@@ -34,13 +37,12 @@
   <header>
     <h2>Lokalni Plodovi</h2>
     <nav>
-      <ul>
+      <ul id="nav-menu">
         <li><a href="index.html">Početna</a></li>
         <li><a href="prodavci.html">Svi prodavci</a></li>
         <li><a href="mapa.html">Mapa</a></li>
         <li><a href="chat.html">Chat</a></li>
-        <li><a href="login.html">Prijavi se</a></li>
-        <li><a href="registracija.html">Postani prodavac</a></li>
+        <!-- Ovde će se dinamički menjati Prijavi se/Postani prodavac u Moj profil/Odjavi se -->
       </ul>
     </nav>
   </header>
@@ -111,6 +113,9 @@
 
     <p id="add-proizvod-poruka"></p>
 
+    <h2>Moji proizvodi</h2>
+    <div id="proizvodi-list"></div>
+
     <button id="logout-btn">Odjavi se</button>
   </main>
 
@@ -133,7 +138,7 @@
       if (!token || !userStr) {
         console.log('Nema tokena – preusmeravam na login');
         if (loading) loading.textContent = 'Niste prijavljeni. Preusmeravam na login...';
-        setTimeout(() => window.location.href = 'login.html', 2000);
+        setTimeout(() => window.location.href = 'prijavi-se.html', 2000);
         return;
       }
 
@@ -173,7 +178,7 @@
       document.getElementById('logout-btn')?.addEventListener('click', () => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
-        window.location.href = 'login.html';
+        window.location.href = 'prijavi-se.html';
       });
     });
   </script>
