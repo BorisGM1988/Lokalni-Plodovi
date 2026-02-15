@@ -171,41 +171,39 @@
   </div>
 </footer>
 <script>
-  // Proveri da li korisnik ima token (sačuvan pri registraciji/login)
-  document.addEventListener('DOMContentLoaded', function() {
-    const token = localStorage.getItem('authToken');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Profil stranica učitana – proveravam token');
 
-    const loadingText = document.getElementById('loading-text') || document.querySelector('p'); // prilagodi ID ako imaš
+  const token = localStorage.getItem('authToken');
+  const userStr = localStorage.getItem('user');
 
-    if (!token || !user.id) {
-      loadingText.textContent = 'Niste prijavljeni. Molimo prijavite se.';
-      setTimeout(() => {
-        window.location.href = 'login.html'; // ili registracija.html
-      }, 2000);
-      return;
-    }
+  const loading = document.getElementById('loading-text') || document.querySelector('p');
 
-    // Ako ima token – prikaži podatke korisnika
-    loadingText.textContent = ''; // sakrij loading
+  if (loading) loading.textContent = 'Proveravam prijavu...';
 
-    document.getElementById('user-ime')?.textContent = user.ime || 'Korisnik';
-    document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
-    // Dodaj još polja ako imaš (telefon, lokacija itd.)
+  if (!token || !userStr) {
+    console.log('Nema tokena – preusmeravam na login');
+    if (loading) loading.textContent = 'Niste prijavljeni. Preusmeravam na login...';
+    setTimeout(() => window.location.href = 'login.html', 2000);
+    return;
+  }
 
-    console.log('Ulogovan korisnik:', user);
-  });
+  const user = JSON.parse(userStr);
+  console.log('Korisnik pronađen u storage-u:', user);
 
-  // Dodaj logout dugme (ako imaš button id="logout-btn")
-  document.getElementById('logout-btn')?.addEventListener('click', function() {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    window.location.href = 'login.html';
-  });
+  if (loading) loading.textContent = ''; // ukloni loading tekst
+
+  // Prikaz podataka (prilagodi ID-ove ako su ti drugačiji)
+  document.getElementById('user-ime')?.textContent = user.ime || user.email.split('@')[0] || 'Korisnik';
+  document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
+
+  // Ako želiš još polja (telefon, lokacija...) – možeš dodati fetch na /profile rutu kasnije
+  console.log('Profil učitan za korisnika:', user.ime);
+});
 </script>
-
 </body>
 </html>
+
 
 
 
