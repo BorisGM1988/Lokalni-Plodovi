@@ -144,7 +144,7 @@
   </div>
 </footer>
 <script>
-  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL (npr. https://tvoj-backend.onrender.com)
+  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
 
   function azurirajHeader() {
     const token = localStorage.getItem('token');
@@ -162,7 +162,7 @@
   }
 
   async function ucitajProfil() {
-    azurirajHeader(); // ažuriraj header odmah
+    azurirajHeader();
 
     const token = localStorage.getItem('token');
     const profilInfo = document.getElementById('profil-info');
@@ -171,6 +171,8 @@
       profilInfo.innerHTML = `<p>Niste ulogovani. <a href="registracija.html">Registrujte se</a> ili <a href="login.html">prijavite se</a>.</p>`;
       return;
     }
+
+    console.log('Šaljem token na /profile:', token); // za proveru
 
     try {
       const response = await fetch(`${backendUrl}/profile`, {
@@ -181,25 +183,30 @@
         }
       });
 
+      console.log('Status:', response.status); // za proveru
+
       if (!response.ok) {
-        throw new Error(`Greška ${response.status}: ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Greška ${response.status}`);
       }
 
       const data = await response.json();
 
+      console.log('Podaci sa servera:', data); // za proveru
+
       profilInfo.innerHTML = `
-        <h2>Dobrodošao, ${data.ime}!</h2>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <p><strong>Telefon:</strong> ${data.telefon}</p>
-        <p><strong>Lokacija:</strong> ${data.lokacija}</p>
+        <h2>Dobrodošao, ${data.ime || 'Korisnik'}!</h2>
+        <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
+        <p><strong>Telefon:</strong> ${data.telefon || 'Nije navedeno'}</p>
+        <p><strong>Lokacija:</strong> ${data.lokacija || 'Nije navedeno'}</p>
         <p><strong>Niše:</strong> ${data.nise ? data.nise.join(', ') : 'Nijedna'}</p>
         <p><strong>Opis:</strong> ${data.opis || 'Nema opisa'}</p>
-        <p><strong>Registrovan:</strong> ${new Date(data.registeredAt).toLocaleString()}</p>
+        <p><strong>Registrovan:</strong> ${data.registeredAt ? new Date(data.registeredAt).toLocaleString() : 'N/A'}</p>
         <button onclick="odjaviSe()">Odjavi se</button>
       `;
     } catch (err) {
+      console.error('Greška pri učitavanju profila:', err);
       profilInfo.innerHTML = `<p>Greška pri učitavanju profila: ${err.message}</p>`;
-      console.error(err);
     }
   }
 
@@ -213,6 +220,7 @@
 
 </body>
 </html>
+
 
 
 
