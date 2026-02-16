@@ -3,204 +3,197 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moj profil - Lokalni Plodovi</title>
-  <link rel="icon" href="data:;base64,iVBORw0KGgo=">  <!-- sprečava 404 za favicon -->
+  <title>Moj profil – LokalniPlodovi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
-    header { background: #4CAF50; color: white; padding: 15px; text-align: center; }
-    nav ul { list-style: none; padding: 0; margin: 10px 0; }
-    nav li { display: inline; margin: 0 15px; }
-    nav a { color: white; text-decoration: none; font-weight: bold; }
-    nav a:hover { text-decoration: underline; }
-    main { max-width: 800px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h1 { color: #4CAF50; text-align: center; }
-    #loading-text { text-align: center; font-size: 1.2em; color: #777; margin: 40px 0; }
-    .profil-info { font-size: 1.1em; line-height: 1.6; margin-bottom: 30px; }
-    .profil-info p { margin: 10px 0; }
-    .profil-info strong { color: #4CAF50; }
-    .nise-list { margin-left: 20px; }
-    .form-group { margin-bottom: 20px; }
-    label { display: block; margin-bottom: 6px; font-weight: bold; }
-    input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    button { padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 1.1em; cursor: pointer; }
-    button:hover { background: #45a049; }
-    #logout-btn { background: #e74c3c; }
-    #logout-btn:hover { background: #c0392b; }
-    #slika-preview { max-width: 200px; margin-top: 10px; display: block; }
-    #proizvodi-list { margin-top: 30px; }
-    .proizvod-item { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 6px; background: #f8f8f8; }
-    footer { text-align: center; padding: 20px; background: #333; color: white; margin-top: 40px; }
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+      --svetlo: #f8f9f5;
+      --belo: #ffffff;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--svetlo);
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(46, 125, 50, 0.94);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo { font-size: 1.8rem; font-weight: 700; }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: var(--zelena);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    #profil-info p {
+      margin: 1rem 0;
+      font-size: 1.1rem;
+    }
+
+    button {
+      background: var(--zelena);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    button:hover {
+      background: var(--zelena-svetla);
+    }
+
+    footer {
+      background: var(--zemlja);
+      color: white;
+      text-align: center;
+      padding: 3rem 1rem;
+      margin-top: auto;
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <h2>Lokalni Plodovi</h2>
-    <nav>
-      <ul id="nav-menu">
-        <li><a href="index.html">Početna</a></li>
-        <li><a href="prodavci.html">Svi prodavci</a></li>
-        <li><a href="mapa.html">Mapa</a></li>
-        <li><a href="chat.html">Chat</a></li>
-        <!-- Ovde će se dinamički menjati Prijavi se/Postani prodavac u Moj profil/Odjavi se -->
-      </ul>
-    </nav>
-  </header>
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <ul>
+      <li><a href="/">Početna</a></li>
+      <li><a href="/prodavci">Svi prodavci</a></li>
+      <li><a href="/mapa">Mapa</a></li>
+      <li><a href="/chat">Chat</a></li>
 
-  <main>
-    <h1>Moj profil</h1>
+      <li id="moj-profil-li" style="display:none;">
+        <a href="/moj-profil">Moj profil</a>
+      </li>
+      <li id="odjavi-se-li" style="display:none;">
+        <a href="#" onclick="odjaviSe()">Odjavi se</a>
+      </li>
 
-   <div id="loading-wrapper">
-  <p id="loading-text">Učitavanje podataka...</p>
+      <li id="prijavi-se-li">
+        <a href="/login">Prijavi se</a>
+      </li>
+      <li id="postani-prodavac-li">
+        <a href="/prijava-prodavca">Postani prodavac</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<div class="container">
+  <h1>Moj profil</h1>
+  <div id="profil-info">Učitavanje podataka...</div>
 </div>
 
-<div id="profil-podaci" style="display: none;">
-  <h2>Dobrodošao, <span id="user-ime">...</span></h2>
-  <p><strong>Email:</strong> <span id="user-email">---</span></p>
-  <p><strong>Telefon:</strong> <span id="user-telefon">---</span></p>
-  <p><strong>Lokacija:</strong> <span id="user-lokacija">---</span></p>
-  <p><strong>Opis:</strong> <span id="user-opis">---</span></p>
-  <p><strong>Niše:</strong> <ul id="user-nise"></ul></p>
-</div>
+<footer>
+  <div class="container">
+    <h2>LokalniPlodovi</h2>
+    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
+  </div>
+</footer>
 
-<button id="logout-btn">Odjavi se</button>
+<script>
+  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← PROMENI AKO JE DRUGAČIJI URL
 
-    <h2>Izmeni profil</h2>
-    <form id="update-form">
-      <div class="form-group">
-        <label for="update-ime">Ime</label>
-        <input type="text" id="update-ime" />
-      </div>
-      <div class="form-group">
-        <label for="update-telefon">Telefon</label>
-        <input type="tel" id="update-telefon" />
-      </div>
-      <div class="form-group">
-        <label for="update-lokacija">Lokacija</label>
-        <input type="text" id="update-lokacija" />
-      </div>
-      <div class="form-group">
-        <label for="update-opis">Opis</label>
-        <textarea id="update-opis"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="update-slika">Upload slike profila</label>
-        <input type="file" id="update-slika" accept="image/*" />
-        <img id="slika-preview" src="" alt="Preview" style="display: none;" />
-      </div>
-      <button type="submit">Sačuvaj izmene</button>
-    </form>
+  async function ucitajProfil() {
+    const token = localStorage.getItem('token');
+    const profilInfo = document.getElementById('profil-info');
 
-    <p id="update-poruka"></p>
+    if (!token) {
+      profilInfo.innerHTML = `<p>Niste ulogovani. <a href="registracija.html">Registrujte se</a> ili <a href="login.html">prijavite se</a>.</p>`;
+      return;
+    }
 
-    <h2>Dodaj proizvod</h2>
-    <form id="add-proizvod-form">
-      <div class="form-group">
-        <label for="proizvod-naziv">Naziv proizvoda</label>
-        <input type="text" id="proizvod-naziv" required />
-      </div>
-      <div class="form-group">
-        <label for="proizvod-opis">Opis</label>
-        <textarea id="proizvod-opis" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="proizvod-cena">Cena</label>
-        <input type="number" id="proizvod-cena" required />
-      </div>
-      <div class="form-group">
-        <label for="proizvod-slika">Upload slike proizvoda</label>
-        <input type="file" id="proizvod-slika" accept="image/*" />
-        <img id="proizvod-slika-preview" src="" alt="Preview" style="display: none;" />
-      </div>
-      <button type="submit">Dodaj proizvod</button>
-    </form>
-
-    <p id="add-proizvod-poruka"></p>
-
-    <h2>Moji proizvodi</h2>
-    <div id="proizvodi-list"></div>
-
-    <button id="logout-btn">Odjavi se</button>
-  </main>
-
-  <footer>
-    © 2025 LokalniPlodovi • Sva prava zadržana
-  </footer>
-
- <script>
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('Profil stranica učitana – start');
-
-  const token = localStorage.getItem('authToken');
-  const userStr = localStorage.getItem('user');
-
-  console.log('Token u storage-u:', token ? 'postoji' : 'NE POSTOJI');
-  console.log('User string u storage-u:', userStr || 'prazno');
-
-  const loadingWrapper = document.getElementById('loading-wrapper');
-  const profilDiv = document.getElementById('profil-podaci');
-
-  if (loadingWrapper) loadingWrapper.style.display = 'block';
-
-  if (!token || !userStr) {
-    console.log('Nema tokena ili user-a → preusmeravam na login');
-    if (loadingWrapper) loadingWrapper.innerHTML = '<p>Niste prijavljeni. Preusmeravam na login...</p>';
-    setTimeout(() => window.location.href = 'prijavi-se.html', 2000);
-    return;
-  }
-
-  let user;
-  try {
-    user = JSON.parse(userStr);
-    console.log('User uspešno parsiran:', user);
-  } catch (err) {
-    console.error('Greška pri parsiranju user-a:', err);
-    if (loadingWrapper) loadingWrapper.innerHTML = '<p>Greška pri učitavanju podataka</p>';
-    return;
-  }
-
-  // Brišemo loading
-  if (loadingWrapper) loadingWrapper.style.display = 'none';
-  if (profilDiv) profilDiv.style.display = 'block';
-
-  // Popunjavanje podataka
-  document.getElementById('user-ime')?.textContent = user.ime || user.email?.split('@')[0] || 'Korisnik';
-  document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
-  document.getElementById('user-telefon')?.textContent = user.telefon || '---';
-  document.getElementById('user-lokacija')?.textContent = user.lokacija || '---';
-  document.getElementById('user-opis')?.textContent = user.opis || 'Nema opisa';
-
-  // Niše
-  const niseList = document.getElementById('user-nise');
-  if (niseList && user.nise) {
-    let niseArray = [];
     try {
-      niseArray = JSON.parse(user.nise);
-    } catch {}
-    if (niseArray.length === 0) {
-      niseList.innerHTML = '<li>Nema niša</li>';
-    } else {
-      niseArray.forEach(n => {
-        const li = document.createElement('li');
-        li.textContent = n;
-        niseList.appendChild(li);
+      const response = await fetch(`${backendUrl}/profile`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        profilInfo.innerHTML = `
+          <h2>Dobrodošao, ${data.ime}!</h2>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Telefon:</strong> ${data.telefon}</p>
+          <p><strong>Lokacija:</strong> ${data.lokacija}</p>
+          <p><strong>Niše:</strong> ${data.nise ? data.nise.join(', ') : 'Nijedna'}</p>
+          <p><strong>Opis:</strong> ${data.opis || 'Nema opisa'}</p>
+          <p><strong>Registrovan:</strong> ${new Date(data.registeredAt).toLocaleString()}</p>
+          <button onclick="odjaviSe()">Odjavi se</button>
+        `;
+      } else {
+        profilInfo.innerHTML = `<p>Greška: ${data.error || 'Nevažeći token'}</p>`;
+      }
+    } catch (err) {
+      profilInfo.innerHTML = `<p>Greška sa serverom: ${err.message}</p>`;
     }
   }
 
-  // Logout
-  document.getElementById('logout-btn')?.addEventListener('click', () => {
-    localStorage.clear();
-    window.location.href = 'prijavi-se.html';
-  });
-});
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+  }
+
+  // Pokreni učitavanje kada se stranica učita
+  document.addEventListener('DOMContentLoaded', ucitajProfil);
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
