@@ -50,16 +50,20 @@
   <main>
     <h1>Moj profil</h1>
 
-    <p id="loading-text">Učitavanje podataka...</p>
+   <div id="loading-wrapper">
+  <p id="loading-text">Učitavanje podataka...</p>
+</div>
 
-    <div class="profil-info" id="profil-podaci" style="display: none;">
-      <p><strong>Ime:</strong> <span id="user-ime">---</span></p>
-      <p><strong>Email:</strong> <span id="user-email">---</span></p>
-      <p><strong>Telefon:</strong> <span id="user-telefon">---</span></p>
-      <p><strong>Lokacija:</strong> <span id="user-lokacija">---</span></p>
-      <p><strong>Opis:</strong> <span id="user-opis">---</span></p>
-      <p><strong>Niše:</strong> <ul id="user-nise"></ul></p>
-    </div>
+<div id="profil-podaci" style="display: none;">
+  <h2>Dobrodošao, <span id="user-ime">...</span></h2>
+  <p><strong>Email:</strong> <span id="user-email">---</span></p>
+  <p><strong>Telefon:</strong> <span id="user-telefon">---</span></p>
+  <p><strong>Lokacija:</strong> <span id="user-lokacija">---</span></p>
+  <p><strong>Opis:</strong> <span id="user-opis">---</span></p>
+  <p><strong>Niše:</strong> <ul id="user-nise"></ul></p>
+</div>
+
+<button id="logout-btn">Odjavi se</button>
 
     <h2>Izmeni profil</h2>
     <form id="update-form">
@@ -123,68 +127,78 @@
     © 2025 LokalniPlodovi • Sva prava zadržana
   </footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('Profil stranica učitana');
+ <script>
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Profil stranica učitana – start');
 
-      const token = localStorage.getItem('authToken');
-      const userStr = localStorage.getItem('user');
+  const token = localStorage.getItem('authToken');
+  const userStr = localStorage.getItem('user');
 
-      const loading = document.getElementById('loading-text');
-      const podaciDiv = document.getElementById('profil-podaci');
+  console.log('Token u storage-u:', token ? 'postoji' : 'NE POSTOJI');
+  console.log('User string u storage-u:', userStr || 'prazno');
 
-      if (loading) loading.textContent = 'Proveravam prijavu...';
+  const loadingWrapper = document.getElementById('loading-wrapper');
+  const profilDiv = document.getElementById('profil-podaci');
 
-      if (!token || !userStr) {
-        console.log('Nema tokena – preusmeravam na login');
-        if (loading) loading.textContent = 'Niste prijavljeni. Preusmeravam na login...';
-        setTimeout(() => window.location.href = 'prijavi-se.html', 2000);
-        return;
-      }
+  if (loadingWrapper) loadingWrapper.style.display = 'block';
 
-      let user;
-      try {
-        user = JSON.parse(userStr);
-        console.log('Korisnik pronađen:', user);
-      } catch (err) {
-        console.error('Greška pri parsiranju user-a:', err);
-        if (loading) loading.textContent = 'Greška pri učitavanju profila';
-        return;
-      }
+  if (!token || !userStr) {
+    console.log('Nema tokena ili user-a → preusmeravam na login');
+    if (loadingWrapper) loadingWrapper.innerHTML = '<p>Niste prijavljeni. Preusmeravam na login...</p>';
+    setTimeout(() => window.location.href = 'prijavi-se.html', 2000);
+    return;
+  }
 
-      if (loading) loading.textContent = '';
-      if (podaciDiv) podaciDiv.style.display = 'block';
+  let user;
+  try {
+    user = JSON.parse(userStr);
+    console.log('User uspešno parsiran:', user);
+  } catch (err) {
+    console.error('Greška pri parsiranju user-a:', err);
+    if (loadingWrapper) loadingWrapper.innerHTML = '<p>Greška pri učitavanju podataka</p>';
+    return;
+  }
 
-      document.getElementById('user-ime')?.textContent = user.ime || 'Korisnik';
-      document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
-      document.getElementById('user-telefon')?.textContent = user.telefon || '---';
-      document.getElementById('user-lokacija')?.textContent = user.lokacija || '---';
-      document.getElementById('user-opis')?.textContent = user.opis || 'Nema opisa';
+  // Brišemo loading
+  if (loadingWrapper) loadingWrapper.style.display = 'none';
+  if (profilDiv) profilDiv.style.display = 'block';
 
-      const niseList = document.getElementById('user-nise');
-      if (niseList && user.nise) {
-        let niseArray = [];
-        try {
-          niseArray = JSON.parse(user.nise);
-        } catch {}
-        niseArray.forEach(n => {
-          const li = document.createElement('li');
-          li.textContent = n;
-          niseList.appendChild(li);
-        });
-      }
+  // Popunjavanje podataka
+  document.getElementById('user-ime')?.textContent = user.ime || user.email?.split('@')[0] || 'Korisnik';
+  document.getElementById('user-email')?.textContent = user.email || 'Nema emaila';
+  document.getElementById('user-telefon')?.textContent = user.telefon || '---';
+  document.getElementById('user-lokacija')?.textContent = user.lokacija || '---';
+  document.getElementById('user-opis')?.textContent = user.opis || 'Nema opisa';
 
-      // Logout
-      document.getElementById('logout-btn')?.addEventListener('click', () => {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-        window.location.href = 'prijavi-se.html';
+  // Niše
+  const niseList = document.getElementById('user-nise');
+  if (niseList && user.nise) {
+    let niseArray = [];
+    try {
+      niseArray = JSON.parse(user.nise);
+    } catch {}
+    if (niseArray.length === 0) {
+      niseList.innerHTML = '<li>Nema niša</li>';
+    } else {
+      niseArray.forEach(n => {
+        const li = document.createElement('li');
+        li.textContent = n;
+        niseList.appendChild(li);
       });
-    });
-  </script>
+    }
+  }
+
+  // Logout
+  document.getElementById('logout-btn')?.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = 'prijavi-se.html';
+  });
+});
+</script>
 
 </body>
 </html>
+
 
 
 
