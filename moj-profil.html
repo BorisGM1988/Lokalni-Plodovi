@@ -151,6 +151,19 @@
     const token = localStorage.getItem('token');
     const profilInfo = document.getElementById('profil-info');
 
+    // Logika za header – menja opcije na osnovu tokena
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+    } else {
+      document.getElementById('moj-profil-li').style.display = 'none';
+      document.getElementById('odjavi-se-li').style.display = 'none';
+      document.getElementById('prijavi-se-li').style.display = 'list-item';
+      document.getElementById('postani-prodavac-li').style.display = 'list-item';
+    }
+
     if (!token) {
       profilInfo.innerHTML = `<p>Niste ulogovani. <a href="registracija.html">Registrujte se</a> ili <a href="login.html">prijavite se</a>.</p>`;
       return;
@@ -197,4 +210,5 @@
 
 </body>
 </html>
+
 
