@@ -324,6 +324,12 @@ document.getElementById('registration-form').addEventListener('submit', async fu
     console.log('Odgovor od servera:', data);
 
     if (!response.ok) {
+     //
+      localStorage.setItem('token', result.token);
+  console.log('Token sačuvan:', result.token); // za proveru u konzoli
+
+  alert('Registracija uspešna!');
+  window.location.href = 'moj-profil.html';
       throw new Error(data.error || 'Greška na serveru (status ' + response.status + ')');
     }
 
@@ -353,6 +359,7 @@ document.getElementById('registration-form').addEventListener('submit', async fu
 </script>
 </body>
 </html>
+
 
 
 
