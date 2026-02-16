@@ -145,13 +145,13 @@
 </footer>
 
 <script>
-  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← PROMENI AKO JE DRUGAČIJI URL
+  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← PROMENI AKO JE DRUGAČIJI
 
   async function ucitajProfil() {
     const token = localStorage.getItem('token');
     const profilInfo = document.getElementById('profil-info');
 
-    // Logika za header – menja opcije na osnovu tokena
+    // Menjaj header na osnovu tokena
     if (token) {
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
@@ -178,24 +178,25 @@
         }
       });
 
+      if (!response.ok) {
+        throw new Error(`Greška ${response.status}: ${response.statusText}`);
+      }
+
       const data = await response.json();
 
-      if (response.ok) {
-        profilInfo.innerHTML = `
-          <h2>Dobrodošao, ${data.ime}!</h2>
-          <p><strong>Email:</strong> ${data.email}</p>
-          <p><strong>Telefon:</strong> ${data.telefon}</p>
-          <p><strong>Lokacija:</strong> ${data.lokacija}</p>
-          <p><strong>Niše:</strong> ${data.nise ? data.nise.join(', ') : 'Nijedna'}</p>
-          <p><strong>Opis:</strong> ${data.opis || 'Nema opisa'}</p>
-          <p><strong>Registrovan:</strong> ${new Date(data.registeredAt).toLocaleString()}</p>
-          <button onclick="odjaviSe()">Odjavi se</button>
-        `;
-      } else {
-        profilInfo.innerHTML = `<p>Greška: ${data.error || 'Nevažeći token'}</p>`;
-      }
+      profilInfo.innerHTML = `
+        <h2>Dobrodošao, ${data.ime}!</h2>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Telefon:</strong> ${data.telefon}</p>
+        <p><strong>Lokacija:</strong> ${data.lokacija}</p>
+        <p><strong>Niše:</strong> ${data.nise ? data.nise.join(', ') : 'Nijedna'}</p>
+        <p><strong>Opis:</strong> ${data.opis || 'Nema opisa'}</p>
+        <p><strong>Registrovan:</strong> ${new Date(data.registeredAt).toLocaleString()}</p>
+        <button onclick="odjaviSe()">Odjavi se</button>
+      `;
     } catch (err) {
-      profilInfo.innerHTML = `<p>Greška sa serverom: ${err.message}</p>`;
+      profilInfo.innerHTML = `<p>Greška pri učitavanju profila: ${err.message}</p>`;
+      console.error(err);
     }
   }
 
@@ -204,11 +205,10 @@
     window.location.href = 'index.html';
   }
 
-  // Pokreni učitavanje kada se stranica učita
   document.addEventListener('DOMContentLoaded', ucitajProfil);
 </script>
-
 </body>
 </html>
+
 
 
