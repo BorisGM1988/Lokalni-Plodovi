@@ -60,7 +60,7 @@
       font-weight: 500;
     }
 
-    .profile-wrapper {
+    .profile-container {
       max-width: 1400px;
       margin: 0 auto;
       padding: 0 1.5rem;
@@ -129,17 +129,19 @@
     }
 
     .profile-edit-btn {
-      background: var(--zelena);
-      color: white;
-      border: none;
-      padding: 0.8rem 1.6rem;
+      background: white;
+      color: var(--zelena);
+      border: 2px solid var(--zelena);
+      padding: 0.8rem 1.8rem;
       border-radius: 50px;
       cursor: pointer;
       font-weight: 600;
+      transition: 0.2s;
     }
 
     .profile-edit-btn:hover {
-      background: var(--zelena-svetla);
+      background: var(--zelena);
+      color: white;
     }
 
     .profile-details {
@@ -221,14 +223,14 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="prodavci.html">Svi prodavci</a></li>
-      <li><a href="mapa.html">Mapa</a></li>
-      <li><a href="chat.html">Chat</a></li>
-      <li id="moj-profil-li"><a href="moj-profil.html">Moj profil</a></li>
+      <li><a href="/">Početna</a></li>
+      <li><a href="/prodavci">Svi prodavci</a></li>
+      <li><a href="/mapa">Mapa</a></li>
+      <li><a href="/chat">Chat</a></li>
+      <li id="moj-profil-li"><a href="/moj-profil">Moj profil</a></li>
       <li id="odjavi-se-li"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
-      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
+      <li id="prijavi-se-li"><a href="/login">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="/prijava-prodavca">Postani prodavac</a></li>
     </ul>
   </nav>
 </header>
@@ -294,7 +296,7 @@
 </footer>
 
 <script>
-  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
+  const backendUrl = 'https://tvoj-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
 
   async function ucitajProfil() {
     const token = localStorage.getItem('token');
