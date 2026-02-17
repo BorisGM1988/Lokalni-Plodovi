@@ -60,64 +60,71 @@
       font-weight: 500;
     }
 
-    .profile-card {
-      max-width: 1100px;
-      margin: 2rem auto;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    .profile-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .profile-cover {
+      height: 350px;
+      background: linear-gradient(135deg, var(--zelena), var(--zelena-svetla));
+      border-radius: 0 0 16px 16px;
+      position: relative;
       overflow: hidden;
     }
 
-    .profile-top {
-      display: flex;
-      padding: 2.5rem 3rem;
-      gap: 3rem;
-      background: linear-gradient(135deg, var(--zelena), var(--zelena-svetla));
-      color: white;
-      position: relative;
+    .profile-avatar-wrapper {
+      position: absolute;
+      bottom: -80px;
+      left: 3rem;
+      border: 6px solid white;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
 
     .profile-avatar {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
+      width: 200px;
+      height: 200px;
       object-fit: cover;
-      border: 6px solid white;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-      flex-shrink: 0;
+      border-radius: 50%;
     }
 
-    .profile-header-info {
-      flex: 1;
+    .profile-content {
+      padding: 5rem 3rem 3rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      gap: 2rem;
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1rem;
     }
 
     .profile-name {
-      font-size: 2.4rem;
+      font-size: 2.8rem;
       margin-bottom: 0.5rem;
     }
 
     .profile-bio {
-      font-size: 1.15rem;
-      opacity: 0.95;
-      line-height: 1.5;
-      max-width: 700px;
+      font-size: 1.2rem;
+      color: var(--siva);
+      line-height: 1.6;
+      max-width: 800px;
     }
 
     .profile-edit-btn {
-      position: absolute;
-      top: 2rem;
-      right: 2rem;
       background: white;
       color: var(--zelena);
-      border: 2px solid white;
-      padding: 0.6rem 1.2rem;
+      border: 2px solid var(--zelena);
+      padding: 0.8rem 1.8rem;
       border-radius: 50px;
       cursor: pointer;
-      font-size: 1rem;
+      font-weight: 600;
       transition: 0.2s;
     }
 
@@ -126,56 +133,54 @@
       color: white;
     }
 
-    .profile-content {
-      padding: 2.5rem 3rem;
-    }
-
     .profile-details {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
-      margin: 2rem 0;
     }
 
-    .detail-box {
-      background: #f8f9f5;
-      padding: 1.2rem;
+    .detail-card {
+      background: white;
+      padding: 1.5rem;
       border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       border: 1px solid #eee;
     }
 
     .detail-label {
       color: var(--zelena);
       font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 0.4rem;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      display: block;
     }
 
     .detail-value {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
     }
 
     .profile-actions {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      max-width: 300px;
-      margin: 2rem auto 0;
+      gap: 1.2rem;
+      max-width: 400px;
+      margin: 3rem auto 0;
     }
 
     .btn {
-      padding: 1rem;
+      padding: 1.1rem;
       border-radius: 50px;
       font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
       transition: 0.2s;
-      border: none;
       text-align: center;
     }
 
     .btn-primary {
       background: var(--zelena);
       color: white;
+      border: none;
     }
 
     .btn-primary:hover { background: var(--zelena-svetla); }
@@ -206,10 +211,10 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="prodavci.html">Svi prodavci</a></li>
-      <li><a href="mapa.html">Mapa</a></li>
-      <li><a href="chat.html">Chat</a></li>
+      <li><a href="/">Početna</a></li>
+      <li><a href="/prodavci">Svi prodavci</a></li>
+      <li><a href="/mapa">Mapa</a></li>
+      <li><a href="/chat">Chat</a></li>
       <li id="moj-profil-li"><a href="/moj-profil">Moj profil</a></li>
       <li id="odjavi-se-li"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
       <li id="prijavi-se-li"><a href="/login">Prijavi se</a></li>
@@ -218,41 +223,45 @@
   </nav>
 </header>
 
-<div class="profile-card">
-  <div class="profile-top">
-    <img src="https://via.placeholder.com/180?text=Boris" alt="Profilna slika" class="profile-avatar" id="profile-avatar">
+<div class="profile-wrapper">
+  <div class="profile-cover"></div>
 
-    <div class="profile-header-info">
-      <h1 class="profile-name" id="profile-name">Učitavanje...</h1>
-      <p class="profile-bio" id="profile-bio">Opis domaćinstva...</p>
+  <div class="profile-content">
+    <div class="profile-avatar-wrapper">
+      <img src="https://via.placeholder.com/200?text=Boris" alt="Profilna slika" class="profile-avatar" id="profile-avatar">
+    </div>
+
+    <div class="profile-header">
+      <div>
+        <h1 class="profile-name" id="profile-name">Učitavanje...</h1>
+        <p class="profile-bio" id="profile-bio">Opis domaćinstva...</p>
+      </div>
 
       <button class="profile-edit-btn" onclick="izmeniProfil()">Izmeni profil</button>
     </div>
-  </div>
 
-  <div class="profile-content">
     <div class="profile-details">
-      <div class="detail-box">
+      <div class="detail-card">
         <div class="detail-label">Email</div>
         <div id="email">Učitavanje...</div>
       </div>
-      <div class="detail-box">
+      <div class="detail-card">
         <div class="detail-label">Telefon</div>
         <div id="telefon">Učitavanje...</div>
       </div>
-      <div class="detail-box">
+      <div class="detail-card">
         <div class="detail-label">Lokacija</div>
         <div id="lokacija">Učitavanje...</div>
       </div>
-      <div class="detail-box">
+      <div class="detail-card">
         <div class="detail-label">Niše</div>
         <div id="nise">Učitavanje...</div>
       </div>
-      <div class="detail-box">
+      <div class="detail-card">
         <div class="detail-label">Opis</div>
         <div id="opis">Učitavanje...</div>
       </div>
-      <div class="detail-box">
+      <div class="detail-card">
         <div class="detail-label">Registrovan</div>
         <div id="registeredAt">Učitavanje...</div>
       </div>
@@ -270,12 +279,11 @@
 </footer>
 
 <script>
-  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
+  const backendUrl = 'https://tvoj-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
 
   async function ucitajProfil() {
     const token = localStorage.getItem('token');
 
-    // Ažuriraj header
     if (token) {
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
@@ -318,7 +326,7 @@
   }
 
   function objaviNovost() {
-    alert('Forma za objavu novosti uskoro – možeš da napišeš šta ima novo kod tebe');
+    alert('Forma za objavu novosti uskoro');
   }
 
   function dodajProizvod() {
