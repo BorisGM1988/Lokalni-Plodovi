@@ -49,24 +49,33 @@
       font-weight: 500;
     }
 
+    .profile-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
     .profile-cover {
-      height: 300px;
+      height: 200px;
       background: linear-gradient(135deg, #2e7d32, #4caf50);
+      border-radius: 0 0 16px 16px;
       position: relative;
+      overflow: hidden;
     }
 
     .profile-content {
-      max-width: 1400px;
-      margin: -120px auto 0;
-      padding: 0 2rem;
       display: flex;
-      flex-wrap: wrap;
       gap: 2rem;
+      margin-top: -80px;
+      padding: 0 2rem 3rem;
+      flex-wrap: wrap;
     }
 
     .profile-left {
       flex: 0 0 220px;
       text-align: center;
+      position: relative;
+      z-index: 10;
     }
 
     .profile-avatar {
@@ -81,25 +90,26 @@
     .profile-right {
       flex: 1;
       min-width: 400px;
+      padding-top: 40px;
     }
 
     .profile-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .profile-name {
-      font-size: 2.8rem;
+      font-size: 2.6rem;
       margin-bottom: 0.5rem;
     }
 
     .profile-bio {
       font-size: 1.15rem;
       color: #555;
-      margin: 1rem 0 2rem;
       line-height: 1.6;
+      max-width: 800px;
     }
 
     .profile-edit-btn {
@@ -110,6 +120,7 @@
       border-radius: 50px;
       cursor: pointer;
       font-weight: 600;
+      margin-top: 0.5rem;
     }
 
     .profile-edit-btn:hover {
@@ -121,6 +132,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
+      margin: 2rem 0;
     }
 
     .info-card {
@@ -143,14 +155,12 @@
       font-size: 1.1rem;
     }
 
-    .profile-bottom-actions {
-      margin: 3rem 0;
+    .profile-actions {
       display: flex;
       flex-direction: column;
       gap: 1rem;
       max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 3rem auto 0;
     }
 
     .btn {
@@ -232,28 +242,28 @@
       </div>
 
       <div class="profile-info-grid">
-        <div class="info-card">
-          <div class="info-label">Email</div>
+        <div class="detail-card">
+          <div class="detail-label">Email</div>
           <div id="email">Učitavanje...</div>
         </div>
-        <div class="info-card">
-          <div class="info-label">Telefon</div>
+        <div class="detail-card">
+          <div class="detail-label">Telefon</div>
           <div id="telefon">Učitavanje...</div>
         </div>
-        <div class="info-card">
-          <div class="info-label">Lokacija</div>
+        <div class="detail-card">
+          <div class="detail-label">Lokacija</div>
           <div id="lokacija">Učitavanje...</div>
         </div>
-        <div class="info-card">
-          <div class="info-label">Niše</div>
+        <div class="detail-card">
+          <div class="detail-label">Niše</div>
           <div id="nise">Učitavanje...</div>
         </div>
-        <div class="info-card">
-          <div class="info-label">Opis</div>
+        <div class="detail-card">
+          <div class="detail-label">Opis</div>
           <div id="opis">Učitavanje...</div>
         </div>
-        <div class="info-card">
-          <div class="info-label">Registrovan</div>
+        <div class="detail-card">
+          <div class="detail-label">Registrovan</div>
           <div id="registeredAt">Učitavanje...</div>
         </div>
       </div>
@@ -334,3 +344,4 @@
 
 </body>
 </html>
+
