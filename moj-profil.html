@@ -60,49 +60,60 @@
       font-weight: 500;
     }
 
-    .profile-container {
+    .profile-wrapper {
       max-width: 1400px;
       margin: 0 auto;
       padding: 0 1.5rem;
     }
 
     .profile-cover {
-      height: 350px;
-      background: linear-gradient(135deg, var(--zelena), var(--zelena-svetla));
+      height: 250px;
+      background: var(--svetlo);
       border-radius: 0 0 16px 16px;
       position: relative;
       overflow: hidden;
+      border: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--siva);
+      font-size: 1.2rem;
+    }
+
+    .profile-content {
+      display: flex;
+      gap: 3rem;
+      margin-top: -100px;
+      padding: 0 2rem 3rem;
+      flex-wrap: wrap;
     }
 
     .profile-avatar-wrapper {
-      position: absolute;
-      bottom: -80px;
-      left: 3rem;
-      border: 6px solid white;
-      border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
     }
 
     .profile-avatar {
       width: 200px;
       height: 200px;
-      object-fit: cover;
       border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid var(--belo);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
     }
 
-    .profile-content {
-      padding: 5rem 3rem 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
+    .profile-main {
+      flex: 1;
+      min-width: 300px;
+      padding-top: 60px;
     }
 
     .profile-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 1rem;
+      align-items: flex-start;
+      margin-bottom: 2rem;
     }
 
     .profile-name {
@@ -118,25 +129,24 @@
     }
 
     .profile-edit-btn {
-      background: white;
-      color: var(--zelena);
-      border: 2px solid var(--zelena);
-      padding: 0.8rem 1.8rem;
+      background: var(--zelena);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem;
       border-radius: 50px;
       cursor: pointer;
       font-weight: 600;
-      transition: 0.2s;
     }
 
     .profile-edit-btn:hover {
-      background: var(--zelena);
-      color: white;
+      background: var(--zelena-svetla);
     }
 
     .profile-details {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1.5rem;
+      margin: 2rem 0;
     }
 
     .detail-card {
@@ -211,20 +221,25 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="/">Početna</a></li>
-      <li><a href="/prodavci">Svi prodavci</a></li>
-      <li><a href="/mapa">Mapa</a></li>
-      <li><a href="/chat">Chat</a></li>
-      <li id="moj-profil-li"><a href="/moj-profil">Moj profil</a></li>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
+      <li id="moj-profil-li"><a href="moj-profil.html">Moj profil</a></li>
       <li id="odjavi-se-li"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
-      <li id="prijavi-se-li"><a href="/login">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="/prijava-prodavca">Postani prodavac</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
     </ul>
   </nav>
 </header>
 
 <div class="profile-wrapper">
-  <div class="profile-cover"></div>
+  <div class="profile-cover">
+    <!-- Naslovna fotografija – ovde možeš da staviš svoju sliku kasnije -->
+    <div style="height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.5rem; opacity:0.7;">
+      Naslovna fotografija (klikni Izmeni profil da promeniš)
+    </div>
+  </div>
 
   <div class="profile-content">
     <div class="profile-avatar-wrapper">
@@ -279,7 +294,7 @@
 </footer>
 
 <script>
-  const backendUrl = 'https://tvoj-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
+  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
 
   async function ucitajProfil() {
     const token = localStorage.getItem('token');
@@ -313,7 +328,7 @@
       document.getElementById('opis').textContent = data.opis || 'Nema opisa';
       document.getElementById('registeredAt').textContent = data.registeredAt ? new Date(data.registeredAt).toLocaleString() : 'N/A';
 
-      document.getElementById('profile-avatar').src = data.slika || 'https://via.placeholder.com/180?text=' + (data.ime ? data.ime[0] : 'B');
+      document.getElementById('profile-avatar').src = data.slika || 'https://via.placeholder.com/200?text=' + (data.ime ? data.ime[0] : 'B');
     } catch (err) {
       console.error(err);
       document.getElementById('profile-name').textContent = 'Greška pri učitavanju';
