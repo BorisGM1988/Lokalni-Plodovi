@@ -185,7 +185,7 @@
 
 <script>
   // Proveri da li je korisnik ulogovan
-  const korisnik = localStorage.getItem('trenutniKorisnik');
+  const korisnik = localStorage.getItem('token');
 
   if (korisnik) {
     document.getElementById('moj-profil-li').style.display = 'list-item';
@@ -307,6 +307,7 @@ s0.parentNode.insertBefore(s1,s0);
 </body>
 
 </html>
+
 
 
 
