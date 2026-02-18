@@ -53,6 +53,12 @@
       height: 280px;
       background: linear-gradient(135deg, #2e7d32, #4caf50);
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.4rem;
+      text-align: center;
     }
 
     .profile-content {
@@ -148,7 +154,7 @@
     .profile-actions {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 1rem;
       max-width: 400px;
       margin: 3rem auto 0;
     }
@@ -197,27 +203,31 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="prodavci.html">Svi prodavci</a></li>
-      <li><a href="mapa.html">Mapa</a></li>
-      <li><a href="chat.html">Chat</a></li>
+      <li><a href="/">Početna</a></li>
+      <li><a href="/prodavci">Svi prodavci</a></li>
+      <li><a href="/mapa">Mapa</a></li>
+      <li><a href="/chat">Chat</a></li>
       <li id="moj-profil-li"><a href="/moj-profil">Moj profil</a></li>
       <li id="odjavi-se-li"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
-      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="/registracija.html">Postani prodavac</a></li>
+      <li id="prijavi-se-li"><a href="/login">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="/prijava-prodavca">Postani prodavac</a></li>
     </ul>
   </nav>
 </header>
 
 <div class="profile-container">
-  <div class="profile-cover"></div>
+  <div class="profile-cover">
+    <div style="height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.5rem; opacity:0.7;">
+      Naslovna fotografija (klikni Izmeni profil da promeniš)
+    </div>
+  </div>
 
   <div class="profile-content">
-    <div class="profile-left">
+    <div class="profile-avatar-wrapper">
       <img src="https://via.placeholder.com/200?text=Boris" alt="Profilna slika" class="profile-avatar" id="profile-avatar">
     </div>
 
-    <div class="profile-right">
+    <div class="profile-main">
       <div class="profile-header">
         <div>
           <h1 class="profile-name" id="profile-name">Učitavanje...</h1>
@@ -267,7 +277,7 @@
 </footer>
 
 <script>
-  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
+  const backendUrl = 'https://tvoj-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
 
   async function ucitajProfil() {
     const token = localStorage.getItem('token');
@@ -330,6 +340,7 @@
 
 </body>
 </html>
+
 
 
 
