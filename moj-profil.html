@@ -100,6 +100,8 @@
     .profile-name {
       font-size: 2.8rem;
       margin: 0;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
 
     .profile-edit-btn {
@@ -120,7 +122,7 @@
 
     .profile-bio {
       font-size: 1.15rem;
-      color: #555;
+      color: #ddd;
       margin: 1rem 0 2rem;
       line-height: 1.6;
     }
@@ -129,6 +131,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
+      margin: 2rem 0;
     }
 
     .info-card {
@@ -230,8 +233,8 @@
     <div class="profile-main">
       <div class="profile-header">
         <div>
-          <h1 class="profile-name" id="profile-name">Učitavanje...</h1>
-          <p class="profile-bio" id="profile-bio">Opis domaćinstva...</p>
+          <h1 class="profile-name" id="profileName">Učitavanje...</h1>
+          <p class="profile-bio" id="profileBio">Opis domaćinstva...</p>
         </div>
 
         <button class="profile-edit-btn" onclick="izmeniProfil()">Izmeni profil</button>
@@ -277,7 +280,7 @@
 </footer>
 
 <script>
-  const backendUrl = 'https://lokalni-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
+  const backendUrl = 'https://tvoj-backend.onrender.com'; // ← TVOJ PRAVI RENDER URL
 
   async function ucitajProfil() {
     const token = localStorage.getItem('token');
@@ -290,7 +293,7 @@
     }
 
     if (!token) {
-      document.getElementById('profile-name').textContent = 'Niste ulogovani';
+      document.getElementById('profileName').textContent = 'Niste ulogovani';
       return;
     }
 
@@ -302,8 +305,8 @@
 
       const data = await response.json();
 
-      document.getElementById('profile-name').textContent = data.ime || 'Korisnik';
-      document.getElementById('profile-bio').textContent = data.opis || 'Nema opisa';
+      document.getElementById('profileName').textContent = data.ime || 'Korisnik';
+      document.getElementById('profileBio').textContent = data.opis || 'Nema opisa';
       document.getElementById('email').textContent = data.email || 'N/A';
       document.getElementById('telefon').textContent = data.telefon || 'Nije navedeno';
       document.getElementById('lokacija').textContent = data.lokacija || 'Nije navedeno';
@@ -314,7 +317,7 @@
       document.getElementById('profile-avatar').src = data.slika || 'https://via.placeholder.com/200?text=' + (data.ime ? data.ime[0] : 'B');
     } catch (err) {
       console.error(err);
-      document.getElementById('profile-name').textContent = 'Greška pri učitavanju';
+      document.getElementById('profileName').textContent = 'Greška pri učitavanju';
     }
   }
 
@@ -337,62 +340,9 @@
 
   document.addEventListener('DOMContentLoaded', ucitajProfil);
 </script>
-<!-- Upload profilne slike i cover-a (Cloudinary unsigned) -->
-<script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 
-<script>
-  const cloudName = 'dlpavpfl'; // tvoj Cloud name
-  const uploadPreset = 'unsigned-profile'; // tačno ime preset-a koji si napravio
-
-  // Funkcija za upload profilne slike
-  function uploadAvatar() {
-    cloudinary.openUploadWidget({
-      cloud_name: cloudName,
-      upload_preset: uploadPreset,
-      folder: 'profiles/avatars',
-      sources: ['local'],
-      multiple: false,
-      cropping: true,
-      croppingAspectRatio: 1,
-      croppingDefaultSelectionRatio: 1,
-      maxImageWidth: 400,
-      maxImageHeight: 400
-    }, (err, result) => {
-      if (!err && result && result.event === "success") {
-        const url = result.info.secure_url;
-        document.getElementById('profile-avatar').src = url;
-        alert('Profilna slika uspešno upload-ovana! (URL: ' + url + ')');
-        // Ovdje možeš da pošalješ url na backend da sačuvaš u bazi
-        // fetch(backendUrl + '/update-avatar', { method: 'POST', body: JSON.stringify({ url }) });
-      }
-    });
-  }
-
-  // Funkcija za upload naslovne fotografije
-  function uploadCover() {
-    cloudinary.openUploadWidget({
-      cloud_name: cloudName,
-      upload_preset: uploadPreset,
-      folder: 'profiles/covers',
-      sources: ['local'],
-      multiple: false,
-      maxImageWidth: 1400,
-      maxImageHeight: 300
-    }, (err, result) => {
-      if (!err && result && result.event === "success") {
-        const url = result.info.secure_url;
-        document.getElementById('profile-cover').style.backgroundImage = `url(${url})`;
-        document.getElementById('profile-cover').style.backgroundSize = 'cover';
-        document.getElementById('profile-cover').style.backgroundPosition = 'center';
-        alert('Naslovna fotografija uspešno upload-ovana! (URL: ' + url + ')');
-        // Ovdje možeš da pošalješ url na backend da sačuvaš u bazi
-      }
-    });
-  }
-</script>
 </body>
 </html>
-
 
 
 
