@@ -50,7 +50,7 @@
     }
 
     .profile-cover {
-      height: 240px;
+      height: 280px;
       background: linear-gradient(135deg, #2e7d32, #4caf50);
       position: relative;
       display: flex;
@@ -214,9 +214,13 @@
     </div>
 
     <div class="profile-main">
-      <div class="profile-header" style="text-align:center;">
-        <h1 class="profile-name" id="profileName">Učitavanje...</h1>
-        <p class="profile-bio" id="profileBio">Opis domaćinstva...</p>
+      <div class="profile-header">
+        <div style="text-align:center;">
+          <h1 class="profile-name" id="profileName">Učitavanje...</h1>
+          <p class="profile-bio" id="profileBio">Opis domaćinstva...</p>
+        </div>
+
+        <button class="profile-edit-btn" onclick="izmeniProfil()">Izmeni profil</button>
       </div>
 
       <div class="profile-info-grid">
@@ -322,9 +326,6 @@
 
 </body>
 </html>
-
-
-
 
 
 
