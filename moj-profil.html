@@ -308,6 +308,18 @@
         flex-direction: column;
       }
     }
+    .profile-cover {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.profile-cover:hover {
+  opacity: 0.92;
+}
+
+.profile-cover .placeholder-text {
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
@@ -316,14 +328,14 @@
   <nav>
     <div class="logo">LokalniPlodovi</div>
     <ul>
-      <li><a href="/">Početna</a></li>
-      <li><a href="/prodavci">Svi prodavci</a></li>
-      <li><a href="/mapa">Mapa</a></li>
-      <li><a href="/chat">Chat</a></li>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
       <li id="moj-profil-li"><a href="/moj-profil">Moj profil</a></li>
       <li id="odjavi-se-li"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
-      <li id="prijavi-se-li"><a href="/login">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="/prijava-prodavca">Postani prodavac</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
     </ul>
   </nav>
 </header>
@@ -338,7 +350,7 @@
     </div>
   </div>
 
-  <div class="profile-content">
+  <div class="profile-content"><input type="file" id="hidden-cover-upload" accept="image/*" style="display: none;">
     <div class="profile-avatar-wrapper">
       <img src="https://via.placeholder.com/200?text=Boris" alt="Profilna slika" class="profile-avatar" id="profile-avatar">
     </div>
@@ -473,7 +485,67 @@
   }
 
   document.addEventListener('DOMContentLoaded', ucitajProfil);
+  // Klik na naslovnu sliku ili placeholder tekst → otvori birač fajla
+document.querySelector('.profile-cover').addEventListener('click', function() {
+  document.getElementById('hidden-cover-upload').click();
+});
+
+// Kada korisnik izabere sliku → odmah preview + šalji na server
+document.getElementById('hidden-cover-upload').addEventListener('change', async function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Prvo prikaži preview lokalno (da korisnik odmah vidi)
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const coverImage = document.getElementById('cover-image');
+    const placeholderText = document.getElementById('placeholder-text');
+
+    coverImage.src = e.target.result;
+    coverImage.style.display = 'block';
+    placeholderText.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+
+  // Sada pošalji fajl na backend (isto kao u formi)
+  const formData = new FormData();
+  formData.append('coverSlika', file);  // ime polja mora da odgovara backend-u
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Morate biti ulogovani');
+    return;
+  }
+
+  try {
+    const response = await fetch(`${backendUrl}/profile/update`, {  // promeni endpoint ako je drugačiji
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      console.log('Naslovna slika uspešno upload-ovana');
+      // Opcionalno: možeš osvežiti ceo profil
+      // ucitajProfil();
+    } else {
+      alert('Greška pri upload-u slike');
+      // Vratiti stari placeholder ako ne uspe
+      document.getElementById('cover-image').style.display = 'none';
+      document.getElementById('placeholder-text').style.display = 'block';
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Došlo je do greške pri slanju slike');
+  }
+
+  // Očisti input da možeš ponovo isti fajl da izabereš ako treba
+  event.target.value = '';
+});
 </script>
 
 </body>
 </html>
+
