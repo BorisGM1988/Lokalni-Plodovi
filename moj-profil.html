@@ -351,7 +351,7 @@
   </div>
 
   <div class="profile-content"><input type="file" id="hidden-cover-upload" accept="image/*" style="display: none;">
-    <div class="profile-avatar-wrapper">
+    <div class="profile-avatar-wrapper"><input type="file" id="hidden-avatar-upload" accept="image/*" style="display: none;">
       <img src="https://via.placeholder.com/200?text=Boris" alt="Profilna slika" class="profile-avatar" id="profile-avatar">
     </div>
 
@@ -544,8 +544,31 @@ document.getElementById('hidden-cover-upload').addEventListener('change', async 
   // Očisti input da možeš ponovo isti fajl da izabereš ako treba
   event.target.value = '';
 });
+document.getElementById('profile-avatar').addEventListener('click', function() {
+  document.getElementById('hidden-avatar-upload').click();
+});
+
+document.getElementById('hidden-avatar-upload').addEventListener('change', async function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Preview
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('profile-avatar').src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+
+  // Upload na backend (slično kao za cover)
+  const formData = new FormData();
+  formData.append('slika', file);
+
+  const token = localStorage.getItem('token');
+  // ... isti fetch kod kao za cover, samo promeni append('slika', file)
+});
 </script>
 
 </body>
 </html>
+
 
