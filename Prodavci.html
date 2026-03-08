@@ -285,10 +285,49 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+<script>
+  const backendUrl = 'https://tvoj-backend-url.onrender.com'; // PROMENI NA PRAVI (npr. lokalni-backend.onrender.com)
 
+  async function ucitajProdavce() {
+    try {
+      const response = await fetch(`${backendUrl}/svi-prodavci`);
+      if (!response.ok) throw new Error('Greška pri učitavanju');
+
+      const prodavci = await response.json();
+      const grid = document.getElementById('prodavci-grid'); // PROMENI ID ako si drugačije nazvao grid
+      grid.innerHTML = '';
+
+      prodavci.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'prodavac-card'; // dodaj ovu klasu u CSS ako nemaš
+        card.innerHTML = `
+          <img src="${p.slika}" alt="${p.ime}" class="card-image">
+          <div class="card-content">
+            <h3 class="card-title">${p.ime}</h3>
+            <p class="card-desc">${p.opis.substring(0, 120)}${p.opis.length > 120 ? '...' : ''}</p>
+            <p class="card-loc"><i class="fas fa-map-marker-alt"></i> ${p.lokacija}</p>
+            <a href="/moj-profil.html?userId=${p.id}" class="card-btn">Pogledaj profil</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      if (prodavci.length === 0) {
+        grid.innerHTML = '<p style="text-align:center; color:#666; grid-column: 1 / -1;">Još nema registrovanih prodavaca.</p>';
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById('prodavci-grid').innerHTML = '<p style="color:red; text-align:center;">Greška pri učitavanju prodavaca</p>';
+    }
+  }
+
+  // Učitaj odmah kad se stranica otvori
+  window.addEventListener('load', ucitajProdavce);
+</script>
 </body>
 
 </html>
+
 
 
 
