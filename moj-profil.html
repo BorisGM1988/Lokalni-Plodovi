@@ -320,6 +320,79 @@
 .profile-cover .placeholder-text {
   cursor: pointer;
 }
+    /* === STIL ZA MODAL DODAJ PROIZVOD === */
+#dodaj-proizvod-modal {
+  display: none; /* skriven po default-u */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 3000;
+  justify-content: center;
+  align-items: center;
+}
+
+#dodaj-proizvod-modal > div {
+  background: white;
+  width: 90%;
+  max-width: 520px;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+#dodaj-proizvod-modal label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+#dodaj-proizvod-modal input,
+#dodaj-proizvod-modal select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+#dodaj-proizvod-modal button {
+  margin-top: 1.5rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#dodaj-proizvod-modal button[type="button"]:first-child {
+  background: #ccc;
+  color: black;
+}
+
+#dodaj-proizvod-modal button[type="button"]:last-child {
+  background: #2e7d32;
+  color: white;
+}
+
+#dodaj-proizvod-modal button:hover {
+  opacity: 0.9;
+}
+
+#preview-slika {
+  margin-top: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  max-height: 180px;
+  object-fit: cover;
+}
   </style>
 </head>
 <body>
@@ -655,10 +728,90 @@ function objaviNovost() {
   window.location.href = '/Lokalni-Plodovi/index.html'; // ili '/Lokalni-Plodovi/' ako je index.html default
   window.location.reload(true); // ovo osigurava da se stranica učita ponovo sa servera, bez keša
 }
-</script>
+  // Otvaranje modala
+function dodajProizvod() {
+  document.getElementById('dodaj-proizvod-modal').style.display = 'flex';
+}
 
+// Zatvaranje modala
+function zatvoriModal() {
+  document.getElementById('dodaj-proizvod-modal').style.display = 'none';
+}
+
+// Preview slike
+document.getElementById('slika-proizvoda').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      document.getElementById('preview-slika').src = ev.target.result;
+      document.getElementById('preview-slika').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Dugme "Izloži na pijac" (za sada samo test)
+function izloziNaPijac() {
+  const naziv = document.getElementById('naziv').value;
+  const cena = document.getElementById('cena').value;
+  const kolicina = document.getElementById('kolicina').value;
+  const glavnaNisa = document.getElementById('glavna-nisa').value;
+  const podnisa = document.getElementById('podnisa').value;
+
+  if (!naziv || !cena || !kolicina || !glavnaNisa) {
+    alert('Molim te popuni obavezna polja!');
+    return;
+  }
+
+  alert(`✅ Proizvod "${naziv}" (${glavnaNisa} - ${podnisa}) je izložen na pijac!\n\nCena: ${cena} RSD\nKoličina: ${kolicina}`);
+  zatvoriModal();
+  
+  // Kasnije ovde ide poziv na backend
+}
+</script>
+<!-- === MODAL ZA DODAVANJE PROIZVODA === -->
+<div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
+  <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+    <h2 style="margin-top:0; color:#2e7d32;">Dodaj novi proizvod</h2>
+
+    <form id="proizvod-form">
+      <label>Naziv proizvoda / sorte *</label><br>
+      <input type="text" id="naziv" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Cena (RSD) *</label><br>
+      <input type="number" id="cena" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Dostupna količina *</label><br>
+      <input type="number" id="kolicina" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Glavna niša *</label><br>
+      <select id="glavna-nisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
+        <option value="">Izaberi nišu</option>
+        <option value="Povrće">Povrće</option>
+        <option value="Voće">Voće</option>
+        <option value="Mlečni proizvodi">Mlečni proizvodi</option>
+        <option value="Meso">Meso</option>
+        <option value="Med">Med</option>
+      </select><br>
+
+      <label>Podniša (npr. Jabuke, Krastavac...)</label><br>
+      <input type="text" id="podnisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;"><br>
+
+      <label>Slika proizvoda (za sada samo preview)</label><br>
+      <input type="file" id="slika-proizvoda" accept="image/*" style="margin:8px 0;"><br>
+      <img id="preview-slika" style="width:100%; max-height:180px; object-fit:cover; border-radius:8px; display:none; margin-top:8px;">
+
+      <div style="margin-top:1.5rem; display:flex; gap:1rem;">
+        <button type="button" onclick="zatvoriModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600;">Otkaži</button>
+        <button type="button" onclick="izloziNaPijac()" style="flex:1; padding:12px; border-radius:50px; background:#2e7d32; color:white; border:none; font-weight:600;">Izloži na pijac</button>
+      </div>
+    </form>
+  </div>
+</div>
 </body>
 </html>
+
 
 
 
