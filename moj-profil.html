@@ -649,10 +649,17 @@ function objaviNovost() {
     alert('Greška pri objavljivanju – proveri internet ili token');
   });
 }
+  function odjaviSe() {
+  localStorage.removeItem('token');
+  // Preusmeri na početnu stranicu i prinudi reload da se keš očisti
+  window.location.href = '/Lokalni-Plodovi/index.html'; // ili '/Lokalni-Plodovi/' ako je index.html default
+  window.location.reload(true); // ovo osigurava da se stranica učita ponovo sa servera, bez keša
+}
 </script>
 
 </body>
 </html>
+
 
 
 
