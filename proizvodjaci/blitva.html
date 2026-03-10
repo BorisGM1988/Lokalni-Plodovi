@@ -127,9 +127,10 @@
     document.getElementById('postani-prodavac-li').style.display = 'list-item';
   }
 
-  function odjaviSe() {
-    localStorage.removeItem('trenutniKorisnik');
-    window.location.href = '../index.html';
+ function odjaviSe() {
+  localStorage.removeItem('token');
+  window.location.replace('/Lokalni-Plodovi/index.html');
+}
   }
 </script>
 
@@ -213,6 +214,7 @@ s0.parentNode.insertBefore(s1,s0);
 
 </body>
 </html>
+
 
 
 
