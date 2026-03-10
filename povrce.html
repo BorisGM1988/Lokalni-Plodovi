@@ -6,8 +6,8 @@
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
-      <li><a href="#">mapa.htm</a></li>
-      <li><a href="#">Chat.html</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
 
       <!-- Prikazuje se SAMO ako je ulogovan -->
       <li id="moj-profil-li" style="display:none;">
@@ -395,20 +395,9 @@
   </div>
 
 </div>
-  <!--Start of Tawk.to Script-->
+ 
 <script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-// === PROVERA PRIJAVE ZA NAVIGACIJU (kopirano iz moj-profil.html) ===
+  // === PROVERA PRIJAVE ZA NAVIGACIJU (kopirano iz moj-profil.html) ===
 const token = localStorage.getItem('token');
 
 if (token) {
@@ -434,8 +423,22 @@ if (token) {
   if (prijaviSeLi) prijaviSeLi.style.display = 'list-item';
   if (postaniProdavacLi) postaniProdavacLi.style.display = 'list-item';
 }
+   <!--Start of Tawk.to Script-->
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+
   </body>
   </html>
+
 
 
 
