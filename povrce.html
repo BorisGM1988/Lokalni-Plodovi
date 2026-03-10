@@ -45,8 +45,10 @@
   }
 
 function odjaviSe() {
-  localStorage.removeItem('token');
-  window.location.replace('/Lokalni-Plodovi/index.html');
+  localStorage.removeItem('token'); // briše token
+  // Koristi replace() da obriše istoriju – strelica nazad neće vratiti na profil
+  window.location.replace('/Lokalni-Plodovi/index.html'); // ili '/Lokalni-Plodovi/' ako je index.html default
+}
 }
   }
 </script>
@@ -439,6 +441,7 @@ s0.parentNode.insertBefore(s1,s0);
 
   </body>
   </html>
+
 
 
 
