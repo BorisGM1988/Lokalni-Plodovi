@@ -174,8 +174,36 @@
   document.getElementById('naslov').textContent = `Proizvođači ${prviVeliki}`;
   document.title = `Proizvođači ${prviVeliki} – LokalniPlodovi`;
 </script>
-<!--Start of Tawk.to Script-->
+
 <script type="text/javascript">
+  <script type="text/javascript">
+  // === PROVERA PRIJAVE ZA NAVIGACIJU (kopirano iz moj-profil.html) ===
+const token = localStorage.getItem('token');
+
+if (token) {
+  // ulogovan → prikaži Moj profil i Odjavi se
+  const mojProfilLi = document.getElementById('moj-profil-li');
+  const odjaviSeLi = document.getElementById('odjavi-se-li');
+  const prijaviSeLi = document.getElementById('prijavi-se-li');
+  const postaniProdavacLi = document.getElementById('postani-prodavac-li');
+
+  if (mojProfilLi) mojProfilLi.style.display = 'list-item';
+  if (odjaviSeLi) odjaviSeLi.style.display = 'list-item';
+  if (prijaviSeLi) prijaviSeLi.style.display = 'none';
+  if (postaniProdavacLi) postaniProdavacLi.style.display = 'none';
+} else {
+  // odjavljen → prikaži Prijavi se i Postani prodavac
+  const mojProfilLi = document.getElementById('moj-profil-li');
+  const odjaviSeLi = document.getElementById('odjavi-se-li');
+  const prijaviSeLi = document.getElementById('prijavi-se-li');
+  const postaniProdavacLi = document.getElementById('postani-prodavac-li');
+
+  if (mojProfilLi) mojProfilLi.style.display = 'none';
+  if (odjaviSeLi) odjaviSeLi.style.display = 'none';
+  if (prijaviSeLi) prijaviSeLi.style.display = 'list-item';
+  if (postaniProdavacLi) postaniProdavacLi.style.display = 'list-item';
+}
+  <!--Start of Tawk.to Script-->
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -191,4 +219,5 @@ s0.parentNode.insertBefore(s1,s0);
 </body>
 
 </html>
+
 
