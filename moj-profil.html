@@ -769,6 +769,47 @@ function izloziNaPijac() {
   
   // Kasnije ovde ide poziv na backend
 }
+  function izmeniProfil() {
+  document.getElementById('edit-ime').value = document.getElementById('profileName').textContent || '';
+  document.getElementById('edit-opis').value = document.getElementById('profileBio').textContent || '';
+  document.getElementById('edit-telefon').value = document.getElementById('telefon').textContent || '';
+  document.getElementById('edit-lokacija').value = document.getElementById('lokacija').textContent || '';
+
+  document.getElementById('izmeni-profil-modal').style.display = 'flex';
+}
+
+function zatvoriIzmeniModal() {
+  document.getElementById('izmeni-profil-modal').style.display = 'none';
+}
+
+function sacuvajIzmene() {
+  alert('Izmene profila sačuvane! (test – backend kasnije)');
+  zatvoriIzmeniModal();
+}
+
+document.getElementById('edit-profilna-slika').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      document.getElementById('preview-profilna').src = ev.target.result;
+      document.getElementById('preview-profilna').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+document.getElementById('edit-naslovna-slika').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      document.getElementById('preview-naslovna').src = ev.target.result;
+      document.getElementById('preview-naslovna').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
 </script>
 <!-- === MODAL ZA DODAVANJE PROIZVODA === -->
 <div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
@@ -846,6 +887,7 @@ function izloziNaPijac() {
 </div>
 </body>
 </html>
+
 
 
 
