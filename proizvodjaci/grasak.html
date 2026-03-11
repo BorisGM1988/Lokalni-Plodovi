@@ -113,7 +113,8 @@
 </header>
 
 <script>
-  const korisnik = localStorage.getItem('trenutniKorisnik');
+  // Proveri da li je korisnik ulogovan
+  const korisnik = localStorage.getItem('token');
 
   if (korisnik) {
     document.getElementById('moj-profil-li').style.display = 'list-item';
@@ -128,11 +129,10 @@
   }
 
   function odjaviSe() {
-    localStorage.removeItem('trenutniKorisnik');
+    localStorage.removeItem('token');
     window.location.href = '../index.html';
   }
-</script>
-
+</script> 
 <div class="container">
   <h1 id="naslov">Proizvođači</h1>
   <p>Ova stranica je za sada prazna. Kasnije će ovde biti lista proizvođača ovog proizvoda, njihovi profili, proizvodi i kontakt.</p>
@@ -176,8 +176,8 @@
 </script>
 
 <script type="text/javascript">
-  // === PROVERA PRIJAVE ZA NAVIGACIJU (kopirano iz moj-profil.html) ===
-const token = localStorage.getItem('token');
+ // === PROVERA PRIJAVE ZA NAVIGACIJU (kopirano iz moj-profil.html) ===
+  const token = localStorage.getItem('token');
 
 if (token) {
   // ulogovan → prikaži Moj profil i Odjavi se
@@ -218,5 +218,6 @@ s0.parentNode.insertBefore(s1,s0);
 </body>
 
 </html>
+
 
 
