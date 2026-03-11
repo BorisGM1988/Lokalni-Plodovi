@@ -29,7 +29,8 @@
 </header>
 
 <script>
-  const korisnik = localStorage.getItem('trenutniKorisnik');
+  // Proveri da li je korisnik ulogovan
+  const korisnik = localStorage.getItem('token');
 
   if (korisnik) {
     document.getElementById('moj-profil-li').style.display = 'list-item';
@@ -43,10 +44,9 @@
     document.getElementById('postani-prodavac-li').style.display = 'list-item';
   }
 
-  // Funkcija je sada van if-else – na nivou skripte
   function odjaviSe() {
-    localStorage.removeItem('trenutniKorisnik');
-    window.location.replace('/Lokalni-Plodovi/index.html'); // ili '/Lokalni-Plodovi/' ako index.html ide automatski
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
   }
 </script>
 
@@ -437,6 +437,7 @@ s0.parentNode.insertBefore(s1,s0);
 
   </body>
   </html>
+
 
 
 
