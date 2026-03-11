@@ -29,7 +29,6 @@
 </header>
 
 <script>
-  // Proveri da li je korisnik ulogovan
   const korisnik = localStorage.getItem('trenutniKorisnik');
 
   if (korisnik) {
@@ -44,15 +43,12 @@
     document.getElementById('postani-prodavac-li').style.display = 'list-item';
   }
 
-function odjaviSe() {
-  localStorage.removeItem('token'); // briše token
-  // Koristi replace() da obriše istoriju – strelica nazad neće vratiti na profil
-  window.location.replace('/Lokalni-Plodovi/index.html'); // ili '/Lokalni-Plodovi/' ako je index.html default
-}
-}
-  
+  // Funkcija je sada van if-else – na nivou skripte
+  function odjaviSe() {
+    localStorage.removeItem('trenutniKorisnik');
+    window.location.replace('/Lokalni-Plodovi/index.html'); // ili '/Lokalni-Plodovi/' ako index.html ide automatski
+  }
 </script>
-
 
   ...
 
@@ -441,6 +437,7 @@ s0.parentNode.insertBefore(s1,s0);
 
   </body>
   </html>
+
 
 
 
