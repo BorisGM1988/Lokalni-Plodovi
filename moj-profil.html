@@ -810,6 +810,41 @@ document.getElementById('edit-naslovna-slika').addEventListener('change', functi
     reader.readAsDataURL(file);
   }
 });
+  function sacuvajIzmene() {
+  const formData = new FormData();
+
+  formData.append('ime', document.getElementById('edit-ime').value);
+  formData.append('opis', document.getElementById('edit-opis').value);
+  formData.append('telefon', document.getElementById('edit-telefon').value);
+  formData.append('lokacija', document.getElementById('edit-lokacija').value);
+
+  // Profilna slika
+  const profilnaFile = document.getElementById('edit-profilna-slika').files[0];
+  if (profilnaFile) formData.append('slika', profilnaFile);
+
+  // Naslovna slika
+  const naslovnaFile = document.getElementById('edit-naslovna-slika').files[0];
+  if (naslovnaFile) formData.append('coverSlika', naslovnaFile);
+
+  fetch('https://lokalni-backend.onrender.com/profile/update', {
+    method: 'PATCH',
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    },
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Profil uspešno izmenjen!');
+      zatvoriIzmeniModal();
+      location.reload(); // osveži stranicu da vidiš promene
+    } else {
+      alert('Greška: ' + data.error);
+    }
+  })
+  .catch(err => alert('Greška pri čuvanju: ' + err));
+}
 </script>
 <!-- === MODAL ZA DODAVANJE PROIZVODA === -->
 <div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
@@ -887,6 +922,7 @@ document.getElementById('edit-naslovna-slika').addEventListener('change', functi
 </div>
 </body>
 </html>
+
 
 
 
