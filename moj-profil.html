@@ -826,7 +826,7 @@ document.getElementById('edit-naslovna-slika').addEventListener('change', functi
   const naslovnaFile = document.getElementById('edit-naslovna-slika').files[0];
   if (naslovnaFile) formData.append('coverSlika', naslovnaFile);
 
-  fetch('https://lokalni-backend.onrender.com/profile/update', {
+  fetch('lokalni-backend-production.up.railway.app', {
     method: 'PATCH',
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem('token')
