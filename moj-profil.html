@@ -751,23 +751,45 @@ document.getElementById('slika-proizvoda').addEventListener('change', function(e
   }
 });
 
-// Dugme "Izloži na pijac" (za sada samo test)
 function izloziNaPijac() {
-  const naziv = document.getElementById('naziv').value;
+  const naziv = document.getElementById('naziv').value.trim();
   const cena = document.getElementById('cena').value;
   const kolicina = document.getElementById('kolicina').value;
   const glavnaNisa = document.getElementById('glavna-nisa').value;
-  const podnisa = document.getElementById('podnisa').value;
+  const podnisa = document.getElementById('podnisa').value.trim();
 
   if (!naziv || !cena || !kolicina || !glavnaNisa) {
     alert('Molim te popuni obavezna polja!');
     return;
   }
 
-  alert(`✅ Proizvod "${naziv}" (${glavnaNisa} - ${podnisa}) je izložen na pijac!\n\nCena: ${cena} RSD\nKoličina: ${kolicina}`);
-  zatvoriModal();
-  
-  // Kasnije ovde ide poziv na backend
+  const data = {
+    naziv,
+    cena: parseFloat(cena),
+    kolicina: parseInt(kolicina),
+    glavnaNisa,
+    podnisa: podnisa || null,
+    slikaUrl: null // za sada bez slike, dodajemo kasnije
+  };
+
+  fetch('https://lokalni-backend-production.up.railway.app/dodaj-proizvod', { // ← PROMENI NA TAČAN RAILWAY URL
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Proizvod uspešno dodat!');
+      zatvoriModal();
+    } else {
+      alert('Greška: ' + data.error);
+    }
+  })
+  .catch(err => alert('Greška pri slanju: ' + err.message));
 }
   function izmeniProfil() {
   document.getElementById('edit-ime').value = document.getElementById('profileName').textContent || '';
