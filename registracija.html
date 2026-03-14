@@ -302,7 +302,7 @@ s0.parentNode.insertBefore(s1,s0);
     console.log('Šaljem podatke na backend:', data); // za proveru u konzoli
 
     try {
-      const response = await fetch('https://lokalni-backend.onrender.com/register', {
+      const response = await fetch('https://lokalni-backend-production.up.railway.app', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
