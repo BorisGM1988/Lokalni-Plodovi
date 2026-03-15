@@ -287,8 +287,13 @@ s0.parentNode.insertBefore(s1,s0);
 <!--End of Tawk.to Script-->
 <script>
   document.getElementById('registration-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+    e.preventDefault(); // ← OVO SPREČAVA RELOAD STRANICE I BRISANJE POLJA!!!
 
+    const porukaEl = document.getElementById('poruka');
+    porukaEl.textContent = ''; // očisti prethodne poruke
+    porukaEl.style.color = 'red';
+
+    // Prikupljanje podataka – dodao sam i kontakt opcije
     const data = {
       ime: document.getElementById('ime').value.trim(),
       email: document.getElementById('email').value.trim(),
@@ -296,45 +301,81 @@ s0.parentNode.insertBefore(s1,s0);
       telefon: document.getElementById('telefon').value.trim(),
       lokacija: document.getElementById('lokacija').value.trim(),
       nise: Array.from(document.querySelectorAll('input[name="nise"]:checked')).map(cb => cb.value),
-      opis: document.getElementById('opis').value.trim()
+      opis: document.getElementById('opis').value.trim(),
+      // Dodaj kontakt opcije ako ih backend očekuje (kao boolean ili array/string)
+      kontaktViber: document.querySelector('input[name="viber"]').checked,
+      kontaktWhatsApp: document.querySelector('input[name="whatsapp"]').checked,
+      kontaktTelegram: document.querySelector('input[name="telegram"]').checked
     };
 
-    console.log('Šaljem podatke na backend:', data); // za proveru u konzoli
+    // Osnovna validacija na frontendu (opciono, ali korisno)
+    if (!data.ime || !data.email || !data.lozinka || !data.telefon || !data.lokacija) {
+      porukaEl.textContent = 'Popunite sva obavezna polja!';
+      return;
+    }
+    if (data.lozinka.length < 6) {
+      porukaEl.textContent = 'Lozinka mora imati najmanje 6 karaktera!';
+      return;
+    }
+    if (data.nise.length === 0) {
+      porukaEl.textContent = 'Izaberite bar jednu nišu koju prodajete!';
+      return;
+    }
 
-try {
     console.log('Šaljem podatke na backend:', data);
 
-    const response = await fetch('https://lokalni-backend-production.up.railway.app/register', {
+    try {
+      const response = await fetch('https://lokalni-backend-production.up.railway.app/register', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
-    });
+      });
 
-    console.log('Status odgovora:', response.status);
+      console.log('Status:', response.status);
 
-    const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (jsonErr) {
+        console.error('Backend nije vratio validan JSON:', jsonErr);
+        throw new Error('Neočekivan odgovor sa servera');
+      }
 
-    console.log('Odgovor od servera:', result);
+      console.log('Odgovor od servera:', result);
 
-    if (response.ok) {
+      if (response.ok) {
+        // Uspeh
         if (!result.token) {
-            throw new Error('Backend nije vratio token!');
+          throw new Error('Nema tokena u odgovoru!');
         }
 
         localStorage.setItem('token', result.token);
         console.log('Token sačuvan:', result.token);
 
-        alert('Registracija uspešna!');
-        window.location.href = 'moj-profil.html';  // ← ovo će otvoriti profil sa tokenom u localStorage
-    } else {
-        alert(result.poruka || result.error || 'Greška pri registraciji (status: ' + response.status + ')');
+        // Prikaz uspeha na stranici umesto samo alert (bolje UX)
+        document.getElementById('success-message').style.display = 'block';
+        porukaEl.style.color = 'green';
+        porukaEl.textContent = 'Registracija uspešna! Preusmeravam na profil...';
+
+        // Preusmeri posle 2 sekunde (da korisnik vidi poruku)
+        setTimeout(() => {
+          window.location.href = 'moj-profil.html';
+        }, 2200);
+      } else {
+        // Greška sa backend-a
+        const errorMsg = result.poruka || result.error || result.message || 'Greška pri registraciji';
+        porukaEl.textContent = errorMsg + (response.status !== 400 && response.status !== 409 ? ` (status: ${response.status})` : '');
+        if (response.status === 409) {
+          porukaEl.textContent = 'Email već postoji – probajte drugi.';
+        }
+      }
+    } catch (err) {
+      console.error('Greška prilikom slanja:', err);
+      porukaEl.textContent = 'Došlo je do greške: ' + (err.message || 'povezivanje sa serverom');
     }
-} catch (err) {
-    console.error('Greška u fetch-u:', err);
-    alert('Došlo je do greške: ' + err.message);
-}
+  });
 </script>
 </body>
 </html>
