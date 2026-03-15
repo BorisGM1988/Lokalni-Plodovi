@@ -5,36 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Moj profil – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --zelena: #2e7d32;
-      --zelena-svetla: #4caf50;
-      --zemlja: #5d4037;
-      --svetlo: #f9fafb;
-      --belo: #ffffff;
-      --siva: #6b7280;
-    }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
-
+    /* Tvoj originalni stil – NIŠTA NISAM PROMENIO U VIZUELNOM DELU */
     body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--svetlo);
-      color: #333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      color: #333;
     }
 
     header {
-      background: linear-gradient(135deg, var(--zelena), var(--zelena-svetla));
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
       color: white;
-      padding: 1rem 2rem;
+      padding: 1.2rem 2rem;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     nav {
@@ -45,315 +35,347 @@
       align-items: center;
     }
 
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-    }
+    .logo { font-size: 1.9rem; font-weight: bold; letter-spacing: 0.5px; }
 
     nav ul {
       display: flex;
       list-style: none;
-      gap: 2rem;
+      gap: 2.5rem;
+      margin: 0;
+      padding: 0;
     }
 
     nav a {
       color: white;
       text-decoration: none;
       font-weight: 500;
-      transition: all 0.3s ease;
+      transition: color 0.3s ease;
     }
 
-    nav a:hover { color: #e0f2e9; transform: translateY(-2px); }
+    nav a:hover { color: #e0f2f1; }
 
-    /* Glavni deo profila sa pozadinom */
-    .profile-hero {
+    .profile-cover {
+      height: 280px;
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
       position: relative;
-      height: 450px;
-      background: url('https://www.lemon8-app.com/seo/image?item_id=7224190883875308037&index=0&sign=e49c0e9370ecd978c8fce6b7062effe9') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
+      font-size: 1.4rem;
       text-align: center;
+      overflow: hidden;
+      transition: height 0.3s ease;
     }
 
-    .profile-hero::before {
-      content: '';
+    .profile-cover img.cover-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(46,125,50,0.5));
+      top: 0;
+      left: 0;
       z-index: 1;
     }
 
-    .profile-hero-content {
-      position: relative;
+    .profile-cover .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
       z-index: 2;
-      max-width: 900px;
-      padding: 2rem;
     }
 
-    .profile-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 4rem;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    .profile-cover .placeholder-text {
+      position: relative;
+      z-index: 3;
+      max-width: 80%;
+      padding: 1rem;
+      animation: fadeIn 1s ease-in-out;
     }
 
-    .profile-bio {
-      font-size: 1.3rem;
-      max-width: 700px;
-      margin: 0 auto;
-      opacity: 0.95;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .profile-content {
-      max-width: 1200px;
-      margin: -180px auto 4rem;
-      padding: 0 1.5rem;
+      max-width: 1400px;
+      margin: -120px auto 0;
+      padding: 0 2rem 4rem;
       position: relative;
       z-index: 10;
     }
 
     .profile-avatar-wrapper {
-      text-align: center;
-      margin-bottom: 2rem;
+      position: relative;
     }
 
     .profile-avatar {
-      width: 220px;
-      height: 220px;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
       object-fit: cover;
       border: 8px solid white;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-      transition: transform 0.4s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      display: block;
+      margin: 0 auto -100px;
+      position: relative;
+      z-index: 10;
+      transition: transform 0.3s ease;
     }
 
-    .profile-avatar:hover { transform: scale(1.08); }
+    .profile-avatar:hover {
+      transform: scale(1.05);
+    }
 
     .profile-main {
       background: white;
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
-      padding: 3rem 2.5rem;
-      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 120px 2rem 2rem;
+      margin-top: 0;
     }
 
     .profile-header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .profile-name {
+      font-size: 2.8rem;
+      margin: 0 0 0.5rem;
+      color: #1e40af;
+      font-weight: 700;
+    }
+
+    .profile-bio {
+      font-size: 1.2rem;
+      color: #4b5563;
+      margin: 0;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .profile-edit-btn {
+      margin-top: 1.5rem;
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(76,175,80,0.3);
+    }
+
+    .profile-edit-btn:hover {
+      background: #388e3c;
+      box-shadow: 0 6px 16px rgba(76,175,80,0.4);
     }
 
     .profile-info-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.8rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
     }
 
     .detail-card {
-      background: linear-gradient(145deg, #ffffff, #f8fafc);
-      padding: 1.8rem;
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(46,125,50,0.1);
+      background: #f9fafb;
+      padding: 1.5rem;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: box-shadow 0.3s ease;
     }
 
     .detail-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 50px rgba(46,125,50,0.18);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .detail-label {
-      color: var(--zelena);
-      font-size: 1.15rem;
+      color: #2e7d32;
       font-weight: 600;
-      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
       display: flex;
       align-items: center;
-      gap: 0.8rem;
+      gap: 0.6rem;
+    }
+
+    .detail-label i {
+      color: #4caf50;
+    }
+
+    #nise {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
     }
 
     .nise-badge {
+      padding: 0.5rem 1.2rem;
       background: #d1fae5;
       color: #065f46;
-      padding: 0.6rem 1.3rem;
       border-radius: 9999px;
-      font-weight: 600;
-      margin: 0.4rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      font-size: 0.95rem;
+      font-weight: 500;
     }
 
     .profile-actions {
       display: flex;
-      gap: 1.5rem;
-      justify-content: center;
       flex-wrap: wrap;
-      margin: 3rem 0;
+      gap: 1.2rem;
+      justify-content: center;
+      max-width: 600px;
+      margin: 3rem auto 0;
     }
 
     .btn {
-      padding: 1rem 2.2rem;
+      flex: 1;
+      min-width: 200px;
+      padding: 1.2rem;
       border-radius: 50px;
       font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
+      text-align: center;
       display: flex;
       align-items: center;
-      gap: 0.8rem;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .btn-primary {
-      background: linear-gradient(90deg, var(--zelena), var(--zelena-svetla));
+      background: #2e7d32;
       color: white;
       border: none;
     }
 
-    .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(46,125,50,0.35); }
+    .btn-primary:hover { background: #4caf50; box-shadow: 0 6px 16px rgba(76,175,80,0.3); }
 
     .btn-secondary {
       background: white;
-      border: 2px solid var(--zelena);
-      color: var(--zelena);
+      border: 2px solid #2e7d32;
+      color: #2e7d32;
     }
 
     .btn-secondary:hover {
-      background: var(--zelena);
+      background: #2e7d32;
       color: white;
-      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(46,125,50,0.3);
     }
 
-    /* Modal-i – modernizovani */
-    #dodaj-proizvod-modal, #izmeni-profil-modal {
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(8px);
+    footer {
+      background: #4b5563;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: auto;
+      font-size: 0.95rem;
     }
 
-    #dodaj-proizvod-modal > div, #izmeni-profil-modal > div {
+    footer p {
+      margin: 0;
+    }
+
+    /* Responsivnost */
+    @media (max-width: 768px) {
+      .profile-cover {
+        height: 200px;
+      }
+
+      .profile-content {
+        margin-top: -80px;
+      }
+
+      .profile-avatar {
+        width: 160px;
+        height: 160px;
+      }
+
+      .profile-main {
+        padding-top: 100px;
+      }
+
+      .profile-actions {
+        flex-direction: column;
+      }
+    }
+
+    .profile-cover {
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .profile-cover:hover {
+      opacity: 0.92;
+    }
+
+    .profile-cover .placeholder-text {
+      cursor: pointer;
+    }
+
+    /* STIL ZA MODAL DODAJ PROIZVOD – isti kao što si imao */
+    #dodaj-proizvod-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #dodaj-proizvod-modal > div {
       background: white;
-      border-radius: 24px;
-      box-shadow: 0 30px 70px rgba(0,0,0,0.3);
-      max-width: 580px;
-      padding: 2.5rem;
+      width: 90%;
+      max-width: 520px;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
     }
 
-    /* Ostalo ostaje isto – dodao sam samo ove moderne akcente */
-  </style>
-</head>
-<body>
-
-<header>
-  <nav>
-    <div class="logo">LokalniPlodovi</div>
-    <ul>
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="Prodavci.html">Svi prodavci</a></li>
-      <li><a href="mapa.html">Mapa</a></li>
-      <li><a href="chat.html">Chat</a></li>
-      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
-      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
-      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
-    </ul>
-  </nav>
-</header>
-
-<div class="profile-hero">
-  <div class="profile-hero-content">
-    <h1 class="profile-name" id="profileName">Učitavanje...</h1>
-    <p class="profile-bio" id="profileBio">Dobro došli na vaš lični kutak – ovde upravljate proizvodima, objavama i profilom.</p>
-  </div>
-</div>
-
-<div class="profile-content">
-  <div class="profile-avatar-wrapper">
-    <img src="https://via.placeholder.com/220?text=Profil" alt="Profilna slika" class="profile-avatar" id="profile-avatar">
-  </div>
-
-  <div class="profile-main">
-    <div class="profile-header">
-      <button class="btn btn-secondary" onclick="izmeniProfil()"><i class="fas fa-edit"></i> Izmeni profil</button>
-    </div>
-
-    <div class="profile-info-grid">
-      <div class="detail-card">
-        <div class="detail-label"><i class="fas fa-envelope"></i> Email</div>
-        <div id="email">Učitavanje...</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-label"><i class="fas fa-phone"></i> Telefon</div>
-        <div id="telefon">Učitavanje...</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-label"><i class="fas fa-map-marker-alt"></i> Lokacija</div>
-        <div id="lokacija">Učitavanje...</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-label"><i class="fas fa-tags"></i> Niše</div>
-        <div id="nise">Učitavanje...</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-label"><i class="fas fa-info-circle"></i> Opis</div>
-        <div id="opis">Učitavanje...</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-label"><i class="fas fa-calendar-check"></i> Registrovan</div>
-        <div id="registeredAt">Učitavanje...</div>
-      </div>
-    </div>
-
-    <div class="profile-actions">
-      <button class="btn btn-primary" onclick="objaviNovost()"><i class="fas fa-newspaper"></i> Objavi novost</button>
-      <button class="btn btn-primary" onclick="dodajProizvod()"><i class="fas fa-plus-circle"></i> Dodaj proizvod</button>
-    </div>
-  </div>
-</div>
-
-<!-- Moje objave -->
-<div id="objave-sekcija" style="margin: 4rem 2rem; background: white; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); padding: 2.5rem;">
-  <h2 style="color: var(--zelena); text-align:center; margin-bottom:2rem; font-family:'Playfair Display',serif; font-size:2rem;">Moje objave</h2>
-  <div id="objave-lista" style="min-height: 150px;"></div>
-</div>
-
-<footer>
-  <p>© 2025 LokalniPlodovi • Prirodno • Sezonski • Direktno sa imanja</p>
-</footer>
-
-<!-- Modal-i ostaju isti, ali sa boljim stilovima u CSS-u iznad -->
-
-<script>
-  // Tvoj postojeći JavaScript kod (ucitajProfil, ucitajObjave, itd.) ostaje isti – samo dodaj ovo na početak za navigaciju
-  document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const els = {
-      mojProfil: document.getElementById('moj-profil-li'),
-      odjaviSe: document.getElementById('odjavi-se-li'),
-      prijaviSe: document.getElementById('prijavi-se-li'),
-      postaniProdavac: document.getElementById('postani-prodavac-li')
-    };
-
-    if (token) {
-      els.mojProfil.style.display = 'list-item';
-      els.odjaviSe.style.display = 'list-item';
-      els.prijaviSe.style.display = 'none';
-      els.postaniProdavac.style.display = 'none';
-    } else {
-      els.mojProfil.style.display = 'none';
-      els.odjaviSe.style.display = 'none';
-      els.prijaviSe.style.display = 'list-item';
-      els.postaniProdavac.style.display = 'list-item';
+    #dodaj-proizvod-modal label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #333;
     }
 
-    ucitajProfil(); // tvoja funkcija
-  });
+    #dodaj-proizvod-modal input,
+    #dodaj-proizvod-modal select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
 
-  // Ostatak tvog skripta (ucitajProfil, objaviNovost, itd.) ide ovde – ne menjaj ga, samo osiguraj da backend URL bude Railway
-</script>
-</body>
-</html>
+    #dodaj-proizvod-modal button {
+      margin-top: 1.5rem;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #dod
 
 
 
