@@ -301,8 +301,8 @@ s0.parentNode.insertBefore(s1,s0);
 
     console.log('Šaljem podatke na backend:', data); // za proveru u konzoli
 
-  try {
-    console.log('Šaljem podatke na backend:', data); // za proveru
+try {
+    console.log('Šaljem podatke na backend:', data);
 
     const response = await fetch('https://lokalni-backend-production.up.railway.app/register', {
         method: 'POST',
@@ -312,20 +312,22 @@ s0.parentNode.insertBefore(s1,s0);
         body: JSON.stringify(data)
     });
 
-    console.log('Status odgovora:', response.status); // super korisno za debug
+    console.log('Status odgovora:', response.status);
 
     const result = await response.json();
 
-    console.log('Odgovor od servera:', result); // OVO JE KLJUČNO – vidi šta backend vraća
+    console.log('Odgovor od servera:', result);
 
     if (response.ok) {
         if (!result.token) {
             throw new Error('Backend nije vratio token!');
         }
+
         localStorage.setItem('token', result.token);
         console.log('Token sačuvan:', result.token);
+
         alert('Registracija uspešna!');
-        window.location.href = 'moj-profil.html'; // ili šta god da je sledeća stranica
+        window.location.href = 'moj-profil.html';  // ← ovo će otvoriti profil sa tokenom u localStorage
     } else {
         alert(result.poruka || result.error || 'Greška pri registraciji (status: ' + response.status + ')');
     }
