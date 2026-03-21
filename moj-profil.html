@@ -731,52 +731,54 @@
   });
 
   async function izloziNaPijac() {
-    const naziv = document.getElementById('naziv').value.trim();
-    const cena = document.getElementById('cena').value;
-    const kolicina = document.getElementById('kolicina').value;
-    const glavnaNisa = document.getElementById('glavna-nisa').value;
+  const naziv = document.getElementById('naziv').value.trim();
+  const cena = document.getElementById('cena').value;
+  const kolicina = document.getElementById('kolicina').value;
+  const glavnaNisa = document.getElementById('glavna-nisa').value;
+  const podnisa = document.getElementById('podnisa').value.trim();
 
-    if (!naziv || !cena || !kolicina || !glavnaNisa) {
-      alert('Popunite obavezna polja!');
-      return;
-    }
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Morate biti ulogovani');
-      return;
-    }
-
-    const data = {
-      naziv,
-      cena: parseFloat(cena),
-      kolicina: parseInt(kolicina),
-      glavnaNisa
-    };
-
-    try {
-      const response = await fetch(`${backendUrl}/dodaj-proizvod`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        alert('Proizvod uspešno dodat!');
-        zatvoriModal();
-      } else {
-        alert(result.poruka || result.error || 'Greška pri dodavanju');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Greška pri slanju na server');
-    }
+  if (!naziv || !cena || !kolicina || !glavnaNisa) {
+    alert('Popunite obavezna polja!');
+    return;
   }
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Morate biti ulogovani');
+    return;
+  }
+
+  const data = {
+    naziv,
+    cena: parseFloat(cena),
+    kolicina: parseInt(kolicina),
+    glavnaNisa,
+    podnisa
+  };
+
+  try {
+    const response = await fetch(`${backendUrl}/dodaj-proizvod`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert('Proizvod uspešno dodat!');
+      zatvoriModal();
+    } else {
+      alert(result.poruka || result.error || 'Greška pri dodavanju');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Greška pri slanju na server');
+  }
+}
 
   function izmeniProfil() {
     document.getElementById('edit-ime').value = document.getElementById('profileName').textContent || '';
