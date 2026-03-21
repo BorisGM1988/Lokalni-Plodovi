@@ -220,49 +220,8 @@
     Kliknite na profil da vidite detalje, proizvode i kontakt.
   </div>
 
-  <div class="sellers-grid">
-<div id="prodavci-grid" class="prodavci-grid">
-  <!-- ovde će JS ubaciti kartice -->
-</div>
-    <!-- Pčelarstvo Jovanović -->
-    <div class="seller-card">
-      <div class="seller-img">
-        <img src="pcelarstvo-jovanovic.jpg" alt="Pčelarstvo Jovanović">
-      </div>
-      <div class="seller-info">
-        <h2 class="seller-name">Pčelarstvo Jovanović</h2>
-        <div class="seller-location">Selo Banovo Polje, okolina Mačve</div>
-        <p class="seller-description">Porodično pčelarstvo od 1998. godine. Prirodni med, saće, propolis – bez aditiva.</p>
-        <a href="profil-pcelar.html" class="seller-btn">Pogledaj profil</a>
-      </div>
-    </div>
-
-    <!-- Domaćinstvo Marković -->
-    <div class="seller-card">
-      <div class="seller-img">
-        <img src="domacinstvo-markovic.jpg" alt="Domaćinstvo Marković">
-      </div>
-      <div class="seller-info">
-        <h2 class="seller-name">Domaćinstvo Marković</h2>
-        <div class="seller-location">Stara Planina, okolina Pirota</div>
-        <p class="seller-description">Tradicionalno pravljenje kajmaka, ovčijeg sira, pavlake i kiselog mleka. Sve od naših životinja na pašnjaku Stara Planina.</p>
-        <a href="profil-kajmak.html" class="seller-btn">Pogledaj profil</a>
-      </div>
-    </div>
-
-    <!-- Mesara Petrović -->
-    <div class="seller-card">
-      <div class="seller-img">
-        <img src="mesara-petrovic.jpg" alt="Mesara Petrović">
-      </div>
-      <div class="seller-info">
-        <h2 class="seller-name">Mesara Petrović</h2>
-        <div class="seller-location">Zlatibor, okolina Čajetine</div>
-        <p class="seller-description">Sveže meso, pršuta, čvarci, kulen, slanina – sve od naših svinja i goveda na pašnjaku Zlatibor.</p>
-        <a href="profil-meso.html" class="seller-btn">Pogledaj profil</a>
-      </div>
-    </div>
-
+  <div class="sellers-grid" id="prodavci-grid">
+    <!-- ovde će JS dinamički ubaciti kartice -->
   </div>
 
 </div>
@@ -274,6 +233,7 @@
     <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
   </div>
 </footer>
+
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -287,39 +247,57 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+
 <script>
-  const backendUrl = 'https://lokalni-backend.onrender.com'; // PROMENI NA PRAVI (npr. lokalni-backend.onrender.com)
+  const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
   async function ucitajProdavce() {
     try {
-      const response = await fetch(`${backendUrl}/svi-prodavci`);
-      if (!response.ok) throw new Error('Greška pri učitavanju');
+      console.log('Pokušaj učitavanja prodavaca sa:', `${backendUrl}/svi-prodavci`);
+
+      const response = await fetch(`${backendUrl}/svi-prodavci`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Status odgovora:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`Server vratio status ${response.status}`);
+      }
 
       const prodavci = await response.json();
-      const grid = document.getElementById('prodavci-grid'); // PROMENI ID ako si drugačije nazvao grid
+      console.log('Podaci sa servera:', prodavci);
+
+      const grid = document.getElementById('prodavci-grid');
       grid.innerHTML = '';
+
+      if (prodavci.length === 0) {
+        grid.innerHTML = '<p style="text-align:center; color:#666; grid-column: 1 / -1;">Još nema registrovanih prodavaca.</p>';
+        return;
+      }
 
       prodavci.forEach(p => {
         const card = document.createElement('div');
-        card.className = 'prodavac-card'; // dodaj ovu klasu u CSS ako nemaš
+        card.className = 'seller-card';
         card.innerHTML = `
-          <img src="${p.slika}" alt="${p.ime}" class="card-image">
-          <div class="card-content">
-            <h3 class="card-title">${p.ime}</h3>
-            <p class="card-desc">${p.opis.substring(0, 120)}${p.opis.length > 120 ? '...' : ''}</p>
-            <p class="card-loc"><i class="fas fa-map-marker-alt"></i> ${p.lokacija}</p>
-            <a href="/moj-profil.html?userId=${p.id}" class="card-btn">Pogledaj profil</a>
+          <div class="seller-img">
+            <img src="${p.slika}" alt="${p.ime || 'Prodavac'}">
+          </div>
+          <div class="seller-info">
+            <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
+            <div class="seller-location"><i class="fas fa-map-marker-alt"></i> ${p.lokacija || 'Lokacija nije navedena'}</div>
+            <p class="seller-description">${p.opis || 'Porodična proizvodnja svežih domaćih proizvoda.'}</p>
+            <a href="moj-profil.html?userId=${p.id}" class="seller-btn">Pogledaj profil</a>
           </div>
         `;
         grid.appendChild(card);
       });
-
-      if (prodavci.length === 0) {
-        grid.innerHTML = '<p style="text-align:center; color:#666; grid-column: 1 / -1;">Još nema registrovanih prodavaca.</p>';
-      }
     } catch (err) {
-      console.error(err);
-      document.getElementById('prodavci-grid').innerHTML = '<p style="color:red; text-align:center;">Greška pri učitavanju prodavaca</p>';
+      console.error('Greška pri učitavanju prodavaca:', err);
+      document.getElementById('prodavci-grid').innerHTML = '<p style="color:red; text-align:center;">Greška pri učitavanju prodavaca. Server nije dostupan ili ruta ne postoji.</p>';
     }
   }
 
@@ -327,14 +305,4 @@ s0.parentNode.insertBefore(s1,s0);
   window.addEventListener('load', ucitajProdavce);
 </script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
