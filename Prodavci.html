@@ -189,28 +189,6 @@
   </nav>
 </header>
 
-<script>
-  // Proveri da li je korisnik ulogovan
-  const korisnik = localStorage.getItem('trenutniKorisnik');
-
-  if (korisnik) {
-    document.getElementById('moj-profil-li').style.display = 'list-item';
-    document.getElementById('odjavi-se-li').style.display = 'list-item';
-    document.getElementById('prijavi-se-li').style.display = 'none';
-    document.getElementById('postani-prodavac-li').style.display = 'none';
-  } else {
-    document.getElementById('moj-profil-li').style.display = 'none';
-    document.getElementById('odjavi-se-li').style.display = 'none';
-    document.getElementById('prijavi-se-li').style.display = 'list-item';
-    document.getElementById('postani-prodavac-li').style.display = 'list-item';
-  }
-
-  function odjaviSe() {
-    localStorage.removeItem('trenutniKorisnik');
-    window.location.href = 'index.html';
-  }
-</script>
-
 <div class="container">
 
   <h1>Svi prodavci</h1>
@@ -251,9 +229,33 @@ s0.parentNode.insertBefore(s1,s0);
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
+  // Proveri da li je korisnik ulogovan (koristi 'token' kao u loginu)
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+    } else {
+      document.getElementById('moj-profil-li').style.display = 'none';
+      document.getElementById('odjavi-se-li').style.display = 'none';
+      document.getElementById('prijavi-se-li').style.display = 'list-item';
+      document.getElementById('postani-prodavac-li').style.display = 'list-item';
+    }
+
+    ucitajProdavce();
+  });
+
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+  }
+
   async function ucitajProdavce() {
     try {
-      console.log('Pokušaj učitavanja prodavaca sa:', `${backendUrl}/svi-prodavci`);
+      console.log('Pokušaj učitavanja sa:', `${backendUrl}/svi-prodavci`);
 
       const response = await fetch(`${backendUrl}/svi-prodavci`, {
         method: 'GET',
@@ -300,9 +302,6 @@ s0.parentNode.insertBefore(s1,s0);
       document.getElementById('prodavci-grid').innerHTML = '<p style="color:red; text-align:center;">Greška pri učitavanju prodavaca. Server nije dostupan ili ruta ne postoji.</p>';
     }
   }
-
-  // Učitaj odmah kad se stranica otvori
-  window.addEventListener('load', ucitajProdavce);
 </script>
 </body>
 </html>
