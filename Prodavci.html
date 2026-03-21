@@ -226,23 +226,23 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 <!--End of Tawk.to Script-->
 
-<script>
+
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
   async function ucitajProdavce() {
     try {
-      console.log('Pokušavam učitati prodavce sa:', `${backendUrl}/svi-prodavci`);
+      console.log('Pokušavam učitati sa:', `${backendUrl}/svi-prodavci`);
 
       const response = await fetch(`${backendUrl}/svi-prodavci`);
-      console.log('Status odgovora:', response.status);
+      console.log('Status:', response.status);
 
       if (!response.ok) {
         throw new Error(`Server vratio ${response.status}`);
       }
 
       const prodavci = await response.json();
-      console.log('Stigli prodavci:', prodavci);
+      console.log('Stigli podaci:', prodavci);
 
       const grid = document.getElementById('prodavci-grid');
       grid.innerHTML = '';
@@ -260,9 +260,9 @@ s0.parentNode.insertBefore(s1,s0);
             <img src="${p.slika}" alt="${p.ime}">
           </div>
           <div class="seller-info">
-            <h2 class="seller-name">${p.ime}</h2>
-            <div class="seller-location">${p.lokacija}</div>
-            <p class="seller-description">${p.opis}</p>
+            <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
+            <div class="seller-location">${p.lokacija || 'Nepoznato'}</div>
+            <p class="seller-description">${p.opis || 'Nema opisa'}</p>
             <a href="moj-profil.html?userId=${p.id}" class="seller-btn">Pogledaj profil</a>
           </div>
         `;
@@ -275,7 +275,6 @@ s0.parentNode.insertBefore(s1,s0);
   }
 
   window.addEventListener('load', ucitajProdavce);
-</script>
 </script>
 </body>
 </html>
