@@ -862,56 +862,47 @@
     }
   });
 
-  // Upload naslovne slike klikom na cover
-  document.querySelector('.profile-cover').addEventListener('click', function() {
-    document.getElementById('hidden-cover-upload').click();
-  });
+document.getElementById('hidden-cover-upload').addEventListener('change', async function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-  document.getElementById('hidden-cover-upload').addEventListener('change', async function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const base64 = e.target.result;
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const coverImage = document.getElementById('cover-image');
-      const placeholderText = document.getElementById('placeholder-text');
-
-      coverImage.src = e.target.result;
-      coverImage.style.display = 'block';
-      placeholderText.style.display = 'none';
-    };
-    reader.readAsDataURL(file);
-
-    const formData = new FormData();
-    formData.append('coverSlika', file);
+    // Lokalni preview
+    document.getElementById('cover-image').src = base64;
+    document.getElementById('cover-image').style.display = 'block';
+    document.getElementById('placeholder-text').style.display = 'none';
 
     const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Morate biti ulogovani');
-      return;
-    }
+    if (!token) return alert('Morate biti ulogovani');
 
     try {
-      const response = await fetch(`${backendUrl}/profile/update`, {
+      const response = await fetch('https://lokalni-backend-production.up.railway.app/profile/update', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formData
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ coverSlikaBase64: base64 })
       });
 
+      const result = await response.json();
+
       if (response.ok) {
-        console.log('Naslovna slika uspešno upload-ovana');
+        alert('Naslovna slika uspešno upload-ovana!');
       } else {
-        alert('Greška pri upload-u naslovne slike');
+        alert(result.poruka || 'Greška pri upload-u');
         document.getElementById('cover-image').style.display = 'none';
         document.getElementById('placeholder-text').style.display = 'block';
       }
     } catch (err) {
-      console.error(err);
-      alert('Došlo je do greške pri slanju slike');
+      alert('Greška pri slanju slike');
     }
-
-    event.target.value = '';
-  });
+  };
+  reader.readAsDataURL(file);
+});
 
   // Upload profilne slike
   document.getElementById('profile-avatar').addEventListener('click', function() {
