@@ -227,57 +227,28 @@ s0.parentNode.insertBefore(s1,s0);
 <!--End of Tawk.to Script-->
 
 <script>
+<script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
-
-  // Proveri da li je korisnik ulogovan (koristi 'token' kao u loginu)
-  document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-    } else {
-      document.getElementById('moj-profil-li').style.display = 'none';
-      document.getElementById('odjavi-se-li').style.display = 'none';
-      document.getElementById('prijavi-se-li').style.display = 'list-item';
-      document.getElementById('postani-prodavac-li').style.display = 'list-item';
-    }
-
-    ucitajProdavce();
-  });
-
-  function odjaviSe() {
-    localStorage.removeItem('token');
-    window.location.href = 'index.html';
-  }
 
   async function ucitajProdavce() {
     try {
-      console.log('Pokušaj učitavanja sa:', `${backendUrl}/svi-prodavci`);
+      console.log('Pokušavam učitati prodavce sa:', `${backendUrl}/svi-prodavci`);
 
-      const response = await fetch(`${backendUrl}/svi-prodavci`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
+      const response = await fetch(`${backendUrl}/svi-prodavci`);
       console.log('Status odgovora:', response.status);
 
       if (!response.ok) {
-        throw new Error(`Server vratio status ${response.status}`);
+        throw new Error(`Server vratio ${response.status}`);
       }
 
       const prodavci = await response.json();
-      console.log('Podaci sa servera:', prodavci);
+      console.log('Stigli prodavci:', prodavci);
 
       const grid = document.getElementById('prodavci-grid');
       grid.innerHTML = '';
 
       if (prodavci.length === 0) {
-        grid.innerHTML = '<p style="text-align:center; color:#666; grid-column: 1 / -1;">Još nema registrovanih prodavaca.</p>';
+        grid.innerHTML = '<p>Još nema registrovanih prodavaca.</p>';
         return;
       }
 
@@ -286,12 +257,12 @@ s0.parentNode.insertBefore(s1,s0);
         card.className = 'seller-card';
         card.innerHTML = `
           <div class="seller-img">
-            <img src="${p.slika}" alt="${p.ime || 'Prodavac'}">
+            <img src="${p.slika}" alt="${p.ime}">
           </div>
           <div class="seller-info">
-            <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
-            <div class="seller-location"><i class="fas fa-map-marker-alt"></i> ${p.lokacija || 'Lokacija nije navedena'}</div>
-            <p class="seller-description">${p.opis || 'Porodična proizvodnja svežih domaćih proizvoda.'}</p>
+            <h2 class="seller-name">${p.ime}</h2>
+            <div class="seller-location">${p.lokacija}</div>
+            <p class="seller-description">${p.opis}</p>
             <a href="moj-profil.html?userId=${p.id}" class="seller-btn">Pogledaj profil</a>
           </div>
         `;
@@ -299,9 +270,12 @@ s0.parentNode.insertBefore(s1,s0);
       });
     } catch (err) {
       console.error('Greška pri učitavanju prodavaca:', err);
-      document.getElementById('prodavci-grid').innerHTML = '<p style="color:red; text-align:center;">Greška pri učitavanju prodavaca. Server nije dostupan ili ruta ne postoji.</p>';
+      document.getElementById('prodavci-grid').innerHTML = '<p style="color:red;">Greška pri učitavanju prodavaca (status: ' + (err.message || 'nepoznato') + ')</p>';
     }
   }
+
+  window.addEventListener('load', ucitajProdavce);
+</script>
 </script>
 </body>
 </html>
