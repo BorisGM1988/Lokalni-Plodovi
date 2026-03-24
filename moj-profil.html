@@ -884,5 +884,111 @@
   });
   
 </script>
+  <!-- === DODAVANJE PROIZVODA - KOD ZA MODAL === -->
+<script>
+  // Funkcija za otvaranje modala (već pozivaš onclick="dodajProizvod()")
+  function dodajProizvod() {
+    document.getElementById('dodaj-proizvod-modal').style.display = 'flex';
+  }
+
+  // Funkcija za zatvaranje modala
+  function zatvoriModal() {
+    document.getElementById('dodaj-proizvod-modal').style.display = 'none';
+    // Opcionalno: resetuj formu
+    document.getElementById('proizvod-form').reset();
+    document.getElementById('preview-slika').style.display = 'none';
+  }
+
+  // Glavna funkcija - kada klikne "Izloži na pijac"
+  async function izloziNaPijac() {
+    const naziv     = document.getElementById('naziv').value.trim();
+    const cena      = parseFloat(document.getElementById('cena').value);
+    const kolicina  = parseInt(document.getElementById('kolicina').value);
+    const glavnaNisa = document.getElementById('glavna-nisa').value;
+    const podnisa   = document.getElementById('podnisa').value.trim();
+    const opis      = ''; // za sada nemaš polje za opis u modalu
+
+    // Validacija
+    if (!naziv) {
+      alert('Molimo unesite naziv proizvoda / sorte');
+      return;
+    }
+    if (!cena || cena <= 0) {
+      alert('Molimo unesite validnu cenu');
+      return;
+    }
+    if (!kolicina || kolicina <= 0) {
+      alert('Molimo unesite dostupnu količinu');
+      return;
+    }
+    if (!glavnaNisa) {
+      alert('Molimo izaberite glavnu nišu');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Morate biti ulogovani da dodate proizvod!');
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const podaci = {
+      naziv: naziv,
+      cena: cena,
+      kolicina: kolicina,
+      glavnaNisa: glavnaNisa,
+      podnisa: podnisa || null,
+      opis: opis || null
+    };
+
+    try {
+      const response = await fetch(`${backendUrl}/dodaj-proizvod`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(podaci)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert('✅ Proizvod je uspešno izložen na pijac!');
+        zatvoriModal();
+        
+        // Opcionalno: osveži moje objave ili dodaj obaveštenje
+        // ucitajMojeProizvode();  // kasnije ćemo dodati
+      } else {
+        alert('❌ Greška: ' + (result.error || result.message || 'Nešto nije u redu'));
+      }
+    } catch (err) {
+      console.error('Greška pri dodavanju proizvoda:', err);
+      alert('❌ Došlo je do greške pri komunikaciji sa serverom. Proveri internet i pokušaj ponovo.');
+    }
+  }
+
+  // Bonus: Preview slike u modalu (radi odmah)
+  document.getElementById('slika-proizvoda').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const preview = document.getElementById('preview-slika');
+        preview.src = ev.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Zatvori modal ako se klikne van njega
+  document.getElementById('dodaj-proizvod-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      zatvoriModal();
+    }
+  });
+</script>
 </body>
 </html>
