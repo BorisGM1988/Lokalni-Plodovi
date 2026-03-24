@@ -710,86 +710,7 @@
     });
   }
 
- <script>
-// === DODAJ PROIZVOD - FRONTEND ===
-document.addEventListener('DOMContentLoaded', () => {
-    const dodajForm = document.getElementById('dodajProizvodForm'); // ako imaš <form id="dodajProizvodForm">
-    // Ako nemaš form tag, koristićemo button click
 
-    const btnIzlozi = document.querySelector('button.btn-success, #izloziNaPijac, .green-button'); 
-    // prilagodi selektor ako treba (vidi u tvom HTML-u dugme "Izloži na pijac")
-
-    if (!btnIzlozi) {
-        console.error('Nisam pronašao dugme "Izloži na pijac"');
-        return;
-    }
-
-    btnIzlozi.addEventListener('click', async (e) => {
-        e.preventDefault();
-
-        // Uzimamo vrednosti iz input polja (promeni ID-ove ako su drugačiji u tvom HTML-u!)
-        const naziv = document.getElementById('nazivProizvoda').value.trim();
-        const cena = parseFloat(document.getElementById('cena').value);
-        const kolicina = parseInt(document.getElementById('kolicina').value);
-        const glavnaNisa = document.getElementById('glavnaNisa').value;
-        const podnisa = document.getElementById('podnisa').value.trim();
-        const opis = document.getElementById('opis') ? document.getElementById('opis').value.trim() : '';
-
-        // Provera da li su obavezna polja popunjena
-        if (!naziv || !cena || !kolicina || !glavnaNisa) {
-            alert('Molimo popunite sva obavezna polja (Naziv, Cena, Količina, Glavna niša)');
-            return;
-        }
-
-        // Uzimamo JWT token iz localStorage (pretpostavljam da ga čuvaš posle logina)
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('Morate se prvo ulogovati!');
-            window.location.href = 'login.html';
-            return;
-        }
-
-        const podaci = {
-            naziv: naziv,
-            cena: cena,
-            kolicina: kolicina,
-            glavnaNisa: glavnaNisa,
-            podnisa: podnisa || null,
-            opis: opis || null
-        };
-
-        try {
-            const response = await fetch('https://tvoj-railway-url.up.railway.app/dodaj-proizvod', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(podaci)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                alert('✅ Proizvod uspešno izložen na pijac!');
-                // Zatvori modal
-                const modal = document.getElementById('dodajProizvodModal'); // promeni ID ako je drugačiji
-                if (modal) modal.style.display = 'none';
-                
-                // Opciono: resetuj formu
-                if (dodajForm) dodajForm.reset();
-                
-                // TODO kasnije: osveži listu proizvoda na profilu
-            } else {
-                alert('❌ Greška: ' + (result.error || 'Nešto nije u redu'));
-            }
-        } catch (err) {
-            console.error(err);
-            alert('❌ Došlo je do greške pri konekciji sa serverom.');
-        }
-    });
-});
-</script>
 
   function izmeniProfil() {
     document.getElementById('edit-ime').value = document.getElementById('profileName').textContent || '';
@@ -961,6 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     reader.readAsDataURL(file);
   });
+  
 </script>
 </body>
 </html>
