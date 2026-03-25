@@ -193,7 +193,73 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+<!-- === DINAMIČKO učitavanje proizvoda za Jabuku === -->
+<div id="proizvodi-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+  <!-- Ovde će se pojavljivati proizvodi -->
+</div>
 
+<script>
+  const backendUrl = 'https://lokalni-backend-production.up.railway.app';   // ← promeni ako ti je URL drugačiji
+
+  async function ucitajJabuke() {
+    const container = document.getElementById('proizvodi-container');
+    container.innerHTML = '<p style="text-align:center; padding:2rem;">Učitavam proizvode...</p>';
+
+    try {
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Voće&podnisa=Jabuka`);
+
+      if (!response.ok) {
+        throw new Error('Greška sa servera');
+      }
+
+      const proizvodi = await response.json();
+
+      container.innerHTML = '';
+
+      if (proizvodi.length === 0) {
+        container.innerHTML = `
+          <p style="text-align:center; color:#666; font-size:1.1rem; padding:3rem 0;">
+            Još nema proizvoda u ovoj podniši.<br>
+            <strong>Budite prvi koji će dodati jabuke!</strong>
+          </p>`;
+        return;
+      }
+
+      proizvodi.forEach(p => {
+        const card = document.createElement('div');
+        card.style = `
+          background: white; 
+          border: 1px solid #e0e0e0; 
+          border-radius: 16px; 
+          padding: 1.5rem; 
+          margin-bottom: 1.5rem;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        `;
+        card.innerHTML = `
+          <h3 style="margin:0 0 0.8rem 0; color:#2e7d32;">${p.naziv}</h3>
+          <p style="margin:0.4rem 0;"><strong>Cena:</strong> ${p.cena} RSD</p>
+          <p style="margin:0.4rem 0;"><strong>Dostupno:</strong> ${p.kolicina} kg/kom</p>
+          <p style="margin:0.4rem 0;"><strong>Prodavac:</strong> ${p.prodavacIme}</p>
+          <p style="margin:0.4rem 0; font-size:0.9rem; color:#555;">
+            ${p.prodavacLokacija ? p.prodavacLokacija : ''}
+          </p>
+          <small style="color:#888;">Dodato: ${new Date(p.created_at).toLocaleDateString('sr-RS')}</small>
+        `;
+        container.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = `
+        <p style="text-align:center; color:red; padding:2rem;">
+          Greška pri učitavanju proizvoda. Pokušajte ponovo kasnije.
+        </p>`;
+    }
+  }
+
+  // Pokreni učitavanje kada se stranica učita
+  document.addEventListener('DOMContentLoaded', ucitajJabuke);
+</script>
 </body>
 
 </html>
