@@ -280,8 +280,18 @@
           <div id="registeredAt">Učitavanje...</div>
         </div>
       </div>
+
+      <div class="profile-actions">
+        <button class="btn btn-primary" onclick="objaviNovost()"><i class="fas fa-newspaper"></i> Objavi novost</button>
+        <button class="btn btn-secondary" onclick="dodajProizvod()"><i class="fas fa-plus-circle"></i> Dodaj proizvod</button>
+      </div>
     </div>
   </div>
+</div>
+
+<div id="objave-sekcija" style="margin-top: 3rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
+  <h2 style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
+  <div id="objave-lista" style="min-height: 120px;"></div>
 </div>
 
 <footer>
@@ -291,28 +301,21 @@
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  // === GLAVNA FUNKCIJA - UČITAVANJE PROFILA ===
   async function ucitajProfil() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdParam = urlParams.get('userId');
     const token = localStorage.getItem('token');
 
     let url = `${backendUrl}/profile`;
-
-    // Ako postoji userId u URL-u, šaljemo ga kao query parametar
     if (userIdParam) {
       url += `?userId=${userIdParam}`;
     }
 
     try {
-      const headers = {};
-      if (token) headers.Authorization = `Bearer ${token}`;
-
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
       const response = await fetch(url, { headers });
 
-      if (!response.ok) {
-        throw new Error('Greška pri učitavanju profila');
-      }
+      if (!response.ok) throw new Error('Greška pri učitavanju');
 
       const data = await response.json();
 
@@ -338,7 +341,6 @@
       }
 
       if (data.slika) document.getElementById('profile-avatar').src = data.slika;
-
       if (data.coverSlika) {
         document.getElementById('cover-image').src = data.coverSlika;
         document.getElementById('cover-image').style.display = 'block';
@@ -351,15 +353,54 @@
     }
   }
 
+  // Ostale funkcije iz tvog originalnog koda
   function odjaviSe() {
     localStorage.removeItem('token');
     window.location.href = 'index.html';
   }
 
+  function objaviNovost() {
+    const tekst = prompt('Šta želite da objavite?');
+    if (!tekst || tekst.trim() === '') return;
+
+    const token = localStorage.getItem('token');
+    if (!token) return alert('Morate biti ulogovani');
+
+    fetch(`${backendUrl}/objavi-novost`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ tekst: tekst.trim() })
+    })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(() => {
+      alert('Objava uspešno dodata!');
+    })
+    .catch(() => alert('Greška pri objavljivanju'));
+  }
+
+  function dodajProizvod() {
+    alert("Modal za dodavanje proizvoda će biti implementiran kasnije.");
+    // Ovde možeš dodati otvaranje modala kada budeš spreman
+  }
+
   // Pokretanje
-  document.addEventListener('DOMContentLoaded', () => {
-    ucitajProfil();
-  });
+  document.addEventListener('DOMContentLoaded', ucitajProfil);
+</script>
+
+<!-- Tawk.to Script -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
 </script>
 
 </body>
