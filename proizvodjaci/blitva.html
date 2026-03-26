@@ -211,9 +211,8 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
-<!-- === KOMPLETAN KOD ZA PODNIŠU (Prikaz + Obriši + Poseti profil) === -->
-<div id="proizvodi-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; min-height: 400px;">
-</div>
+<!-- === ČIST KOD ZA PODNIŠU (Blitva) === -->
+<div id="proizvodi-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; min-height: 400px;"></div>
 
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
@@ -223,13 +222,11 @@ s0.parentNode.insertBefore(s1,s0);
     container.innerHTML = '<p style="text-align:center; padding:3rem 0; color:#666;">Učitavam proizvode...</p>';
 
     try {
-      // === PROMENI OVA DVA PARAMETRA ZA SVAKU PODNIŠU ===
       const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Povrće&podnisa=Blitva`);
-
       const proizvodi = await response.json();
+
       const token = localStorage.getItem('token');
       let currentUserId = null;
-
       if (token) {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
@@ -239,19 +236,13 @@ s0.parentNode.insertBefore(s1,s0);
 
       container.innerHTML = '';
 
-      // Automatski sakrij tekst "Ova stranica je za sada prazna"
+      // Sakrij "Ova stranica je za sada prazna"
       document.querySelectorAll('p').forEach(p => {
-        if (p.textContent.includes('Ova stranica je za sada prazna')) {
-          p.style.display = 'none';
-        }
+        if (p.textContent.includes('Ova stranica je za sada prazna')) p.style.display = 'none';
       });
 
       if (proizvodi.length === 0) {
-        container.innerHTML = `
-          <p style="text-align:center; color:#666; font-size:1.1rem; padding:4rem 0;">
-            Još nema proizvoda u ovoj podniši.<br>
-            <strong>Budite prvi koji će dodati blitvu!</strong>
-          </p>`;
+        container.innerHTML = `<p style="text-align:center; color:#666; padding:4rem 0;">Još nema proizvoda u ovoj podniši.<br><strong>Budite prvi koji će dodati blitvu!</strong></p>`;
         return;
       }
 
@@ -259,15 +250,7 @@ s0.parentNode.insertBefore(s1,s0);
         const isOwner = currentUserId && String(p.userId) === String(currentUserId);
 
         const card = document.createElement('div');
-        card.style = `
-          background: white; 
-          border: 1px solid #e0e0e0; 
-          border-radius: 16px; 
-          padding: 1.8rem; 
-          margin-bottom: 1.5rem;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-          position: relative;
-        `;
+        card.style = `background:white; border:1px solid #e0e0e0; border-radius:16px; padding:1.8rem; margin-bottom:1.5rem; box-shadow:0 4px 15px rgba(0,0,0,0.06); position:relative;`;
 
         card.innerHTML = `
           <h3 style="margin:0 0 0.8rem 0; color:#2e7d32;">${p.naziv}</h3>
@@ -276,15 +259,12 @@ s0.parentNode.insertBefore(s1,s0);
           <p style="margin:0.5rem 0;"><strong>Prodavac:</strong> ${p.prodavacIme} • ${p.prodavacLokacija || ''}</p>
           <small style="color:#777;">Dodato: ${new Date(p.created_at).toLocaleDateString('sr-RS')}</small>
           
-          <div style="margin-top: 1.2rem; display: flex; gap: 12px; flex-wrap: wrap;">
-            <button onclick="posetiProfil(${p.userId})" 
-                    style="background:#2e7d32; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
+          <div style="margin-top:1.2rem; display:flex; gap:12px; flex-wrap:wrap;">
+            <button onclick="posetiProfil(${p.userId})" style="background:#2e7d32; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
               👤 Poseti profil
             </button>
-            
             ${isOwner ? `
-            <button onclick="obrisiProizvod(${p.id})" 
-                    style="background:#d32f2f; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
+            <button onclick="obrisiProizvod(${p.id})" style="background:#d32f2f; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
               🗑 Obriši
             </button>` : ''}
           </div>
@@ -294,22 +274,17 @@ s0.parentNode.insertBefore(s1,s0);
 
     } catch (err) {
       console.error(err);
-      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.</p>`;
+      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju.</p>`;
     }
   }
 
   function posetiProfil(userId) {
-    if (!userId) {
-      alert("Profil prodavca nije dostupan.");
-      return;
-    }
-    // Za sada šaljemo na moj-profil.html sa userId parametrom
+    if (!userId) return alert("Profil nije dostupan.");
     window.location.href = `../../moj-profil.html?userId=${userId}`;
   }
 
   async function obrisiProizvod(id) {
     if (!confirm('Da li ste sigurni da želite da obrišete ovaj proizvod?')) return;
-
     const token = localStorage.getItem('token');
     if (!token) return alert('Morate biti ulogovani!');
 
@@ -318,20 +293,17 @@ s0.parentNode.insertBefore(s1,s0);
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
       if (res.ok) {
-        alert('✅ Proizvod je uspešno obrisan.');
-        ucitajProizvode();   // osvežavamo listu
+        alert('✅ Proizvod obrisan.');
+        ucitajProizvode();
       } else {
-        const data = await res.json().catch(() => ({}));
-        alert('❌ ' + (data.error || 'Greška pri brisanju'));
+        alert('Greška pri brisanju.');
       }
     } catch (err) {
-      alert('Došlo je do greške pri brisanju.');
+      alert('Došlo je do greške.');
     }
   }
 
-  // Pokreni učitavanje
   document.addEventListener('DOMContentLoaded', ucitajProizvode);
 </script>
 
