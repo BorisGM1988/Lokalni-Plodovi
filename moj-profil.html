@@ -298,6 +298,46 @@
   <p>© 2025 LokalniPlodovi • Sva prava zadržana</p>
 </footer>
 
+<!-- MODAL DODAJ PROIZVOD -->
+<div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
+  <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+    <h2 style="margin-top:0; color:#2e7d32;">Dodaj novi proizvod</h2>
+
+    <form id="proizvod-form">
+      <label>Naziv proizvoda / sorte *</label><br>
+      <input type="text" id="naziv" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Cena (RSD) *</label><br>
+      <input type="number" id="cena" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Dostupna količina *</label><br>
+      <input type="number" id="kolicina" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Glavna niša *</label><br>
+      <select id="glavna-nisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
+        <option value="">Izaberi nišu</option>
+        <option value="Povrće">Povrće</option>
+        <option value="Voće">Voće</option>
+        <option value="Mlečni proizvodi">Mlečni proizvodi</option>
+        <option value="Meso">Meso</option>
+        <option value="Med">Med</option>
+      </select><br>
+
+      <label>Podniša (npr. Jabuke, Krastavac...)</label><br>
+      <input type="text" id="podnisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;"><br>
+
+      <label>Slika proizvoda (za sada samo preview)</label><br>
+      <input type="file" id="slika-proizvoda" accept="image/*" style="margin:8px 0;"><br>
+      <img id="preview-slika" style="width:100%; max-height:180px; object-fit:cover; border-radius:8px; display:none; margin-top:8px;">
+
+      <div style="margin-top:1.5rem; display:flex; gap:1rem;">
+        <button type="button" onclick="zatvoriModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600;">Otkaži</button>
+        <button type="button" onclick="izloziNaPijac()" style="flex:1; padding:12px; border-radius:50px; background:#2e7d32; color:white; border:none; font-weight:600;">Izloži na pijac</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
@@ -307,15 +347,13 @@
     const token = localStorage.getItem('token');
 
     let url = `${backendUrl}/profile`;
-    if (userIdParam) {
-      url += `?userId=${userIdParam}`;
-    }
+    if (userIdParam) url += `?userId=${userIdParam}`;
 
     try {
       const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
       const response = await fetch(url, { headers });
 
-      if (!response.ok) throw new Error('Greška pri učitavanju');
+      if (!response.ok) throw new Error('Greška');
 
       const data = await response.json();
 
@@ -349,11 +387,10 @@
 
     } catch (err) {
       console.error(err);
-      document.getElementById('profileName').textContent = 'Greška pri učitavanju profila';
+      document.getElementById('profileName').textContent = 'Greška pri učitavanju';
     }
   }
 
-  // Ostale funkcije iz tvog originalnog koda
   function odjaviSe() {
     localStorage.removeItem('token');
     window.location.href = 'index.html';
@@ -374,16 +411,22 @@
       },
       body: JSON.stringify({ tekst: tekst.trim() })
     })
-    .then(r => r.ok ? r.json() : Promise.reject())
-    .then(() => {
-      alert('Objava uspešno dodata!');
-    })
+    .then(r => r.ok ? alert('Objava dodata!') : alert('Greška'))
     .catch(() => alert('Greška pri objavljivanju'));
   }
 
   function dodajProizvod() {
-    alert("Modal za dodavanje proizvoda će biti implementiran kasnije.");
-    // Ovde možeš dodati otvaranje modala kada budeš spreman
+    document.getElementById('dodaj-proizvod-modal').style.display = 'flex';
+  }
+
+  function zatvoriModal() {
+    document.getElementById('dodaj-proizvod-modal').style.display = 'none';
+  }
+
+  async function izloziNaPijac() {
+    // ... tvoja originalna funkcija za dodavanje proizvoda ...
+    alert("Funkcija za dodavanje proizvoda će biti povezana kasnije.");
+    zatvoriModal();
   }
 
   // Pokretanje
