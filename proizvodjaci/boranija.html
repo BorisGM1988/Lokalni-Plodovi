@@ -212,7 +212,7 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
-<!-- === KOMPLETAN KOD ZA PODNIŠU BORANIJA === -->
+<!-- === KOMPLETAN KOD ZA BORANIJA (sa Poseti profil + Obriši) === -->
 <div id="proizvodi-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; min-height: 400px;">
 </div>
 
@@ -239,7 +239,7 @@ s0.parentNode.insertBefore(s1,s0);
 
       container.innerHTML = '';
 
-      // Sakrij tekst "Ova stranica je za sada prazna"
+      // Sakrij eventualni tekst "prazna stranica"
       document.querySelectorAll('p').forEach(p => {
         if (p.textContent.includes('Ova stranica je za sada prazna')) {
           p.style.display = 'none';
@@ -294,7 +294,40 @@ s0.parentNode.insertBefore(s1,s0);
 
     } catch (err) {
       console.error(err);
-      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.</p>
+      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.</p>`;
+    }
+  }
+
+  function posetiProfil(userId) {
+    if (!userId) return alert("Profil nije dostupan.");
+    window.location.href = `/Lokalni-Plodovi/moj-profil.html?userId=${userId}`;
+  }
+
+  async function obrisiProizvod(id) {
+    if (!confirm('Da li ste sigurni da želite da obrišete ovaj proizvod?')) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) return alert('Morate biti ulogovani!');
+
+    try {
+      const res = await fetch(`${backendUrl}/proizvod/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        alert('✅ Proizvod je uspešno obrisan.');
+        ucitajProizvode();
+      } else {
+        alert('Greška pri brisanju.');
+      }
+    } catch (err) {
+      alert('Došlo je do greške pri brisanju.');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', ucitajProizvode);
+</script>
 </body>
 
 </html>
