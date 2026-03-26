@@ -260,14 +260,17 @@ s0.parentNode.insertBefore(s1,s0);
           <small style="color:#777;">Dodato: ${new Date(p.created_at).toLocaleDateString('sr-RS')}</small>
           
           <div style="margin-top:1.2rem; display:flex; gap:12px; flex-wrap:wrap;">
-            <button onclick="posetiProfil(${p.userId})" style="background:#2e7d32; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
-              👤 Poseti profil
-            </button>
-            ${isOwner ? `
-            <button onclick="obrisiProizvod(${p.id})" style="background:#d32f2f; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
-              🗑 Obriši
-            </button>` : ''}
-          </div>
+  <button onclick="posetiProfil(${p.userId})" 
+          style="background:#2e7d32; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
+    👤 Poseti profil
+  </button>
+  
+  ${isOwner ? `
+  <button onclick="obrisiProizvod(${p.id})" 
+          style="background:#d32f2f; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
+    🗑 Obriši
+  </button>` : ''}
+</div>
         `;
         container.appendChild(card);
       });
