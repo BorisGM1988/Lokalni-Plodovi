@@ -107,7 +107,7 @@
 <div class="container">
   <h1>Proizvođači Cvekla</h1>
   
-  <!-- Proizvodi se učitavaju ovde -->
+  <!-- Ovde se učitavaju proizvodi -->
   <div id="proizvodi-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; min-height: 400px;"></div>
 </div>
 
@@ -119,7 +119,7 @@
   </div>
 </footer>
 
-<!-- === GLAVNI SCRIPT ZA PRIKAZ PROIZVODA + DUGMAD === -->
+<!-- === GLAVNI SCRIPT ZA PROIZVODE === -->
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
@@ -143,7 +143,7 @@
 
       container.innerHTML = '';
 
-      // Sakrij "Ova stranica je za sada prazna" ako postoji
+      // Sakrij tekst "Ova stranica je za sada prazna" ako postoji
       document.querySelectorAll('p').forEach(p => {
         if (p.textContent.includes('Ova stranica je za sada prazna')) {
           p.style.display = 'none';
@@ -230,7 +230,7 @@
     }
   }
 
-  // Navigacija - prijava
+  // Navigacija
   function initNav() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -251,7 +251,7 @@
     window.location.href = '../index.html';
   }
 
-  // Pokreni sve kada se stranica učita
+  // Pokretanje
   document.addEventListener('DOMContentLoaded', () => {
     initNav();
     ucitajProizvode();
