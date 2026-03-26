@@ -1,190 +1,548 @@
-<script>
-  const backendUrl = 'https://lokalni-backend-production.up.railway.app';
-
-  // === ORIGINALNA FUNKCIJA + PODRŠKA ZA ?userId= (ovo smo ceo veče radili) ===
-  async function ucitajProfil() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userIdParam = urlParams.get('userId');
-    const token = localStorage.getItem('token');
-
-    let url = `${backendUrl}/profile`;
-    if (userIdParam) {
-      url += `?userId=${userIdParam}`;
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moj profil – LokalniPlodovi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #333;
     }
 
-    try {
-      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-      const response = await fetch(url, { headers });
+    header {
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
+      color: white;
+      padding: 1.2rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-      if (!response.ok) throw new Error(`Greška: ${response.status}`);
+    nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-      const data = await response.json();
+    .logo { font-size: 1.9rem; font-weight: bold; letter-spacing: 0.5px; }
 
-      document.getElementById('profileName').textContent = data.ime || 'Korisnik';
-      document.getElementById('profileBio').textContent = data.opis || 'Nema opisa';
-      document.getElementById('email').textContent = data.email || 'N/A';
-      document.getElementById('telefon').textContent = data.telefon || 'Nije navedeno';
-      document.getElementById('lokacija').textContent = data.lokacija || 'Nije navedeno';
-      document.getElementById('opis').textContent = data.opis || 'Nema opisa';
-      document.getElementById('registeredAt').textContent = data.registeredAt ? new Date(data.registeredAt).toLocaleString('sr-RS') : 'N/A';
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      margin: 0;
+      padding: 0;
+    }
 
-      const niseDiv = document.getElementById('nise');
-      niseDiv.innerHTML = '';
-      if (data.nise && data.nise.length > 0) {
-        data.nise.forEach(nisa => {
-          const badge = document.createElement('span');
-          badge.className = 'nise-badge';
-          badge.textContent = nisa;
-          niseDiv.appendChild(badge);
-        });
-      } else {
-        niseDiv.textContent = 'Nijedna';
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover { color: #e0f2f1; }
+
+    .profile-cover {
+      height: 280px;
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.4rem;
+      text-align: center;
+      overflow: hidden;
+      transition: height 0.3s ease;
+    }
+
+    .profile-cover img.cover-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .profile-cover .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      z-index: 2;
+    }
+
+    .profile-cover .placeholder-text {
+      position: relative;
+      z-index: 3;
+      max-width: 80%;
+      padding: 1rem;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .profile-content {
+      max-width: 1400px;
+      margin: -120px auto 0;
+      padding: 0 2rem 4rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .profile-avatar-wrapper {
+      position: relative;
+    }
+
+    .profile-avatar {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 8px solid white;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      display: block;
+      margin: 0 auto -100px;
+      position: relative;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .profile-main {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 120px 2rem 2rem;
+      margin-top: 0;
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .profile-name {
+      font-size: 2.8rem;
+      margin: 0 0 0.5rem;
+      color: #1e40af;
+      font-weight: 700;
+    }
+
+    .profile-bio {
+      font-size: 1.2rem;
+      color: #4b5563;
+      margin: 0;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .profile-edit-btn {
+      margin-top: 1.5rem;
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(76,175,80,0.3);
+    }
+
+    .profile-edit-btn:hover {
+      background: #388e3c;
+      box-shadow: 0 6px 16px rgba(76,175,80,0.4);
+    }
+
+    .profile-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .detail-card {
+      background: #f9fafb;
+      padding: 1.5rem;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .detail-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .detail-label {
+      color: #2e7d32;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .detail-label i {
+      color: #4caf50;
+    }
+
+    #nise {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .nise-badge {
+      padding: 0.5rem 1.2rem;
+      background: #d1fae5;
+      color: #065f46;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .profile-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+      max-width: 600px;
+      margin: 3rem auto 0;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 1.2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary {
+      background: #2e7d32;
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover { background: #4caf50; box-shadow: 0 6px 16px rgba(76,175,80,0.3); }
+
+    .btn-secondary {
+      background: white;
+      border: 2px solid #2e7d32;
+      color: #2e7d32;
+    }
+
+    .btn-secondary:hover {
+      background: #2e7d32;
+      color: white;
+      box-shadow: 0 6px 16px rgba(46,125,50,0.3);
+    }
+
+    footer {
+      background: #4b5563;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: auto;
+      font-size: 0.95rem;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .profile-cover {
+        height: 200px;
       }
 
-      if (data.slika) document.getElementById('profile-avatar').src = data.slika;
-      if (data.coverSlika) {
-        document.getElementById('cover-image').src = data.coverSlika;
-        document.getElementById('cover-image').style.display = 'block';
-        document.getElementById('placeholder-text').style.display = 'none';
+      .profile-content {
+        margin-top: -80px;
       }
 
-      ucitajObjave();
-    } catch (err) {
-      console.error('Greška pri učitavanju profila:', err);
-      document.getElementById('profileName').textContent = 'Greška pri učitavanju';
-    }
-  }
-
-  // === NAVIGACIJA (da se vidi Moj profil i Odjavi se) ===
-  function initNav() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-    } else {
-      document.getElementById('moj-profil-li').style.display = 'none';
-      document.getElementById('odjavi-se-li').style.display = 'none';
-      document.getElementById('prijavi-se-li').style.display = 'list-item';
-      document.getElementById('postani-prodavac-li').style.display = 'list-item';
-    }
-  }
-
-  // === OSTALE FUNKCIJE KOJE SI IMAO (ostavljene netaknute) ===
-  function odjaviSe() {
-    localStorage.removeItem('token');
-    window.location.href = 'index.html';
-  }
-
-  function objaviNovost() {
-    const tekst = prompt('Šta želite da objavite?\n\n(Npr: "Danas imamo sveže maline i med po akcijskoj ceni!")');
-    if (!tekst || tekst.trim() === '') return;
-
-    const token = localStorage.getItem('token');
-    if (!token) return alert('Morate biti ulogovani');
-
-    fetch(`${backendUrl}/objavi-novost`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ tekst: tekst.trim() })
-    })
-    .then(() => alert('Objava uspešno dodata!'))
-    .catch(() => alert('Greška pri objavljivanju'));
-  }
-
-  function dodajProizvod() {
-    document.getElementById('dodaj-proizvod-modal').style.display = 'flex';
-  }
-
-  function zatvoriModal() {
-    document.getElementById('dodaj-proizvod-modal').style.display = 'none';
-  }
-
-  async function izloziNaPijac() {
-    // Tvoja originalna funkcija za dodavanje proizvoda (ostavljena netaknuta)
-    const naziv = document.getElementById('naziv').value.trim();
-    const cena = parseFloat(document.getElementById('cena').value);
-    const kolicina = parseInt(document.getElementById('kolicina').value);
-    const glavnaNisa = document.getElementById('glavna-nisa').value;
-    const podnisa = document.getElementById('podnisa').value.trim();
-
-    if (!naziv || !cena || !kolicina || !glavnaNisa) {
-      alert('Molimo popunite sva obavezna polja');
-      return;
-    }
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Morate biti ulogovani!');
-      return;
-    }
-
-    const podaci = {
-      naziv: naziv,
-      cena: cena,
-      kolicina: kolicina,
-      glavnaNisa: glavnaNisa,
-      podnisa: podnisa || null
-    };
-
-    try {
-      const response = await fetch(`${backendUrl}/dodaj-proizvod`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(podaci)
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        alert('✅ Proizvod je uspešno izložen na pijac!');
-        zatvoriModal();
-      } else {
-        alert('❌ Greška: ' + (result.error || 'Nešto nije u redu'));
+      .profile-avatar {
+        width: 160px;
+        height: 160px;
       }
-    } catch (err) {
-      console.error(err);
-      alert('Došlo je do greške pri komunikaciji sa serverom.');
+
+      .profile-main {
+        padding-top: 100px;
+      }
+
+      .profile-actions {
+        flex-direction: column;
+      }
     }
-  }
 
-  function izmeniProfil() {
-    document.getElementById('izmeni-profil-modal').style.display = 'flex';
-  }
+    .profile-cover {
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
 
-  function zatvoriIzmeniModal() {
-    document.getElementById('izmeni-profil-modal').style.display = 'none';
-  }
+    .profile-cover:hover {
+      opacity: 0.92;
+    }
 
-  async function sacuvajIzmene() {
-    // Tvoja originalna funkcija za čuvanje izmena (ostavljena netaknuta)
-    alert('Funkcija čuvanja izmena će biti povezana kasnije. (originalno si imao FormData)');
-    zatvoriIzmeniModal();
-  }
+    .profile-cover .placeholder-text {
+      cursor: pointer;
+    }
 
-  // Pokretanje
-  document.addEventListener('DOMContentLoaded', () => {
-    initNav();
-    ucitajProfil();
-  });
-</script>
+    #dodaj-proizvod-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+    }
 
-<!-- Tawk.to Script -->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
+    #dodaj-proizvod-modal > div {
+      background: white;
+      width: 90%;
+      max-width: 520px;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    #dodaj-proizvod-modal label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    #dodaj-proizvod-modal input,
+    #dodaj-proizvod-modal select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    #dodaj-proizvod-modal button {
+      margin-top: 1.5rem;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #dodaj-proizvod-modal button[type="button"]:first-child {
+      background: #ccc;
+      color: black;
+    }
+
+    #dodaj-proizvod-modal button[type="button"]:last-child {
+      background: #2e7d32;
+      color: white;
+    }
+
+    #dodaj-proizvod-modal button:hover {
+      opacity: 0.9;
+    }
+
+    #preview-slika {
+      margin-top: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      max-height: 180px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <ul>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="Prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="profile-container">
+  <div class="profile-cover" id="profile-cover">
+    <img src="" alt="Naslovna slika" class="cover-image" id="cover-image">
+    <div class="overlay"></div>
+    <div class="placeholder-text" id="placeholder-text">
+      <h2>Naslovna fotografija</h2>
+      <p>(klikni Izmeni profil da promeniš)</p>
+    </div>
+  </div>
+
+  <div class="profile-content">
+    <input type="file" id="hidden-cover-upload" accept="image/*" style="display: none;">
+    <div class="profile-avatar-wrapper">
+      <input type="file" id="hidden-avatar-upload" accept="image/*" style="display: none;">
+      <img src="https://via.placeholder.com/200?text=Boris" alt="Profilna slika" class="profile-avatar" id="profile-avatar">
+    </div>
+
+    <div class="profile-main">
+      <div class="profile-header">
+        <h1 class="profile-name" id="profileName">Učitavanje...</h1>
+        <p class="profile-bio" id="profileBio">Opis domaćinstva...</p>
+        <button class="profile-edit-btn" onclick="izmeniProfil()">Izmeni profil</button>
+      </div>
+
+      <div class="profile-info-grid">
+        <div class="detail-card">
+          <div class="detail-label"><i class="fas fa-envelope"></i> Email</div>
+          <div id="email">Učitavanje...</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label"><i class="fas fa-phone"></i> Telefon</div>
+          <div id="telefon">Učitavanje...</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label"><i class="fas fa-map-marker-alt"></i> Lokacija</div>
+          <div id="lokacija">Učitavanje...</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label"><i class="fas fa-tags"></i> Niše</div>
+          <div id="nise">Učitavanje...</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label"><i class="fas fa-info-circle"></i> Opis</div>
+          <div id="opis">Učitavanje...</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label"><i class="fas fa-calendar-check"></i> Registrovan</div>
+          <div id="registeredAt">Učitavanje...</div>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="btn btn-primary" onclick="objaviNovost()"><i class="fas fa-newspaper"></i> Objavi novost</button>
+        <button class="btn btn-secondary" onclick="dodajProizvod()"><i class="fas fa-plus-circle"></i> Dodaj proizvod</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="objave-sekcija" style="margin-top: 3rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
+  <h2 style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
+  <div id="objave-lista" style="min-height: 120px;"></div>
+</div>
+
+<footer>
+  <p>© 2025 LokalniPlodovi • Sva prava zadržana</p>
+</footer>
+
+<!-- MODAL DODAJ PROIZVOD -->
+<div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
+  <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+    <h2 style="margin-top:0; color:#2e7d32;">Dodaj novi proizvod</h2>
+
+    <form id="proizvod-form">
+      <label>Naziv proizvoda / sorte *</label><br>
+      <input type="text" id="naziv" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Cena (RSD) *</label><br>
+      <input type="number" id="cena" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Dostupna količina *</label><br>
+      <input type="number" id="kolicina" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required><br>
+
+      <label>Glavna niša *</label><br>
+      <select id="glavna-nisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
+        <option value="">Izaberi nišu</option>
+        <option value="Povrće">Povrće</option>
+        <option value="Voće">Voće</option>
+        <option value="Mlečni proizvodi">Mlečni proizvodi</option>
+        <option value="Meso">Meso</option>
+        <option value="Med">Med</option>
+      </select><br>
+
+      <label>Podniša (npr. Jabuke, Krastavac...)</label><br>
+      <input type="text" id="podnisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;"><br>
+
+      <label>Slika proizvoda (za sada samo preview)</label><br>
+      <input type="file" id="slika-proizvoda" accept="image/*" style="margin:8px 0;"><br>
+      <img id="preview-slika" style="width:100%; max-height:180px; object-fit:cover; border-radius:8px; display:none; margin-top:8px;">
+
+      <div style="margin-top:1.5rem; display:flex; gap:1rem;">
+        <button type="button" onclick="zatvoriModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600;">Otkaži</button>
+        <button type="button" onclick="izloziNaPijac()" style="flex:1; padding:12px; border-radius:50px; background:#2e7d32; color:white; border:none; font-weight:600;">Izloži na pijac</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL ZA IZMENU PROFILA -->
+<div id="izmeni-profil-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
+  <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+    <h2 style="margin-top:0; color:#2e7d32;">Izmeni profil</h2>
+
+    <form id="izmeni-profil-form">
+      <label>Ime</label><br>
+      <input type="text" id="edit-ime" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;"><br>
+
+      <label>Opis</label><br>
+      <textarea id="edit-opis" rows="4" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;"></textarea><br>
+
+      <label>Telefon</label><br>
+      <input type="tel" id="edit-telefon" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;"><br>
+
+      <label>Lokacija</label><br>
+      <input type="text" id="edit-lokacija" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;"><br>
+
+      <label>Profilna slika</label><br>
+      <input type="file" id="edit-profilna-slika" accept="image/*" style="margin:8px 0;"><br>
+      <img id="preview-profilna" style="width:120px; height:120px; border-radius:50%; object-fit:cover; margin:8px 0; display:none;">
+
+      <label>Naslovna fotografija</label><br>
+      <input type="file" id="edit-naslovna-slika" accept="image/*" style="margin:8px 0;"><br>
+      <img id="preview-naslovna" style="width:100%; max-height:180px; object-fit:cover; margin:8px 0;
