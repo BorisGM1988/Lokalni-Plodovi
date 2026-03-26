@@ -94,12 +94,6 @@
       transform: translateY(-8px);
     }
 
-    .proizvod-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
     .card-body {
       padding: 1.2rem;
     }
@@ -139,14 +133,6 @@
     .btn-red {
       background: #d32f2f;
       color: white;
-    }
-
-    footer {
-      background: var(--zemlja);
-      color: white;
-      text-align: center;
-      padding: 4rem 1rem 2.5rem;
-      margin-top: 6rem;
     }
   </style>
 </head>
@@ -196,7 +182,7 @@
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  // === NAVIGACIJA ===
+  // NAVIGACIJA
   function initNav() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -217,28 +203,26 @@
     window.location.href = '../index.html';
   }
 
-  // === UČITAVANJE PROIZVODA ZA KROMPIR ===
+  // UČITAVANJE PROIZVODA + OBRISI DUGME
   async function ucitajProizvode() {
     const container = document.getElementById('proizvodi-container');
     container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:2rem;">Učitavanje proizvoda...</p>';
 
     try {
       const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Povrće&podnisa=Krompir`);
-      if (!response.ok) throw new Error('Greška pri učitavanju');
+      if (!response.ok) throw new Error('Greška');
 
       const proizvodi = await response.json();
-
       container.innerHTML = '';
 
       if (proizvodi.length === 0) {
-        container.innerHTML = `
-          <p style="grid-column:1/-1; text-align:center; padding:3rem; color:#666;">
-            Trenutno nema proizvoda u ovoj kategoriji.
-          </p>`;
+        container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:3rem; color:#666;">Trenutno nema proizvoda u ovoj kategoriji.</p>`;
         return;
       }
 
       proizvodi.forEach(p => {
+        const isOwner = String(p.userId) === String(localStorage.getItem('userId'));   // provera vlasništva
+
         const card = document.createElement('div');
         card.className = 'proizvod-card';
         card.innerHTML = `
@@ -255,7 +239,7 @@
               <button class="btn btn-green" onclick="posetiProfil(${p.userId})">
                 👤 Poseti profil
               </button>
-              ${p.userId == localStorage.getItem('userId') ? 
+              ${isOwner ? 
                 `<button class="btn btn-red" onclick="obrisiProizvod(${p.id})">🗑 Obriši</button>` : ''}
             </div>
           </div>
