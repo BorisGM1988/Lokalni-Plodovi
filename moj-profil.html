@@ -559,7 +559,7 @@ footer p {
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  // Pametna navigacija – sakriva opcije kad je ulogovan
+  // Pametna navigacija
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
 
@@ -578,19 +578,26 @@ footer p {
     ucitajProfil();
   });
 
+  // UCITAVANJE PROFILA SA ?userId= PODRŠKOM + SAKRIVANJE DUGMADI
   async function ucitajProfil() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userIdParam = urlParams.get('userId');
     const token = localStorage.getItem('token');
-    const profileName = document.getElementById('profileName');
 
-    if (!token) {
-      profileName.textContent = 'Niste ulogovani';
-      return;
+    let url = `${backendUrl}/profile`;
+    if (userIdParam) {
+      url += `?userId=${userIdParam}`;
     }
 
     try {
-      const response = await fetch(`${backendUrl}/profile`, {
+      const headers = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(url, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: headers
       });
 
       if (!response.ok) {
@@ -599,7 +606,7 @@ footer p {
 
       const data = await response.json();
 
-      profileName.textContent = data.ime || 'Korisnik';
+      document.getElementById('profileName').textContent = data.ime || 'Korisnik';
       document.getElementById('profileBio').textContent = data.opis || 'Nema opisa';
       document.getElementById('email').textContent = data.email || 'N/A';
       document.getElementById('telefon').textContent = data.telefon || 'Nije navedeno';
@@ -620,20 +627,30 @@ footer p {
         niseDiv.textContent = 'Nijedna';
       }
 
-      if (data.slika) {
-        document.getElementById('profile-avatar').src = data.slika;
-      }
-
+      if (data.slika) document.getElementById('profile-avatar').src = data.slika;
       if (data.coverSlika) {
         document.getElementById('cover-image').src = data.coverSlika;
         document.getElementById('cover-image').style.display = 'block';
         document.getElementById('placeholder-text').style.display = 'none';
       }
 
+      // === SAKRIVANJE DUGMADI ZA TUĐI PROFIL ===
+      const isOwnProfile = !userIdParam;
+
+      // Sakrij "Izmeni profil" dugme
+      const editBtn = document.querySelector('.profile-edit-btn');
+      if (editBtn) editBtn.style.display = isOwnProfile ? 'block' : 'none';
+
+      // Sakrij "Objavi novost" i "Dodaj proizvod"
+      const actionButtons = document.querySelectorAll('.profile-actions button');
+      actionButtons.forEach(btn => {
+        btn.style.display = isOwnProfile ? 'flex' : 'none';
+      });
+
       ucitajObjave();
     } catch (err) {
       console.error('Greška pri učitavanju profila:', err);
-      profileName.textContent = 'Greška pri učitavanju';
+      document.getElementById('profileName').textContent = 'Greška pri učitavanju profila';
     }
   }
 
@@ -710,6 +727,7 @@ footer p {
       alert('Greška pri objavljivanju');
     });
   }
+
   function izmeniProfil() {
     document.getElementById('edit-ime').value = document.getElementById('profileName').textContent || '';
     document.getElementById('edit-opis').value = document.getElementById('profileBio').textContent || '';
@@ -791,7 +809,7 @@ footer p {
     }
   });
 
-  // === POPRAVLJENI UPLOAD NASLOVNE SLIKE (cover) ===
+  // Upload naslovne slike
   document.getElementById('profile-cover').addEventListener('click', function() {
     document.getElementById('hidden-cover-upload').click();
   });
@@ -804,7 +822,6 @@ footer p {
     reader.onload = async function(e) {
       const base64 = e.target.result;
 
-      // Lokalni preview
       document.getElementById('cover-image').src = base64;
       document.getElementById('cover-image').style.display = 'block';
       document.getElementById('placeholder-text').style.display = 'none';
@@ -828,8 +845,6 @@ footer p {
           alert('Naslovna slika uspešno upload-ovana!');
         } else {
           alert(result.poruka || 'Greška pri upload-u naslovne slike');
-          document.getElementById('cover-image').style.display = 'none';
-          document.getElementById('placeholder-text').style.display = 'block';
         }
       } catch (err) {
         alert('Greška pri slanju naslovne slike');
@@ -838,7 +853,7 @@ footer p {
     reader.readAsDataURL(file);
   });
 
-  // === POPRAVLJENI UPLOAD PROFILNE SLIKE ===
+  // Upload profilne slike
   document.getElementById('profile-avatar').addEventListener('click', function() {
     document.getElementById('hidden-avatar-upload').click();
   });
@@ -850,8 +865,6 @@ footer p {
     const reader = new FileReader();
     reader.onload = async function(e) {
       const base64 = e.target.result;
-
-      // Lokalni preview
       document.getElementById('profile-avatar').src = base64;
 
       const token = localStorage.getItem('token');
@@ -880,7 +893,6 @@ footer p {
     };
     reader.readAsDataURL(file);
   });
-  
 </script>
   <!-- === DODAVANJE PROIZVODA - KOD ZA MODAL === -->
 <script>
