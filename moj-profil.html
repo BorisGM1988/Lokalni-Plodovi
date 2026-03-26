@@ -24,24 +24,36 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}nav {
+}
+
+nav {
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}.logo { font-size: 1.9rem; font-weight: bold; letter-spacing: 0.5px; }nav ul {
+}
+
+.logo { font-size: 1.9rem; font-weight: bold; letter-spacing: 0.5px; }
+
+nav ul {
   display: flex;
   list-style: none;
   gap: 2.5rem;
   margin: 0;
   padding: 0;
-}nav a {
+}
+
+nav a {
   color: white;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
-}nav a:hover { color: #e0f2f1; }.profile-cover {
+}
+
+nav a:hover { color: #e0f2f1; }
+
+.profile-cover {
   height: 280px;
   background: linear-gradient(135deg, #2e7d32, #4caf50);
   position: relative;
@@ -53,7 +65,9 @@ header {
   text-align: center;
   overflow: hidden;
   transition: height 0.3s ease;
-}.profile-cover img.cover-image {
+}
+
+.profile-cover img.cover-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -61,7 +75,9 @@ header {
   top: 0;
   left: 0;
   z-index: 1;
-}.profile-cover .overlay {
+}
+
+.profile-cover .overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -69,24 +85,34 @@ header {
   height: 100%;
   background: rgba(0,0,0,0.3);
   z-index: 2;
-}.profile-cover .placeholder-text {
+}
+
+.profile-cover .placeholder-text {
   position: relative;
   z-index: 3;
   max-width: 80%;
   padding: 1rem;
   animation: fadeIn 1s ease-in-out;
-}@keyframes fadeIn {
+}
+
+@keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
-}.profile-content {
+}
+
+.profile-content {
   max-width: 1400px;
   margin: -120px auto 0;
   padding: 0 2rem 4rem;
   position: relative;
   z-index: 10;
-}.profile-avatar-wrapper {
+}
+
+.profile-avatar-wrapper {
   position: relative;
-}.profile-avatar {
+}
+
+.profile-avatar {
   width: 200px;
   height: 200px;
   border-radius: 50%;
@@ -98,30 +124,42 @@ header {
   position: relative;
   z-index: 10;
   transition: transform 0.3s ease;
-}.profile-avatar:hover {
+}
+
+.profile-avatar:hover {
   transform: scale(1.05);
-}.profile-main {
+}
+
+.profile-main {
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   padding: 120px 2rem 2rem;
   margin-top: 0;
-}.profile-header {
+}
+
+.profile-header {
   text-align: center;
   margin-bottom: 2.5rem;
-}.profile-name {
+}
+
+.profile-name {
   font-size: 2.8rem;
   margin: 0 0 0.5rem;
   color: #1e40af;
   font-weight: 700;
-}.profile-bio {
+}
+
+.profile-bio {
   font-size: 1.2rem;
   color: #4b5563;
   margin: 0;
   line-height: 1.6;
   max-width: 800px;
   margin: 0 auto;
-}.profile-edit-btn {
+}
+
+.profile-edit-btn {
   margin-top: 1.5rem;
   background: #4caf50;
   color: white;
@@ -132,24 +170,34 @@ header {
   cursor: pointer;
   transition: background 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 12px rgba(76,175,80,0.3);
-}.profile-edit-btn:hover {
+}
+
+.profile-edit-btn:hover {
   background: #388e3c;
   box-shadow: 0 6px 16px rgba(76,175,80,0.4);
-}.profile-info-grid {
+}
+
+.profile-info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   margin: 2rem 0;
-}.detail-card {
+}
+
+.detail-card {
   background: #f9fafb;
   padding: 1.5rem;
   border-radius: 16px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   transition: box-shadow 0.3s ease;
-}.detail-card:hover {
+}
+
+.detail-card:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}.detail-label {
+}
+
+.detail-label {
   color: #2e7d32;
   font-weight: 600;
   font-size: 1.1rem;
@@ -157,27 +205,37 @@ header {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-}.detail-label i {
+}
+
+.detail-label i {
   color: #4caf50;
-}#nise {
+}
+
+#nise {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-}.nise-badge {
+}
+
+.nise-badge {
   padding: 0.5rem 1.2rem;
   background: #d1fae5;
   color: #065f46;
   border-radius: 9999px;
   font-size: 0.95rem;
   font-weight: 500;
-}.profile-actions {
+}
+
+.profile-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 1.2rem;
   justify-content: center;
   max-width: 600px;
   margin: 3rem auto 0;
-}.btn {
+}
+
+.btn {
   flex: 1;
   min-width: 200px;
   padding: 1.2rem;
@@ -192,48 +250,78 @@ header {
   justify-content: center;
   gap: 0.6rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}.btn-primary {
+}
+
+.btn-primary {
   background: #2e7d32;
   color: white;
   border: none;
-}.btn-primary:hover { background: #4caf50; box-shadow: 0 6px 16px rgba(76,175,80,0.3); }.btn-secondary {
+}
+
+.btn-primary:hover { background: #4caf50; box-shadow: 0 6px 16px rgba(76,175,80,0.3); }
+
+.btn-secondary {
   background: white;
   border: 2px solid #2e7d32;
   color: #2e7d32;
-}.btn-secondary:hover {
+}
+
+.btn-secondary:hover {
   background: #2e7d32;
   color: white;
   box-shadow: 0 6px 16px rgba(46,125,50,0.3);
-}footer {
+}
+
+footer {
   background: #4b5563;
   color: white;
   text-align: center;
   padding: 2rem;
   margin-top: auto;
   font-size: 0.95rem;
-}footer p {
+}
+
+footer p {
   margin: 0;
-}@media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
   .profile-cover {
     height: 200px;
-  }  .profile-content {
+  }
+
+  .profile-content {
     margin-top: -80px;
-  }  .profile-avatar {
+  }
+
+  .profile-avatar {
     width: 160px;
     height: 160px;
-  }  .profile-main {
+  }
+
+  .profile-main {
     padding-top: 100px;
-  }  .profile-actions {
+  }
+
+  .profile-actions {
     flex-direction: column;
   }
-}.profile-cover {
+}
+
+.profile-cover {
   cursor: pointer;
   transition: opacity 0.3s ease;
-}.profile-cover:hover {
+}
+
+.profile-cover:hover {
   opacity: 0.92;
-}.profile-cover .placeholder-text {
+}
+
+.profile-cover .placeholder-text {
   cursor: pointer;
-}#dodaj-proizvod-modal {
+}
+
+#dodaj-proizvod-modal {
   display: none;
   position: fixed;
   top: 0;
@@ -244,7 +332,9 @@ header {
   z-index: 3000;
   justify-content: center;
   align-items: center;
-}#dodaj-proizvod-modal > div {
+}
+
+#dodaj-proizvod-modal > div {
   background: white;
   width: 90%;
   max-width: 520px;
@@ -252,12 +342,16 @@ header {
   padding: 2rem;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   position: relative;
-}#dodaj-proizvod-modal label {
+}
+
+#dodaj-proizvod-modal label {
   display: block;
   margin-top: 1rem;
   font-weight: 600;
   color: #333;
-}#dodaj-proizvod-modal input,
+}
+
+#dodaj-proizvod-modal input,
 #dodaj-proizvod-modal select {
   width: 100%;
   padding: 10px;
@@ -266,7 +360,9 @@ header {
   border-radius: 8px;
   font-size: 1rem;
   box-sizing: border-box;
-}#dodaj-proizvod-modal button {
+}
+
+#dodaj-proizvod-modal button {
   margin-top: 1.5rem;
   padding: 12px 24px;
   border: none;
@@ -274,21 +370,30 @@ header {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s;
-}#dodaj-proizvod-modal button[type="button"]:first-child {
+}
+
+#dodaj-proizvod-modal button[type="button"]:first-child {
   background: #ccc;
   color: black;
-}#dodaj-proizvod-modal button[type="button"]:last-child {
+}
+
+#dodaj-proizvod-modal button[type="button"]:last-child {
   background: #2e7d32;
   color: white;
-}#dodaj-proizvod-modal button:hover {
+}
+
+#dodaj-proizvod-modal button:hover {
   opacity: 0.9;
-}#preview-slika {
+}
+
+#preview-slika {
   margin-top: 1rem;
   border-radius: 8px;
   border: 1px solid #ddd;
   max-height: 180px;
   object-fit: cover;
-}  </style></head><body>
+}  </style></head>
+<body>
 
 <header>
   <nav>
@@ -426,7 +531,9 @@ header {
   <label>Opis</label>
 
   <textarea id="edit-opis" rows="4" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;"></textarea>
-  <label>Telefon</label>  <input type="tel" id="edit-telefon" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
+  <label>Telefon</label>
+
+  <input type="tel" id="edit-telefon" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
   <label>Lokacija</label>
 
   <input type="text" id="edit-lokacija" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
@@ -436,7 +543,9 @@ header {
 
   <img id="preview-profilna" style="width:120px; height:120px; border-radius:50%; object-fit:cover; margin:8px 0; display:none;">
 
-  <label>Naslovna fotografija</label>  <input type="file" id="edit-naslovna-slika" accept="image/*" style="margin:8px 0;">
+  <label>Naslovna fotografija</label>
+
+  <input type="file" id="edit-naslovna-slika" accept="image/*" style="margin:8px 0;">
 
   <img id="preview-naslovna" style="width:100%; max-height:180px; object-fit:cover; margin:8px 0; display:none;">
 
