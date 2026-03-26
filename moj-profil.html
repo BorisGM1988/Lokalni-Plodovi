@@ -575,10 +575,7 @@ footer p {
       document.getElementById('postani-prodavac-li').style.display = 'list-item';
     }
 
-    ucitajProfil();
-  });
-
-async function ucitajProfil() {
+    async function ucitajProfil() {
   const urlParams = new URLSearchParams(window.location.search);
   const userIdParam = urlParams.get('userId');
   const token = localStorage.getItem('token');
@@ -636,13 +633,22 @@ async function ucitajProfil() {
       document.getElementById('placeholder-text').style.display = 'none';
     }
 
+    // === NOVA LOGIKA: Sakrij dugmad ako je tuđi profil ===
+    const isOwnProfile = !userIdParam;   // ako nema userIdParam → sopstveni profil
+
+    document.querySelector('.profile-edit-btn').style.display = isOwnProfile ? 'block' : 'none';
+    
+    const actionButtons = document.querySelectorAll('.profile-actions button');
+    actionButtons.forEach(btn => {
+      btn.style.display = isOwnProfile ? 'flex' : 'none';
+    });
+
     ucitajObjave();
   } catch (err) {
     console.error('Greška pri učitavanju profila:', err);
     document.getElementById('profileName').textContent = 'Greška pri učitavanju profila';
   }
 }
-
   async function ucitajObjave() {
     const token = localStorage.getItem('token');
     if (!token) return;
