@@ -33,7 +33,6 @@
       top: 0;
       z-index: 1000;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      width: 100%;
     }
 
     .logo { font-size: 1.8rem; font-weight: 700; }
@@ -84,41 +83,34 @@
 
     .proizvod-card {
       background: white;
+      border: 1px solid #e0e0e0;
       border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      position: relative;
     }
 
-    .proizvod-card:hover {
-      transform: translateY(-8px);
-    }
-
-    .card-body {
-      padding: 1.2rem;
-    }
-
-    .card-body h3 {
+    .proizvod-card h3 {
       margin: 0 0 0.8rem 0;
-      color: var(--zemlja);
+      color: #2e7d32;
     }
 
     .info {
-      display: flex;
-      justify-content: space-between;
-      margin: 12px 0;
+      margin: 0.5rem 0;
       font-size: 1.05rem;
     }
 
     .btn-group {
+      margin-top: 1.2rem;
       display: flex;
-      gap: 10px;
-      margin-top: 15px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .btn {
       flex: 1;
-      padding: 10px;
+      padding: 10px 18px;
       border: none;
       border-radius: 8px;
       font-weight: 600;
@@ -147,28 +139,19 @@
       <li><a href="../mapa.html">Mapa</a></li>
       <li><a href="../chat.html">Chat</a></li>
 
-      <li id="moj-profil-li" style="display:none;">
-        <a href="../moj-profil.html">Moj profil</a>
-      </li>
-      <li id="odjavi-se-li" style="display:none;">
-        <a href="#" onclick="odjaviSe()">Odjavi se</a>
-      </li>
+      <li id="moj-profil-li" style="display:none;"><a href="../moj-profil.html">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
 
-      <li id="prijavi-se-li">
-        <a href="../login.html">Prijavi se</a>
-      </li>
-      <li id="postani-prodavac-li">
-        <a href="../registracija.html">Postani prodavac</a>
-      </li>
+      <li id="prijavi-se-li"><a href="../login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="../registracija.html">Postani prodavac</a></li>
     </ul>
   </nav>
 </header>
 
 <div class="container">
-  <h1 id="naslov">Proizvođači Krompir</h1>
-  <div id="proizvodi-container">
-    <!-- Proizvodi se učitavaju dinamički -->
-  </div>
+  <h1>Proizvođači Krompir</h1>
+  
+  <div id="proizvodi-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; min-height: 400px;"></div>
 </div>
 
 <footer>
@@ -182,73 +165,74 @@
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  // NAVIGACIJA
-  function initNav() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-    } else {
-      document.getElementById('moj-profil-li').style.display = 'none';
-      document.getElementById('odjavi-se-li').style.display = 'none';
-      document.getElementById('prijavi-se-li').style.display = 'list-item';
-      document.getElementById('postani-prodavac-li').style.display = 'list-item';
-    }
-  }
-
-  function odjaviSe() {
-    localStorage.removeItem('token');
-    window.location.href = '../index.html';
-  }
-
-  // UČITAVANJE PROIZVODA + OBRISI DUGME
   async function ucitajProizvode() {
     const container = document.getElementById('proizvodi-container');
-    container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:2rem;">Učitavanje proizvoda...</p>';
+    container.innerHTML = '<p style="text-align:center; padding:3rem 0; color:#666;">Učitavam proizvode...</p>';
 
     try {
       const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Povrće&podnisa=Krompir`);
-      if (!response.ok) throw new Error('Greška');
-
       const proizvodi = await response.json();
+
+      const token = localStorage.getItem('token');
+      let currentUserId = null;
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          currentUserId = payload.userId;
+        } catch(e) {}
+      }
+
       container.innerHTML = '';
 
       if (proizvodi.length === 0) {
-        container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:3rem; color:#666;">Trenutno nema proizvoda u ovoj kategoriji.</p>`;
+        container.innerHTML = `
+          <p style="text-align:center; color:#666; font-size:1.1rem; padding:4rem 0;">
+            Još nema proizvoda u ovoj podniši.<br>
+            <strong>Budite prvi koji će dodati krompir!</strong>
+          </p>`;
         return;
       }
 
       proizvodi.forEach(p => {
-        const isOwner = String(p.userId) === String(localStorage.getItem('userId'));   // provera vlasništva
+        const isOwner = currentUserId && String(p.userId) === String(currentUserId);
 
         const card = document.createElement('div');
-        card.className = 'proizvod-card';
+        card.style = `
+          background: white; 
+          border: 1px solid #e0e0e0; 
+          border-radius: 16px; 
+          padding: 1.8rem; 
+          margin-bottom: 1.5rem;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+          position: relative;
+        `;
+
         card.innerHTML = `
-          <div class="card-body">
-            <h3>${p.naziv}</h3>
-            <div class="info">
-              <span><strong>${p.cena} RSD</strong></span>
-              <span>${p.kolicina} kom</span>
-            </div>
-            <p><strong>Prodavac:</strong> ${p.prodavacIme || 'Nepoznato'}</p>
-            <p><strong>Lokacija:</strong> ${p.prodavacLokacija || 'Nije navedeno'}</p>
+          <h3 style="margin:0 0 0.8rem 0; color:#2e7d32;">${p.naziv}</h3>
+          <p style="margin:0.5rem 0; font-size:1.05rem;"><strong>Cena:</strong> ${p.cena} RSD</p>
+          <p style="margin:0.5rem 0;"><strong>Dostupno:</strong> ${p.kolicina} kg/kom</p>
+          <p style="margin:0.5rem 0;"><strong>Prodavac:</strong> ${p.prodavacIme} • ${p.prodavacLokacija || ''}</p>
+          <small style="color:#777;">Dodato: ${new Date(p.created_at).toLocaleDateString('sr-RS')}</small>
+          
+          <div style="margin-top:1.2rem; display:flex; gap:12px; flex-wrap:wrap;">
+            <button onclick="posetiProfil(${p.userId})" 
+                    style="background:#2e7d32; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
+              👤 Poseti profil
+            </button>
             
-            <div class="btn-group">
-              <button class="btn btn-green" onclick="posetiProfil(${p.userId})">
-                👤 Poseti profil
-              </button>
-              ${isOwner ? 
-                `<button class="btn btn-red" onclick="obrisiProizvod(${p.id})">🗑 Obriši</button>` : ''}
-            </div>
+            ${isOwner ? `
+            <button onclick="obrisiProizvod(${p.id})" 
+                    style="background:#d32f2f; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
+              🗑 Obriši
+            </button>` : ''}
           </div>
         `;
         container.appendChild(card);
       });
+
     } catch (err) {
       console.error(err);
-      container.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:red; padding:3rem;">Greška pri učitavanju proizvoda.</p>`;
+      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.</p>`;
     }
   }
 
@@ -280,7 +264,26 @@
     }
   }
 
-  // Pokretanje
+  function initNav() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+    } else {
+      document.getElementById('moj-profil-li').style.display = 'none';
+      document.getElementById('odjavi-se-li').style.display = 'none';
+      document.getElementById('prijavi-se-li').style.display = 'list-item';
+      document.getElementById('postani-prodavac-li').style.display = 'list-item';
+    }
+  }
+
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = '../index.html';
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     initNav();
     ucitajProizvode();
