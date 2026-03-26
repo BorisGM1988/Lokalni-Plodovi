@@ -578,64 +578,70 @@ footer p {
     ucitajProfil();
   });
 
-  async function ucitajProfil() {
-    const token = localStorage.getItem('token');
-    const profileName = document.getElementById('profileName');
+async function ucitajProfil() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const userIdParam = urlParams.get('userId');
+  const token = localStorage.getItem('token');
 
-    if (!token) {
-      profileName.textContent = 'Niste ulogovani';
-      return;
-    }
-
-    try {
-      const response = await fetch(`${backendUrl}/profile`, {
-        method: 'GET',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (!response.ok) {
-        throw new Error(`Greška: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      profileName.textContent = data.ime || 'Korisnik';
-      document.getElementById('profileBio').textContent = data.opis || 'Nema opisa';
-      document.getElementById('email').textContent = data.email || 'N/A';
-      document.getElementById('telefon').textContent = data.telefon || 'Nije navedeno';
-      document.getElementById('lokacija').textContent = data.lokacija || 'Nije navedeno';
-      document.getElementById('opis').textContent = data.opis || 'Nema opisa';
-      document.getElementById('registeredAt').textContent = data.registeredAt ? new Date(data.registeredAt).toLocaleString('sr-RS') : 'N/A';
-
-      const niseDiv = document.getElementById('nise');
-      niseDiv.innerHTML = '';
-      if (data.nise && data.nise.length > 0) {
-        data.nise.forEach(nisa => {
-          const badge = document.createElement('span');
-          badge.className = 'nise-badge';
-          badge.textContent = nisa;
-          niseDiv.appendChild(badge);
-        });
-      } else {
-        niseDiv.textContent = 'Nijedna';
-      }
-
-      if (data.slika) {
-        document.getElementById('profile-avatar').src = data.slika;
-      }
-
-      if (data.coverSlika) {
-        document.getElementById('cover-image').src = data.coverSlika;
-        document.getElementById('cover-image').style.display = 'block';
-        document.getElementById('placeholder-text').style.display = 'none';
-      }
-
-      ucitajObjave();
-    } catch (err) {
-      console.error('Greška pri učitavanju profila:', err);
-      profileName.textContent = 'Greška pri učitavanju';
-    }
+  let url = `${backendUrl}/profile`;
+  if (userIdParam) {
+    url += `?userId=${userIdParam}`;
   }
+
+  try {
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: headers
+    });
+
+    if (!response.ok) {
+      throw new Error(`Greška: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    document.getElementById('profileName').textContent = data.ime || 'Korisnik';
+    document.getElementById('profileBio').textContent = data.opis || 'Nema opisa';
+    document.getElementById('email').textContent = data.email || 'N/A';
+    document.getElementById('telefon').textContent = data.telefon || 'Nije navedeno';
+    document.getElementById('lokacija').textContent = data.lokacija || 'Nije navedeno';
+    document.getElementById('opis').textContent = data.opis || 'Nema opisa';
+    document.getElementById('registeredAt').textContent = data.registeredAt ? new Date(data.registeredAt).toLocaleString('sr-RS') : 'N/A';
+
+    const niseDiv = document.getElementById('nise');
+    niseDiv.innerHTML = '';
+    if (data.nise && data.nise.length > 0) {
+      data.nise.forEach(nisa => {
+        const badge = document.createElement('span');
+        badge.className = 'nise-badge';
+        badge.textContent = nisa;
+        niseDiv.appendChild(badge);
+      });
+    } else {
+      niseDiv.textContent = 'Nijedna';
+    }
+
+    if (data.slika) {
+      document.getElementById('profile-avatar').src = data.slika;
+    }
+
+    if (data.coverSlika) {
+      document.getElementById('cover-image').src = data.coverSlika;
+      document.getElementById('cover-image').style.display = 'block';
+      document.getElementById('placeholder-text').style.display = 'none';
+    }
+
+    ucitajObjave();
+  } catch (err) {
+    console.error('Greška pri učitavanju profila:', err);
+    document.getElementById('profileName').textContent = 'Greška pri učitavanju profila';
+  }
+}
 
   async function ucitajObjave() {
     const token = localStorage.getItem('token');
