@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Proizvođači [PROIZVOD] – LokalniPlodovi</title>
+  <title>Proizvođači Krompir – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     :root {
@@ -67,12 +67,78 @@
       max-width: 1400px;
       margin: 2rem auto;
       padding: 2rem 1.5rem;
-      text-align: center;
     }
 
     h1 {
       color: var(--zemlja);
       margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    #proizvodi-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .proizvod-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .proizvod-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .proizvod-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1.2rem;
+    }
+
+    .card-body h3 {
+      margin: 0 0 0.8rem 0;
+      color: var(--zemlja);
+    }
+
+    .info {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0;
+      font-size: 1.05rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-green {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-red {
+      background: #d32f2f;
+      color: white;
     }
 
     footer {
@@ -112,31 +178,11 @@
   </nav>
 </header>
 
-<script>
-  // Proveri da li je korisnik ulogovan
-  const korisnik = localStorage.getItem('token');
-
-  if (korisnik) {
-    document.getElementById('moj-profil-li').style.display = 'list-item';
-    document.getElementById('odjavi-se-li').style.display = 'list-item';
-    document.getElementById('prijavi-se-li').style.display = 'none';
-    document.getElementById('postani-prodavac-li').style.display = 'none';
-  } else {
-    document.getElementById('moj-profil-li').style.display = 'none';
-    document.getElementById('odjavi-se-li').style.display = 'none';
-    document.getElementById('prijavi-se-li').style.display = 'list-item';
-    document.getElementById('postani-prodavac-li').style.display = 'list-item';
-  }
-
-  function odjaviSe() {
-    localStorage.removeItem('token');
-    window.location.href = '../index.html';
-  }
-</script> 
-
 <div class="container">
-  <h1 id="naslov">Proizvođači</h1>
-  <p>Ova stranica je za sada prazna. Kasnije će ovde biti lista proizvođača ovog proizvoda, njihovi profili, proizvodi i kontakt.</p>
+  <h1 id="naslov">Proizvođači Krompir</h1>
+  <div id="proizvodi-container">
+    <!-- Proizvodi se učitavaju dinamički -->
+  </div>
 </div>
 
 <footer>
@@ -148,62 +194,117 @@
 </footer>
 
 <script>
-  // Logika za prikazivanje/sakrivanje opcija u header-u
-  const korisnik = localStorage.getItem('trenutniKorisnik');
+  const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  if (korisnik) {
-    document.getElementById('moj-profil-li').style.display = 'list-item';
-    document.getElementById('odjavi-se-li').style.display = 'list-item';
-    document.getElementById('prijavi-se-li').style.display = 'none';
-    document.getElementById('postani-prodavac-li').style.display = 'none';
-  } else {
-    document.getElementById('moj-profil-li').style.display = 'none';
-    document.getElementById('odjavi-se-li').style.display = 'none';
-    document.getElementById('prijavi-se-li').style.display = 'list-item';
-    document.getElementById('postani-prodavac-li').style.display = 'list-item';
+  // === NAVIGACIJA ===
+  function initNav() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+    } else {
+      document.getElementById('moj-profil-li').style.display = 'none';
+      document.getElementById('odjavi-se-li').style.display = 'none';
+      document.getElementById('prijavi-se-li').style.display = 'list-item';
+      document.getElementById('postani-prodavac-li').style.display = 'list-item';
+    }
   }
 
   function odjaviSe() {
-    localStorage.removeItem('trenutniKorisnik');
-    window.location.href = 'index.html';
+    localStorage.removeItem('token');
+    window.location.href = '../index.html';
   }
 
-  // Automatski naslov na osnovu imena fajla
-  const fajlIme = window.location.pathname.split('/').pop().replace('.html', '');
-  const proizvod = fajlIme.replace('proizvodjaci-', '').replace(/-/g, ' ');
-  const prviVeliki = proizvod.charAt(0).toUpperCase() + proizvod.slice(1);
-  document.getElementById('naslov').textContent = `Proizvođači ${prviVeliki}`;
-  document.title = `Proizvođači ${prviVeliki} – LokalniPlodovi`;
+  // === UČITAVANJE PROIZVODA ZA KROMPIR ===
+  async function ucitajProizvode() {
+    const container = document.getElementById('proizvodi-container');
+    container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:2rem;">Učitavanje proizvoda...</p>';
+
+    try {
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Povrće&podnisa=Krompir`);
+      if (!response.ok) throw new Error('Greška pri učitavanju');
+
+      const proizvodi = await response.json();
+
+      container.innerHTML = '';
+
+      if (proizvodi.length === 0) {
+        container.innerHTML = `
+          <p style="grid-column:1/-1; text-align:center; padding:3rem; color:#666;">
+            Trenutno nema proizvoda u ovoj kategoriji.
+          </p>`;
+        return;
+      }
+
+      proizvodi.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'proizvod-card';
+        card.innerHTML = `
+          <div class="card-body">
+            <h3>${p.naziv}</h3>
+            <div class="info">
+              <span><strong>${p.cena} RSD</strong></span>
+              <span>${p.kolicina} kom</span>
+            </div>
+            <p><strong>Prodavac:</strong> ${p.prodavacIme || 'Nepoznato'}</p>
+            <p><strong>Lokacija:</strong> ${p.prodavacLokacija || 'Nije navedeno'}</p>
+            
+            <div class="btn-group">
+              <button class="btn btn-green" onclick="posetiProfil(${p.userId})">
+                👤 Poseti profil
+              </button>
+              ${p.userId == localStorage.getItem('userId') ? 
+                `<button class="btn btn-red" onclick="obrisiProizvod(${p.id})">🗑 Obriši</button>` : ''}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:red; padding:3rem;">Greška pri učitavanju proizvoda.</p>`;
+    }
+  }
+
+  function posetiProfil(userId) {
+    if (!userId) return alert("Profil nije dostupan.");
+    window.location.href = `../moj-profil.html?userId=${userId}`;
+  }
+
+  async function obrisiProizvod(id) {
+    if (!confirm('Da li ste sigurni da želite da obrišete ovaj proizvod?')) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) return alert('Morate biti ulogovani!');
+
+    try {
+      const res = await fetch(`${backendUrl}/proizvod/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        alert('✅ Proizvod je uspešno obrisan.');
+        ucitajProizvode();
+      } else {
+        alert('Greška pri brisanju.');
+      }
+    } catch (err) {
+      alert('Došlo je do greške pri brisanju.');
+    }
+  }
+
+  // Pokretanje
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    ucitajProizvode();
+  });
 </script>
 
+<!-- Tawk.to Script -->
 <script type="text/javascript">
-  // === PROVERA PRIJAVE ZA NAVIGACIJU (kopirano iz moj-profil.html) ===
-  const token = localStorage.getItem('token');
-
-if (token) {
-  // ulogovan → prikaži Moj profil i Odjavi se
-  const mojProfilLi = document.getElementById('moj-profil-li');
-  const odjaviSeLi = document.getElementById('odjavi-se-li');
-  const prijaviSeLi = document.getElementById('prijavi-se-li');
-  const postaniProdavacLi = document.getElementById('postani-prodavac-li');
-
-  if (mojProfilLi) mojProfilLi.style.display = 'list-item';
-  if (odjaviSeLi) odjaviSeLi.style.display = 'list-item';
-  if (prijaviSeLi) prijaviSeLi.style.display = 'none';
-  if (postaniProdavacLi) postaniProdavacLi.style.display = 'none';
-} else {
-  // odjavljen → prikaži Prijavi se i Postani prodavac
-  const mojProfilLi = document.getElementById('moj-profil-li');
-  const odjaviSeLi = document.getElementById('odjavi-se-li');
-  const prijaviSeLi = document.getElementById('prijavi-se-li');
-  const postaniProdavacLi = document.getElementById('postani-prodavac-li');
-
-  if (mojProfilLi) mojProfilLi.style.display = 'none';
-  if (odjaviSeLi) odjaviSeLi.style.display = 'none';
-  if (prijaviSeLi) prijaviSeLi.style.display = 'list-item';
-  if (postaniProdavacLi) postaniProdavacLi.style.display = 'list-item';
-}
-  <!--Start of Tawk.to Script-->
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -214,12 +315,6 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<!--End of Tawk.to Script-->
 
 </body>
-
 </html>
-
-
-
-
