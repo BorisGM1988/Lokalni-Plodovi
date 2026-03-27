@@ -125,6 +125,14 @@
       background: #d32f2f;
       color: white;
     }
+
+    footer {
+      background: var(--zemlja);
+      color: white;
+      text-align: center;
+      padding: 4rem 1rem 2.5rem;
+      margin-top: auto;
+    }
   </style>
 </head>
 <body>
@@ -209,98 +217,4 @@
           <h3 style="margin:0 0 0.8rem 0; color:#2e7d32;">${p.naziv}</h3>
           <p style="margin:0.5rem 0; font-size:1.05rem;"><strong>Cena:</strong> ${p.cena} RSD</p>
           <p style="margin:0.5rem 0;"><strong>Dostupno:</strong> ${p.kolicina} kg/kom</p>
-          <p style="margin:0.5rem 0;"><strong>Prodavac:</strong> ${p.prodavacIme || 'Nepoznato'}</p>
-          <p style="margin:0.5rem 0;"><strong>Lokacija:</strong> ${p.prodavacLokacija || 'Nije navedeno'}</p>
-          <small style="color:#777;">Dodato: ${new Date(p.created_at).toLocaleDateString('sr-RS')}</small>
-          
-          <div style="margin-top:1.2rem; display:flex; gap:12px; flex-wrap:wrap;">
-            <button onclick="posetiProfil(${p.userId})" 
-                    style="background:#2e7d32; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
-              👤 Poseti profil
-            </button>
-            
-            ${isOwner ? `
-            <button onclick="obrisiProizvod(${p.id})" 
-                    style="background:#d32f2f; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
-              🗑 Obriši
-            </button>` : ''}
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-    } catch (err) {
-      console.error(err);
-      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.</p>`;
-    }
-  }
-
-  function posetiProfil(userId) {
-    if (!userId) return alert("Profil nije dostupan.");
-    window.location.href = `../moj-profil.html?userId=${userId}`;
-  }
-
-  async function obrisiProizvod(id) {
-    if (!confirm('Da li ste sigurni da želite da obrišete ovaj proizvod?')) return;
-
-    const token = localStorage.getItem('token');
-    if (!token) return alert('Morate biti ulogovani!');
-
-    try {
-      const res = await fetch(`${backendUrl}/proizvod/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (res.ok) {
-        alert('✅ Proizvod je uspešno obrisan.');
-        ucitajProizvode();
-      } else {
-        alert('Greška pri brisanju.');
-      }
-    } catch (err) {
-      alert('Došlo je do greške pri brisanju.');
-    }
-  }
-
-  function initNav() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-    } else {
-      document.getElementById('moj-profil-li').style.display = 'none';
-      document.getElementById('odjavi-se-li').style.display = 'none';
-      document.getElementById('prijavi-se-li').style.display = 'list-item';
-      document.getElementById('postani-prodavac-li').style.display = 'list-item';
-    }
-  }
-
-  function odjaviSe() {
-    localStorage.removeItem('token');
-    window.location.href = '../index.html';
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    initNav();
-    ucitajProizvode();
-  });
-</script>
-
-<!-- Tawk.to Script -->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-
-</body>
-</html>
+         
