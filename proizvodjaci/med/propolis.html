@@ -87,7 +87,6 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
       gap: 1.8rem;
-      margin-top: 1rem;
     }
 
     .proizvod-card {
@@ -104,14 +103,9 @@
     }
 
     .proizvod-card h3 {
-      margin: 0 0 1rem 0;
+      margin-bottom: 1rem;
       color: var(--zelena);
       font-size: 1.35rem;
-    }
-
-    .info {
-      margin: 0.6rem 0;
-      color: #444;
     }
 
     footer {
@@ -145,7 +139,6 @@
 
 <div class="container">
   <h1>Proizvođači Propolis</h1>
-  
   <div id="proizvodi-container"></div>
 </div>
 
@@ -162,18 +155,16 @@
 
   async function ucitajProizvode() {
     const container = document.getElementById('proizvodi-container');
-    container.innerHTML = '<p style="text-align:center; padding:4rem 0; color:#666; font-size:1.1rem;">Učitavam proizvode...</p>';
+    container.innerHTML = '<p style="text-align:center; padding:4rem 0; color:#666;">Učitavam proizvode...</p>';
 
     try {
       const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Med&podnisa=Propolis`);
-      
       if (!response.ok) throw new Error('Greška na serveru');
-      
+
       const proizvodi = await response.json();
 
       const token = localStorage.getItem('token');
       let currentUserId = null;
-      
       if (token) {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
@@ -212,7 +203,6 @@
                     style="background:var(--zelena); color:white; border:none; padding:11px 20px; border-radius:8px; cursor:pointer; font-weight:600; flex:1;">
               👤 Poseti profil
             </button>
-            
             ${isOwner ? `
             <button onclick="obrisiProizvod(${p.id})" 
                     style="background:#d32f2f; color:white; border:none; padding:11px 20px; border-radius:8px; cursor:pointer; font-weight:600;">
@@ -224,8 +214,7 @@
       });
 
     } catch (err) {
-      console.error(err);
-      container.innerHTML = `<p style="text-align:center; color:red; padding:4rem 0;">Greška pri učitavanju proizvoda.<br>Molimo proverite internet konekciju.</p>`;
+      container.innerHTML = `<p style="text-align:center; color:red; padding:4rem 0;">Greška pri učitavanju.<br>Proveri internet konekciju.</p>`;
     }
   }
 
@@ -250,18 +239,16 @@
         alert('✅ Proizvod je uspešno obrisan.');
         ucitajProizvode();
       } else {
-        const error = await res.json();
-        alert(error.error || 'Greška pri brisanju.');
+        alert('Greška pri brisanju.');
       }
     } catch (err) {
-      alert('Došlo je do greške pri brisanju. Pokušajte ponovo.');
+      alert('Došlo je do greške pri brisanju.');
     }
   }
 
   function initNav() {
     const token = localStorage.getItem('token');
     const loggedIn = !!token;
-
     document.getElementById('moj-profil-li').style.display = loggedIn ? 'list-item' : 'none';
     document.getElementById('odjavi-se-li').style.display = loggedIn ? 'list-item' : 'none';
     document.getElementById('prijavi-se-li').style.display = loggedIn ? 'none' : 'list-item';
@@ -273,7 +260,6 @@
     window.location.href = '../../index.html';
   }
 
-  // Pokretanje
   document.addEventListener('DOMContentLoaded', () => {
     initNav();
     ucitajProizvode();
