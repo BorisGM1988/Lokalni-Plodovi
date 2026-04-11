@@ -4,28 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mapa prodavaca – LokalniPlodovi</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5gg7fNY5F0=" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <style>
     :root {
       --zelena: #2e7d32;
       --zelena-svetla: #4caf50;
       --zemlja: #5d4037;
-      --siva: #757575;
-      --svetlo: #f8f9f5;
-      --belo: #ffffff;
     }
-
     * { margin:0; padding:0; box-sizing:border-box; }
-
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--svetlo);
+      background: #f8f9f5;
       color: #333;
-      line-height: 1.6;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-
     header {
       background: rgba(46, 125, 50, 0.94);
       color: white;
@@ -34,11 +30,8 @@
       top: 0;
       z-index: 1000;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      width: 100%;
     }
-
     .logo { font-size: 1.8rem; font-weight: 700; }
-
     nav {
       display: flex;
       justify-content: space-between;
@@ -46,7 +39,6 @@
       max-width: 1400px;
       margin: 0 auto;
     }
-
     nav ul {
       display: flex;
       list-style: none;
@@ -54,26 +46,84 @@
       margin: 0;
       padding: 0;
     }
-
     nav a {
       color: white;
       text-decoration: none;
       font-weight: 500;
       transition: 0.2s;
     }
-
     nav a:hover { color: #c8e6c9; }
+
+    #mapa-wrapper {
+      position: relative;
+      flex: 1;
+    }
 
     #map {
       height: calc(100vh - 80px);
+      width: 100%;
+    }
+
+    #loading-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255,255,255,0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      font-size: 1.2rem;
+      color: #2e7d32;
+      gap: 1rem;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 5px solid #c8e6c9;
+      border-top-color: #2e7d32;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .leaflet-popup-content b {
+      color: #2e7d32;
+      font-size: 1.1rem;
+    }
+
+    .leaflet-popup-content {
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .popup-btn {
+      display: inline-block;
+      margin-top: 8px;
+      background: #2e7d32;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .popup-btn:hover {
+      background: #4caf50;
     }
 
     footer {
       background: var(--zemlja);
       color: white;
       text-align: center;
-      padding: 4rem 1rem 2.5rem;
-      margin-top: 0;
+      padding: 2rem 1rem;
     }
   </style>
 </head>
@@ -87,64 +137,130 @@
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-
-      <li id="moj-profil-li" style="display:none;">
-        <a href="/moj-profil">Moj profil</a>
-      </li>
-      <li id="odjavi-se-li" style="display:none;">
-        <a href="#" onclick="odjaviSe()">Odjavi se</a>
-      </li>
-
-      <li id="prijavi-se-li">
-        <a href="/login.html">Prijavi se</a>
-      </li>
-      <li id="postani-prodavac-li">
-        <a href="/registracija.html">Postani prodavac</a>
-      </li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
     </ul>
   </nav>
 </header>
 
-<div id="map"></div>
+<div id="mapa-wrapper">
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <span>Učitavam prodavce na mapi...</span>
+  </div>
+  <div id="map"></div>
+</div>
 
 <footer>
-  <div class="container">
-    <h2>LokalniPlodovi</h2>
-    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
-    <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
-  </div>
+  <h2>LokalniPlodovi</h2>
+  <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+  <p style="margin-top:1rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
 </footer>
 
 <script>
-  var map = L.map('map').setView([44.0165, 21.0059], 8);
+  const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  // Najbolji besplatni satelitski/terrain sloj (CartoDB DarkMatter ili Stamen Terrain)
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
+  // Navigacija
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+    }
+    ucitajMapu();
+  });
+
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+  }
+
+  // Inicijalizacija mape
+  const map = L.map('map').setView([44.0165, 21.0059], 7);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 19
   }).addTo(map);
 
-  // Ograniči na Srbiju
-  map.setMinZoom(7);
-  map.setMaxBounds([
-    [40.8, 18.1],
-    [46.2, 23.0]
-  ]);
+  map.setMinZoom(6);
+  map.setMaxBounds([[40.8, 18.1], [46.2, 23.0]]);
 
-  // Pinovi
-  var prodavci = [
-    { ime: "Pčelarstvo Jovanović", lat: 44.85, lng: 19.35, link: "profil-pcelar.html" },
-    { ime: "Domaćinstvo Marković", lat: 43.35, lng: 22.58, link: "profil-kajmak.html" },
-    { ime: "Mesara Petrović", lat: 43.71, lng: 19.70, link: "profil-meso.html" }
-  ];
-
-  prodavci.forEach(p => {
-    L.marker([p.lat, p.lng])
-      .addTo(map)
-      .bindPopup(`
-        <b>${p.ime}</b><br>
-        <a href="${p.link}">Pogledaj profil</a>
-      `);
+  // Zeleni marker
+  const zeleniMarker = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
   });
+
+  async function ucitajMapu() {
+    try {
+      const response = await fetch(`${backendUrl}/prodavci-mapa`);
+      if (!response.ok) throw new Error('Greška na serveru');
+
+      const prodavci = await response.json();
+
+      // Sakrij loading
+      document.getElementById('loading-overlay').style.display = 'none';
+
+      if (prodavci.length === 0) {
+        document.getElementById('loading-overlay').innerHTML = `
+          <p style="color:#666;">Još nema prodavaca na mapi.</p>`;
+        document.getElementById('loading-overlay').style.display = 'flex';
+        return;
+      }
+
+      prodavci.forEach(p => {
+        let niseText = '';
+        if (p.nise && p.nise.length > 0) {
+          niseText = `<br><span style="color:#666; font-size:0.85rem;">🌿 ${p.nise.join(', ')}</span>`;
+        }
+
+        const popup = `
+          <b>${p.ime}</b>
+          ${niseText}
+          <br><span style="color:#666;">📍 ${p.lokacija}</span>
+          <br><a href="moj-profil.html?userId=${p.id}" class="popup-btn">👤 Pogledaj profil</a>
+        `;
+
+        L.marker([p.lat, p.lng], { icon: zeleniMarker })
+          .addTo(map)
+          .bindPopup(popup);
+      });
+
+      // Ako ima prodavaca, fokusiraj mapu na njih
+      if (prodavci.length > 0) {
+        const bounds = L.latLngBounds(prodavci.map(p => [p.lat, p.lng]));
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
+
+    } catch (err) {
+      console.error('Greška:', err);
+      document.getElementById('loading-overlay').innerHTML = `
+        <p style="color:red;">Greška pri učitavanju mape.<br>Pokušaj ponovo.</p>`;
+    }
+  }
 </script>
+
+<!-- Tawk.to Script -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
+</body>
+</html>
