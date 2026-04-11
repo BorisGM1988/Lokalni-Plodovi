@@ -230,7 +230,10 @@
           <br><a href="moj-profil.html?userId=${p.id}" class="popup-btn">👤 Pogledaj profil</a>
         `;
 
-        L.marker([p.lat, p.lng], { icon: zeleniMarker })
+      const offset = 0.003;
+const lat = p.lat + (Math.random() - 0.5) * offset;
+const lng = p.lng + (Math.random() - 0.5) * offset;
+L.marker([lat, lng], { icon: zeleniMarker })
           .addTo(map)
           .bindPopup(popup);
       });
