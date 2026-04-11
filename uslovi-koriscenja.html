@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Uslovi korišćenja – LokalniPlodovi</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f8f9f5;
+      color: #333;
+      line-height: 1.8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(46, 125, 50, 0.94);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .logo { font-size: 1.8rem; font-weight: 700; }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      margin: 0; padding: 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+    nav a:hover { color: #c8e6c9; }
+    .container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 3rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    h1 {
+      color: var(--zelena);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .datum {
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid #e8f5e9;
+    }
+    h2 {
+      color: var(--zemlja);
+      font-size: 1.3rem;
+      margin: 2rem 0 0.8rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 1.3rem;
+      background: var(--zelena-svetla);
+      border-radius: 2px;
+    }
+    p { margin-bottom: 1rem; color: #444; }
+    ul {
+      margin: 0.5rem 0 1rem 1.5rem;
+      color: #444;
+    }
+    ul li { margin-bottom: 0.4rem; }
+    .highlight {
+      background: #e8f5e9;
+      border-left: 4px solid var(--zelena);
+      padding: 1rem 1.5rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.5rem 0;
+    }
+    .warning {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 1rem 1.5rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.5rem 0;
+    }
+    .kontakt-box {
+      background: #f1f8e9;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .kontakt-box a { color: var(--zelena); font-weight: 600; }
+    footer {
+      background: var(--zemlja);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: auto;
+    }
+    footer a { color: #c8e6c9; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <ul>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="Prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h1><i class="fas fa-file-contract"></i> Uslovi korišćenja</h1>
+    <div class="datum">Poslednje ažuriranje: April 2026 | lokalniplodovi.rs</div>
+
+    <div class="highlight">
+      <strong>Molimo vas da pažljivo pročitate ove uslove.</strong> Registracijom i korišćenjem platforme LokalniPlodovi potvrđujete da ste pročitali, razumeli i prihvatili sve navedene uslove.
+    </div>
+
+    <h2>1. O platformi</h2>
+    <p>LokalniPlodovi (lokalniplodovi.rs) je digitalna platforma koja služi kao oglasnik za povezivanje lokalnih poljoprivrednih proizvođača i kupaca u Srbiji. Platforma <strong>nije posrednik</strong> u transakcijama — sve kupoprodaje se odvijaju direktno između korisnika.</p>
+
+    <h2>2. Registracija i nalog</h2>
+    <ul>
+      <li>Registracijom potvrđujete da imate najmanje 18 godina</li>
+      <li>Dužni ste da unesete tačne i istinite podatke</li>
+      <li>Odgovorni ste za čuvanje lozinke i bezbednost svog naloga</li>
+      <li>Jedan korisnik može imati samo jedan nalog</li>
+      <li>Zabranjeno je kreiranje lažnih ili duplih naloga</li>
+    </ul>
+
+    <h2>3. Pravila za prodavce</h2>
+    <p>Kao prodavac na platformi obavezujete se da:</p>
+    <ul>
+      <li>Prodajete isključivo sopstvene, domaće proizvode</li>
+      <li>Navedete tačne informacije o proizvodima (naziv, cena, količina)</li>
+      <li>Poštujete važeće propise Republike Srbije o prometu hrane</li>
+      <li>Odgovorite na upite kupaca u razumnom roku</li>
+      <li>Ne objavljujete lažne ili zavaravajuće informacije</li>
+      <li>Ne koristite platformu za prodaju zabranjenih proizvoda</li>
+    </ul>
+
+    <div class="warning">
+      <strong>⚠️ Važno:</strong> LokalniPlodovi nije odgovoran za kvalitet, bezbednost niti isporuku proizvoda. Odgovornost za sve prodaje snosi isključivo prodavac.
+    </div>
+
+    <h2>4. Pravila za kupce</h2>
+    <ul>
+      <li>Kontaktirajte prodavce isključivo u poslovne svrhe</li>
+      <li>Ne zloupotrebljavajte kontakt podatke prodavaca</li>
+      <li>Prijavite sumnjive oglase ili prevare putem kontakt emaila</li>
+      <li>LokalniPlodovi ne garantuje kvalitet niti isporuku kupljenih proizvoda</li>
+    </ul>
+
+    <h2>5. Zabranjen sadržaj</h2>
+    <p>Strogo je zabranjeno objavljivati:</p>
+    <ul>
+      <li>Lažne, zavaravajuće ili nepotpune informacije</li>
+      <li>Uvredljiv, diskriminatorski ili nelegalan sadržaj</li>
+      <li>Proizvode koji nisu domaćeg porekla ili nisu u vlasništvu prodavca</li>
+      <li>Zabranjene supstance ili predmete</li>
+      <li>Sadržaj koji krši autorska prava trećih lica</li>
+      <li>Spam poruke ili neželjene komercijalne poruke</li>
+    </ul>
+
+    <h2>6. Ograničenje odgovornosti</h2>
+    <p>LokalniPlodovi se ograđuje od odgovornosti za:</p>
+    <ul>
+      <li>Sporove između kupaca i prodavaca</li>
+      <li>Kvalitet, bezbednost ili poreklo prodatih proizvoda</li>
+      <li>Štetu nastalu usled neispravnih informacija u oglasima</li>
+      <li>Privremenu nedostupnost platforme usled tehničkih problema</li>
+      <li>Gubitak podataka usled više sile ili tehničkih kvarova</li>
+    </ul>
+
+    <h2>7. Intelektualna svojina</h2>
+    <p>Sav sadržaj na platformi (dizajn, logo, tekstovi) je vlasništvo LokalniPlodovi i zaštićen je autorskim pravom. Fotografije koje korisnici uploaduju ostaju njihovo vlasništvo, ali korisnici daju platformi pravo prikaza tih fotografija.</p>
+
+    <h2>8. Ukidanje naloga</h2>
+    <p>Zadržavamo pravo da bez prethodnog obaveštenja ukinemo nalog korisnika koji:</p>
+    <ul>
+      <li>Krši ove uslove korišćenja</li>
+      <li>Objavljuje lažne informacije</li>
+      <li>Zloupotrebljava platformu na bilo koji način</li>
+      <li>Vrši prevaru ili obmanjuje druge korisnike</li>
+    </ul>
+
+    <h2>9. Izmene uslova</h2>
+    <p>Zadržavamo pravo izmene ovih uslova u bilo koje vreme. Korisnici će biti obavešteni o značajnim promenama. Nastavak korišćenja platforme nakon obaveštenja znači prihvatanje izmenjenih uslova.</p>
+
+    <h2>10. Merodavno pravo</h2>
+    <p>Na ove uslove korišćenja primenjuje se pravo Republike Srbije. Za sve sporove nadležan je sud u Republici Srbiji.</p>
+
+    <div class="kontakt-box">
+      <p><strong>Imate pitanja vezana za uslove korišćenja?</strong></p>
+      <p>Kontaktirajte nas na: <a href="mailto:lokalniplodovi@gmail.com">lokalniplodovi@gmail.com</a></p>
+      <p style="margin-top:0.5rem; font-size:0.9rem; color:#666;">Odgovaramo u roku od 48 sati</p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 LokalniPlodovi • Sva prava zadržana</p>
+  <p style="margin-top:0.5rem;">
+    <a href="politika-privatnosti.html">Politika privatnosti</a> •
+    <a href="uslovi-koriscenja.html">Uslovi korišćenja</a> •
+    <a href="index.html">Početna</a>
+  </p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+    }
+  });
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+  }
+</script>
+
+</body>
+</html>

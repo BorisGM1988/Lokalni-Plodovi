@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Politika privatnosti – LokalniPlodovi</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f8f9f5;
+      color: #333;
+      line-height: 1.8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(46, 125, 50, 0.94);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .logo { font-size: 1.8rem; font-weight: 700; }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      margin: 0; padding: 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+    nav a:hover { color: #c8e6c9; }
+    .container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 3rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    h1 {
+      color: var(--zelena);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .datum {
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid #e8f5e9;
+    }
+    h2 {
+      color: var(--zemlja);
+      font-size: 1.3rem;
+      margin: 2rem 0 0.8rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 1.3rem;
+      background: var(--zelena-svetla);
+      border-radius: 2px;
+    }
+    p { margin-bottom: 1rem; color: #444; }
+    ul {
+      margin: 0.5rem 0 1rem 1.5rem;
+      color: #444;
+    }
+    ul li { margin-bottom: 0.4rem; }
+    .highlight {
+      background: #e8f5e9;
+      border-left: 4px solid var(--zelena);
+      padding: 1rem 1.5rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.5rem 0;
+    }
+    .kontakt-box {
+      background: #f1f8e9;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .kontakt-box a {
+      color: var(--zelena);
+      font-weight: 600;
+    }
+    footer {
+      background: var(--zemlja);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: auto;
+    }
+    footer a { color: #c8e6c9; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <ul>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="Prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h1><i class="fas fa-shield-alt"></i> Politika privatnosti</h1>
+    <div class="datum">Poslednje ažuriranje: April 2026 | lokalniplodovi.rs</div>
+
+    <div class="highlight">
+      <strong>Vaša privatnost nam je važna.</strong> Ova politika objašnjava koje podatke prikupljamo, kako ih koristimo i kako ih štitimo. Korišćenjem platforme LokalniPlodovi prihvatate ovu politiku privatnosti.
+    </div>
+
+    <h2>1. Ko smo mi</h2>
+    <p>LokalniPlodovi (lokalniplodovi.rs) je digitalna platforma koja povezuje lokalne poljoprivrednike i proizvođače hrane sa kupcima u Srbiji. Platforma je u vlasništvu i pod upravljanjem osnivača Boris Gutalj.</p>
+
+    <h2>2. Koje podatke prikupljamo</h2>
+    <p>Prilikom registracije i korišćenja platforme prikupljamo sledeće podatke:</p>
+    <ul>
+      <li><strong>Ime i prezime</strong> — za identifikaciju na platformi</li>
+      <li><strong>Email adresa</strong> — za prijavu i komunikaciju</li>
+      <li><strong>Broj telefona</strong> — za kontakt između kupaca i prodavaca</li>
+      <li><strong>Lokacija (grad/mesto)</strong> — za prikaz na mapi i pretragu</li>
+      <li><strong>Fotografije profila</strong> — profilna i naslovna slika koje sami uploadujete</li>
+      <li><strong>Opisi i informacije o proizvodima</strong> — koje sami unosite</li>
+    </ul>
+
+    <h2>3. Kako koristimo vaše podatke</h2>
+    <p>Vaše podatke koristimo isključivo za:</p>
+    <ul>
+      <li>Prikazivanje vašeg profila i proizvoda na platformi</li>
+      <li>Omogućavanje komunikacije između kupaca i prodavaca</li>
+      <li>Prikaz vaše lokacije na interaktivnoj mapi</li>
+      <li>Slanje obaveštenja vezanih za vaš nalog (ako se prijavite)</li>
+      <li>Poboljšanje funkcionalnosti platforme</li>
+    </ul>
+
+    <h2>4. Čuvanje i bezbednost podataka</h2>
+    <p>Vaši podaci se čuvaju na sigurnim serverima kompanije Railway (SAD) koji koriste enkripciju SSL/TLS. Lozinke su zaštićene bcrypt enkripcijom i nikada se ne čuvaju u originalnom obliku.</p>
+    <p>Podatke čuvamo dok god je vaš nalog aktivan. Kada obrišete nalog, podaci se trajno brišu iz naše baze.</p>
+
+    <h2>5. Deljenje podataka sa trećim stranama</h2>
+    <p>Vaše podatke <strong>ne prodajemo, ne iznajmljujemo niti delimo</strong> sa trećim stranama u komercijalne svrhe. Podaci se mogu deliti jedino u sledećim slučajevima:</p>
+    <ul>
+      <li>Na zahtev nadležnih organa u skladu sa zakonom Srbije</li>
+      <li>Radi tehničkog funkcionisanja platforme (hosting servisi)</li>
+    </ul>
+
+    <h2>6. Vaša prava</h2>
+    <p>U skladu sa Zakonom o zaštiti podataka o ličnosti Republike Srbije, imate pravo da:</p>
+    <ul>
+      <li><strong>Pristupite</strong> svojim podacima</li>
+      <li><strong>Ispravite</strong> netačne podatke putem opcije "Izmeni profil"</li>
+      <li><strong>Obrišete</strong> sve svoje podatke slanjem zahteva na naš email</li>
+      <li><strong>Prigovorite</strong> obradi vaših podataka</li>
+      <li><strong>Prenesete</strong> podatke u mašinski čitljiv format</li>
+    </ul>
+
+    <h2>7. Kolačići (Cookies)</h2>
+    <p>Platforma koristi localStorage za čuvanje tokena prijave isključivo na vašem uređaju. Ne koristimo kolačiće za praćenje ili reklamiranje.</p>
+
+    <h2>8. Deca</h2>
+    <p>Naša platforma nije namenjena osobama mlađim od 18 godina. Ako saznamo da smo prikupili podatke deteta, odmah ćemo ih obrisati.</p>
+
+    <h2>9. Izmene politike privatnosti</h2>
+    <p>Zadržavamo pravo izmene ove politike. O značajnim promenama obavestićemo korisnike putem email-a ili obaveštenjem na sajtu. Nastavak korišćenja platforme nakon izmena znači prihvatanje novih uslova.</p>
+
+    <div class="kontakt-box">
+      <p><strong>Imate pitanja vezana za privatnost?</strong></p>
+      <p>Kontaktirajte nas na: <a href="mailto:lokalniplodovi@gmail.com">lokalniplodovi@gmail.com</a></p>
+      <p style="margin-top:0.5rem; font-size:0.9rem; color:#666;">Odgovaramo u roku od 48 sati</p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 LokalniPlodovi • Sva prava zadržana</p>
+  <p style="margin-top:0.5rem;">
+    <a href="politika-privatnosti.html">Politika privatnosti</a> •
+    <a href="uslovi-koriscenja.html">Uslovi korišćenja</a> •
+    <a href="index.html">Početna</a>
+  </p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+    }
+  });
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+  }
+</script>
+
+</body>
+</html>
