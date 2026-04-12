@@ -395,7 +395,7 @@ footer p { margin: 0; }
       </select>
       <label>Podniša (npr. Jabuke, Krastavac...)</label>
       <input type="text" id="podnisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
-      <label>Slika proizvoda (za sada samo preview)</label>
+    <label>Slika proizvoda</label>
       <input type="file" id="slika-proizvoda" accept="image/*" style="margin:8px 0;">
       <img id="preview-slika" style="width:100%; max-height:180px; object-fit:cover; border-radius:8px; display:none; margin-top:8px;">
       <div style="margin-top:1.5rem; display:flex; gap:1rem;">
@@ -660,7 +660,7 @@ footer p { margin: 0; }
     document.getElementById('preview-slika').style.display = 'none';
   }
 
-  async function izloziNaPijac() {
+ async function izloziNaPijac() {
     const naziv = document.getElementById('naziv').value.trim();
     const cena = parseFloat(document.getElementById('cena').value);
     const kolicina = parseInt(document.getElementById('kolicina').value);
@@ -675,11 +675,23 @@ footer p { margin: 0; }
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti ulogovani!'); window.location.href = 'login.html'; return; }
 
+    // Konvertuj sliku u base64 ako je izabrana
+    let slikaBase64 = null;
+    const slikaFile = document.getElementById('slika-proizvoda').files[0];
+    if (slikaFile) {
+      slikaBase64 = await fileToBase64(slikaFile);
+    }
+
     try {
       const response = await fetch(`${backendUrl}/dodaj-proizvod`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa: podnisa || null, opis: null })
+        body: JSON.stringify({ 
+          naziv, cena, kolicina, glavnaNisa, 
+          podnisa: podnisa || null, 
+          opis: null,
+          slikaBase64: slikaBase64
+        })
       });
 
       const result = await response.json();
