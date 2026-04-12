@@ -129,7 +129,7 @@
 </header>
 
 <div class="container">
-  <h1>Proizvođači Španac</h1>
+  <h1>Proizvođači Spanac</h1>
   
   <div id="proizvodi-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; min-height: 400px;"></div>
 </div>
@@ -154,7 +154,7 @@
     container.innerHTML = '<p style="text-align:center; padding:3rem 0; color:#666;">Učitavam proizvode...</p>';
 
     try {
-      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Povrće&podnisa=Španac`);
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Povrće&podnisa=Spanac`);
       if (!response.ok) throw new Error('Greška na serveru');
       
       const proizvodi = await response.json();
