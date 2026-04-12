@@ -336,6 +336,62 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+<!-- DISCLAIMER BANNER -->
+<div id="disclaimer-banner" style="
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(30, 30, 30, 0.97);
+  color: white;
+  z-index: 9999;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+">
+  <div style="max-width: 900px; margin: 0 auto;">
+    <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 1rem;">
+      ⚠️ <strong>Napomena:</strong> LokalniPlodovi je <strong>oglasnik</strong> koji povezuje lokalne proizvođače i kupce. 
+      Platforma <strong>nije posrednik</strong> u transakcijama i nije odgovorna za kvalitet, 
+      poreklo niti isporuku proizvoda. Sve transakcije se odvijaju <strong>direktno između kupca i prodavca</strong>. 
+      Korišćenjem ovog sajta prihvatate naše 
+      <a href="uslovi-koriscenja.html" style="color:#4caf50; font-weight:600;">uslove korišćenja</a> i 
+      <a href="politika-privatnosti.html" style="color:#4caf50; font-weight:600;">politiku privatnosti</a>.
+    </p>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+      <button onclick="prihvatiDisclaimer()" style="
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+      ">✅ Razumem i prihvatam</button>
+      <a href="uslovi-koriscenja.html" style="
+        color: #aaa;
+        font-size: 0.9rem;
+        align-self: center;
+        text-decoration: underline;
+      ">Pročitaj uslove korišćenja</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Prikaži banner samo ako korisnik nije već prihvatio
+  window.addEventListener('load', function() {
+    if (!localStorage.getItem('disclaimer_prihvacen')) {
+      document.getElementById('disclaimer-banner').style.display = 'block';
+    }
+  });
+
+  function prihvatiDisclaimer() {
+    localStorage.setItem('disclaimer_prihvacen', 'true');
+    document.getElementById('disclaimer-banner').style.display = 'none';
+  }
+</script>
 </body>
 
 </html>
