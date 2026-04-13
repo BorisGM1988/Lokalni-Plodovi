@@ -550,21 +550,55 @@ footer p { margin: 0; }
   }
 
   function objaviNovost() {
-    const tekst = prompt('Šta želite da objavite?\n\n(Npr: "Danas imamo sveže maline i med po akcijskoj ceni!")');
-    if (!tekst || tekst.trim() === '') return;
+  document.getElementById('objavi-novost-modal').style.display = 'flex';
+}
 
-    const token = localStorage.getItem('token');
-    if (!token) { alert('Morate biti ulogovani da objavite'); return; }
+function zatvoriNovostModal() {
+  document.getElementById('objavi-novost-modal').style.display = 'none';
+  document.getElementById('novost-tekst').value = '';
+  document.getElementById('novost-slika').value = '';
+  document.getElementById('preview-novost-slika').style.display = 'none';
+  document.getElementById('novost-zona-placeholder').style.display = 'block';
+}
 
-    fetch(`${backendUrl}/objavi-novost`, {
+async function posaljiNovost() {
+  const tekst = document.getElementById('novost-tekst').value.trim();
+  if (!tekst) { alert('Unesite tekst objave!'); return; }
+
+  const token = localStorage.getItem('token');
+  if (!token) { alert('Morate biti ulogovani!'); return; }
+
+  let slikaBase64 = null;
+  const slikaFile = document.getElementById('novost-slika').files[0];
+  if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
+
+  try {
+    const res = await fetch(`${backendUrl}/objavi-novost`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify({ tekst: tekst.trim() })
-    })
-    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
-    .then(() => { alert('Objava uspešno dodata!'); ucitajObjave(); })
-    .catch(() => alert('Greška pri objavljivanju'));
+      body: JSON.stringify({ tekst, slikaBase64 })
+    });
+    if (!res.ok) throw new Error();
+    alert('✅ Objava uspešno dodata!');
+    zatvoriNovostModal();
+    ucitajObjave();
+  } catch {
+    alert('Greška pri objavljivanju');
   }
+}
+
+async function obrisiObjavu(id) {
+  if (!confirm('Obrisati ovu objavu?')) return;
+  const token = localStorage.getItem('token');
+  try {
+    const res = await fetch(`${backendUrl}/objava/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) { ucitajObjave(); }
+    else alert('Greška pri brisanju');
+  } catch { alert('Greška'); }
+}
 
   function izmeniProfil() {
     document.getElementById('edit-ime').value = document.getElementById('profileName').textContent || '';
