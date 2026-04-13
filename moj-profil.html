@@ -530,19 +530,19 @@ footer p { margin: 0; }
         return;
       }
 
-      objave.forEach(o => {
-        const div = document.createElement('div');
-        div.style = 'padding: 1rem 0; border-bottom: 1px solid #eee;';
-        div.innerHTML = `
-          <p style="margin:0 0 0.6rem 0; font-size:1.05rem; line-height:1.4;">${o.tekst}</p>
-          <small style="color:#888; font-size:0.9rem;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>
-        `;
-        lista.prepend(div);
-      });
-    } catch (err) {
-      document.getElementById('objave-lista').innerHTML = '<p style="color:red; text-align:center;">Greška pri učitavanju objava</p>';
-    }
-  }
+  objave.forEach(o => {
+  const div = document.createElement('div');
+  div.style = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
+  div.innerHTML = `
+    ${o.slika ? `<img src="${o.slika}" style="width:100%; max-height:250px; object-fit:cover; border-radius:10px; margin-bottom:0.8rem;">` : ''}
+    <p style="margin:0 0 0.6rem; font-size:1.05rem; line-height:1.5;">${o.tekst}</p>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <small style="color:#888;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>
+      <button onclick="obrisiObjavu(${o.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;">🗑 Obriši</button>
+    </div>
+  `;
+  lista.appendChild(div);
+});
 
   function odjaviSe() {
     localStorage.removeItem('token');
@@ -757,7 +757,45 @@ async function obrisiObjavu(id) {
   document.getElementById('dodaj-proizvod-modal').addEventListener('click', function(e) {
     if (e.target === this) zatvoriModal();
   });
-</script>
-
+document.getElementById('novost-slika').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('preview-novost-slika').src = ev.target.result;
+      document.getElementById('preview-novost-slika').style.display = 'block';
+      document.getElementById('novost-zona-placeholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+    </script>
+<!-- MODAL OBJAVI NOVOST -->
+<div id="objavi-novost-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:540px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
+    <div style="background:linear-gradient(135deg,#2e7d32,#4caf50); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2 style="margin:0; font-size:1.5rem;">📢 Objavi novost</h2>
+        <p style="margin:0.3rem 0 0; opacity:0.85; font-size:0.9rem;">Obavesti kupce o novostima</p>
+      </div>
+      <button onclick="zatvoriNovostModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:2rem;">
+      <textarea id="novost-tekst" rows="4" placeholder='npr. "Danas imamo sveže maline po akcijskoj ceni!"' style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit;" onfocus="this.style.borderColor='#4caf50'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+      <div onclick="document.getElementById('novost-slika').click()" style="border:2px dashed #4caf50; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#f0fdf4; margin-top:1.2rem;">
+        <img id="preview-novost-slika" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; display:none;">
+        <div id="novost-zona-placeholder">
+          <div style="font-size:2rem;">📸</div>
+          <p style="margin:0.4rem 0 0; color:#4caf50; font-weight:600;">Dodaj sliku (opciono)</p>
+        </div>
+        <input type="file" id="novost-slika" accept="image/*" style="display:none;">
+      </div>
+      <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+        <button onclick="zatvoriNovostModal()" style="flex:1; padding:14px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
+        <button onclick="posaljiNovost()" style="flex:2; padding:14px; border-radius:50px; background:linear-gradient(135deg,#2e7d32,#4caf50); color:white; border:none; font-weight:600; cursor:pointer;">📢 Objavi</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
