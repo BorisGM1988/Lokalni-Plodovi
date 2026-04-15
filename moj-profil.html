@@ -726,9 +726,16 @@ function popuniPodnise() {
   }
 
   function zatvoriModal() {
-    document.getElementById('dodaj-proizvod-modal').style.display = 'none';
-    document.getElementById('proizvod-form').reset();
-    document.getElementById('preview-slika').style.display = 'none';
+  document.getElementById('dodaj-proizvod-modal').style.display = 'none';
+  document.getElementById('naziv').value = '';
+  document.getElementById('cena').value = '';
+  document.getElementById('kolicina').value = '';
+  document.getElementById('glavna-nisa').value = '';
+  document.getElementById('podnisa').value = '';
+  document.getElementById('opis-proizvoda').value = '';
+  document.getElementById('slika-proizvoda').value = '';
+  document.getElementById('podnisa-wrapper').style.display = 'none';
+  document.getElementById('preview-slika').style.display = 'none';
   }
 
  async function izloziNaPijac() {
