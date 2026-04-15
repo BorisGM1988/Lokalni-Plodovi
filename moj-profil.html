@@ -373,36 +373,40 @@ footer p { margin: 0; }
 
 <!-- MODAL DODAJ PROIZVOD -->
 <div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
-  <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+  <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
     <h2 style="margin-top:0; color:#2e7d32;">Dodaj novi proizvod</h2>
-    <form id="proizvod-form">
-      <label>Naziv proizvoda / sorte *</label>
-      <input type="text" id="naziv" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required>
-      <label>Cena (RSD) *</label>
-      <input type="number" id="cena" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required>
-      <label>Dostupna količina *</label>
-      <input type="number" id="kolicina" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;" required>
-      <label>Glavna niša *</label>
-      <select id="glavna-nisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
-        <option value="">Izaberi nišu</option>
-        <option value="Povrće">Povrće</option>
-        <option value="Voće">Voće</option>
-        <option value="Mlečni proizvodi">Mlečni proizvodi</option>
-        <option value="Meso">Meso</option>
-        <option value="Med">Med</option>
-        <option value="Jaja">Jaja</option>
-        <option value="Bilje i Zdravlje">Bilje i Zdravlje</option>
+    <label>Naziv proizvoda / sorte *</label>
+    <input type="text" id="naziv" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;" required>
+    <label>Cena (RSD) *</label>
+    <input type="number" id="cena" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;" required>
+    <label>Dostupna količina *</label>
+    <input type="number" id="kolicina" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;" required>
+    <label>Glavna niša *</label>
+    <select id="glavna-nisa" onchange="popuniPodnise()" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+      <option value="">-- Izaberi nišu --</option>
+      <option value="Voće">🍎 Voće</option>
+      <option value="Povrće">🥦 Povrće</option>
+      <option value="Mlečni proizvodi">🥛 Mlečni proizvodi</option>
+      <option value="Meso">🥩 Meso i mesne prerađevine</option>
+      <option value="Med">🍯 Med i pčelinji proizvodi</option>
+      <option value="Jaja">🥚 Jaja</option>
+      <option value="Bilje i Zdravlje">🌿 Bilje i zdravlje</option>
+    </select>
+    <div id="podnisa-wrapper" style="display:none;">
+      <label>Podniša *</label>
+      <select id="podnisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+        <option value="">-- Izaberi --</option>
       </select>
-      <label>Podniša (npr. Jabuke, Krastavac...)</label>
-      <input type="text" id="podnisa" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;">
+    </div>
+    <label>Opis (opciono)</label>
+    <textarea id="opis-proizvoda" rows="3" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;"></textarea>
     <label>Slika proizvoda</label>
-      <input type="file" id="slika-proizvoda" accept="image/*" style="margin:8px 0;">
-      <img id="preview-slika" style="width:100%; max-height:180px; object-fit:cover; border-radius:8px; display:none; margin-top:8px;">
-      <div style="margin-top:1.5rem; display:flex; gap:1rem;">
-        <button type="button" onclick="zatvoriModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600;">Otkaži</button>
-        <button type="button" onclick="izloziNaPijac()" style="flex:1; padding:12px; border-radius:50px; background:#2e7d32; color:white; border:none; font-weight:600;">Izloži na pijac</button>
-      </div>
-    </form>
+    <input type="file" id="slika-proizvoda" accept="image/*" style="margin:8px 0;">
+    <img id="preview-slika" style="width:100%; max-height:180px; object-fit:cover; border-radius:8px; display:none; margin-top:8px;">
+    <div style="margin-top:1.5rem; display:flex; gap:1rem;">
+      <button type="button" onclick="zatvoriModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
+      <button type="button" onclick="izloziNaPijac()" style="flex:1; padding:12px; border-radius:50px; background:#2e7d32; color:white; border:none; font-weight:600; cursor:pointer;">Izloži na pijac</button>
+    </div>
   </div>
 </div>
 
@@ -685,6 +689,36 @@ async function obrisiObjavu(id) {
       reader.readAsDataURL(file);
     }
   });
+  const podnisePoNisi = {
+  'Voće': ['Šljiva','Jabuka','Malina','Jagoda','Višnja','Grožđe','Trešnje','Kajsija','Breskva','Kruška','Dunja','Kupina','Borovnica','Lubenica'],
+  'Povrće': ['Blitva','Cvekla','Crni i beli luk','Krastavac','Krompir','Kupus','Paprika','Paradajz','Patlidžan','Šargarepa','Spanać','Tikvice','Boranija','Grašak','Pasulj','Rotkvice'],
+  'Mlečni proizvodi': ['Kajmak','Sir','Pavlaka','Mleko','Jogurt','Maslac','Surutka'],
+  'Meso': ['Sveže meso','Pršuta','Čvarke','Kobasice','Kulen','Slanina'],
+  'Med': ['Bagremov med','Livadski med','Šumski med','Lipov med','Kestenov med','Borov med','Med sa saćem','Propolis'],
+  'Jaja': [],
+  'Bilje i Zdravlje': []
+};
+
+function popuniPodnise() {
+  const nisa = document.getElementById('glavna-nisa').value;
+  const wrapper = document.getElementById('podnisa-wrapper');
+  const select = document.getElementById('podnisa');
+  const podnise = podnisePoNisi[nisa] || [];
+  
+  select.innerHTML = '<option value="">-- Izaberi --</option>';
+  
+  if (podnise.length > 0) {
+    podnise.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      select.appendChild(opt);
+    });
+    wrapper.style.display = 'block';
+  } else {
+    wrapper.style.display = 'none'; // Jaja i Zdravlje nemaju podnišu
+  }
+}
 
   // DODAVANJE PROIZVODA
   function dodajProizvod() {
@@ -702,7 +736,8 @@ async function obrisiObjavu(id) {
     const cena = parseFloat(document.getElementById('cena').value);
     const kolicina = parseInt(document.getElementById('kolicina').value);
     const glavnaNisa = document.getElementById('glavna-nisa').value;
-    const podnisa = document.getElementById('podnisa').value.trim();
+    const podnisaEl = document.getElementById('podnisa');
+    const podnisa = podnisaEl ? podnisaEl.value : '';
 
     if (!naziv) { alert('Molimo unesite naziv proizvoda'); return; }
     if (!cena || cena <= 0) { alert('Molimo unesite validnu cenu'); return; }
