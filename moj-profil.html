@@ -738,6 +738,7 @@ function popuniPodnise() {
     const glavnaNisa = document.getElementById('glavna-nisa').value;
     const podnisaEl = document.getElementById('podnisa');
     const podnisa = podnisaEl ? podnisaEl.value : '';
+    const opis = document.getElementById('opis-proizvoda').value.trim();
 
     if (!naziv) { alert('Molimo unesite naziv proizvoda'); return; }
     if (!cena || cena <= 0) { alert('Molimo unesite validnu cenu'); return; }
@@ -761,7 +762,7 @@ function popuniPodnise() {
         body: JSON.stringify({ 
           naziv, cena, kolicina, glavnaNisa, 
           podnisa: podnisa || null, 
-          opis: null,
+          opis: opis || null,
           slikaBase64: slikaBase64
         })
       });
