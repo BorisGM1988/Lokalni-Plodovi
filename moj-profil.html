@@ -775,9 +775,10 @@ function popuniPodnise() {
       } else {
         alert('Greška: ' + (result.error || 'Nešto nije u redu'));
       }
-    } catch (err) {
-      alert('Greška pri komunikaciji sa serverom.');
-    }
+ } catch (err) {
+  alert('Greška: ' + err.message);
+  console.error(err);
+}
   }
 
   document.getElementById('slika-proizvoda').addEventListener('change', function(e) {
