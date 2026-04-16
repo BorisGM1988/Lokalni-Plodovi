@@ -148,9 +148,50 @@
       margin-top: 6rem;
     }
 
-    @media (max-width: 768px) {
-      h1 { font-size: 2rem; }
-      .nishes-grid { gap: 2rem; }
+   @media (max-width: 768px) {
+  h1 { font-size: 1.8rem; margin: 1.5rem 0 2rem; }
+  
+  .nishes-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  .niche-img { height: 160px; }
+  .niche-title { font-size: 1.1rem; }
+  .niche-info { padding: 1rem; }
+  .btn { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
+
+  nav ul { display: none; }
+  nav ul.open { 
+    display: flex; 
+    flex-direction: column; 
+    position: absolute;
+    top: 70px; left: 0; right: 0;
+    background: rgba(46,125,50,0.97);
+    padding: 1rem 2rem 1.5rem;
+    gap: 1rem;
+    z-index: 999;
+  }
+  
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .hamburger span {
+    width: 28px; height: 3px;
+    background: white;
+    border-radius: 3px;
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .hamburger { display: none; }
+}
     }
   </style>
 </head>
@@ -159,6 +200,9 @@
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
+    <button class="hamburger" onclick="toggleMenu()" id="hamburger">
+  <span></span><span></span><span></span>
+</button>
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
@@ -391,6 +435,9 @@ s0.parentNode.insertBefore(s1,s0);
     localStorage.setItem('disclaimer_prihvacen', 'true');
     document.getElementById('disclaimer-banner').style.display = 'none';
   }
+  function toggleMenu() {
+  document.querySelector('nav ul').classList.toggle('open');
+}
 </script>
 </body>
 
