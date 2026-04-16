@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prijavi se – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="mobile.css">
   <style>
     body { font-family: 'Segoe UI', sans-serif; background: #f8f9f5; margin:0; padding:0; }
     header { background: #2e7d32; color: white; padding: 1rem; text-align: center; }
@@ -22,6 +23,9 @@
 
 <header>
   <h1>LokalniPlodovi</h1>
+  <button class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+  <span></span><span></span><span></span>
+</button>
   <nav>
     <a href="index.html">Početna</a>
     <a href="prodavci.html">Svi prodavci</a>
