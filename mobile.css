@@ -1,0 +1,208 @@
+/* ========================================
+   LOKALNI PLODOVI — MOBILNI RESPONSIVE CSS
+   Dodaj u SVE html fajlove:
+   <link rel="stylesheet" href="/mobile.css">
+   (za fajlove u podfolderima koristiti:)
+   <link rel="stylesheet" href="../../mobile.css">
+   ======================================== */
+
+@media (max-width: 768px) {
+
+  /* ── NAVIGACIJA ── */
+  header {
+    padding: 0.8rem 1rem !important;
+  }
+
+  .logo {
+    font-size: 1.3rem !important;
+  }
+
+  nav ul {
+    display: none !important;
+    flex-direction: column !important;
+    position: absolute !important;
+    top: 60px !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: rgba(46, 125, 50, 0.98) !important;
+    padding: 1rem 1.5rem 1.5rem !important;
+    gap: 0.8rem !important;
+    z-index: 9999 !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
+  }
+
+  nav ul.open {
+    display: flex !important;
+  }
+
+  nav ul li a {
+    font-size: 1.1rem !important;
+    padding: 0.3rem 0 !important;
+    display: block !important;
+  }
+
+  .hamburger {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    cursor: pointer !important;
+    background: none !important;
+    border: none !important;
+    padding: 4px !important;
+  }
+
+  .hamburger span {
+    width: 26px !important;
+    height: 3px !important;
+    background: white !important;
+    border-radius: 3px !important;
+    display: block !important;
+    transition: 0.3s !important;
+  }
+
+  /* ── GRID KARTICE (niše, prodavci, proizvodi) ── */
+  .nishes-grid,
+  .sellers-grid,
+  .products-grid,
+  .niche-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.8rem !important;
+  }
+
+  /* ── SLIKE KARTICA ── */
+  .niche-img,
+  .seller-img {
+    height: 130px !important;
+  }
+
+  /* ── TEKST KARTICA ── */
+  .niche-title,
+  .seller-name {
+    font-size: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .niche-info,
+  .seller-info {
+    padding: 0.8rem !important;
+  }
+
+  .btn,
+  .seller-btn {
+    padding: 0.6rem 1rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* ── NASLOVI STRANICA ── */
+  h1 {
+    font-size: 1.5rem !important;
+    margin: 1.2rem 0 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.2rem !important;
+  }
+
+  /* ── KONTEJNER ── */
+  .container {
+    padding: 1rem !important;
+  }
+
+  /* ── FORME (registracija, login) ── */
+  form {
+    padding: 1.2rem !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+  }
+
+  .checkbox-group {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 16px !important; /* sprečava zoom na iOS */
+    padding: 0.75rem !important;
+  }
+
+  .submit-btn {
+    font-size: 1rem !important;
+    padding: 0.9rem !important;
+  }
+
+  /* ── PROFIL STRANICA ── */
+  .profile-cover {
+    height: 160px !important;
+  }
+
+  .profile-avatar {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .profile-main {
+    padding: 80px 1rem 1.5rem !important;
+  }
+
+  .profile-name {
+    font-size: 1.8rem !important;
+  }
+
+  .profile-info-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .profile-actions {
+    flex-direction: column !important;
+  }
+
+  .profile-actions .btn {
+    min-width: unset !important;
+    width: 100% !important;
+  }
+
+  /* ── PODNISE STRANICE (proizvodjaci) ── */
+  .products-container,
+  #proizvodi-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 1rem 1.5rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* ── MODALI ── */
+  #dodaj-proizvod-modal > div,
+  #objavi-novost-modal > div,
+  #izmeni-profil-modal > div {
+    width: 95% !important;
+    padding: 1.2rem !important;
+    max-height: 85vh !important;
+  }
+
+  /* ── MAPA ── */
+  #map {
+    height: calc(100vh - 60px) !important;
+  }
+
+  /* ── DISCLAIMER BANNER ── */
+  #disclaimer-banner {
+    padding: 1rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ── HAMBURGER SAKRIVEN NA DESKTOPU ── */
+@media (min-width: 769px) {
+  .hamburger {
+    display: none !important;
+  }
+}
