@@ -6,6 +6,7 @@
   <title>Mapa prodavaca – LokalniPlodovi</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <link rel="stylesheet" href="mobile.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <style>
     :root {
@@ -132,6 +133,9 @@
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
+    <button class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+  <span></span><span></span><span></span>
+</button>
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
