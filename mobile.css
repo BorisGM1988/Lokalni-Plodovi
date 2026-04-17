@@ -233,15 +233,22 @@ nav ul {
   left: -1rem !important;
   right: -1rem !important;
 }
-  /* ── DISCLAIMER BANNER ── */
+ /* ── DISCLAIMER BANNER ── */
   #disclaimer-banner {
     padding: 1rem !important;
     font-size: 0.9rem !important;
   }
+
+  /* ── HAMBURGER VIDLJIV NA MOBILNOM ── */
+  .hamburger {
+    display: flex !important;
+  }
+
+} /* ← KRAJ @media (max-width: 768px) */
 
 /* ── HAMBURGER SAKRIVEN NA DESKTOPU ── */
 @media (min-width: 769px) {
   .hamburger {
     display: none !important;
   }
-   }
+}
