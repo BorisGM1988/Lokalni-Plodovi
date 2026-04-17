@@ -198,70 +198,7 @@
     padding: 1rem !important;
     font-size: 0.9rem !important;
   }
-/* ── PRILAGOĐEN CHAT ZA TVOJ KOD ── */
-  .chat-container {
-    flex-direction: column !important;
-    height: calc(100vh - 70px) !important;
-  }
 
-  /* Sakrivamo kanale na mobilnom da bi chat bio pregledan */
-  /* Možeš ih posle otvoriti nekim dugmetom ako želiš */
-  .channels {
-    display: none !important; 
-  }
-
-  .chat-area {
-    height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .messages {
-    flex: 1 !important;
-    padding: 15px !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .message {
-    max-width: 85% !important;
-    margin-bottom: 12px !important;
-    font-size: 0.95rem !important;
-    padding: 10px 14px !important;
-    border-radius: 15px !important;
-    line-height: 1.4 !important;
-  }
-
-  /* Tvoje poruke (Firebase koristi 'sent') */
-  .message.sent {
-    align-self: flex-end !important;
-    background: var(--zelena) !important;
-    color: white !important;
-    margin-left: auto !important;
-    border-bottom-right-radius: 2px !important;
-  }
-
-  /* Tuđe poruke (Firebase koristi 'received') */
-  .message.received {
-    align-self: flex-start !important;
-    background: #e0e0e0 !important;
-    color: #333 !important;
-    margin-right: auto !important;
-    border-bottom-left-radius: 2px !important;
-  }
-
-  .input-area {
-    padding: 10px !important;
-    position: sticky !important;
-    bottom: 0 !important;
-    background: white !important;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05) !important;
-  }
-
-  .input-area input {
-    font-size: 16px !important; /* Rešava zumiranje na iPhone */
-    padding: 12px !important;
-  }
 /* ── HAMBURGER SAKRIVEN NA DESKTOPU ── */
 @media (min-width: 769px) {
   .hamburger {
