@@ -8,8 +8,11 @@
   <link rel="stylesheet" href="mobile.css">
   <style>
     body { font-family: 'Segoe UI', sans-serif; background: #f8f9f5; margin:0; padding:0; }
-    header { background: #2e7d32; color: white; padding: 1rem; text-align: center; }
-    nav a { color: white; margin: 0 1rem; text-decoration: none; }
+    header { background: rgba(46,125,50,0.94); color: white; padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .logo { font-size: 1.8rem; font-weight: 700; }
+    nav { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+    nav ul { display: flex; list-style: none; gap: 2.5rem; margin: 0; padding: 0; }
+    nav a { color: white; text-decoration: none; font-weight: 500; }
     .container { max-width: 500px; margin: 4rem auto; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
     h1 { color: #2e7d32; text-align: center; }
     label { display: block; margin: 1rem 0 0.5rem; font-weight: bold; }
@@ -22,15 +25,18 @@
 <body>
 
 <header>
-  <h1>LokalniPlodovi</h1>
-  <button class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
-  <span></span><span></span><span></span>
-</button>
   <nav>
-    <a href="index.html">Početna</a>
-    <a href="prodavci.html">Svi prodavci</a>
-    <a href="mapa.html">Mapa</a>
-    <a href="chat.html">Chat</a>
+    <div class="logo">LokalniPlodovi</div>
+    <button class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+      <span></span><span></span><span></span>
+    </button>
+    <ul>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="Prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
+      <li><a href="registracija.html">Postani prodavac</a></li>
+    </ul>
   </nav>
 </header>
 
