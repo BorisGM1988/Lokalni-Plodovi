@@ -198,6 +198,76 @@
     padding: 1rem !important;
     font-size: 0.9rem !important;
   }
+ /* Popravka za Chat stranicu */
+  .chat-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 70px) !important; /* Oduzimamo visinu headera */
+    overflow: hidden;
+  }
+
+  #chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fdfdfd;
+  }
+
+  /* Balončići poruka */
+  .message {
+    max-width: 85% !important;
+    padding: 10px 14px !important;
+    border-radius: 18px !important;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+
+  /* Tvoja poruka desno, tuđa levo */
+  .my-message {
+    align-self: flex-end;
+    background-color: #2e7d32 !important;
+    color: white !important;
+    border-bottom-right-radius: 4px !important;
+  }
+
+  .other-message {
+    align-self: flex-start;
+    background-color: #e0e0e0 !important;
+    color: #333 !important;
+    border-bottom-left-radius: 4px !important;
+  }
+
+  /* Donja zona za kucanje - FIKSIRANA */
+  .chat-input-container {
+    padding: 10px !important;
+    background: white !important;
+    border-top: 1px solid #ddd !important;
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  #chat-input {
+    flex: 1 !important;
+    height: 45px !important;
+    border-radius: 25px !important;
+    border: 1px solid #ccc !important;
+    padding: 0 15px !important;
+    font-size: 16px !important; /* Važno: sprečava auto-zoom na iPhone-u */
+  }
+
+  #send-btn {
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }   
 }
 
 /* ── HAMBURGER SAKRIVEN NA DESKTOPU ── */
@@ -205,4 +275,4 @@
   .hamburger {
     display: none !important;
   }
-}
+   }
