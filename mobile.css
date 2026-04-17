@@ -192,7 +192,47 @@
   #map {
     height: calc(100vh - 60px) !important;
   }
+/* ── CHAT STRANICA ── */
+.chat-container {
+  flex-direction: column !important;
+}
 
+.channels {
+  width: 100% !important;
+  border-right: none !important;
+  border-bottom: 1px solid #ddd !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  padding: 0.8rem !important;
+}
+
+.channels h3 {
+  width: 100% !important;
+  margin-bottom: 0.3rem !important;
+}
+
+.channel {
+  padding: 0.5rem 0.8rem !important;
+  font-size: 0.85rem !important;
+  margin-bottom: 0 !important;
+}
+
+/* ── FIX ZA NAV DROPDOWN ── */
+header {
+  position: sticky !important;
+  overflow: visible !important;
+}
+
+nav {
+  position: relative !important;
+}
+
+nav ul {
+  top: 100% !important;
+  left: -1rem !important;
+  right: -1rem !important;
+}
   /* ── DISCLAIMER BANNER ── */
   #disclaimer-banner {
     padding: 1rem !important;
