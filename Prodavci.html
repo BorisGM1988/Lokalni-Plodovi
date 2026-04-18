@@ -97,6 +97,8 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.09);
       transition: all 0.3s ease;
       text-align: center;
+      display: flex;
+      flex-direction: column;
     }
 
     .seller-card:hover {
@@ -107,6 +109,7 @@
     .seller-img {
       height: 220px;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .seller-img img {
@@ -117,6 +120,9 @@
 
     .seller-info {
       padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
     }
 
     .seller-name {
@@ -133,8 +139,25 @@
 
     .seller-description {
       font-size: 0.95rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       color: #555;
+      flex: 1;
+    }
+
+    .prikazi-vise-btn {
+      background: none;
+      border: none;
+      color: #2e7d32;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0;
+      margin-bottom: 1rem;
+      text-decoration: underline;
+    }
+
+    .prikazi-vise-btn:hover {
+      color: #4caf50;
     }
 
     .seller-btn {
@@ -145,6 +168,8 @@
       text-decoration: none;
       font-weight: 600;
       transition: 0.25s;
+      margin-top: auto;
+      display: inline-block;
     }
 
     .seller-btn:hover {
@@ -165,9 +190,9 @@
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
-    <button class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
-  <span></span><span></span><span></span>
-</button>
+    <button class="hamburger" style="display:none;" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+      <span></span><span></span><span></span>
+    </button>
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
@@ -201,7 +226,6 @@
   </div>
 
   <div class="sellers-grid" id="prodavci-grid">
-    <!-- ovde će JS dinamički ubaciti kartice -->
   </div>
 
 </div>
@@ -212,16 +236,16 @@
     <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
     <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
     <p style="margin-top:0.5rem;">
-  <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
-  <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
-</p>
+      <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
+      <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
+    </p>
   </div>
 </footer>
+
 <script>
-  // Pametna navigacija
+  // Navigacija
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
-
     if (token) {
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
@@ -240,6 +264,7 @@
     window.location.href = 'index.html';
   }
 </script>
+
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -254,33 +279,49 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 <!--End of Tawk.to Script-->
 
-
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
+  const MAX_OPIS = 150;
+
+  // Čuvamo sve prodavce globalno da bi prikaziVise mogao da ih nađe
+  let sviProdavci = [];
+
+  function prikaziVise(id) {
+    const p = sviProdavci.find(x => x.id === id);
+    if (!p) return;
+
+    const opisEl = document.getElementById(`opis-${id}`);
+    const btnEl = document.getElementById(`btn-${id}`);
+
+    if (btnEl.textContent.includes('više')) {
+      opisEl.textContent = p.opis;
+      btnEl.textContent = 'Prikaži manje ▲';
+    } else {
+      opisEl.textContent = p.opis.substring(0, MAX_OPIS) + '...';
+      btnEl.textContent = 'Prikaži više ▼';
+    }
+  }
 
   async function ucitajProdavce() {
     try {
-      console.log('Pokušavam učitati sa:', `${backendUrl}/svi-prodavci`);
-
       const response = await fetch(`${backendUrl}/svi-prodavci`);
-      console.log('Status:', response.status);
+      if (!response.ok) throw new Error(`Server vratio ${response.status}`);
 
-      if (!response.ok) {
-        throw new Error(`Server vratio ${response.status}`);
-      }
-
-      const prodavci = await response.json();
-      console.log('Stigli podaci:', prodavci);
+      sviProdavci = await response.json();
 
       const grid = document.getElementById('prodavci-grid');
       grid.innerHTML = '';
 
-      if (prodavci.length === 0) {
+      if (sviProdavci.length === 0) {
         grid.innerHTML = '<p>Još nema registrovanih prodavaca.</p>';
         return;
       }
 
-      prodavci.forEach(p => {
+      sviProdavci.forEach(p => {
+        const opis = p.opis || 'Nema opisa';
+        const dugOpis = opis.length > MAX_OPIS;
+        const kratakOpis = dugOpis ? opis.substring(0, MAX_OPIS) + '...' : opis;
+
         const card = document.createElement('div');
         card.className = 'seller-card';
         card.innerHTML = `
@@ -290,15 +331,18 @@ s0.parentNode.insertBefore(s1,s0);
           <div class="seller-info">
             <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
             <div class="seller-location">${p.lokacija || 'Nepoznato'}</div>
-            <p class="seller-description">${p.opis || 'Nema opisa'}</p>
+            <p class="seller-description" id="opis-${p.id}">${kratakOpis}</p>
+            ${dugOpis ? `<button class="prikazi-vise-btn" id="btn-${p.id}" onclick="prikaziVise(${p.id})">Prikaži više ▼</button>` : ''}
             <a href="moj-profil.html?userId=${p.id}" class="seller-btn">Pogledaj profil</a>
           </div>
         `;
         grid.appendChild(card);
       });
+
     } catch (err) {
       console.error('Greška pri učitavanju prodavaca:', err);
-      document.getElementById('prodavci-grid').innerHTML = '<p style="color:red;">Greška pri učitavanju prodavaca (status: ' + (err.message || 'nepoznato') + ')</p>';
+      document.getElementById('prodavci-grid').innerHTML = 
+        '<p style="color:red;">Greška pri učitavanju prodavaca</p>';
     }
   }
 
@@ -306,3 +350,4 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 </body>
 </html>
+
