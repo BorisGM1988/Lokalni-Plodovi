@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Proizvođači Slanina – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="../../mobile.css">
   <style>
     :root {
       --zelena: #2e7d32;
@@ -113,6 +114,10 @@
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
+    <button class="hamburger" style="display:none;" 
+  onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+  <span></span><span></span><span></span>
+</button>
     <ul>
       <li><a href="../../index.html">Početna</a></li>
       <li><a href="../../Prodavci.html">Svi prodavci</a></li>
@@ -130,8 +135,8 @@
 
 <div class="container">
   <h1>Proizvođači Slanina</h1>
-  
-  <div id="proizvodi-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; min-height: 400px;"></div>
+
+  <div id="proizvodi-container"></div>
 </div>
 
 <footer>
