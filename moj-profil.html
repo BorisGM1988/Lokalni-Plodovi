@@ -229,16 +229,16 @@ nav a:hover { color: #e0f2f1; }
   flex-wrap: wrap;
   gap: 1.2rem;
   justify-content: center;
-  max-width: 600px;
+  max-width: 800px;
   margin: 3rem auto 0;
 }
 
 .btn {
   flex: 1;
-  min-width: 200px;
+  min-width: 180px;
   padding: 1.2rem;
   border-radius: 50px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -255,6 +255,9 @@ nav a:hover { color: #e0f2f1; }
 
 .btn-secondary { background: white; border: 2px solid #2e7d32; color: #2e7d32; }
 .btn-secondary:hover { background: #2e7d32; color: white; box-shadow: 0 6px 16px rgba(46,125,50,0.3); }
+
+.btn-tezga { background: #f59e0b; color: white; border: none; }
+.btn-tezga:hover { background: #d97706; box-shadow: 0 6px 16px rgba(245,158,11,0.3); }
 
 footer {
   background: #4b5563;
@@ -282,6 +285,68 @@ footer p { margin: 0; }
   max-height: 180px;
   object-fit: cover;
 }
+
+/* TEZGA MODAL STILOVI */
+.nisa-grupa {
+  margin-bottom: 1.5rem;
+}
+
+.nisa-grupa-naslov {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2e7d32;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid #e8f5e9;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tezga-proizvod {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.6rem;
+  transition: box-shadow 0.2s;
+}
+
+.tezga-proizvod:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.tezga-slika {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.tezga-slika-placeholder {
+  width: 60px;
+  height: 60px;
+  background: #e8f5e9;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.tezga-info { flex: 1; }
+.tezga-naziv { font-weight: 600; color: #333; font-size: 1rem; }
+.tezga-detalji { font-size: 0.85rem; color: #666; margin-top: 0.2rem; }
+.tezga-cena { font-weight: 700; color: #2e7d32; font-size: 1rem; white-space: nowrap; }
+
+.nisa-ikona {
+  font-size: 1.2rem;
+}
   </style>
 </head>
 <body>
@@ -289,11 +354,11 @@ footer p { margin: 0; }
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
- <button class="hamburger" 
-  style="display:none;" 
-  onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
-  <span></span><span></span><span></span>
- </button>
+    <button class="hamburger" 
+      style="display:none;" 
+      onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+      <span></span><span></span><span></span>
+    </button>
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
@@ -359,6 +424,7 @@ footer p { margin: 0; }
       <div class="profile-actions">
         <button class="btn btn-primary" onclick="objaviNovost()"><i class="fas fa-newspaper"></i> Objavi novost</button>
         <button class="btn btn-secondary" onclick="dodajProizvod()"><i class="fas fa-plus-circle"></i> Dodaj proizvod</button>
+        <button class="btn btn-tezga" onclick="pogledajTezgu()"><i class="fas fa-store"></i> Moja tezga</button>
       </div>
     </div>
   </div>
@@ -372,10 +438,37 @@ footer p { margin: 0; }
 <footer>
   <p>© 2025 LokalniPlodovi • Sva prava zadržana</p>
   <p style="margin-top:0.5rem;">
-  <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
-  <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
-</p>
+    <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
+    <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
+  </p>
 </footer>
+
+<!-- MODAL MOJA TEZGA -->
+<div id="tezga-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:600px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; display:flex; flex-direction:column;">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#f59e0b,#d97706); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+      <div>
+        <h2 style="margin:0; font-size:1.5rem;">🛒 Moja tezga</h2>
+        <p style="margin:0.3rem 0 0; opacity:0.85; font-size:0.9rem;">Svi moji proizvodi na jednom mestu</p>
+      </div>
+      <button onclick="zatvoriTezgu()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <!-- Sadržaj -->
+    <div id="tezga-sadrzaj" style="padding:1.5rem 2rem; overflow-y:auto; flex:1;">
+      <p style="text-align:center; color:#666; padding:2rem;">Učitavam proizvode...</p>
+    </div>
+    <!-- Footer modal -->
+    <div style="padding:1rem 2rem; border-top:1px solid #f0f0f0; flex-shrink:0; text-align:center;">
+      <button onclick="dodajProizvod(); zatvoriTezgu();" style="background:#2e7d32; color:white; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer; margin-right:1rem;">
+        <i class="fas fa-plus"></i> Dodaj novi proizvod
+      </button>
+      <button onclick="zatvoriTezgu()" style="background:#f0f0f0; color:#555; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer;">
+        Zatvori
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL DODAJ PROIZVOD -->
 <div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
@@ -443,8 +536,47 @@ footer p { margin: 0; }
   </div>
 </div>
 
+<!-- MODAL OBJAVI NOVOST -->
+<div id="objavi-novost-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:540px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
+    <div style="background:linear-gradient(135deg,#2e7d32,#4caf50); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2 style="margin:0; font-size:1.5rem;">📢 Objavi novost</h2>
+        <p style="margin:0.3rem 0 0; opacity:0.85; font-size:0.9rem;">Obavesti kupce o novostima</p>
+      </div>
+      <button onclick="zatvoriNovostModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:2rem;">
+      <textarea id="novost-tekst" rows="4" placeholder='npr. "Danas imamo sveže maline po akcijskoj ceni!"' style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit;" onfocus="this.style.borderColor='#4caf50'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+      <input type="file" id="novost-slika" accept="image/*" style="display:none;">
+      <div onclick="document.getElementById('novost-slika').click()" style="border:2px dashed #4caf50; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#f0fdf4; margin-top:1.2rem;">
+        <img id="preview-novost-slika" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; display:none;">
+        <div id="novost-zona-placeholder">
+          <div style="font-size:2rem;">📸</div>
+          <p style="margin:0.4rem 0 0; color:#4caf50; font-weight:600;">Dodaj sliku (opciono)</p>
+        </div>
+      </div>
+      <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+        <button onclick="zatvoriNovostModal()" style="flex:1; padding:14px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
+        <button onclick="posaljiNovost()" style="flex:2; padding:14px; border-radius:50px; background:linear-gradient(135deg,#2e7d32,#4caf50); color:white; border:none; font-weight:600; cursor:pointer;">📢 Objavi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
+  let trenutniUserId = null;
+
+  const nisaIkone = {
+    'Voće': '🍎',
+    'Povrće': '🥦',
+    'Mlečni proizvodi': '🥛',
+    'Meso': '🥩',
+    'Med': '🍯',
+    'Jaja': '🥚',
+    'Bilje i Zdravlje': '🌿'
+  };
 
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
@@ -514,6 +646,16 @@ footer p { margin: 0; }
         btn.style.display = isOwnProfile ? 'flex' : 'none';
       });
 
+      // Sačuvaj userId za tezgu
+      if (userIdParam) {
+        trenutniUserId = userIdParam;
+      } else if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          trenutniUserId = payload.userId;
+        } catch(e) {}
+      }
+
       ucitajObjave();
     } catch (err) {
       console.error('Greška pri učitavanju profila:', err);
@@ -521,6 +663,90 @@ footer p { margin: 0; }
     }
   }
 
+  // ── MOJA TEZGA ──
+  async function pogledajTezgu() {
+    document.getElementById('tezga-modal').style.display = 'flex';
+    const sadrzaj = document.getElementById('tezga-sadrzaj');
+    sadrzaj.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Učitavam proizvode...</p>';
+
+    if (!trenutniUserId) {
+      sadrzaj.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Nije moguće učitati proizvode.</p>';
+      return;
+    }
+
+    try {
+      const response = await fetch(`${backendUrl}/proizvodi?userId=${trenutniUserId}`);
+      if (!response.ok) throw new Error('Greška');
+
+      const proizvodi = await response.json();
+
+      if (proizvodi.length === 0) {
+        sadrzaj.innerHTML = `
+          <div style="text-align:center; padding:3rem 1rem; color:#666;">
+            <div style="font-size:3rem; margin-bottom:1rem;">🛒</div>
+            <p style="font-size:1.1rem;">Još nema proizvoda na tezgi.</p>
+            <p>Klikni "Dodaj novi proizvod" da počneš!</p>
+          </div>`;
+        return;
+      }
+
+      // Grupiši po nišama
+      const grupisano = {};
+      proizvodi.forEach(p => {
+        const nisa = p.glavnaNisa || 'Ostalo';
+        if (!grupisano[nisa]) grupisano[nisa] = [];
+        grupisano[nisa].push(p);
+      });
+
+      sadrzaj.innerHTML = '';
+
+      Object.entries(grupisano).forEach(([nisa, lista]) => {
+        const grupa = document.createElement('div');
+        grupa.className = 'nisa-grupa';
+
+        const naslov = document.createElement('div');
+        naslov.className = 'nisa-grupa-naslov';
+        naslov.innerHTML = `<span class="nisa-ikona">${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
+        grupa.appendChild(naslov);
+
+        lista.forEach(p => {
+          const item = document.createElement('div');
+          item.className = 'tezga-proizvod';
+          item.innerHTML = `
+            ${p.slika 
+              ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">`
+              : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`
+            }
+            <div class="tezga-info">
+              <div class="tezga-naziv">${p.naziv}</div>
+              <div class="tezga-detalji">
+                ${p.podnisa ? `${p.podnisa} • ` : ''}
+                Dostupno: ${p.kolicina} kg/kom
+                ${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}
+              </div>
+            </div>
+            <div class="tezga-cena">${p.cena} RSD</div>
+          `;
+          grupa.appendChild(item);
+        });
+
+        sadrzaj.appendChild(grupa);
+      });
+
+    } catch (err) {
+      sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju proizvoda.</p>';
+    }
+  }
+
+  function zatvoriTezgu() {
+    document.getElementById('tezga-modal').style.display = 'none';
+  }
+
+  document.getElementById('tezga-modal').addEventListener('click', function(e) {
+    if (e.target === this) zatvoriTezgu();
+  });
+
+  // ── OBJAVE ──
   async function ucitajObjave() {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -540,78 +766,79 @@ footer p { margin: 0; }
         return;
       }
 
-  objave.forEach(o => {
-  const div = document.createElement('div');
-  div.style = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
-  div.innerHTML = `
-  ${o.slika ? `<img src="${o.slika}" style="width:auto; max-width:100%; max-height:160px; display:block; margin:0 auto 0.8rem; border-radius:10px;">` : ''}
-    <p style="margin:0 0 0.6rem; font-size:1.05rem; line-height:1.5;">${o.tekst}</p>
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <small style="color:#888;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>
-      <button onclick="obrisiObjavu(${o.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;">🗑 Obriši</button>
-    </div>
-  `;
-  lista.appendChild(div);
-});
-} catch (err) {
+      objave.forEach(o => {
+        const div = document.createElement('div');
+        div.style = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
+        div.innerHTML = `
+          ${o.slika ? `<img src="${o.slika}" style="width:auto; max-width:100%; max-height:160px; display:block; margin:0 auto 0.8rem; border-radius:10px;">` : ''}
+          <p style="margin:0 0 0.6rem; font-size:1.05rem; line-height:1.5;">${o.tekst}</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <small style="color:#888;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>
+            <button onclick="obrisiObjavu(${o.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;">🗑 Obriši</button>
+          </div>
+        `;
+        lista.appendChild(div);
+      });
+    } catch (err) {
       document.getElementById('objave-lista').innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>';
     }
   }
+
   function odjaviSe() {
     localStorage.removeItem('token');
     window.location.href = 'index.html';
   }
 
   function objaviNovost() {
-  document.getElementById('objavi-novost-modal').style.display = 'flex';
-}
-
-function zatvoriNovostModal() {
-  document.getElementById('objavi-novost-modal').style.display = 'none';
-  document.getElementById('novost-tekst').value = '';
-  document.getElementById('novost-slika').value = '';
-  document.getElementById('preview-novost-slika').style.display = 'none';
-  document.getElementById('novost-zona-placeholder').style.display = 'block';
-}
-
-async function posaljiNovost() {
-  const tekst = document.getElementById('novost-tekst').value.trim();
-  if (!tekst) { alert('Unesite tekst objave!'); return; }
-
-  const token = localStorage.getItem('token');
-  if (!token) { alert('Morate biti ulogovani!'); return; }
-
-  let slikaBase64 = null;
-  const slikaFile = document.getElementById('novost-slika').files[0];
-  if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
-
-  try {
-    const res = await fetch(`${backendUrl}/objavi-novost`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify({ tekst, slikaBase64 })
-    });
-    if (!res.ok) throw new Error();
-    alert('✅ Objava uspešno dodata!');
-    zatvoriNovostModal();
-    ucitajObjave();
-  } catch {
-    alert('Greška pri objavljivanju');
+    document.getElementById('objavi-novost-modal').style.display = 'flex';
   }
-}
 
-async function obrisiObjavu(id) {
-  if (!confirm('Obrisati ovu objavu?')) return;
-  const token = localStorage.getItem('token');
-  try {
-    const res = await fetch(`${backendUrl}/objava/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (res.ok) { ucitajObjave(); }
-    else alert('Greška pri brisanju');
-  } catch { alert('Greška'); }
-}
+  function zatvoriNovostModal() {
+    document.getElementById('objavi-novost-modal').style.display = 'none';
+    document.getElementById('novost-tekst').value = '';
+    document.getElementById('novost-slika').value = '';
+    document.getElementById('preview-novost-slika').style.display = 'none';
+    document.getElementById('novost-zona-placeholder').style.display = 'block';
+  }
+
+  async function posaljiNovost() {
+    const tekst = document.getElementById('novost-tekst').value.trim();
+    if (!tekst) { alert('Unesite tekst objave!'); return; }
+
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti ulogovani!'); return; }
+
+    let slikaBase64 = null;
+    const slikaFile = document.getElementById('novost-slika').files[0];
+    if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
+
+    try {
+      const res = await fetch(`${backendUrl}/objavi-novost`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ tekst, slikaBase64 })
+      });
+      if (!res.ok) throw new Error();
+      alert('✅ Objava uspešno dodata!');
+      zatvoriNovostModal();
+      ucitajObjave();
+    } catch {
+      alert('Greška pri objavljivanju');
+    }
+  }
+
+  async function obrisiObjavu(id) {
+    if (!confirm('Obrisati ovu objavu?')) return;
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${backendUrl}/objava/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) { ucitajObjave(); }
+      else alert('Greška pri brisanju');
+    } catch { alert('Greška'); }
+  }
 
   function izmeniProfil() {
     document.getElementById('edit-ime').value = document.getElementById('profileName').textContent || '';
@@ -695,56 +922,56 @@ async function obrisiObjavu(id) {
       reader.readAsDataURL(file);
     }
   });
+
   const podnisePoNisi = {
-  'Voće': ['Šljiva','Jabuka','Malina','Jagoda','Višnja','Grožđe','Trešnje','Kajsija','Breskva','Kruška','Dunja','Kupina','Borovnica','Lubenica'],
-  'Povrće': ['Blitva','Cvekla','Crni i beli luk','Krastavac','Krompir','Kupus','Paprika','Paradajz','Patlidžan','Šargarepa','Spanać','Tikvice','Boranija','Grašak','Pasulj','Rotkvice'],
-  'Mlečni proizvodi': ['Kajmak','Sir','Pavlaka','Mleko','Jogurt','Maslac','Surutka'],
-  'Meso': ['Sveže meso','Pršuta','Čvarci','Kobasice','Kulen','Slanina'],
-  'Med': ['Bagremov med','Livadski med','Šumski med','Lipov med','Kestenov med','Borov med','Med sa saćem','Propolis'],
-  'Jaja': [],
-  'Bilje i Zdravlje': []
-};
+    'Voće': ['Šljiva','Jabuka','Malina','Jagoda','Višnja','Grožđe','Trešnje','Kajsija','Breskva','Kruška','Dunja','Kupina','Borovnica','Lubenica'],
+    'Povrće': ['Blitva','Cvekla','Crni i beli luk','Krastavac','Krompir','Kupus','Paprika','Paradajz','Patlidžan','Šargarepa','Spanać','Tikvice','Boranija','Grašak','Pasulj','Rotkvice'],
+    'Mlečni proizvodi': ['Kajmak','Sir','Pavlaka','Mleko','Jogurt','Maslac','Surutka'],
+    'Meso': ['Sveže meso','Pršuta','Čvarci','Kobasice','Kulen','Slanina'],
+    'Med': ['Bagremov med','Livadski med','Šumski med','Lipov med','Kestenov med','Borov med','Med sa saćem','Propolis'],
+    'Jaja': [],
+    'Bilje i Zdravlje': []
+  };
 
-function popuniPodnise() {
-  const nisa = document.getElementById('glavna-nisa').value;
-  const wrapper = document.getElementById('podnisa-wrapper');
-  const select = document.getElementById('podnisa');
-  const podnise = podnisePoNisi[nisa] || [];
-  
-  select.innerHTML = '<option value="">-- Izaberi --</option>';
-  
-  if (podnise.length > 0) {
-    podnise.forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p;
-      opt.textContent = p;
-      select.appendChild(opt);
-    });
-    wrapper.style.display = 'block';
-  } else {
-    wrapper.style.display = 'none'; // Jaja i Zdravlje nemaju podnišu
+  function popuniPodnise() {
+    const nisa = document.getElementById('glavna-nisa').value;
+    const wrapper = document.getElementById('podnisa-wrapper');
+    const select = document.getElementById('podnisa');
+    const podnise = podnisePoNisi[nisa] || [];
+    
+    select.innerHTML = '<option value="">-- Izaberi --</option>';
+    
+    if (podnise.length > 0) {
+      podnise.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        select.appendChild(opt);
+      });
+      wrapper.style.display = 'block';
+    } else {
+      wrapper.style.display = 'none';
+    }
   }
-}
 
-  // DODAVANJE PROIZVODA
   function dodajProizvod() {
     document.getElementById('dodaj-proizvod-modal').style.display = 'flex';
   }
 
   function zatvoriModal() {
-  document.getElementById('dodaj-proizvod-modal').style.display = 'none';
-  document.getElementById('naziv').value = '';
-  document.getElementById('cena').value = '';
-  document.getElementById('kolicina').value = '';
-  document.getElementById('glavna-nisa').value = '';
-  document.getElementById('podnisa').value = '';
-  document.getElementById('opis-proizvoda').value = '';
-  document.getElementById('slika-proizvoda').value = '';
-  document.getElementById('podnisa-wrapper').style.display = 'none';
-  document.getElementById('preview-slika').style.display = 'none';
+    document.getElementById('dodaj-proizvod-modal').style.display = 'none';
+    document.getElementById('naziv').value = '';
+    document.getElementById('cena').value = '';
+    document.getElementById('kolicina').value = '';
+    document.getElementById('glavna-nisa').value = '';
+    document.getElementById('podnisa').value = '';
+    document.getElementById('opis-proizvoda').value = '';
+    document.getElementById('slika-proizvoda').value = '';
+    document.getElementById('podnisa-wrapper').style.display = 'none';
+    document.getElementById('preview-slika').style.display = 'none';
   }
 
- async function izloziNaPijac() {
+  async function izloziNaPijac() {
     const naziv = document.getElementById('naziv').value.trim();
     const cena = parseFloat(document.getElementById('cena').value);
     const kolicina = parseInt(document.getElementById('kolicina').value);
@@ -761,12 +988,9 @@ function popuniPodnise() {
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti ulogovani!'); window.location.href = 'login.html'; return; }
 
-    // Konvertuj sliku u base64 ako je izabrana
     let slikaBase64 = null;
     const slikaFile = document.getElementById('slika-proizvoda').files[0];
-    if (slikaFile) {
-      slikaBase64 = await fileToBase64(slikaFile);
-    }
+    if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
 
     try {
       const response = await fetch(`${backendUrl}/dodaj-proizvod`, {
@@ -788,10 +1012,10 @@ function popuniPodnise() {
       } else {
         alert('Greška: ' + (result.error || 'Nešto nije u redu'));
       }
- } catch (err) {
-  alert('Greška: ' + err.message);
-  console.error(err);
-}
+    } catch (err) {
+      alert('Greška: ' + err.message);
+      console.error(err);
+    }
   }
 
   document.getElementById('slika-proizvoda').addEventListener('change', function(e) {
@@ -810,47 +1034,20 @@ function popuniPodnise() {
   document.getElementById('dodaj-proizvod-modal').addEventListener('click', function(e) {
     if (e.target === this) zatvoriModal();
   });
-document.addEventListener('change', function(e) {
-  if (e.target.id !== 'novost-slika') return;
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      document.getElementById('preview-novost-slika').src = ev.target.result;
-      document.getElementById('preview-novost-slika').style.display = 'block';
-      document.getElementById('novost-zona-placeholder').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
-  }
-});
-    </script>
-<!-- MODAL OBJAVI NOVOST -->
-<div id="objavi-novost-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
-  <div style="background:white; width:90%; max-width:540px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
-    <div style="background:linear-gradient(135deg,#2e7d32,#4caf50); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <h2 style="margin:0; font-size:1.5rem;">📢 Objavi novost</h2>
-        <p style="margin:0.3rem 0 0; opacity:0.85; font-size:0.9rem;">Obavesti kupce o novostima</p>
-      </div>
-      <button onclick="zatvoriNovostModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
-    </div>
-    <div style="padding:2rem;">
-     <textarea id="novost-tekst" rows="4" placeholder='npr. "Danas imamo sveže maline po akcijskoj ceni!"' style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit;" onfocus="this.style.borderColor='#4caf50'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
-     <input type="file" id="novost-slika" accept="image/*" style="display:none;">
-     <div onclick="document.getElementById('novost-slika').click()" style="border:2px dashed #4caf50; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#f0fdf4; margin-top:1.2rem;">
-        <img id="preview-novost-slika" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; display:none;">
-        <div id="novost-zona-placeholder">
-          <div style="font-size:2rem;">📸</div>
-          <p style="margin:0.4rem 0 0; color:#4caf50; font-weight:600;">Dodaj sliku (opciono)</p>
-        </div>
-       
-      </div>
-      <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-        <button onclick="zatvoriNovostModal()" style="flex:1; padding:14px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
-        <button onclick="posaljiNovost()" style="flex:2; padding:14px; border-radius:50px; background:linear-gradient(135deg,#2e7d32,#4caf50); color:white; border:none; font-weight:600; cursor:pointer;">📢 Objavi</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+  document.addEventListener('change', function(e) {
+    if (e.target.id !== 'novost-slika') return;
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        document.getElementById('preview-novost-slika').src = ev.target.result;
+        document.getElementById('preview-novost-slika').style.display = 'block';
+        document.getElementById('novost-zona-placeholder').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
 </body>
 </html>
