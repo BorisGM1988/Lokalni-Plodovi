@@ -414,7 +414,7 @@ footer p { margin: 0; }
 </div>
 
 <div id="objave-sekcija" style="margin-top: 3rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
-<h2 id="objave-naslov" style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
+  <h2 style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
   <div id="objave-lista" style="min-height: 120px;"></div>
 </div>
 
@@ -748,57 +748,23 @@ footer p { margin: 0; }
   });
 
   async function ucitajObjave() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const userIdParam = urlParams.get('userId');
-  const token = localStorage.getItem('token');
-  const lista = document.getElementById('objave-lista');
+    const token = localStorage.getItem('token');
+    if (!token) return;
 
-  try {
-    let response;
-
-    if (userIdParam) {
-      // Tuđi profil — koristi novu javnu rutu
-      response = await fetch(`${backendUrl}/objave/${userIdParam}`);
-    } else if (token) {
-      // Sopstveni profil — koristi staru rutu sa tokenom
-      response = await fetch(`${backendUrl}/moje-objave`, {
+    try {
+      const response = await fetch(`${backendUrl}/moje-objave`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-    } else {
-      lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Prijavite se da vidite objave.</p>';
-      return;
-    }
+      if (!response.ok) throw new Error('Greška');
 
-    if (!response.ok) throw new Error('Greška');
+      const objave = await response.json();
+      const lista = document.getElementById('objave-lista');
+      lista.innerHTML = '';
 
-    const objave = await response.json();
-    lista.innerHTML = '';
-
-    if (objave.length === 0) {
-      lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>';
-      return;
-    }
-
-    const isOwnProfile = !userIdParam;
-
-    objave.forEach(o => {
-      const div = document.createElement('div');
-      div.style = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
-      div.innerHTML = `
-        ${o.slika ? `<img src="${o.slika}" style="width:auto; max-width:100%; max-height:160px; display:block; margin:0 auto 0.8rem; border-radius:10px;">` : ''}
-        <p style="margin:0 0 0.6rem; font-size:1.05rem; line-height:1.5;">${o.tekst}</p>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <small style="color:#888;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>
-          ${isOwnProfile ? `<button onclick="obrisiObjavu(${o.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;">🗑 Obriši</button>` : ''}
-        </div>
-      `;
-      lista.appendChild(div);
-    });
-
-  } catch (err) {
-    lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>';
-  }
-}
+      if (objave.length === 0) {
+        lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>';
+        return;
+      }
 
       objave.forEach(o => {
         const div = document.createElement('div');
