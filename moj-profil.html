@@ -413,8 +413,9 @@ footer p { margin: 0; }
   </div>
 </div>
 
+<!-- IZMENA 1: dodat id="objave-naslov" -->
 <div id="objave-sekcija" style="margin-top: 3rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
-  <h2 style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
+  <h2 id="objave-naslov" style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
   <div id="objave-lista" style="min-height: 120px;"></div>
 </div>
 
@@ -439,7 +440,6 @@ footer p { margin: 0; }
     <div id="tezga-sadrzaj" style="padding:1.5rem 2rem; overflow-y:auto; flex:1;">
       <p style="text-align:center; color:#666; padding:2rem;">Učitavam proizvode...</p>
     </div>
-    <!-- IZMENA 2: dugme skriveno po defaultu, prikazuje se samo vlasniku -->
     <div style="padding:1rem 2rem; border-top:1px solid #f0f0f0; flex-shrink:0; text-align:center;">
       <button id="tezga-dodaj-btn" onclick="dodajProizvod(); zatvoriTezgu();" style="display:none; background:#2e7d32; color:white; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer; margin-right:1rem;">
         <i class="fas fa-plus"></i> Dodaj novi proizvod
@@ -492,40 +492,30 @@ footer p { margin: 0; }
 
 <!-- MODAL ZA IZMENU PROFILA -->
 <div id="izmeni-profil-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
-  
   <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); display:flex; flex-direction:column; max-height:90vh; overflow:hidden;">
-    
     <h2 style="margin-top:0; color:#2e7d32; flex-shrink:0;">Izmeni profil</h2>
-    
     <div style="overflow-y: auto; flex: 1; padding-right: 5px;">
         <form id="izmeni-profil-form">
           <label>Ime</label>
           <input type="text" id="edit-ime" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
-          
           <label>Opis</label>
           <textarea id="edit-opis" rows="4" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;"></textarea>
-          
           <label>Telefon</label>
           <input type="tel" id="edit-telefon" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
-          
           <label>Lokacija</label>
           <input type="text" id="edit-lokacija" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
-          
           <label>Profilna slika</label>
           <input type="file" id="edit-profilna-slika" accept="image/*" style="margin:8px 0; display:block;">
           <img id="preview-profilna" style="width:120px; height:120px; border-radius:50%; object-fit:cover; margin:8px 0; display:none;">
-          
           <label>Naslovna fotografija</label>
           <input type="file" id="edit-naslovna-slika" accept="image/*" style="margin:8px 0; display:block;">
           <img id="preview-naslovna" style="width:100%; max-height:180px; object-fit:cover; margin:8px 0; display:none;">
         </form>
     </div>
-
     <div style="margin-top:1.5rem; display:flex; gap:1rem; flex-shrink:0;">
         <button type="button" onclick="zatvoriIzmeniModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
         <button type="button" onclick="sacuvajIzmene()" style="flex:1; padding:12px; border-radius:50px; background:#2e7d32; color:white; border:none; font-weight:600; cursor:pointer;">Sačuvaj izmene</button>
     </div>
-    
   </div>
 </div>
 
@@ -631,7 +621,6 @@ footer p { margin: 0; }
       const editBtn = document.querySelector('.profile-edit-btn');
       if (editBtn) editBtn.style.display = isOwnProfile ? 'block' : 'none';
 
-      // IZMENA 1: tezga uvek vidljiva svima, ostala dugmad samo vlasniku
       document.querySelectorAll('.profile-actions button').forEach(btn => {
         if (btn.classList.contains('btn-tezga')) {
           btn.style.display = 'flex';
@@ -643,13 +632,11 @@ footer p { margin: 0; }
         }
       });
 
-      // IZMENA 2: dugme "Dodaj" u tezgi samo vlasniku
       const tezgaDodajBtn = document.getElementById('tezga-dodaj-btn');
       if (tezgaDodajBtn) {
         tezgaDodajBtn.style.display = isOwnProfile ? 'inline-block' : 'none';
       }
 
-      // Sačuvaj userId za tezgu
       if (userIdParam) {
         trenutniUserId = userIdParam;
       } else if (token) {
@@ -747,18 +734,31 @@ footer p { margin: 0; }
     if (e.target === this) zatvoriTezgu();
   });
 
+  // IZMENA 2: ucitajObjave sada prikazuje objave svima
   async function ucitajObjave() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userIdParam = urlParams.get('userId');
     const token = localStorage.getItem('token');
-    if (!token) return;
+    const lista = document.getElementById('objave-lista');
+    const naslov = document.getElementById('objave-naslov');
 
     try {
-      const response = await fetch(`${backendUrl}/moje-objave`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!response.ok) throw new Error('Greška');
+      let response;
+      if (userIdParam) {
+        response = await fetch(`${backendUrl}/objave/${userIdParam}`);
+        if (naslov) naslov.textContent = 'Objave prodavca';
+      } else if (token) {
+        response = await fetch(`${backendUrl}/moje-objave`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (naslov) naslov.textContent = 'Moje objave';
+      } else {
+        lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Nema objava.</p>';
+        return;
+      }
 
+      if (!response.ok) throw new Error('Greška');
       const objave = await response.json();
-      const lista = document.getElementById('objave-lista');
       lista.innerHTML = '';
 
       if (objave.length === 0) {
@@ -766,6 +766,7 @@ footer p { margin: 0; }
         return;
       }
 
+      const isOwnProfile = !userIdParam;
       objave.forEach(o => {
         const div = document.createElement('div');
         div.style = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
@@ -774,13 +775,13 @@ footer p { margin: 0; }
           <p style="margin:0 0 0.6rem; font-size:1.05rem; line-height:1.5;">${o.tekst}</p>
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <small style="color:#888;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>
-            <button onclick="obrisiObjavu(${o.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;">🗑 Obriši</button>
+            ${isOwnProfile ? `<button onclick="obrisiObjavu(${o.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;">🗑 Obriši</button>` : ''}
           </div>
         `;
         lista.appendChild(div);
       });
     } catch (err) {
-      document.getElementById('objave-lista').innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>';
+      lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>';
     }
   }
 
