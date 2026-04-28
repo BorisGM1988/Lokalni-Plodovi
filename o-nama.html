@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>O nama • LokalniPlodovi.rs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: url('https://thumbs.dreamstime.com/b/serbian-rural-village-green-springtime-landscape-mountains-serbia-very-123806888.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(248, 249, 245, 0.78);
+      z-index: -1;
+    }
+
+    /* Header - isti kao na svim stranicama */
+    header {
+      background: rgba(46, 125, 50, 0.94);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .logo { font-size: 1.8rem; font-weight: 700; }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a { color: white; text-decoration: none; font-weight: 500; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 5rem;
+    }
+
+    h1 {
+      color: var(--zemlja);
+      text-align: center;
+      font-size: 2.8rem;
+      margin: 2.5rem 0 1.5rem;
+    }
+
+    .mission {
+      font-size: 1.35rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 4rem;
+      color: #444;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .value-card {
+      background: white;
+      border-radius: 18px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .value-card i {
+      font-size: 3.5rem;
+      color: var(--zelena);
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <button class="hamburger" onclick="toggleMenu()" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+    <ul>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="Prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const token = localStorage.getItem('token');
+  if (token) {
+    document.getElementById('moj-profil-li').style.display = 'list-item';
+    document.getElementById('odjavi-se-li').style.display = 'list-item';
+    document.getElementById('prijavi-se-li').style.display = 'none';
+    document.getElementById('postani-prodavac-li').style.display = 'none';
+  } else {
+    document.getElementById('moj-profil-li').style.display = 'none';
+    document.getElementById('odjavi-se-li').style.display = 'none';
+    document.getElementById('prijavi-se-li').style.display = 'list-item';
+    document.getElementById('postani-prodavac-li').style.display = 'list-item';
+  }
+
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+  }
+  function toggleMenu() {
+    document.querySelector('nav ul').classList.toggle('open');
+  }
+</script>
+
+<div class="container">
+  <h1>O nama</h1>
+  <p class="mission">
+    LokalniPlodovi.rs je pokrenut iz želje da se spoje mali proizvođači hrane sa kupcima koji žele sveže, domaće i kvalitetne proizvode direktno sa imanja.
+  </p>
+
+  <div style="text-align:center; max-width:800px; margin:0 auto 4rem; font-size:1.2rem;">
+    <p>
+      Verujemo da hrana ima priču. Iza svakog paradajza, tegla meda ili krompira stoji nečiji rad, znoj i ljubav prema zemlji. 
+      Naš cilj je da tu priču približimo ljudima i omogućimo da se kupuje <strong>direktno od onoga ko proizvodi</strong>.
+    </p>
+  </div>
+
+  <h2 style="text-align:center; color:var(--zelena); margin:3rem 0 2rem;">Naše vrednosti</h2>
+
+  <div class="values-grid">
+    <div class="value-card">
+      <i class="fas fa-leaf"></i>
+      <h3>Pravo sa imanja</h3>
+      <p>Samo lokalni proizvođači. Bez posrednika. Bez velikih lanaca.</p>
+    </div>
+    <div class="value-card">
+      <i class="fas fa-users"></i>
+      <h3>Poverenje i transparentnost</h3>
+      <p>Svaki prodavac ima profil, slike sa imanja i mogućnost direktne komunikacije.</p>
+    </div>
+    <div class="value-card">
+      <i class="fas fa-heart"></i>
+      <h3>Podrška malima</h3>
+      <p>Pomažemo malim domaćinstvima i porodičnim gazdinstvima da dopru do kupaca.</p>
+    </div>
+    <div class="value-card">
+      <i class="fas fa-seedling"></i>
+      <h3>Zdravo i prirodno</h3>
+      <p>Podržavamo tradicionalan način gajenja i očuvanje starih sorti.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:5rem; text-align:center; background:white; padding:3rem; border-radius:18px; box-shadow:0 8px 25px rgba(0,0,0,0.1);">
+    <h3 style="color:var(--zelena);">Želiš da budeš deo priče?</h3>
+    <p style="margin:1.5rem 0; font-size:1.2rem;">Bilo da si proizvođač ili kupac koji voli domaće — dobrodošao si!</p>
+    <a href="registracija.html" class="btn" style="background:#4caf50; color:white; padding:1rem 3rem; font-size:1.3rem; border-radius:50px; text-decoration:none;">
+      Postani prodavac
+    </a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer style="background: #5d4037; color: white; padding: 3rem 1rem 2rem; text-align:center;">
+  <div class="container">
+    <h2>LokalniPlodovi</h2>
+    <p>Prirodno • Zdravo • Direktno sa imanja</p>
+    <p style="margin-top:2rem; opacity:0.9;">© 2026 LokalniPlodovi</p>
+    <p style="margin-top:0.8rem;">
+      <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
+      <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
