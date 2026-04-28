@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roadmap • LokalniPlodovi.rs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: url('https://thumbs.dreamstime.com/b/serbian-rural-village-green-springtime-landscape-mountains-serbia-very-123806888.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(248, 249, 245, 0.78);
+      z-index: -1;
+    }
+
+    /* Header - identičan kao na ostalim stranicama */
+    header {
+      background: rgba(46, 125, 50, 0.94);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .logo { font-size: 1.8rem; font-weight: 700; }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a { color: white; text-decoration: none; font-weight: 500; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 5rem;
+    }
+
+    h1 {
+      color: var(--zemlja);
+      text-align: center;
+      font-size: 2.8rem;
+      margin: 2.5rem 0 1rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #555;
+      margin-bottom: 4rem;
+    }
+
+    .roadmap {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .roadmap::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: #4caf50;
+      transform: translateX(-50%);
+      border-radius: 10px;
+    }
+
+    .milestone {
+      margin: 4rem 0;
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      position: relative;
+    }
+
+    .milestone:nth-child(even) { flex-direction: row-reverse; }
+
+    .milestone-card {
+      background: white;
+      border-radius: 18px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      width: 48%;
+      position: relative;
+    }
+
+    .milestone-card.completed {
+      border-left: 6px solid #2e7d32;
+    }
+
+    .milestone-card.in-progress {
+      border-left: 6px solid #f0ad4e;
+    }
+
+    .milestone-card.future {
+      border-left: 6px solid #777;
+    }
+
+    .status {
+      position: absolute;
+      top: -15px;
+      right: 20px;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .completed .status { background: #2e7d32; color: white; }
+    .in-progress .status { background: #f0ad4e; color: white; }
+    .future .status { background: #777; color: white; }
+
+    .icon-circle {
+      width: 80px;
+      height: 80px;
+      background: var(--zelena-svetla);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(76,175,80,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">LokalniPlodovi</div>
+    <button class="hamburger" onclick="toggleMenu()" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+    <ul>
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="Prodavci.html">Svi prodavci</a></li>
+      <li><a href="mapa.html">Mapa</a></li>
+      <li><a href="chat.html">Chat</a></li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const token = localStorage.getItem('token');
+  if (token) {
+    document.getElementById('moj-profil-li').style.display = 'list-item';
+    document.getElementById('odjavi-se-li').style.display = 'list-item';
+    document.getElementById('prijavi-se-li').style.display = 'none';
+    document.getElementById('postani-prodavac-li').style.display = 'none';
+  } else {
+    document.getElementById('moj-profil-li').style.display = 'none';
+    document.getElementById('odjavi-se-li').style.display = 'none';
+    document.getElementById('prijavi-se-li').style.display = 'list-item';
+    document.getElementById('postani-prodavac-li').style.display = 'list-item';
+  }
+
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+  }
+  function toggleMenu() {
+    document.querySelector('nav ul').classList.toggle('open');
+  }
+</script>
+
+<div class="container">
+  <h1>🗺️ Naš Roadmap</h1>
+  <p class="subtitle">Gde smo sada i kuda idemo zajedno</p>
+
+  <div class="roadmap">
+
+    <!-- 1. Već realizovano -->
+    <div class="milestone completed">
+      <div class="icon-circle">✅</div>
+      <div class="milestone-card completed">
+        <div class="status">ZAVRŠENO</div>
+        <h3>Osnovna platforma</h3>
+        <ul style="margin-top:1rem; line-height:1.8;">
+          <li>✓ Registracija i profil prodavaca</li>
+          <li>✓ Dodavanje proizvoda po nišama</li>
+          <li>✓ Mapa proizvođača</li>
+          <li>✓ Osnovni chat</li>
+          <li>✓ Responsivan dizajn</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. U toku / Sledeće -->
+    <div class="milestone in-progress">
+      <div class="icon-circle">🚀</div>
+      <div class="milestone-card in-progress">
+        <div class="status">U TOKU</div>
+        <h3>Kratkoročno (April - Maj 2026)</h3>
+        <ul style="margin-top:1rem; line-height:1.8;">
+          <li>→ Interna poruka između kupca i prodavca (direktan chat)</li>
+          <li>→ Poboljšani profil prodavca (ocjene i recenzije)</li>
+          <li>→ Notifikacije (email + u app-u)</li>
+          <li>→ Bolja pretraga i filteri</li>
+          <li>→ Integracija društvenih mreža (Instagram, TikTok, YouTube)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. Srednjoročno -->
+    <div class="milestone">
+      <div class="icon-circle">📦</div>
+      <div class="milestone-card">
+        <div class="status">Srednjoročno</div>
+        <h3>Srednjoročno (Jun - Avgust 2026)</h3>
+        <ul style="margin-top:1rem; line-height:1.8;">
+          <li>→ Sistem plaćanja na platformi</li>
+          <li>→ Dostava / dogovor o preuzimanju</li>
+          <li>→ Prodavac dashboard (statistika prodaje)</li>
+          <li>→ Favoriti i lista želja</li>
+          <li>→ Mobilna aplikacija (u razvoju)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4. Dugoročno -->
+    <div class="milestone">
+      <div class="icon-circle">🌱</div>
+      <div class="milestone-card">
+        <div class="status">Dugoročno</div>
+        <h3>Dugoročno (2026/2027)</h3>
+        <ul style="margin-top:1rem; line-height:1.8;">
+          <li>→ Pretplata na sezonske proizvode (CSA model)</li>
+          <li>→ Blog i recepti sa lokalnim proizvodima</li>
+          <li>→ Partnerstva sa restoranima i pijacama</li>
+          <li>→ Višejezična podrška</li>
+          <li>→ Ekološki sertifikati i praćenje porekla</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; margin-top:5rem; padding:2rem; background:white; border-radius:18px;">
+    <p style="font-size:1.3rem;">Želiš neku funkciju da dodamo ranije?<br>
+    <strong>Javi nam se</strong> — tvoje ideje su nam veoma važne!</p>
+    <a href="kontakt.html" class="btn" style="margin-top:1.5rem; font-size:1.3rem; padding:1rem 3rem;">Pošalji predlog</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer style="background: #5d4037; color: white; padding: 3rem 1rem 2rem; text-align:center;">
+  <div class="container">
+    <h2>LokalniPlodovi</h2>
+    <p>Prirodno • Zdravo • Direktno sa imanja</p>
+    <p style="margin-top:2rem; opacity:0.9;">© 2026 LokalniPlodovi</p>
+    <p style="margin-top:0.8rem;">
+      <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
+      <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
