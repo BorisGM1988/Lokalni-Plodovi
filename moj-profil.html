@@ -142,6 +142,16 @@ nav a:hover { color: #e0f2f1; }
 .profile-header {
   text-align: center;
   margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.profile-header-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .profile-name {
@@ -160,7 +170,6 @@ nav a:hover { color: #e0f2f1; }
 }
 
 .profile-edit-btn {
-  margin-top: 1.5rem;
   background: #4caf50;
   color: white;
   border: none;
@@ -175,6 +184,57 @@ nav a:hover { color: #e0f2f1; }
 .profile-edit-btn:hover {
   background: #388e3c;
   box-shadow: 0 6px 16px rgba(76,175,80,0.4);
+}
+
+.btn-poruka {
+  background: #1877f2;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 12px rgba(24,119,242,0.3);
+  display: none;
+}
+
+.btn-poruka:hover {
+  background: #1558b0;
+}
+
+.btn-inbox {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 12px rgba(124,58,237,0.3);
+  display: none;
+  position: relative;
+}
+
+.btn-inbox:hover {
+  background: #6d28d9;
+}
+
+.inbox-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
 }
 
 .profile-info-grid {
@@ -331,6 +391,53 @@ footer p { margin: 0; }
 .tezga-detalji { font-size: 0.85rem; color: #666; margin-top: 0.2rem; }
 .tezga-cena { font-weight: 700; color: #2e7d32; font-size: 1rem; white-space: nowrap; }
 .nisa-ikona { font-size: 1.2rem; }
+
+/* INBOX PORUKA STIL */
+.poruka-card {
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.8rem;
+  transition: box-shadow 0.2s;
+}
+
+.poruka-card.neprocitana {
+  border-left: 4px solid #7c3aed;
+  background: #faf5ff;
+}
+
+.poruka-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+.poruka-od {
+  font-weight: 700;
+  color: #1e40af;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+.poruka-tekst {
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.poruka-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.poruka-vreme {
+  color: #888;
+  font-size: 0.82rem;
+}
+
+.poruka-akcije {
+  display: flex;
+  gap: 0.5rem;
+}
   </style>
 </head>
 <body>
@@ -374,7 +481,16 @@ footer p { margin: 0; }
       <div class="profile-header">
         <h1 class="profile-name" id="profileName">Učitavanje...</h1>
         <p class="profile-bio" id="profileBio">Opis domaćinstva...</p>
-        <button class="profile-edit-btn" onclick="izmeniProfil()">Izmeni profil</button>
+        <div class="profile-header-btns">
+          <button class="profile-edit-btn" onclick="izmeniProfil()">Izmeni profil</button>
+          <button class="btn-inbox" id="btn-inbox" onclick="otvoriInbox()">
+            <i class="fas fa-inbox"></i> Inbox
+            <span class="inbox-badge" id="inbox-badge" style="display:none;">0</span>
+          </button>
+          <button class="btn-poruka" id="btn-poruka" onclick="otvoriPosaljiPoruku()">
+            <i class="fas fa-envelope"></i> Pošalji poruku
+          </button>
+        </div>
       </div>
 
       <div class="profile-info-grid">
@@ -413,7 +529,6 @@ footer p { margin: 0; }
   </div>
 </div>
 
-<!-- IZMENA 1: dodat id="objave-naslov" -->
 <div id="objave-sekcija" style="margin-top: 3rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
   <h2 id="objave-naslov" style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
   <div id="objave-lista" style="min-height: 120px;"></div>
@@ -426,6 +541,46 @@ footer p { margin: 0; }
     <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
   </p>
 </footer>
+
+<!-- MODAL POŠALJI PORUKU -->
+<div id="poruka-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:500px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#1877f2,#1558b0); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2 style="margin:0; font-size:1.4rem;">✉️ Pošalji poruku</h2>
+        <p id="poruka-primalac" style="margin:0.3rem 0 0; opacity:0.85; font-size:0.9rem;"></p>
+      </div>
+      <button onclick="zatvoriPorukuModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:1.5rem 2rem;">
+      <textarea id="poruka-tekst" rows="5" placeholder="Napišite vašu poruku ovde..." style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit;" onfocus="this.style.borderColor='#1877f2'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+      <p style="color:#888; font-size:0.85rem; margin:0.5rem 0 1rem;">Morate biti prijavljeni da biste poslali poruku.</p>
+      <div style="display:flex; gap:1rem;">
+        <button onclick="zatvoriPorukuModal()" style="flex:1; padding:12px; border-radius:50px; background:#f0f0f0; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
+        <button onclick="posaljiPoruku()" style="flex:2; padding:12px; border-radius:50px; background:#1877f2; color:white; border:none; font-weight:600; cursor:pointer;">✉️ Pošalji</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INBOX -->
+<div id="inbox-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:600px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; display:flex; flex-direction:column;">
+    <div style="background:linear-gradient(135deg,#7c3aed,#6d28d9); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+      <div>
+        <h2 style="margin:0; font-size:1.4rem;">📬 Inbox</h2>
+        <p style="margin:0.3rem 0 0; opacity:0.85; font-size:0.9rem;">Primljene poruke</p>
+      </div>
+      <button onclick="zatvoriInbox()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div id="inbox-sadrzaj" style="padding:1.5rem 2rem; overflow-y:auto; flex:1;">
+      <p style="text-align:center; color:#666; padding:2rem;">Učitavam poruke...</p>
+    </div>
+    <div style="padding:1rem 2rem; border-top:1px solid #f0f0f0; flex-shrink:0; text-align:center;">
+      <button onclick="zatvoriInbox()" style="background:#f0f0f0; color:#555; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer;">Zatvori</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL MOJA TEZGA -->
 <div id="tezga-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
@@ -550,6 +705,7 @@ footer p { margin: 0; }
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   let trenutniUserId = null;
+  let profilIme = '';
 
   const nisaIkone = {
     'Voće': '🍎', 'Povrće': '🥦', 'Mlečni proizvodi': '🥛',
@@ -588,6 +744,7 @@ footer p { margin: 0; }
       if (!response.ok) throw new Error(`Greška: ${response.status}`);
 
       const data = await response.json();
+      profilIme = data.ime || 'Prodavac';
 
       document.getElementById('profileName').textContent = data.ime || 'Korisnik';
       document.getElementById('profileBio').textContent = data.opis || 'Nema opisa';
@@ -619,7 +776,18 @@ footer p { margin: 0; }
 
       const isOwnProfile = !userIdParam;
       const editBtn = document.querySelector('.profile-edit-btn');
-      if (editBtn) editBtn.style.display = isOwnProfile ? 'block' : 'none';
+      if (editBtn) editBtn.style.display = isOwnProfile ? 'inline-block' : 'none';
+
+      // Inbox — samo vlasniku
+      const btnInbox = document.getElementById('btn-inbox');
+      if (btnInbox) btnInbox.style.display = isOwnProfile ? 'inline-block' : 'none';
+
+      // Pošalji poruku — samo na tuđim profilima, samo ulogovanim
+      const btnPoruka = document.getElementById('btn-poruka');
+      if (btnPoruka) {
+        btnPoruka.style.display = (!isOwnProfile && token) ? 'inline-block' : 'none';
+        document.getElementById('poruka-primalac').textContent = `Poruka za: ${profilIme}`;
+      }
 
       document.querySelectorAll('.profile-actions button').forEach(btn => {
         if (btn.classList.contains('btn-tezga')) {
@@ -646,6 +814,11 @@ footer p { margin: 0; }
         } catch(e) {}
       }
 
+      // Učitaj broj nepročitanih ako je sopstveni profil
+      if (isOwnProfile && token) {
+        ucitajBrojNeprocitanih();
+      }
+
       ucitajObjave();
     } catch (err) {
       console.error('Greška pri učitavanju profila:', err);
@@ -653,6 +826,159 @@ footer p { margin: 0; }
     }
   }
 
+  // ── PORUKE ──
+  function otvoriPosaljiPoruku() {
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti prijavljeni da biste poslali poruku!'); return; }
+    document.getElementById('poruka-tekst').value = '';
+    document.getElementById('poruka-modal').style.display = 'flex';
+  }
+
+  function zatvoriPorukuModal() {
+    document.getElementById('poruka-modal').style.display = 'none';
+  }
+
+  async function posaljiPoruku() {
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti prijavljeni!'); return; }
+
+    const tekst = document.getElementById('poruka-tekst').value.trim();
+    if (!tekst) { alert('Unesite tekst poruke!'); return; }
+
+    try {
+      const res = await fetch(`${backendUrl}/poruka`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ ka_user_id: trenutniUserId, tekst })
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert('✅ Poruka uspešno poslata!');
+        zatvoriPorukuModal();
+      } else {
+        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+      }
+    } catch (err) {
+      alert('Greška pri slanju poruke');
+    }
+  }
+
+  async function ucitajBrojNeprocitanih() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const res = await fetch(`${backendUrl}/inbox/broj`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      const badge = document.getElementById('inbox-badge');
+      if (data.broj > 0) {
+        badge.textContent = data.broj;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    } catch (err) {}
+  }
+
+  async function otvoriInbox() {
+    document.getElementById('inbox-modal').style.display = 'flex';
+    const sadrzaj = document.getElementById('inbox-sadrzaj');
+    sadrzaj.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Učitavam poruke...</p>';
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      sadrzaj.innerHTML = '<p style="text-align:center; color:#666;">Morate biti prijavljeni.</p>';
+      return;
+    }
+
+    try {
+      const res = await fetch(`${backendUrl}/inbox`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const poruke = await res.json();
+
+      if (poruke.length === 0) {
+        sadrzaj.innerHTML = `
+          <div style="text-align:center; padding:3rem 1rem; color:#666;">
+            <div style="font-size:3rem; margin-bottom:1rem;">📭</div>
+            <p style="font-size:1.1rem;">Nema primljenih poruka.</p>
+          </div>`;
+        return;
+      }
+
+      sadrzaj.innerHTML = '';
+      poruke.forEach(p => {
+        const div = document.createElement('div');
+        div.className = `poruka-card ${!p.procitano ? 'neprocitana' : ''}`;
+        div.innerHTML = `
+          <div class="poruka-od">
+            ${p.odSlika ? `<img src="${p.odSlika}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; margin-right:6px; vertical-align:middle;">` : ''}
+            ${p.odIme || 'Nepoznat'}
+            ${!p.procitano ? '<span style="background:#7c3aed; color:white; font-size:0.7rem; padding:2px 8px; border-radius:50px; margin-left:8px;">Novo</span>' : ''}
+          </div>
+          <div class="poruka-tekst">${p.tekst}</div>
+          <div class="poruka-footer">
+            <span class="poruka-vreme">${new Date(p.created_at).toLocaleString('sr-RS')}</span>
+            <div class="poruka-akcije">
+              ${!p.procitano ? `<button onclick="oznациProcitano(${p.id}, this)" style="background:#7c3aed; color:white; border:none; padding:4px 12px; border-radius:8px; cursor:pointer; font-size:0.8rem;">✓ Pročitano</button>` : ''}
+              <button onclick="obrisiPoruku(${p.id}, this)" style="background:#d32f2f; color:white; border:none; padding:4px 12px; border-radius:8px; cursor:pointer; font-size:0.8rem;">🗑</button>
+            </div>
+          </div>
+        `;
+        sadrzaj.appendChild(div);
+      });
+
+      // Resetuj badge
+      document.getElementById('inbox-badge').style.display = 'none';
+    } catch (err) {
+      sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju.</p>';
+    }
+  }
+
+  function zatvoriInbox() {
+    document.getElementById('inbox-modal').style.display = 'none';
+    ucitajBrojNeprocitanih();
+  }
+
+  async function oznациProcitano(id, btn) {
+    const token = localStorage.getItem('token');
+    try {
+      await fetch(`${backendUrl}/poruka/${id}/procitano`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const card = btn.closest('.poruka-card');
+      card.classList.remove('neprocitana');
+      btn.remove();
+      const novoEl = card.querySelector('span[style*="background:#7c3aed"]');
+      if (novoEl) novoEl.remove();
+    } catch (err) {}
+  }
+
+  async function obrisiPoruku(id, btn) {
+    if (!confirm('Obrisati ovu poruku?')) return;
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${backendUrl}/poruka/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        btn.closest('.poruka-card').remove();
+      }
+    } catch (err) {}
+  }
+
+  document.getElementById('poruka-modal').addEventListener('click', function(e) {
+    if (e.target === this) zatvoriPorukuModal();
+  });
+
+  document.getElementById('inbox-modal').addEventListener('click', function(e) {
+    if (e.target === this) zatvoriInbox();
+  });
+
+  // ── TEZGA ──
   async function pogledajTezgu() {
     document.getElementById('tezga-modal').style.display = 'flex';
     const sadrzaj = document.getElementById('tezga-sadrzaj');
@@ -734,7 +1060,7 @@ footer p { margin: 0; }
     if (e.target === this) zatvoriTezgu();
   });
 
-  // IZMENA 2: ucitajObjave sada prikazuje objave svima
+  // ── OBJAVE ──
   async function ucitajObjave() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdParam = urlParams.get('userId');
@@ -994,7 +1320,6 @@ footer p { margin: 0; }
       }
     } catch (err) {
       alert('Greška: ' + err.message);
-      console.error(err);
     }
   }
 
