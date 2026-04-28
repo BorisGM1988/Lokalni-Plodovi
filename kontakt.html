@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="sr">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6PC0ET059B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6PC0ET059B');
+  </script>
+  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kontakt • LokalniPlodovi.rs</title>
@@ -32,6 +41,7 @@
       z-index: -1;
     }
 
+    /* === HEADER - ISTI KAO NA INDEX.HTML === */
     header {
       background: rgba(46, 125, 50, 0.94);
       color: white;
@@ -58,7 +68,24 @@
       gap: 2rem;
     }
 
-    nav a { color: white; text-decoration: none; font-weight: 500; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover { color: #c8e6c9; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 28px; height: 3px; background: white; border-radius: 3px;
+    }
 
     .container {
       max-width: 1100px;
@@ -88,15 +115,9 @@
       transition: transform 0.3s;
     }
 
-    .contact-card:hover {
-      transform: translateY(-10px);
-    }
+    .contact-card:hover { transform: translateY(-10px); }
 
-    .contact-card i {
-      font-size: 3.8rem;
-      color: var(--zelena);
-      margin-bottom: 1.5rem;
-    }
+    .contact-card i { font-size: 3.8rem; color: var(--zelena); margin-bottom: 1.5rem; }
 
     .btn {
       background: var(--zelena-svetla);
@@ -110,20 +131,15 @@
       transition: 0.3s;
     }
 
-    .btn:hover {
-      background: var(--zelena);
-      transform: scale(1.05);
-    }
+    .btn:hover { background: var(--zelena); transform: scale(1.05); }
 
     .social-icons a {
       font-size: 3rem;
-      margin: 0 12px;
+      margin: 0 15px;
       transition: 0.3s;
     }
 
-    .social-icons a:hover {
-      transform: scale(1.3);
-    }
+    .social-icons a:hover { transform: scale(1.25); }
   </style>
 </head>
 <body>
@@ -131,15 +147,52 @@
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
+    
+    <button class="hamburger" onclick="toggleMenu()" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-      <li><a href="uputstvo-za-prodavce.html">Uputstvo</a></li>
+      
+      <!-- Za ulogovane -->
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
+      
+      <!-- Za neulogovane -->
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
     </ul>
   </nav>
 </header>
+
+<script>
+  // === Provera login statusa (isto kao na index.html) ===
+  const token = localStorage.getItem('token');
+  if (token) {
+    document.getElementById('moj-profil-li').style.display = 'list-item';
+    document.getElementById('odjavi-se-li').style.display = 'list-item';
+    document.getElementById('prijavi-se-li').style.display = 'none';
+    document.getElementById('postani-prodavac-li').style.display = 'none';
+  } else {
+    document.getElementById('moj-profil-li').style.display = 'none';
+    document.getElementById('odjavi-se-li').style.display = 'none';
+    document.getElementById('prijavi-se-li').style.display = 'list-item';
+    document.getElementById('postani-prodavac-li').style.display = 'list-item';
+  }
+
+  function odjaviSe() {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+  }
+
+  function toggleMenu() {
+    document.querySelector('nav ul').classList.toggle('open');
+  }
+</script>
 
 <div class="container">
   <h1>📞 Kontaktirajte nas</h1>
@@ -148,12 +201,11 @@
   </p>
 
   <div class="contact-grid">
-
     <!-- Telefon -->
     <div class="contact-card">
       <i class="fas fa-phone"></i>
       <h3>Telefon</h3>
-      <p style="font-size:1.6rem; margin:1.2rem 0; font-weight:700; color:#2e7d32;">+381 64 140 28 37</p>
+      <p style="font-size:1.7rem; margin:1.2rem 0; font-weight:700; color:#2e7d32;">+381 64 140 28 37</p>
       <a href="tel:+381641402837" class="btn">📲 Pozovite nas</a>
     </div>
 
@@ -169,17 +221,14 @@
     <div class="contact-card">
       <i class="fas fa-share-alt"></i>
       <h3>Pratite nas</h3>
-      
       <div class="social-icons" style="margin: 2rem 0;">
         <a href="https://www.facebook.com/profile.php?id=61575498276383" target="_blank" style="color:#1877f2;"><i class="fab fa-facebook"></i></a>
         <a href="#" target="_blank" style="color:#e1306c;"><i class="fab fa-instagram"></i></a>
         <a href="#" target="_blank" style="color:#000;"><i class="fab fa-tiktok"></i></a>
         <a href="#" target="_blank" style="color:#ff0000;"><i class="fab fa-youtube"></i></a>
       </div>
-      
-      <p style="color:#666; font-size:1.1rem;">Instagram, TikTok i YouTube uskoro!</p>
+      <p style="color:#666; margin-top:1rem;">Instagram, TikTok i YouTube uskoro!</p>
     </div>
-
   </div>
 </div>
 
