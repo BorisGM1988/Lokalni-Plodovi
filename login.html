@@ -6,20 +6,187 @@
   <title>Prijavi se – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="stylesheet" href="mobile.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f8f9f5; margin:0; padding:0; }
-    header { background: rgba(46,125,50,0.94); color: white; padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zemlja: #5d4037;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f8f9f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(46,125,50,0.94);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
     .logo { font-size: 1.8rem; font-weight: 700; }
     nav { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
     nav ul { display: flex; list-style: none; gap: 2.5rem; margin: 0; padding: 0; }
     nav a { color: white; text-decoration: none; font-weight: 500; }
-    .container { max-width: 500px; margin: 4rem auto; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-    h1 { color: #2e7d32; text-align: center; }
-    label { display: block; margin: 1rem 0 0.5rem; font-weight: bold; }
-    input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 6px; }
-    button { background: #2e7d32; color: white; border: none; padding: 1rem; width: 100%; border-radius: 6px; cursor: pointer; font-size: 1.1rem; }
-    button:hover { background: #4caf50; }
-    .error { color: red; text-align: center; margin-top: 1rem; }
+
+    .login-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1rem;
+    }
+
+    .login-box {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .login-logo .ikona {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .login-logo h1 {
+      color: var(--zelena);
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+    .login-logo p {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    .form-group { margin-bottom: 1.3rem; }
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: var(--zemlja);
+      font-size: 0.95rem;
+    }
+    .input-wrapper {
+      position: relative;
+    }
+    .input-wrapper i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+      font-size: 1rem;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.9rem 0.9rem 0.9rem 2.8rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--zelena-svetla);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--zelena), var(--zelena-svetla));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.25s;
+      margin-top: 0.5rem;
+    }
+    .login-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .poruka { 
+      text-align: center; 
+      min-height: 22px; 
+      font-size: 0.95rem;
+      margin: 0.8rem 0;
+    }
+
+    .login-links {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #666;
+      font-size: 0.95rem;
+    }
+    .login-links a {
+      color: var(--zelena);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .login-links a:hover { text-decoration: underline; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 1.5rem 0;
+    }
+
+    .reg-opcije {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .reg-btn {
+      padding: 0.7rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid;
+      transition: 0.2s;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .reg-btn.kupac {
+      border-color: #1976d2;
+      color: #1976d2;
+      background: #e3f2fd;
+    }
+    .reg-btn.kupac:hover { background: #1976d2; color: white; }
+    .reg-btn.prodavac {
+      border-color: var(--zelena);
+      color: var(--zelena);
+      background: #e8f5e9;
+    }
+    .reg-btn.prodavac:hover { background: var(--zelena); color: white; }
+
+    footer {
+      background: var(--zemlja);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -27,57 +194,101 @@
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
- <button class="hamburger" 
-  style="display:none;" 
-  onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
-  <span></span><span></span><span></span>
-</button>
+    <button class="hamburger" style="display:none;"
+      onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+      <span></span><span></span><span></span>
+    </button>
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-      <li><a href="registracija.html">Postani prodavac</a></li>
+      <li><a href="registracija.html">Registruj se</a></li>
     </ul>
   </nav>
 </header>
 
-<div class="container">
-  <h1>Prijavi se</h1>
-  <form id="login-form">
-    <label for="email">Email</label>
-    <input type="email" id="email" required>
+<div class="login-wrapper">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="ikona">🌿</div>
+      <h1>LokalniPlodovi</h1>
+      <p>Prijavi se na svoj nalog</p>
+    </div>
 
-    <label for="lozinka">Lozinka</label>
-    <input type="password" id="lozinka" required>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">Email adresa</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" required placeholder="vas@email.com">
+        </div>
+      </div>
 
-    <button type="submit">Prijavi se</button>
-  </form>
+      <div class="form-group">
+        <label for="lozinka">Lozinka</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="lozinka" required placeholder="Vaša lozinka">
+        </div>
+      </div>
 
-  <p style="text-align:center; margin-top:1.5rem;">
-    Nemaš nalog? <a href="registracija.html">Registruj se</a>
-    <p style="margin-top:0.5rem;">
-  <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
-  <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
-</p>
-  </p>
+      <p id="poruka" class="poruka" style="color:red;"></p>
 
-  <p id="poruka" class="error"></p>
+      <button type="submit" class="login-btn">
+        <i class="fas fa-sign-in-alt"></i> Prijavi se
+      </button>
+    </form>
+
+    <hr class="divider">
+
+    <div class="login-links">
+      <p>Nemaš nalog? Registruj se:</p>
+      <div class="reg-opcije">
+        <a href="registracija-kupac.html" class="reg-btn kupac">🛒 Kao kupac</a>
+        <a href="registracija-prodavca.html" class="reg-btn prodavac">🌿 Kao prodavac</a>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:1.2rem;">
+      <a href="politika-privatnosti.html" style="color:#aaa; font-size:0.85rem; text-decoration:none;">Politika privatnosti</a>
+      &nbsp;•&nbsp;
+      <a href="uslovi-koriscenja.html" style="color:#aaa; font-size:0.85rem; text-decoration:none;">Uslovi korišćenja</a>
+    </div>
+  </div>
 </div>
+
+<footer>
+  <p>© 2026 LokalniPlodovi • Prirodno • Direktno sa imanja</p>
+</footer>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 
 <script>
   document.getElementById('login-form').addEventListener('submit', async function(e) {
-    e.preventDefault(); // spreči reload
+    e.preventDefault();
+
+    const porukaEl = document.getElementById('poruka');
+    porukaEl.textContent = '';
+    porukaEl.style.color = 'red';
 
     const email = document.getElementById('email').value.trim().toLowerCase();
-    const lozinka = document.getElementById('lozinka').value.trim();
-
-    const poruka = document.getElementById('poruka') || document.createElement('p');
-    poruka.textContent = '';
-    poruka.style.color = 'red';
+    const lozinka = document.getElementById('lozinka').value;
 
     if (!email || !lozinka) {
-      poruka.textContent = 'Popunite email i lozinku!';
+      porukaEl.textContent = 'Popunite email i lozinku!';
       return;
     }
 
@@ -91,32 +302,32 @@
       const result = await response.json();
 
       if (response.ok) {
-        if (!result.token) throw new Error('Nema tokena u odgovoru');
+        if (!result.token) throw new Error('Nema tokena');
 
         localStorage.setItem('token', result.token);
-        alert('Uspešno prijavljivanje! Preusmeravam...');
-        window.location.href = 'moj-profil.html';
+        localStorage.setItem('tip', result.user?.tip || 'prodavac');
+
+        porukaEl.style.color = 'green';
+        porukaEl.textContent = '✅ Uspešno! Preusmeravam...';
+
+        // KLJUČNO: preusmeravanje na osnovu tipa korisnika
+        const tip = result.user?.tip || 'prodavac';
+        setTimeout(() => {
+          if (tip === 'kupac') {
+            window.location.href = 'kupac-profil.html';
+          } else {
+            window.location.href = 'moj-profil.html';
+          }
+        }, 1000);
+
       } else {
-        poruka.textContent = result.poruka || 'Neispravan email ili lozinka';
-        if (response.status === 401) poruka.textContent = 'Pogrešna lozinka ili email';
+        porukaEl.textContent = result.error || 'Pogrešan email ili lozinka';
       }
     } catch (err) {
-      console.error('Login greška:', err);
-      poruka.textContent = 'Greška pri povezivanju sa serverom: ' + err.message;
+      porukaEl.textContent = 'Greška pri povezivanju sa serverom';
+      console.error(err);
     }
   });
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
