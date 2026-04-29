@@ -8,116 +8,106 @@
   <link rel="stylesheet" href="mobile.css">
 
   <style>
-    :root {
-      --zelena: #4caf50;
-      --zelena-svetla: #66bb6a;
-      --zemlja: #5d4037;
-    }
-
-    header {
-      background: rgba(46, 125, 50, 0.94);
-      color: white;
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .logo { font-size: 1.8rem; font-weight: 700; }
-    nav { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
-    nav ul { display: flex; list-style: none; gap: 2.5rem; margin: 0; padding: 0; }
-    nav a { color: white; text-decoration: none; font-weight: 500; }
+    :root { --zelena: #4caf50; --zemlja: #5d4037; }
 
     .hero {
-      background: linear-gradient(135deg, rgba(46,125,50,0.9), rgba(93,64,55,0.85)),
+      background: linear-gradient(rgba(46,125,50,0.92), rgba(93,64,55,0.88)),
                   url('https://picsum.photos/id/1015/2000/1200') center/cover;
       color: white;
       text-align: center;
-      padding: 7rem 1rem 5rem;
+      padding: 5rem 1rem 3.5rem;
     }
+
+    .hero h1 { font-size: 2.6rem; margin-bottom: 0.6rem; }
+    .hero p { font-size: 1.25rem; max-width: 700px; margin: 0 auto; }
 
     .choice-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 2.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.8rem;
       max-width: 1240px;
-      margin: -70px auto 5rem;
-      padding: 0 1.5rem;
-      position: relative;
-      z-index: 2;
+      margin: -50px auto 4rem;
+      padding: 0 1rem;
     }
 
     .choice-card {
       background: white;
       border-radius: 24px;
-      padding: 3.5rem 2.5rem;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      padding: 2.8rem 2rem;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.1);
       text-align: center;
       transition: all 0.4s;
     }
 
     .choice-card:hover {
-      transform: translateY(-15px);
-      box-shadow: 0 25px 55px rgba(76,175,80,0.25);
+      transform: translateY(-12px);
+      box-shadow: 0 25px 50px rgba(76,175,80,0.2);
     }
 
     .icon-circle {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 1.5rem;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 1.2rem;
       background: #f8fff8;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 4.2rem;
+      font-size: 3.8rem;
     }
 
     .btn {
-      padding: 15px 40px;
+      padding: 14px 32px;
       border: none;
       border-radius: 50px;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 1.5rem;
+      margin-top: 1.2rem;
       width: 100%;
-      max-width: 280px;
     }
 
-    /* Hamburger fix */
-    .hamburger { display: none !important; }
     @media (max-width: 992px) {
-      .hamburger { display: block !important; }
+      .hero { padding: 4rem 1rem 3rem; }
+      .hero h1 { font-size: 2.2rem; }
     }
   </style>
 </head>
 <body>
 
+<!-- HEADER - ISTI KAO NA "SVI PRODAVCI" -->
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
-      <button class="hamburger" onclick="toggleMenu()" id="hamburger">
-  <span></span><span></span><span></span>
-</button>
+    <button class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+      <span></span><span></span><span></span>
+    </button>
     <ul>
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
-      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
-      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
+
+      <li id="moj-profil-li" style="display:none;">
+        <a href="moj-profil.html">Moj profil</a>
+      </li>
+      <li id="odjavi-se-li" style="display:none;">
+        <a href="#" onclick="odjaviSe()">Odjavi se</a>
+      </li>
+
+      <li id="prijavi-se-li">
+        <a href="login.html">Prijavi se</a>
+      </li>
+      <li id="postani-prodavac-li">
+        <a href="registracija.html">Postani prodavac</a>
+      </li>
     </ul>
   </nav>
 </header>
 
 <div class="hero">
   <h1>Registruj se</h1>
-  <p style="font-size: 1.45rem; max-width: 720px; margin: 0 auto; opacity: 0.95;">
-    Izaberi ulogu koja ti najviše odgovara na LokalniPlodovi.rs
-  </p>
+  <p>Izaberi ulogu koja ti najviše odgovara na LokalniPlodovi.rs</p>
 </div>
 
 <div class="choice-grid">
@@ -125,8 +115,8 @@
     <div class="icon-circle" style="color:#1976d2;">
       <i class="fas fa-shopping-basket"></i>
     </div>
-    <h2 style="color:#1976d2;">Postani kupac</h2>
-    <p style="color:#555; line-height:1.7; margin:1.3rem 0;">
+    <h2 style="color:#1976d2; font-size:1.75rem;">Postani kupac</h2>
+    <p style="color:#555; line-height:1.65; margin:1.1rem 0;">
       Traži sveže domaće proizvode, šalji poruke prodavcima,<br>
       pravi listu želja i ocenjuj kvalitet.
     </p>
@@ -137,8 +127,8 @@
     <div class="icon-circle" style="color:#2e7d32;">
       <i class="fas fa-leaf"></i>
     </div>
-    <h2 style="color:#2e7d32;">Postani prodavac</h2>
-    <p style="color:#555; line-height:1.7; margin:1.3rem 0;">
+    <h2 style="color:#2e7d32; font-size:1.75rem;">Postani prodavac</h2>
+    <p style="color:#555; line-height:1.65; margin:1.1rem 0;">
       Dodaj svoje proizvode, pojavi se na mapi,<br>
       primi poruke i prodaj direktno sa imanja.
     </p>
@@ -146,24 +136,26 @@
   </div>
 </div>
 
-<footer style="background: var(--zemlja); color: white; text-align: center; padding: 4rem 1rem 2.5rem;">
-  <div style="max-width:1400px; margin: 0 auto;">
-    <h2>LokalniPlodovi</h2>
-    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
-    <p style="margin-top:2rem; opacity:0.9;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
-  </div>
+<footer style="background:#5d4037; color:white; padding:3rem 1rem; text-align:center;">
+  <h2>LokalniPlodovi</h2>
+  <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+  <p style="margin-top:1.5rem; opacity:0.9;">© 2026 LokalniPlodovi</p>
 </footer>
 
 <script>
-  if (localStorage.getItem('token')) {
-    document.getElementById('moj-profil-li').style.display = 'list-item';
-    document.getElementById('odjavi-se-li').style.display = 'list-item';
-    document.getElementById('prijavi-se-li').style.display = 'none';
-    document.getElementById('postani-prodavac-li').style.display = 'none';
-  }
+  // Login provera - isto kao na drugim stranicama
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+    }
+  });
 
   function odjaviSe() {
-    localStorage.removeItem('token');
+    localStorage.clear();
     window.location.href = 'index.html';
   }
 </script>
