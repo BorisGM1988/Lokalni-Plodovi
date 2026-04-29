@@ -222,9 +222,10 @@
       <li><a href="chat.html">Chat</a></li>
 
       <!-- Prikazuje se SAMO ako je ulogovan -->
-      <li id="moj-profil-li" style="display:none;">
-        <a href="moj-profil.html">Moj profil</a>
-      </li>
+     <!-- Moj profil - dinamički link (kupac ili prodavac) -->
+<li id="moj-profil-li" style="display:none;">
+  <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
+</li>
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
@@ -486,6 +487,32 @@ s0.parentNode.insertBefore(s1,s0);
   function toggleMenu() {
   document.querySelector('nav ul').classList.toggle('open');
 }
+</script>
+  <script>
+  // === DINAMIČKI MOJ PROFIL (Kupac ili Prodavac) ===
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
+
+    if (token) {
+      // Prikazi linkove za ulogovanog korisnika
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+
+      // Promeni link u zavisnosti od tipa korisnika
+      const profilLink = document.getElementById('moj-profil-link');
+      if (profilLink) {
+        profilLink.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+      }
+    }
+  });
+
+  function odjaviSe() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+  }
 </script>
 </body>
 
