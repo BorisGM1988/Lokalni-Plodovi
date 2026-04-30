@@ -8,58 +8,29 @@
   <link rel="stylesheet" href="mobile.css">
 
   <style>
-    .container {
-      max-width: 1400px;
-      margin: 3rem auto;
-      padding: 0 1.5rem;
-      flex: 1;
+    .container { max-width: 1400px; margin: 3rem auto; padding: 0 1.5rem; }
+    h1 { text-align: center; color: #5d4037; margin-bottom: 3rem; }
+    #proizvodi-container { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+      gap: 2rem; 
     }
-
-    h1 {
-      color: #5d4037;
-      text-align: center;
-      font-size: 2.4rem;
-      margin-bottom: 2.5rem;
-    }
-
-    #proizvodi-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
     .proizvod-card {
       background: white;
       border-radius: 16px;
       padding: 1.5rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      transition: transform 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-
-    .proizvod-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .proizvod-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-    }
-
     .empty-state {
       text-align: center;
-      padding: 6rem 2rem;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      padding: 8rem 2rem;
+      color: #666;
+      font-size: 1.3rem;
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
@@ -71,14 +42,8 @@
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-
-      <li id="moj-profil-li" style="display:none;">
-        <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
-      </li>
-      <li id="odjavi-se-li" style="display:none;">
-        <a href="#" onclick="odjaviSe()">Odjavi se</a>
-      </li>
-
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html" id="moj-profil-link">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
       <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
       <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
     </ul>
@@ -90,48 +55,39 @@
   <div id="proizvodi-container"></div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <h2>LokalniPlodovi</h2>
-    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
-    <p style="margin-top:2rem; opacity:0.9;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
-    <p style="margin-top:0.5rem;">
-      <a href="politika-privatnosti.html">Politika privatnosti</a> • 
-      <a href="uslovi-koriscenja.html">Uslovi korišćenja</a>
-    </p>
-  </div>
+<footer style="background:#5d4037; color:white; padding:3rem 1rem; text-align:center; margin-top:auto;">
+  <h2>LokalniPlodovi</h2>
+  <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+  <p style="margin-top:1rem; opacity:0.9;">© 2026 LokalniPlodovi</p>
 </footer>
 
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
   document.addEventListener('DOMContentLoaded', () => {
+    // Dinamički header
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
-
     if (token) {
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
       document.getElementById('prijavi-se-li').style.display = 'none';
       document.getElementById('postani-prodavac-li').style.display = 'none';
-
+      
       const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
-      }
+      if (link) link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
     }
-
+    
     ucitajProizvode();
   });
 
   async function ucitajProizvode() {
     const container = document.getElementById('proizvodi-container');
-    container.innerHTML = '<p style="text-align:center; padding:6rem 0; color:#666;">Učitavam proizvode...</p>';
+    container.innerHTML = '<p style="text-align:center;padding:6rem 0;color:#666;">Učitavam proizvode...</p>';
 
     try {
-      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Jaja`);
-      const proizvodi = await response.json();
+      const res = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Jaja`);
+      const proizvodi = await res.json();
 
       container.innerHTML = '';
 
@@ -148,6 +104,30 @@
         const card = document.createElement('div');
         card.className = 'proizvod-card';
         card.innerHTML = `
-          ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}">` : ''}
           <h3>${p.naziv}</h3>
-          <p><strong>Cena:</strong> ${p.cena} RSD
+          <p><strong>Cena:</strong> ${p.cena} RSD</p>
+          <p><strong>Dostupno:</strong> ${p.kolicina} kom</p>
+          <button onclick="posetiProfil(${p.userId})" style="margin-top:1rem;background:#2e7d32;color:white;border:none;padding:12px;border-radius:8px;width:100%;cursor:pointer;">
+            👤 Poseti profil
+          </button>
+        `;
+        container.appendChild(card);
+      });
+
+    } catch (e) {
+      container.innerHTML = `<p style="text-align:center;color:red;padding:6rem 0;">Greška pri učitavanju.</p>`;
+    }
+  }
+
+  function posetiProfil(id) {
+    window.location.href = `moj-profil.html?userId=${id}`;
+  }
+
+  function odjaviSe() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+  }
+</script>
+
+</body>
+</html>
