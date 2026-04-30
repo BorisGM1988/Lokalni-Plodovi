@@ -39,7 +39,7 @@
       color: var(--zemlja);
       margin-bottom: 2rem;
       text-align: center;
-      font-size: 2.2rem;
+      font-size: 2.3rem;
     }
 
     #proizvodi-container {
@@ -110,7 +110,7 @@
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  // Dinamički Moj profil
+  // Dinamički header
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
@@ -144,7 +144,7 @@
 
       if (proizvodi.length === 0) {
         container.innerHTML = `
-          <p style="text-align:center; color:#666; font-size:1.15rem; padding:5rem 0;">
+          <p style="text-align:center; color:#666; font-size:1.15rem; padding:5rem 0; line-height:1.6;">
             Trenutno nema dostupnih jaja.<br>
             <strong>Budite prvi koji će dodati jaja na pijacu!</strong>
           </p>`;
@@ -162,12 +162,10 @@
           <p><strong>Prodavac:</strong> ${p.prodavacIme || 'Nepoznato'}</p>
           <p><strong>Lokacija:</strong> ${p.prodavacLokacija || 'Nije navedeno'}</p>
           
-          <div style="margin-top:1.5rem;">
-            <button onclick="posetiProfil(${p.userId})" 
-                    style="background:var(--zelena); color:white; border:none; padding:11px 20px; border-radius:8px; cursor:pointer; width:100%;">
-              👤 Poseti profil
-            </button>
-          </div>
+          <button onclick="posetiProfil(${p.userId})" 
+                  style="margin-top:1.2rem; background:var(--zelena); color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; width:100%;">
+            👤 Poseti profil
+          </button>
         `;
         container.appendChild(card);
       });
