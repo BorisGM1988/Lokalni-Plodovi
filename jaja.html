@@ -68,9 +68,7 @@
       transition: color 0.2s;
     }
 
-    .nav-links a:hover {
-      color: #c8e6c9;
-    }
+    .nav-links a:hover { color: #c8e6c9; }
 
     .container {
       max-width: 1400px;
@@ -86,6 +84,86 @@
       margin-bottom: 2rem;
     }
 
+    /* Grid proizvoda */
+    .proizvodi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    /* Kartica - kao slika 2 */
+    .proizvod-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .proizvod-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .proizvod-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 1.4rem 1.4rem 1.2rem;
+    }
+
+    .card-naziv {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--zelena);
+      margin-bottom: 0.8rem;
+    }
+
+    .card-info {
+      font-size: 0.95rem;
+      color: #444;
+      margin-bottom: 0.35rem;
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .card-info strong {
+      color: #222;
+      min-width: 80px;
+    }
+
+    .card-datum {
+      font-size: 0.82rem;
+      color: #888;
+      margin-top: 0.6rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-profil {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--zelena);
+      color: white;
+      padding: 0.7rem 1.4rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-profil:hover { background: var(--zelena-svetla); }
+
     .empty-state {
       max-width: 600px;
       margin: 4rem auto;
@@ -96,7 +174,7 @@
     }
 
     .empty-state p {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       color: #555;
       line-height: 1.7;
     }
@@ -114,9 +192,7 @@
       text-decoration: none;
     }
 
-    footer a:hover {
-      text-decoration: underline;
-    }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -124,7 +200,6 @@
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
-    
     <ul class="nav-links">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
@@ -167,7 +242,6 @@
       if (!response.ok) throw new Error();
 
       const proizvodi = await response.json();
-
       container.innerHTML = '';
 
       if (proizvodi.length === 0) {
@@ -179,38 +253,46 @@
         return;
       }
 
-      let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem;">';
+      const grid = document.createElement('div');
+      grid.className = 'proizvodi-grid';
 
       proizvodi.forEach(p => {
-        const cena = parseFloat(p.cena || 0).toLocaleString('sr-RS') + ' RSD';
-        const slika = p.slika && p.slika.trim() !== '' ? p.slika : 'https://via.placeholder.com/300x200?text=Nema+slike';
+        const slika = p.slika && p.slika.trim() !== ''
+          ? p.slika
+          : 'https://via.placeholder.com/400x200?text=Nema+slike';
 
-        html += `
-          <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
-            <img src="${slika}" style="width:100%; height:180px; object-fit: cover;" alt="${p.naziv}" onerror="this.src='https://via.placeholder.com/300x200?text=Nema+slike'">
-            <div style="padding: 1rem;">
-              <h3 style="margin:0 0 0.4rem 0; color: var(--zemlja); font-size:1.25rem;">${p.naziv}</h3>
-              <p style="color:#666; font-size:0.9rem; margin-bottom:1rem; min-height:42px;">${p.opis || 'Nema opisa'}</p>
-              
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <strong style="color:var(--zelena); font-size:1.3rem;">${cena}</strong><br>
-                  <small style="color:#777;">${p.kolicina || ''} ${p.jedinica || ''}</small>
-                </div>
-                <a href="moj-profil.html?userId=${p.userId || ''}" 
-                   style="background:var(--zelena); color:white; padding:0.65rem 1.3rem; border-radius:999px; text-decoration:none; font-weight:500;">
-                  Pogledaj prodavca
-                </a>
-              </div>
-            </div>
+        const datum = p.created_at
+          ? new Date(p.created_at).toLocaleDateString('sr-RS')
+          : '';
+
+        const card = document.createElement('div');
+        card.className = 'proizvod-card';
+        card.innerHTML = `
+          <img src="${slika}" alt="${p.naziv}" 
+               onerror="this.src='https://via.placeholder.com/400x200?text=Nema+slike'">
+          <div class="card-body">
+            <div class="card-naziv">${p.naziv}</div>
+            <div class="card-info"><strong>Cena:</strong> ${parseFloat(p.cena || 0).toLocaleString('sr-RS')} RSD</div>
+            <div class="card-info"><strong>Dostupno:</strong> ${p.kolicina || '—'} ${p.jedinica || 'kom'}</div>
+            ${p.prodavacIme ? `<div class="card-info"><strong>Prodavac:</strong> ${p.prodavacIme}</div>` : ''}
+            ${p.prodavacLokacija ? `<div class="card-info"><strong>Lokacija:</strong> ${p.prodavacLokacija}</div>` : ''}
+            ${p.opis ? `<div class="card-info"><strong>Opis:</strong> ${p.opis}</div>` : ''}
+            ${datum ? `<div class="card-datum">Dodato: ${datum}</div>` : ''}
+            ${p.userId
+              ? `<button class="btn-profil" onclick="window.location.href='moj-profil.html?userId=${p.userId}'">
+                   <i class="fas fa-user"></i> Poseti profil
+                 </button>`
+              : `<span style="color:#999; font-size:0.85rem;">Profil nedostupan</span>`
+            }
           </div>`;
+
+        grid.appendChild(card);
       });
 
-      html += '</div>';
-      container.innerHTML = html;
+      container.appendChild(grid);
 
     } catch (err) {
-      container.innerHTML = `<p style="color:red; padding:4rem 0;">Greška pri učitavanju.</p>`;
+      container.innerHTML = `<p style="color:red; padding:4rem 0;">Greška pri učitavanju. Proveri internet konekciju.</p>`;
     }
   }
 
