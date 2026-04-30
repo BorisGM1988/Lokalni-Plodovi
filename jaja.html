@@ -8,26 +8,6 @@
   <link rel="stylesheet" href="mobile.css">
 
   <style>
-    :root {
-      --zelena: #2e7d32;
-      --zelena-svetla: #4caf50;
-      --zemlja: #5d4037;
-      --siva: #757575;
-      --svetlo: #f8f9f5;
-    }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
-
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--svetlo);
-      color: #333;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
     .container {
       max-width: 1400px;
       margin: 2rem auto;
@@ -36,10 +16,10 @@
     }
 
     h1 {
-      color: var(--zemlja);
-      margin-bottom: 2rem;
+      color: #5d4037;
+      margin-bottom: 2.5rem;
       text-align: center;
-      font-size: 2.3rem;
+      font-size: 2.4rem;
     }
 
     #proizvodi-container {
@@ -50,7 +30,6 @@
 
     .proizvod-card {
       background: white;
-      border: 1px solid #e0e0e0;
       border-radius: 16px;
       padding: 1.8rem;
       box-shadow: 0 4px 15px rgba(0,0,0,0.07);
@@ -64,7 +43,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
@@ -110,7 +88,6 @@
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  // Dinamički header
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
@@ -122,9 +99,7 @@
       document.getElementById('postani-prodavac-li').style.display = 'none';
 
       const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
-      }
+      if (link) link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
     }
 
     ucitajProizvode();
@@ -136,34 +111,28 @@
 
     try {
       const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Jaja`);
-      if (!response.ok) throw new Error('Greška na serveru');
-
       const proizvodi = await response.json();
 
       container.innerHTML = '';
 
       if (proizvodi.length === 0) {
         container.innerHTML = `
-          <p style="text-align:center; color:#666; font-size:1.15rem; padding:5rem 0; line-height:1.6;">
+          <p style="text-align:center; color:#666; font-size:1.2rem; padding:6rem 0; line-height:1.7;">
             Trenutno nema dostupnih jaja.<br>
             <strong>Budite prvi koji će dodati jaja na pijacu!</strong>
           </p>`;
         return;
       }
 
+      // Ako ima proizvoda, prikaži ih (za sada ostavljamo jednostavno)
       proizvodi.forEach(p => {
         const card = document.createElement('div');
         card.className = 'proizvod-card';
         card.innerHTML = `
-          ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:1rem;">` : ''}
           <h3>${p.naziv}</h3>
           <p><strong>Cena:</strong> ${p.cena} RSD</p>
           <p><strong>Dostupno:</strong> ${p.kolicina} kom</p>
-          <p><strong>Prodavac:</strong> ${p.prodavacIme || 'Nepoznato'}</p>
-          <p><strong>Lokacija:</strong> ${p.prodavacLokacija || 'Nije navedeno'}</p>
-          
-          <button onclick="posetiProfil(${p.userId})" 
-                  style="margin-top:1.2rem; background:var(--zelena); color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; width:100%;">
+          <button onclick="posetiProfil(${p.userId})" style="margin-top:1rem; background:#2e7d32; color:white; border:none; padding:12px; border-radius:8px; width:100%; cursor:pointer;">
             👤 Poseti profil
           </button>
         `;
@@ -171,7 +140,7 @@
       });
 
     } catch (err) {
-      container.innerHTML = `<p style="text-align:center; color:red; padding:4rem 0;">Greška pri učitavanju.</p>`;
+      container.innerHTML = `<p style="text-align:center; color:red;">Greška pri učitavanju.</p>`;
     }
   }
 
