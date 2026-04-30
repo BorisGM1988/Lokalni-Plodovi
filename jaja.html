@@ -8,25 +8,6 @@
   <link rel="stylesheet" href="mobile.css">
 
   <style>
-    :root {
-      --zelena: #2e7d32;
-      --zelena-svetla: #4caf50;
-      --zemlja: #5d4037;
-      --svetlo: #f8f9f5;
-    }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
-
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--svetlo);
-      color: #333;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
     .container {
       max-width: 1400px;
       margin: 3rem auto;
@@ -35,7 +16,7 @@
     }
 
     h1 {
-      color: var(--zemlja);
+      color: #5d4037;
       text-align: center;
       font-size: 2.4rem;
       margin-bottom: 2.5rem;
@@ -44,14 +25,14 @@
     #proizvodi-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.8rem;
+      gap: 2rem;
     }
 
     .proizvod-card {
       background: white;
       border-radius: 16px;
       padding: 1.5rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       transition: transform 0.2s;
     }
 
@@ -73,13 +54,12 @@
       background: white;
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      max-width: 700px;
-      margin: 4rem auto;
     }
   </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
@@ -110,6 +90,7 @@
   <div id="proizvodi-container"></div>
 </div>
 
+<!-- FOOTER -->
 <footer>
   <div class="container">
     <h2>LokalniPlodovi</h2>
@@ -125,7 +106,6 @@
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
 
-  // Dinamički header
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
@@ -147,16 +127,10 @@
 
   async function ucitajProizvode() {
     const container = document.getElementById('proizvodi-container');
-    
-    container.innerHTML = `
-      <p style="text-align:center; padding:6rem 0; color:#666; font-size:1.1rem;">
-        Učitavam proizvode...
-      </p>`;
+    container.innerHTML = '<p style="text-align:center; padding:6rem 0; color:#666;">Učitavam proizvode...</p>';
 
     try {
       const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Jaja`);
-      if (!response.ok) throw new Error();
-
       const proizvodi = await response.json();
 
       container.innerHTML = '';
@@ -170,53 +144,10 @@
         return;
       }
 
-      // Prikaz proizvoda
       proizvodi.forEach(p => {
         const card = document.createElement('div');
         card.className = 'proizvod-card';
         card.innerHTML = `
           ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}">` : ''}
           <h3>${p.naziv}</h3>
-          <p><strong>Cena:</strong> ${p.cena} RSD</p>
-          <p><strong>Dostupno:</strong> ${p.kolicina} kom</p>
-          ${p.prodavacIme ? `<p><strong>Prodavac:</strong> ${p.prodavacIme}</p>` : ''}
-          
-          <button onclick="posetiProfil(${p.userId})" 
-                  style="margin-top:1.2rem; background:#2e7d32; color:white; border:none; padding:12px; border-radius:8px; width:100%; cursor:pointer; font-weight:600;">
-            👤 Poseti profil
-          </button>
-        `;
-        container.appendChild(card);
-      });
-
-    } catch (err) {
-      container.innerHTML = `
-        <p style="text-align:center; color:red; padding:5rem 0;">
-          Greška pri učitavanju proizvoda.
-        </p>`;
-    }
-  }
-
-  function posetiProfil(userId) {
-    window.location.href = `moj-profil.html?userId=${userId}`;
-  }
-
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
-</script>
-
-<!-- Tawk.to -->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true; s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
-s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-
-</body>
-</html>
+          <p><strong>Cena:</strong> ${p.cena} RSD
