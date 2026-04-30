@@ -188,8 +188,8 @@
 
       <!-- Prikazuje se SAMO ako je ulogovan -->
       <li id="moj-profil-li" style="display:none;">
-        <a href="moj-profil.html">Moj profil</a>
-      </li>
+         <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
+       </li>
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
@@ -199,7 +199,7 @@
         <a href="login.html">Prijavi se</a>
       </li>
       <li id="postani-prodavac-li">
-        <a href="registracija.html">Postani prodavac</a>
+        <a href="registracija.html">Registruj se</a>
       </li>
     </ul>
   </nav>
@@ -373,7 +373,29 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
 
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+
+      const link = document.getElementById('moj-profil-link');
+      if (link) {
+        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+      }
+    }
+  });
+
+  function odjaviSe() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+  }
+</script>
 </body>
 
 </html>
