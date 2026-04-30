@@ -169,7 +169,7 @@
     container.innerHTML = '<p style="padding:4rem 0; color:#666;">Učitavam...</p>';
 
     try {
-      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Jaja&podnisa=Jaja`);
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Jaja`);
       if (!response.ok) throw new Error();
 
       const proizvodi = await response.json();
