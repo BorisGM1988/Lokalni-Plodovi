@@ -174,16 +174,6 @@
 
       const proizvodi = await response.json();
 
-      // Provera da li je korisnik ulogovan
-      const token = localStorage.getItem('token');
-      let currentUserId = null;
-      if (token) {
-        try {
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          currentUserId = payload.userId;
-        } catch(e) {}
-      }
-
       container.innerHTML = '';
 
       if (proizvodi.length === 0) {
@@ -195,8 +185,8 @@
         return;
       }
 
-      // === GENERISANJE KARTICA SA SLIKOM ===
-      let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.8rem; margin-top: 2rem;">';
+      // Manje kartice - 3 u redu
+      let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem;">';
 
       proizvodi.forEach(p => {
         const cena = parseFloat(p.cena || 0).toLocaleString('sr-RS') + ' RSD';
@@ -207,20 +197,21 @@
         html += `
           <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.2s;">
             <img src="${slika}" 
-                 style="width:100%; height:220px; object-fit: cover;" 
+                 style="width:100%; height:180px; object-fit: cover;" 
                  alt="${p.naziv}"
                  onerror="this.src='https://via.placeholder.com/300x200?text=Nema+slike'">
-            <div style="padding: 1.2rem;">
-              <h3 style="margin:0 0 0.5rem 0; color: var(--zemlja); font-size:1.35rem;">${p.naziv}</h3>
-              <p style="color:#666; font-size:0.95rem; margin-bottom:1rem; min-height:48px;">${p.opis || 'Nema opisa'}</p>
+            
+            <div style="padding: 1rem;">
+              <h3 style="margin:0 0 0.4rem 0; color: var(--zemlja); font-size:1.25rem;">${p.naziv}</h3>
+              <p style="color:#666; font-size:0.9rem; margin-bottom:1rem; min-height:42px;">${p.opis || 'Nema opisa'}</p>
               
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                  <strong style="color:var(--zelena); font-size:1.35rem;">${cena}</strong><br>
+                  <strong style="color:var(--zelena); font-size:1.3rem;">${cena}</strong><br>
                   <small style="color:#777;">${p.kolicina || ''} ${p.jedinica || ''}</small>
                 </div>
-                <a href="prodavac.html?id=${p.userId || ''}" 
-                   style="background:var(--zelena); color:white; padding:0.7rem 1.4rem; border-radius:999px; text-decoration:none; font-weight:500; font-size:0.95rem;">
+                <a href="moj-profil.html?userId=${p.userId || ''}" 
+                   style="background:var(--zelena); color:white; padding:0.65rem 1.3rem; border-radius:999px; text-decoration:none; font-weight:500; font-size:0.95rem; white-space:nowrap;">
                   Pogledaj prodavca
                 </a>
               </div>
