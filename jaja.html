@@ -28,7 +28,6 @@
       flex-direction: column;
     }
 
-    /* ==================== HEADER ==================== */
     header {
       background: var(--zelena);
       color: white;
@@ -73,7 +72,6 @@
       color: #c8e6c9;
     }
 
-    /* ==================== MAIN CONTENT ==================== */
     .container {
       max-width: 1400px;
       margin: 3rem auto;
@@ -103,7 +101,6 @@
       line-height: 1.7;
     }
 
-    /* ==================== FOOTER ==================== */
     footer {
       background: var(--zemlja);
       color: white;
@@ -144,9 +141,7 @@
 <div class="container">
   <h1>Proizvođači Jaja</h1>
   
-  <div id="proizvodi-container">
-    <!-- Ovde će se dinamički ubacivati kartice ili empty state -->
-  </div>
+  <div id="proizvodi-container"></div>
 </div>
 
 <footer>
@@ -185,22 +180,15 @@
         return;
       }
 
-      // Manje kartice - 3 u redu
       let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem;">';
 
       proizvodi.forEach(p => {
         const cena = parseFloat(p.cena || 0).toLocaleString('sr-RS') + ' RSD';
-        const slika = p.slika && p.slika.trim() !== '' 
-          ? p.slika 
-          : 'https://via.placeholder.com/300x200?text=Nema+slike';
+        const slika = p.slika && p.slika.trim() !== '' ? p.slika : 'https://via.placeholder.com/300x200?text=Nema+slike';
 
         html += `
-          <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.2s;">
-            <img src="${slika}" 
-                 style="width:100%; height:180px; object-fit: cover;" 
-                 alt="${p.naziv}"
-                 onerror="this.src='https://via.placeholder.com/300x200?text=Nema+slike'">
-            
+          <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+            <img src="${slika}" style="width:100%; height:180px; object-fit: cover;" alt="${p.naziv}" onerror="this.src='https://via.placeholder.com/300x200?text=Nema+slike'">
             <div style="padding: 1rem;">
               <h3 style="margin:0 0 0.4rem 0; color: var(--zemlja); font-size:1.25rem;">${p.naziv}</h3>
               <p style="color:#666; font-size:0.9rem; margin-bottom:1rem; min-height:42px;">${p.opis || 'Nema opisa'}</p>
@@ -211,7 +199,7 @@
                   <small style="color:#777;">${p.kolicina || ''} ${p.jedinica || ''}</small>
                 </div>
                 <a href="moj-profil.html?userId=${p.userId || ''}" 
-                   style="background:var(--zelena); color:white; padding:0.65rem 1.3rem; border-radius:999px; text-decoration:none; font-weight:500; font-size:0.95rem; white-space:nowrap;">
+                   style="background:var(--zelena); color:white; padding:0.65rem 1.3rem; border-radius:999px; text-decoration:none; font-weight:500;">
                   Pogledaj prodavca
                 </a>
               </div>
@@ -223,7 +211,6 @@
       container.innerHTML = html;
 
     } catch (err) {
-      console.error(err);
       container.innerHTML = `<p style="color:red; padding:4rem 0;">Greška pri učitavanju.</p>`;
     }
   }
