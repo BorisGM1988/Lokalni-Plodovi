@@ -454,9 +454,9 @@ footer p { margin: 0; }
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-    <li id="moj-profil-li" style="display:none;">
-  <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
-</li>
+      <li id="moj-profil-li" style="display:none;">
+        <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
+      </li>
       <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
       <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
       <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
@@ -676,7 +676,7 @@ footer p { margin: 0; }
   </div>
 </div>
 
-<!-- MODAL OBJAVI NOVOST -->
+<!-- MODAL OBJAVI NOVOST — sa video uploadom -->
 <div id="objavi-novost-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
   <div style="background:white; width:90%; max-width:540px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
     <div style="background:linear-gradient(135deg,#2e7d32,#4caf50); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
@@ -688,6 +688,8 @@ footer p { margin: 0; }
     </div>
     <div style="padding:2rem;">
       <textarea id="novost-tekst" rows="4" placeholder='npr. "Danas imamo sveže maline po akcijskoj ceni!"' style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit;" onfocus="this.style.borderColor='#4caf50'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+
+      <!-- Slika -->
       <input type="file" id="novost-slika" accept="image/*" style="display:none;">
       <div onclick="document.getElementById('novost-slika').click()" style="border:2px dashed #4caf50; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#f0fdf4; margin-top:1.2rem;">
         <img id="preview-novost-slika" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; display:none;">
@@ -696,9 +698,20 @@ footer p { margin: 0; }
           <p style="margin:0.4rem 0 0; color:#4caf50; font-weight:600;">Dodaj sliku (opciono)</p>
         </div>
       </div>
+
+      <!-- Video -->
+      <input type="file" id="novost-video" accept="video/*" style="display:none;">
+      <div onclick="document.getElementById('novost-video').click()" style="border:2px dashed #f59e0b; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#fffbeb; margin-top:0.8rem;">
+        <video id="preview-novost-video" style="width:100%; max-height:200px; border-radius:10px; display:none;" controls></video>
+        <div id="novost-video-placeholder">
+          <div style="font-size:2rem;">🎥</div>
+          <p style="margin:0.4rem 0 0; color:#f59e0b; font-weight:600;">Dodaj kratki video (max 30 sek, opciono)</p>
+        </div>
+      </div>
+
       <div style="display:flex; gap:1rem; margin-top:1.5rem;">
         <button onclick="zatvoriNovostModal()" style="flex:1; padding:14px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
-        <button onclick="posaljiNovost()" style="flex:2; padding:14px; border-radius:50px; background:linear-gradient(135deg,#2e7d32,#4caf50); color:white; border:none; font-weight:600; cursor:pointer;">📢 Objavi</button>
+        <button id="btn-objavi-novost" onclick="posaljiNovost()" style="flex:2; padding:14px; border-radius:50px; background:linear-gradient(135deg,#2e7d32,#4caf50); color:white; border:none; font-weight:600; cursor:pointer;">📢 Objavi</button>
       </div>
     </div>
   </div>
@@ -716,11 +729,18 @@ footer p { margin: 0; }
 
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
+
     if (token) {
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
       document.getElementById('prijavi-se-li').style.display = 'none';
       document.getElementById('postani-prodavac-li').style.display = 'none';
+
+      const link = document.getElementById('moj-profil-link');
+      if (link) {
+        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+      }
     } else {
       document.getElementById('moj-profil-li').style.display = 'none';
       document.getElementById('odjavi-se-li').style.display = 'none';
@@ -780,11 +800,9 @@ footer p { margin: 0; }
       const editBtn = document.querySelector('.profile-edit-btn');
       if (editBtn) editBtn.style.display = isOwnProfile ? 'inline-block' : 'none';
 
-      // Inbox — samo vlasniku
       const btnInbox = document.getElementById('btn-inbox');
       if (btnInbox) btnInbox.style.display = isOwnProfile ? 'inline-block' : 'none';
 
-      // Pošalji poruku — samo na tuđim profilima, samo ulogovanim
       const btnPoruka = document.getElementById('btn-poruka');
       if (btnPoruka) {
         btnPoruka.style.display = (!isOwnProfile && token) ? 'inline-block' : 'none';
@@ -816,7 +834,6 @@ footer p { margin: 0; }
         } catch(e) {}
       }
 
-      // Učitaj broj nepročitanih ako je sopstveni profil
       if (isOwnProfile && token) {
         ucitajBrojNeprocitanih();
       }
@@ -931,7 +948,6 @@ footer p { margin: 0; }
         sadrzaj.appendChild(div);
       });
 
-      // Resetuj badge
       document.getElementById('inbox-badge').style.display = 'none';
     } catch (err) {
       sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju.</p>';
@@ -1100,6 +1116,7 @@ footer p { margin: 0; }
         div.style = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
         div.innerHTML = `
           ${o.slika ? `<img src="${o.slika}" style="width:auto; max-width:100%; max-height:160px; display:block; margin:0 auto 0.8rem; border-radius:10px;">` : ''}
+          ${o.video ? `<video src="${o.video}" controls style="width:100%; max-height:300px; border-radius:10px; margin-bottom:0.8rem;"></video>` : ''}
           <p style="margin:0 0 0.6rem; font-size:1.05rem; line-height:1.5;">${o.tekst}</p>
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <small style="color:#888;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>
@@ -1114,7 +1131,7 @@ footer p { margin: 0; }
   }
 
   function odjaviSe() {
-    localStorage.removeItem('token');
+    localStorage.clear();
     window.location.href = 'index.html';
   }
 
@@ -1126,8 +1143,15 @@ footer p { margin: 0; }
     document.getElementById('objavi-novost-modal').style.display = 'none';
     document.getElementById('novost-tekst').value = '';
     document.getElementById('novost-slika').value = '';
+    document.getElementById('novost-video').value = '';
     document.getElementById('preview-novost-slika').style.display = 'none';
     document.getElementById('novost-zona-placeholder').style.display = 'block';
+    document.getElementById('preview-novost-video').style.display = 'none';
+    document.getElementById('preview-novost-video').src = '';
+    document.getElementById('novost-video-placeholder').style.display = 'block';
+    const btn = document.getElementById('btn-objavi-novost');
+    btn.textContent = '📢 Objavi';
+    btn.disabled = false;
   }
 
   async function posaljiNovost() {
@@ -1135,14 +1159,48 @@ footer p { margin: 0; }
     if (!tekst) { alert('Unesite tekst objave!'); return; }
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti ulogovani!'); return; }
+
     let slikaBase64 = null;
+    let videoUrl = null;
+
     const slikaFile = document.getElementById('novost-slika').files[0];
     if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
+
+    const videoFile = document.getElementById('novost-video').files[0];
+    if (videoFile) {
+      if (videoFile.size > 50 * 1024 * 1024) {
+        alert('Video je prevelik! Maksimalno 50MB.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-objavi-novost');
+      btn.textContent = '⏳ Uploadujem video...';
+      btn.disabled = true;
+
+      try {
+        const videoBase64 = await fileToBase64(videoFile);
+        const uploadRes = await fetch(`${backendUrl}/upload-video`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ videoBase64 })
+        });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) throw new Error(uploadData.error || 'Greška pri uploadu');
+        videoUrl = uploadData.url;
+      } catch (err) {
+        alert('Greška pri uploadu videa: ' + err.message);
+        const btn = document.getElementById('btn-objavi-novost');
+        btn.textContent = '📢 Objavi';
+        btn.disabled = false;
+        return;
+      }
+    }
+
     try {
       const res = await fetch(`${backendUrl}/objavi-novost`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ tekst, slikaBase64 })
+        body: JSON.stringify({ tekst, slikaBase64, videoUrl })
       });
       if (!res.ok) throw new Error();
       alert('✅ Objava uspešno dodata!');
@@ -1342,44 +1400,32 @@ footer p { margin: 0; }
     if (e.target === this) zatvoriModal();
   });
 
+  // Slika preview listener
   document.addEventListener('change', function(e) {
-    if (e.target.id !== 'novost-slika') return;
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        document.getElementById('preview-novost-slika').src = ev.target.result;
-        document.getElementById('preview-novost-slika').style.display = 'block';
-        document.getElementById('novost-zona-placeholder').style.display = 'none';
-      };
-      reader.readAsDataURL(file);
+    if (e.target.id === 'novost-slika') {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          document.getElementById('preview-novost-slika').src = ev.target.result;
+          document.getElementById('preview-novost-slika').style.display = 'block';
+          document.getElementById('novost-zona-placeholder').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
     }
-  });
-</script>
-  <script>
-  // Dinamički Moj profil za kupca i prodavca
-  document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const tip = localStorage.getItem('tip');
 
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-
-      // Promeni link u zavisnosti od tipa korisnika
-      const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+    // Video preview listener
+    if (e.target.id === 'novost-video') {
+      const file = e.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        document.getElementById('preview-novost-video').src = url;
+        document.getElementById('preview-novost-video').style.display = 'block';
+        document.getElementById('novost-video-placeholder').style.display = 'none';
       }
     }
   });
-
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
 </script>
 </body>
 </html>
