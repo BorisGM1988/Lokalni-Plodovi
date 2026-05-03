@@ -1086,53 +1086,63 @@ footer p { margin: 0; }
         return;
       }
 
-      const grupisano = {};
-      proizvodi.forEach(p => {
-        const nisa = p.glavnaNisa || 'Ostalo';
-        if (!grupisano[nisa]) grupisano[nisa] = [];
-        grupisano[nisa].push(p);
-      });
+     // Provjeri da li je ovo SOPSTVENi profil
+const token = localStorage.getItem('token');
+let mojId = null;
+if (token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    mojId = String(payload.userId);
+  } catch(e) {}
+}
+const isOwnProfile = mojId && String(trenutniUserId) === mojId;
 
-      sadrzaj.innerHTML = '';
+const grupisano = {};
+proizvodi.forEach(p => {
+  const nisa = p.glavnaNisa || 'Ostalo';
+  if (!grupisano[nisa]) grupisano[nisa] = [];
+  grupisano[nisa].push(p);
+});
 
-      Object.entries(grupisano).forEach(([nisa, lista]) => {
-        const grupa = document.createElement('div');
-        grupa.className = 'nisa-grupa';
+sadrzaj.innerHTML = '';
 
-        const naslov = document.createElement('div');
-        naslov.className = 'nisa-grupa-naslov';
-        naslov.innerHTML = `<span class="nisa-ikona">${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
-        grupa.appendChild(naslov);
+Object.entries(grupisano).forEach(([nisa, lista]) => {
+  const grupa = document.createElement('div');
+  grupa.className = 'nisa-grupa';
 
-        lista.forEach(p => {
-          const item = document.createElement('div');
-          item.className = 'tezga-proizvod';
-          const opisEscaped = (p.opis || '').replace(/'/g, "\\'");
-          const nazivEscaped = (p.naziv || '').replace(/'/g, "\\'");
-          item.innerHTML = `
-            ${p.slika
-              ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">`
-              : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`
-            }
-            <div class="tezga-info">
-              <div class="tezga-naziv">${p.naziv}</div>
-              <div class="tezga-detalji">
-                ${p.podnisa ? `${p.podnisa} • ` : ''}
-                Dostupno: ${p.kolicina} kg/kom
-                ${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}
-              </div>
-            </div>
-            <div class="tezga-cena">${p.cena} RSD</div>
-            <div class="tezga-akcije">
-              <button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${nazivEscaped}', ${p.cena}, ${p.kolicina}, '${opisEscaped}')">✏️ Izmeni</button>
-              <button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>
-            </div>
-          `;
-          grupa.appendChild(item);
-        });
+  const naslov = document.createElement('div');
+  naslov.className = 'nisa-grupa-naslov';
+  naslov.innerHTML = `<span class="nisa-ikona">${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
+  grupa.appendChild(naslov);
 
-        sadrzaj.appendChild(grupa);
-      });
+  lista.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'tezga-proizvod';
+    item.innerHTML = `
+      ${p.slika
+        ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">`
+        : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`
+      }
+      <div class="tezga-info">
+        <div class="tezga-naziv">${p.naziv}</div>
+        <div class="tezga-detalji">
+          ${p.podnisa ? `${p.podnisa} • ` : ''}
+          Dostupno: ${p.kolicina} kg/kom
+          ${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}
+        </div>
+      </div>
+      <div class="tezga-cena">${p.cena} RSD</div>
+      ${isOwnProfile ? `
+      <div class="tezga-akcije">
+        <button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena}, ${p.kolicina}, '${(p.opis||'').replace(/'/g, "\\'")}')">✏️ Izmeni</button>
+        <button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>
+      </div>` : ''}
+    `;
+    grupa.appendChild(item);
+  });
+
+  sadrzaj.appendChild(grupa);
+});
 
     } catch (err) {
       sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju proizvoda.</p>';
