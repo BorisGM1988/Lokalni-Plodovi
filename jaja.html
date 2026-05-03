@@ -205,12 +205,10 @@
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-      <li id="moj-profil-li" style="display:none;">
-  <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
-</li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
       <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
       <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
     </ul>
   </nav>
 </header>
@@ -244,6 +242,16 @@
       if (!response.ok) throw new Error();
 
       const proizvodi = await response.json();
+
+      const token = localStorage.getItem('token');
+      let currentUserId = null;
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          currentUserId = payload.userId;
+        } catch(e) {}
+      }
+
       container.innerHTML = '';
 
       if (proizvodi.length === 0) {
@@ -259,6 +267,7 @@
       grid.className = 'proizvodi-grid';
 
       proizvodi.forEach(p => {
+        const isOwner = currentUserId && String(p.userId) === String(currentUserId);
         const slika = p.slika && p.slika.trim() !== ''
           ? p.slika
           : 'https://via.placeholder.com/400x200?text=Nema+slike';
@@ -280,12 +289,21 @@
             ${p.prodavacLokacija ? `<div class="card-info"><strong>Lokacija:</strong> ${p.prodavacLokacija}</div>` : ''}
             ${p.opis ? `<div class="card-info"><strong>Opis:</strong> ${p.opis}</div>` : ''}
             ${datum ? `<div class="card-datum">Dodato: ${datum}</div>` : ''}
-            ${p.userId
-              ? `<button class="btn-profil" onclick="window.location.href='moj-profil.html?userId=${p.userId}'">
-                   <i class="fas fa-user"></i> Poseti profil
-                 </button>`
-              : `<span style="color:#999; font-size:0.85rem;">Profil nedostupan</span>`
-            }
+            <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:1.2rem;">
+              ${p.userId
+                ? `<button class="btn-profil" onclick="window.location.href='moj-profil.html?userId=${p.userId}'">
+                     <i class="fas fa-user"></i> Poseti profil
+                   </button>`
+                : `<span style="color:#999; font-size:0.85rem;">Profil nedostupan</span>`
+              }
+              ${isOwner
+                ? `<button onclick="obrisiProizvod(${p.id})"
+                     style="display:inline-flex; align-items:center; gap:0.5rem; background:#d32f2f; color:white; padding:0.7rem 1.2rem; border-radius:8px; font-weight:600; font-size:0.95rem; border:none; cursor:pointer;">
+                     <i class="fas fa-trash"></i> Obriši
+                   </button>`
+                : ''
+              }
+            </div>
           </div>`;
 
         grid.appendChild(card);
@@ -299,15 +317,42 @@
   }
 
   function initNav() {
-    const loggedIn = !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
+    const loggedIn = !!token;
     document.getElementById('moj-profil-li').style.display = loggedIn ? 'list-item' : 'none';
     document.getElementById('odjavi-se-li').style.display = loggedIn ? 'list-item' : 'none';
     document.getElementById('prijavi-se-li').style.display = loggedIn ? 'none' : 'list-item';
     document.getElementById('postani-prodavac-li').style.display = loggedIn ? 'none' : 'list-item';
+
+    const link = document.getElementById('moj-profil-link');
+    if (link && token) {
+      link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+    }
+  }
+
+  async function obrisiProizvod(id) {
+    if (!confirm('Da li ste sigurni da želite da obrišete ovaj proizvod?')) return;
+    const token = localStorage.getItem('token');
+    if (!token) return alert('Morate biti ulogovani!');
+    try {
+      const res = await fetch(`${backendUrl}/proizvod/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        alert('✅ Proizvod je uspešno obrisan.');
+        ucitajProizvode();
+      } else {
+        alert('Greška pri brisanju.');
+      }
+    } catch (err) {
+      alert('Došlo je do greške pri brisanju.');
+    }
   }
 
   function odjaviSe() {
-    localStorage.removeItem('token');
+    localStorage.clear();
     window.location.href = 'index.html';
   }
 
@@ -326,31 +371,6 @@ s1.async=true; s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh'
 s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
-</script>
-  <script>
-  // Dinamički Moj profil za kupca i prodavca
-  document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const tip = localStorage.getItem('tip');
-
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-
-      // Promeni link u zavisnosti od tipa korisnika
-      const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
-      }
-    }
-  });
-
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
 </script>
 </body>
 </html>
