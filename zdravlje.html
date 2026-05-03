@@ -250,7 +250,7 @@
 
     try {
       // FIX: uklonjeno &podnisa=Zdravlje — Zdravlje nema podnišu
-      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Zdravlje`);
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Bilje i Zdravlje`);
       if (!response.ok) throw new Error('Greška na serveru');
 
       const proizvodi = await response.json();
