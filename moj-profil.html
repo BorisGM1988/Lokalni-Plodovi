@@ -768,7 +768,7 @@ footer p { margin: 0; }
         <video id="preview-novost-video" style="width:100%; max-height:200px; border-radius:10px; display:none;" controls></video>
         <div id="novost-video-placeholder">
           <div style="font-size:2rem;">🎥</div>
-          <p style="margin:0.4rem 0 0; color:#f59e0b; font-weight:600;">Dodaj kratki video (max 60 sek, opciono)</p>
+          <p style="margin:0.4rem 0 0; color:#f59e0b; font-weight:600;">Dodaj kratki video (max 30 sek, opciono)</p>
         </div>
       </div>
 
@@ -1104,26 +1104,32 @@ footer p { margin: 0; }
         naslov.innerHTML = `<span class="nisa-ikona">${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
         grupa.appendChild(naslov);
 
-lista.forEach(p => {
-  const item = document.createElement('div');
-  item.className = 'tezga-proizvod';
-  item.innerHTML = `
-    ${p.slika
-      ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">`
-      : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`
-    }
-    <div class="tezga-info">
-      <div class="tezga-naziv">${p.naziv}</div>
-      <div class="tezga-detalji">
-        ${p.podnisa ? `${p.podnisa} • ` : ''}
-        Dostupno: ${p.kolicina} kg/kom
-        ${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}
-      </div>
-    </div>
-    <div class="tezga-cena">${p.cena} RSD</div>
-  `;
-  grupa.appendChild(item);
-});
+        lista.forEach(p => {
+          const item = document.createElement('div');
+          item.className = 'tezga-proizvod';
+          const opisEscaped = (p.opis || '').replace(/'/g, "\\'");
+          const nazivEscaped = (p.naziv || '').replace(/'/g, "\\'");
+          item.innerHTML = `
+            ${p.slika
+              ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">`
+              : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`
+            }
+            <div class="tezga-info">
+              <div class="tezga-naziv">${p.naziv}</div>
+              <div class="tezga-detalji">
+                ${p.podnisa ? `${p.podnisa} • ` : ''}
+                Dostupno: ${p.kolicina} kg/kom
+                ${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}
+              </div>
+            </div>
+            <div class="tezga-cena">${p.cena} RSD</div>
+            <div class="tezga-akcije">
+              <button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${nazivEscaped}', ${p.cena}, ${p.kolicina}, '${opisEscaped}')">✏️ Izmeni</button>
+              <button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>
+            </div>
+          `;
+          grupa.appendChild(item);
+        });
 
         sadrzaj.appendChild(grupa);
       });
@@ -1489,68 +1495,6 @@ lista.forEach(p => {
       }
     }
   });
-  function otvoriEditProizvod(id, naziv, cena, kolicina, opis) {
-  document.getElementById('edit-proizvod-id').value = id;
-  document.getElementById('edit-naziv').value = naziv;
-  document.getElementById('edit-cena').value = cena;
-  document.getElementById('edit-kolicina').value = kolicina;
-  document.getElementById('edit-opis-proizvoda').value = opis;
-  document.getElementById('edit-proizvod-modal').style.display = 'flex';
-}
-
-function zatvoriEditProizvodModal() {
-  document.getElementById('edit-proizvod-modal').style.display = 'none';
-}
-
-async function sacuvajIzmeneProizvoda() {
-  const token = localStorage.getItem('token');
-  if (!token) return alert('Morate biti ulogovani!');
-
-  const id = document.getElementById('edit-proizvod-id').value;
-  const naziv = document.getElementById('edit-naziv').value.trim();
-  const cena = parseFloat(document.getElementById('edit-cena').value);
-  const kolicina = parseInt(document.getElementById('edit-kolicina').value);
-  const opis = document.getElementById('edit-opis-proizvoda').value.trim();
-
-  if (!naziv || !cena || !kolicina) { alert('Popunite sva obavezna polja!'); return; }
-
-  try {
-    const res = await fetch(`${backendUrl}/proizvod/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify({ naziv, cena, kolicina, opis })
-    });
-    const result = await res.json();
-    if (res.ok) {
-      alert('✅ Proizvod izmenjen!');
-      zatvoriEditProizvodModal();
-      pogledajTezgu(); // osvežava tezgu
-    } else {
-      alert('Greška: ' + (result.error || 'Nešto nije u redu'));
-    }
-  } catch (err) {
-    alert('Greška: ' + err.message);
-  }
-}
-
-async function obrisiProizvodTezga(id) {
-  if (!confirm('Obrisati ovaj proizvod?')) return;
-  const token = localStorage.getItem('token');
-  try {
-    const res = await fetch(`${backendUrl}/proizvod/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (res.ok) {
-      alert('✅ Proizvod obrisan!');
-      pogledajTezgu();
-    } else {
-      alert('Greška pri brisanju.');
-    }
-  } catch (err) {
-    alert('Greška.');
-  }
-}
 </script>
 </body>
 </html>
