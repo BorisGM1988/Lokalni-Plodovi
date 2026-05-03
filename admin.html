@@ -23,10 +23,12 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     header h1 { font-size: 1.5rem; }
-    header span { opacity: 0.8; font-size: 0.9rem; }
 
     #login-screen {
       display: flex;
@@ -46,16 +48,8 @@
       text-align: center;
     }
 
-    .login-box h2 {
-      color: #2e7d32;
-      margin-bottom: 0.5rem;
-      font-size: 1.8rem;
-    }
-
-    .login-box p {
-      color: #666;
-      margin-bottom: 2rem;
-    }
+    .login-box h2 { color: #2e7d32; margin-bottom: 0.5rem; font-size: 1.8rem; }
+    .login-box p { color: #666; margin-bottom: 2rem; }
 
     .login-box input {
       width: 100%;
@@ -66,10 +60,7 @@
       margin-bottom: 1rem;
     }
 
-    .login-box input:focus {
-      border-color: #4caf50;
-      outline: none;
-    }
+    .login-box input:focus { border-color: #4caf50; outline: none; }
 
     .login-box button {
       width: 100%;
@@ -85,57 +76,48 @@
     }
 
     .login-box button:hover { background: #4caf50; }
-
-    #login-error {
-      color: red;
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-    }
+    #login-error { color: red; margin-top: 0.5rem; font-size: 0.9rem; }
 
     #admin-panel { display: none; }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem 2rem 0.5rem;
     }
 
     .stat-card {
       background: white;
-      border-radius: 16px;
-      padding: 1.5rem;
+      border-radius: 14px;
+      padding: 1.2rem;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+      transition: transform 0.2s;
     }
 
-    .stat-card .broj {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #2e7d32;
-    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card .broj { font-size: 2.4rem; font-weight: 700; }
+    .stat-card .naziv { color: #666; font-size: 0.85rem; margin-top: 0.2rem; }
+    .stat-card i { font-size: 1.6rem; margin-bottom: 0.3rem; display: block; }
 
-    .stat-card .naziv {
-      color: #666;
-      font-size: 1rem;
-      margin-top: 0.3rem;
-    }
-
-    .stat-card i {
-      font-size: 2rem;
-      color: #4caf50;
-      margin-bottom: 0.5rem;
-    }
+    .stat-prodavaci .broj, .stat-prodavaci i { color: #2e7d32; }
+    .stat-kupci .broj, .stat-kupci i { color: #1877f2; }
+    .stat-proizvodi .broj, .stat-proizvodi i { color: #f59e0b; }
+    .stat-objave .broj, .stat-objave i { color: #7c3aed; }
+    .stat-refresh { cursor: pointer; }
+    .stat-refresh .broj { font-size: 1.4rem; color: #666; margin-top: 0.4rem; }
+    .stat-refresh i { color: #666; }
 
     .tabs {
       display: flex;
       gap: 0.5rem;
-      padding: 0 2rem;
+      padding: 1rem 2rem 0.5rem;
       flex-wrap: wrap;
     }
 
     .tab {
-      padding: 0.8rem 1.5rem;
+      padding: 0.65rem 1.2rem;
       background: white;
       border: none;
       border-radius: 50px;
@@ -144,61 +126,69 @@
       color: #666;
       transition: 0.2s;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      font-size: 0.88rem;
     }
 
-    .tab.active {
-      background: #2e7d32;
-      color: white;
-    }
-
+    .tab.active { background: #2e7d32; color: white; }
     .tab:hover:not(.active) { background: #e8f5e9; color: #2e7d32; }
 
-    .section {
-      display: none;
-      padding: 2rem;
-    }
-
+    .section { display: none; padding: 0.8rem 2rem 2rem; }
     .section.active { display: block; }
 
-    .search-bar {
-      margin-bottom: 1.5rem;
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.8rem;
     }
 
-    .search-bar input {
-      width: 100%;
-      max-width: 400px;
-      padding: 0.8rem 1rem;
+    .search-input {
+      padding: 0.65rem 1.1rem;
       border: 2px solid #e0e0e0;
       border-radius: 50px;
-      font-size: 1rem;
+      font-size: 0.9rem;
+      min-width: 260px;
+      transition: 0.2s;
     }
 
-    .search-bar input:focus {
-      border-color: #4caf50;
-      outline: none;
+    .search-input:focus { border-color: #4caf50; outline: none; }
+
+    .count-badge {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 0.35rem 0.9rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.85rem;
     }
 
-    table {
-      width: 100%;
+    .table-wrap {
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border-collapse: collapse;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
       overflow: hidden;
+      overflow-x: auto;
     }
+
+    table { width: 100%; border-collapse: collapse; min-width: 580px; }
 
     th {
       background: #2e7d32;
       color: white;
-      padding: 1rem;
+      padding: 0.85rem 1rem;
       text-align: left;
       font-weight: 600;
+      font-size: 0.85rem;
+      white-space: nowrap;
     }
 
     td {
-      padding: 0.9rem 1rem;
+      padding: 0.75rem 1rem;
       border-bottom: 1px solid #f0f0f0;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
+      vertical-align: middle;
     }
 
     tr:last-child td { border-bottom: none; }
@@ -208,102 +198,207 @@
       background: #d32f2f;
       color: white;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.38rem 0.85rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
       transition: 0.2s;
     }
 
     .btn-delete:hover { background: #b71c1c; }
 
-    .badge {
-      display: inline-block;
-      padding: 0.3rem 0.8rem;
-      border-radius: 50px;
+    .btn-info {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.38rem 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
       font-size: 0.8rem;
       font-weight: 600;
-      background: #e8f5e9;
-      color: #2e7d32;
+      transition: 0.2s;
+      margin-right: 0.3rem;
     }
 
-    .loading {
-      text-align: center;
-      padding: 3rem;
-      color: #666;
-      font-size: 1.1rem;
+    .btn-info:hover { background: #1d4ed8; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
     }
+
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-yellow { background: #fef3c7; color: #92400e; }
+    .badge-purple { background: #ede9fe; color: #5b21b6; }
+
+    .loading { text-align: center; padding: 3rem; color: #666; }
+    .empty-state { text-align: center; padding: 3rem; color: #aaa; }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 0.8rem; display: block; }
 
     .btn-logout {
       background: rgba(255,255,255,0.2);
       color: white;
       border: 1px solid rgba(255,255,255,0.4);
-      padding: 0.5rem 1.2rem;
+      padding: 0.45rem 1.1rem;
       border-radius: 50px;
       cursor: pointer;
       font-weight: 600;
       transition: 0.2s;
+      font-size: 0.9rem;
     }
 
     .btn-logout:hover { background: rgba(255,255,255,0.3); }
 
-    .ime-skraceno {
-      max-width: 180px;
+    .cell-truncate {
+      max-width: 160px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.65);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: white;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 1.1rem 1.5rem;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 { margin: 0; font-size: 1.1rem; }
+
+    .modal-close {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .modal-body { padding: 1.2rem 1.5rem; }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9rem;
+      gap: 1rem;
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row .lbl { color: #888; font-weight: 500; white-space: nowrap; }
+    .detail-row .val { color: #222; font-weight: 600; text-align: right; word-break: break-word; max-width: 65%; }
+
+    .nise-wrap { display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: flex-end; }
+
+    .avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      vertical-align: middle;
+      margin-right: 8px;
+      border: 2px solid #e0e0e0;
+    }
+
+    .tip-prodavac { background: #d1fae5; color: #065f46; }
+    .tip-kupac { background: #dbeafe; color: #1e40af; }
   </style>
 </head>
 <body>
 
-<!-- LOGIN EKRAN -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div style="font-size:3rem; margin-bottom:1rem;">🌿</div>
     <h2>Admin Panel</h2>
     <p>LokalniPlodovi upravljačka tabla</p>
-    <input type="password" id="admin-lozinka" placeholder="Admin lozinka" 
+    <input type="password" id="admin-lozinka" placeholder="Admin lozinka"
       onkeypress="if(event.key==='Enter') prijavi()">
     <button onclick="prijavi()">Prijavi se</button>
     <p id="login-error"></p>
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- PANEL -->
 <div id="admin-panel">
   <header>
     <h1>🌿 LokalniPlodovi Admin</h1>
     <div style="display:flex; align-items:center; gap:1rem;">
-      <span id="datum-vreme"></span>
-      <button class="btn-logout" onclick="odjaviSe()">Odjavi se</button>
+      <span style="opacity:0.75; font-size:0.82rem;" id="datum-vreme"></span>
+      <button class="btn-logout" onclick="odjaviSe()"><i class="fas fa-sign-out-alt"></i> Odjavi se</button>
     </div>
   </header>
 
-  <!-- STATISTIKE -->
+  <!-- STATS -->
   <div class="stats-grid">
-    <div class="stat-card">
-      <i class="fas fa-users"></i>
-      <div class="broj" id="stat-korisnici">-</div>
-      <div class="naziv">Registrovanih korisnika</div>
+    <div class="stat-card stat-prodavaci">
+      <i class="fas fa-store"></i>
+      <div class="broj" id="stat-prodavaci">-</div>
+      <div class="naziv">Prodavača</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-kupci">
+      <i class="fas fa-user"></i>
+      <div class="broj" id="stat-kupci">-</div>
+      <div class="naziv">Kupaca</div>
+    </div>
+    <div class="stat-card stat-proizvodi">
       <i class="fas fa-box"></i>
       <div class="broj" id="stat-proizvodi">-</div>
-      <div class="naziv">Aktivnih proizvoda</div>
+      <div class="naziv">Proizvoda</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-objave">
       <i class="fas fa-newspaper"></i>
       <div class="broj" id="stat-objave">-</div>
       <div class="naziv">Objava</div>
+    </div>
+    <div class="stat-card stat-refresh" onclick="osvezi()" title="Osvezi podatke">
+      <i class="fas fa-sync-alt"></i>
+      <div class="broj">↻</div>
+      <div class="naziv">Osvezi sve</div>
     </div>
   </div>
 
   <!-- TABOVI -->
   <div class="tabs">
-    <button class="tab active" onclick="prikaziSekciju('korisnici', this)">
-      <i class="fas fa-users"></i> Korisnici
+    <button class="tab active" onclick="prikaziSekciju('prodavaci', this)">
+      <i class="fas fa-store"></i> Prodavači
+    </button>
+    <button class="tab" onclick="prikaziSekciju('kupci', this)">
+      <i class="fas fa-user"></i> Kupci
     </button>
     <button class="tab" onclick="prikaziSekciju('proizvodi', this)">
       <i class="fas fa-box"></i> Proizvodi
@@ -313,66 +408,121 @@
     </button>
   </div>
 
-  <!-- KORISNICI -->
-  <div id="sec-korisnici" class="section active">
-    <div class="search-bar">
-      <input type="text" id="search-korisnici" placeholder="🔍 Pretraži korisnike..." 
-        oninput="filterujKorisnike()">
+  <!-- PRODAVAČI -->
+  <div id="sec-prodavaci" class="section active">
+    <div class="toolbar">
+      <input class="search-input" id="srch-prodavaci" placeholder="🔍 Pretraži prodavače..."
+        oninput="filteruj('prodavaci')">
+      <span class="count-badge" id="cnt-prodavaci">0 prodavača</span>
     </div>
-    <div id="tabela-korisnici" class="loading">Učitavam korisnike...</div>
+    <div class="table-wrap">
+      <div id="tbl-prodavaci" class="loading">Učitavam...</div>
+    </div>
+  </div>
+
+  <!-- KUPCI -->
+  <div id="sec-kupci" class="section">
+    <div class="toolbar">
+      <input class="search-input" id="srch-kupci" placeholder="🔍 Pretraži kupce..."
+        oninput="filteruj('kupci')">
+      <span class="count-badge" id="cnt-kupci">0 kupaca</span>
+    </div>
+    <div class="table-wrap">
+      <div id="tbl-kupci" class="loading">Učitavam...</div>
+    </div>
   </div>
 
   <!-- PROIZVODI -->
   <div id="sec-proizvodi" class="section">
-    <div class="search-bar">
-      <input type="text" id="search-proizvodi" placeholder="🔍 Pretraži proizvode..." 
-        oninput="filterujProizvode()">
+    <div class="toolbar">
+      <input class="search-input" id="srch-proizvodi" placeholder="🔍 Pretraži proizvode..."
+        oninput="filteruj('proizvodi')">
+      <span class="count-badge" id="cnt-proizvodi">0 proizvoda</span>
     </div>
-    <div id="tabela-proizvodi" class="loading">Učitavam proizvode...</div>
+    <div class="table-wrap">
+      <div id="tbl-proizvodi" class="loading">Učitavam...</div>
+    </div>
   </div>
 
   <!-- OBJAVE -->
   <div id="sec-objave" class="section">
-    <div id="tabela-objave" class="loading">Učitavam objave...</div>
+    <div class="toolbar">
+      <input class="search-input" id="srch-objave" placeholder="🔍 Pretraži objave..."
+        oninput="filteruj('objave')">
+      <span class="count-badge" id="cnt-objave">0 objava</span>
+    </div>
+    <div class="table-wrap">
+      <div id="tbl-objave" class="loading">Učitavam...</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALJI KORISNIKA -->
+<div class="modal-overlay" id="modal-korisnik">
+  <div class="modal-box">
+    <div class="modal-header" style="background:linear-gradient(135deg,#2e7d32,#4caf50);">
+      <h3>👤 Detalji korisnika</h3>
+      <button class="modal-close" onclick="zatvoriModal('modal-korisnik')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-korisnik-body"></div>
+  </div>
+</div>
+
+<!-- MODAL DETALJI PROIZVODA -->
+<div class="modal-overlay" id="modal-proizvod">
+  <div class="modal-box">
+    <div class="modal-header" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+      <h3>📦 Detalji proizvoda</h3>
+      <button class="modal-close" onclick="zatvoriModal('modal-proizvod')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-proizvod-body"></div>
+  </div>
+</div>
+
+<!-- MODAL DETALJI OBJAVE -->
+<div class="modal-overlay" id="modal-objava">
+  <div class="modal-box">
+    <div class="modal-header" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">
+      <h3>📢 Detalji objave</h3>
+      <button class="modal-close" onclick="zatvoriModal('modal-objava')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-objava-body"></div>
   </div>
 </div>
 
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   let adminLozinka = '';
-  let sviKorisnici = [];
-  let sviProizvodi = [];
 
-  // Datum i vreme
-  function updateVreme() {
-    document.getElementById('datum-vreme').textContent = 
-      new Date().toLocaleString('sr-RS');
-  }
-  setInterval(updateVreme, 1000);
-  updateVreme();
+  // Podaci
+  let data = {
+    prodavaci: [],
+    kupci: [],
+    proizvodi: [],
+    objave: []
+  };
+
+  // Vreme
+  setInterval(() => {
+    document.getElementById('datum-vreme').textContent = new Date().toLocaleString('sr-RS');
+  }, 1000);
 
   async function prijavi() {
-    const lozinka = document.getElementById('admin-lozinka').value;
+    const lozinka = document.getElementById('admin-lozinka').value.trim();
     if (!lozinka) return;
-
     try {
       const res = await fetch(`${backendUrl}/admin/stats`, {
         headers: { 'x-admin-password': lozinka }
       });
-
       if (res.ok) {
         adminLozinka = lozinka;
-        const data = await res.json();
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-panel').style.display = 'block';
-        prikaziStats(data);
-        ucitajKorisnike();
-        ucitajProizvode();
-        ucitajObjave();
+        ucitajSve();
       } else {
         document.getElementById('login-error').textContent = '❌ Pogrešna lozinka!';
       }
-    } catch (err) {
+    } catch {
       document.getElementById('login-error').textContent = 'Greška pri povezivanju sa serverom';
     }
   }
@@ -384,17 +534,26 @@
     document.getElementById('admin-lozinka').value = '';
   }
 
-  function prikaziStats(data) {
-    document.getElementById('stat-korisnici').textContent = data.korisnici;
-    document.getElementById('stat-proizvodi').textContent = data.proizvodi;
-    document.getElementById('stat-objave').textContent = data.objave;
+  async function osvezi() {
+    await ucitajSve();
   }
 
-  function prikaziSekciju(naziv, btn) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(`sec-${naziv}`).classList.add('active');
-    btn.classList.add('active');
+  async function ucitajSve() {
+    await Promise.all([ucitajKorisnike(), ucitajProizvode(), ucitajObjave()]);
+    await ucitajStats();
+  }
+
+  async function ucitajStats() {
+    try {
+      const res = await fetch(`${backendUrl}/admin/stats`, {
+        headers: { 'x-admin-password': adminLozinka }
+      });
+      const s = await res.json();
+      document.getElementById('stat-prodavaci').textContent = s.korisnici - s.kupci;
+      document.getElementById('stat-kupci').textContent = s.kupci;
+      document.getElementById('stat-proizvodi').textContent = s.proizvodi;
+      document.getElementById('stat-objave').textContent = s.objave;
+    } catch {}
   }
 
   async function ucitajKorisnike() {
@@ -402,88 +561,13 @@
       const res = await fetch(`${backendUrl}/admin/korisnici`, {
         headers: { 'x-admin-password': adminLozinka }
       });
-      sviKorisnici = await res.json();
-      prikaziKorisnike(sviKorisnici);
-    } catch (err) {
-      document.getElementById('tabela-korisnici').innerHTML = '<p style="color:red;">Greška pri učitavanju</p>';
-    }
-  }
-
-  function prikaziKorisnike(korisnici) {
-    const div = document.getElementById('tabela-korisnici');
-    if (korisnici.length === 0) {
-      div.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">Nema korisnika</p>';
-      return;
-    }
-
-    div.innerHTML = `
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Ime</th>
-            <th>Email</th>
-            <th>Telefon</th>
-            <th>Lokacija</th>
-            <th>Registrovan</th>
-            <th>Akcija</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${korisnici.map(k => `
-            <tr>
-              <td>${k.id}</td>
-              <td class="ime-skraceno">${k.ime || '-'}</td>
-              <td>${k.email}</td>
-              <td>${k.telefon || '-'}</td>
-              <td>${k.lokacija || '-'}</td>
-              <td>${new Date(k.created_at).toLocaleDateString('sr-RS')}</td>
-              <td>
-                <button class="btn-delete" onclick="obrisiKorisnika(${k.id}, '${k.ime}')">
-                  🗑 Obriši
-                </button>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-  }
-
-  function filterujKorisnike() {
-    const upit = document.getElementById('search-korisnici').value.toLowerCase();
-    const filtrirani = sviKorisnici.filter(k => 
-      (k.ime || '').toLowerCase().includes(upit) ||
-      k.email.toLowerCase().includes(upit) ||
-      (k.lokacija || '').toLowerCase().includes(upit)
-    );
-    prikaziKorisnike(filtrirani);
-  }
-
-  async function obrisiKorisnika(id, ime) {
-    if (!confirm(`Obrisati korisnika "${ime}"?\nOvo će obrisati i sve njegove proizvode i objave!`)) return;
-
-    try {
-      const res = await fetch(`${backendUrl}/admin/korisnik/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-admin-password': adminLozinka }
-      });
-
-      if (res.ok) {
-        alert('✅ Korisnik obrisan!');
-        ucitajKorisnike();
-        ucitajProizvode();
-        ucitajObjave();
-        // Osvezi statistike
-        const statsRes = await fetch(`${backendUrl}/admin/stats`, {
-          headers: { 'x-admin-password': adminLozinka }
-        });
-        prikaziStats(await statsRes.json());
-      } else {
-        alert('Greška pri brisanju');
-      }
-    } catch (err) {
-      alert('Greška: ' + err.message);
+      const svi = await res.json();
+      data.prodavaci = svi.filter(k => k.tip !== 'kupac');
+      data.kupci = svi.filter(k => k.tip === 'kupac');
+      renderProdavaci(data.prodavaci);
+      renderKupci(data.kupci);
+    } catch {
+      document.getElementById('tbl-prodavaci').innerHTML = '<p style="color:red;padding:2rem;">Greška</p>';
     }
   }
 
@@ -492,87 +576,10 @@
       const res = await fetch(`${backendUrl}/admin/proizvodi`, {
         headers: { 'x-admin-password': adminLozinka }
       });
-      sviProizvodi = await res.json();
-      prikaziProizvode(sviProizvodi);
-    } catch (err) {
-      document.getElementById('tabela-proizvodi').innerHTML = '<p style="color:red;">Greška pri učitavanju</p>';
-    }
-  }
-
-  function prikaziProizvode(proizvodi) {
-    const div = document.getElementById('tabela-proizvodi');
-    if (proizvodi.length === 0) {
-      div.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">Nema proizvoda</p>';
-      return;
-    }
-
-    div.innerHTML = `
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Naziv</th>
-            <th>Niša</th>
-            <th>Podniša</th>
-            <th>Cena</th>
-            <th>Prodavac</th>
-            <th>Dodato</th>
-            <th>Akcija</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${proizvodi.map(p => `
-            <tr>
-              <td>${p.id}</td>
-              <td class="ime-skraceno">${p.naziv}</td>
-              <td><span class="badge">${p.glavnaNisa || '-'}</span></td>
-              <td>${p.podnisa || '-'}</td>
-              <td>${p.cena} RSD</td>
-              <td>${p.prodavacIme || '-'}</td>
-              <td>${new Date(p.created_at).toLocaleDateString('sr-RS')}</td>
-              <td>
-                <button class="btn-delete" onclick="obrisiProizvod(${p.id}, '${p.naziv}')">
-                  🗑 Obriši
-                </button>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-  }
-
-  function filterujProizvode() {
-    const upit = document.getElementById('search-proizvodi').value.toLowerCase();
-    const filtrirani = sviProizvodi.filter(p => 
-      p.naziv.toLowerCase().includes(upit) ||
-      (p.glavnaNisa || '').toLowerCase().includes(upit) ||
-      (p.prodavacIme || '').toLowerCase().includes(upit)
-    );
-    prikaziProizvode(filtrirani);
-  }
-
-  async function obrisiProizvod(id, naziv) {
-    if (!confirm(`Obrisati proizvod "${naziv}"?`)) return;
-
-    try {
-      const res = await fetch(`${backendUrl}/admin/proizvod/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-admin-password': adminLozinka }
-      });
-
-      if (res.ok) {
-        alert('✅ Proizvod obrisan!');
-        ucitajProizvode();
-        const statsRes = await fetch(`${backendUrl}/admin/stats`, {
-          headers: { 'x-admin-password': adminLozinka }
-        });
-        prikaziStats(await statsRes.json());
-      } else {
-        alert('Greška pri brisanju');
-      }
-    } catch (err) {
-      alert('Greška: ' + err.message);
+      data.proizvodi = await res.json();
+      renderProizvodi(data.proizvodi);
+    } catch {
+      document.getElementById('tbl-proizvodi').innerHTML = '<p style="color:red;padding:2rem;">Greška</p>';
     }
   }
 
@@ -581,41 +588,295 @@
       const res = await fetch(`${backendUrl}/admin/objave`, {
         headers: { 'x-admin-password': adminLozinka }
       });
-      const objave = await res.json();
-      const div = document.getElementById('tabela-objave');
-
-      if (objave.length === 0) {
-        div.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">Nema objava</p>';
-        return;
-      }
-
-      div.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tekst</th>
-              <th>Korisnik</th>
-              <th>Email</th>
-              <th>Objavljeno</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${objave.map(o => `
-              <tr>
-                <td>${o.id}</td>
-                <td class="ime-skraceno">${o.tekst}</td>
-                <td>${o.korisnikIme || '-'}</td>
-                <td>${o.korisnikEmail || '-'}</td>
-                <td>${new Date(o.created_at).toLocaleDateString('sr-RS')}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
-    } catch (err) {
-      document.getElementById('tabela-objave').innerHTML = '<p style="color:red;">Greška pri učitavanju</p>';
+      data.objave = await res.json();
+      renderObjave(data.objave);
+    } catch {
+      document.getElementById('tbl-objave').innerHTML = '<p style="color:red;padding:2rem;">Greška</p>';
     }
+  }
+
+  // ── RENDER FUNKCIJE ──
+
+  function renderProdavaci(lista) {
+    document.getElementById('cnt-prodavaci').textContent = `${lista.length} prodavača`;
+    const div = document.getElementById('tbl-prodavaci');
+    if (!lista.length) {
+      div.innerHTML = '<div class="empty-state"><i class="fas fa-store"></i>Nema prodavača</div>';
+      return;
+    }
+    div.innerHTML = `<table>
+      <thead><tr>
+        <th>#ID</th><th>Ime</th><th>Email</th><th>Telefon</th>
+        <th>Lokacija</th><th>Niše</th><th>Registrovan</th><th>Akcije</th>
+      </tr></thead>
+      <tbody>${lista.map(k => `
+        <tr>
+          <td style="color:#aaa;font-size:0.8rem;">#${k.id}</td>
+          <td class="cell-truncate">${k.ime || '-'}</td>
+          <td style="font-size:0.82rem;" class="cell-truncate">${k.email}</td>
+          <td>${k.telefon || '-'}</td>
+          <td>${k.lokacija || '-'}</td>
+          <td>${parseNise(k.nise).slice(0,2).map(n => `<span class="badge badge-green">${n}</span>`).join(' ') || '-'}</td>
+          <td style="white-space:nowrap;">${fmt(k.created_at)}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-info" onclick="detaljiKorisnika(${k.id})">👁</button>
+            <button class="btn-delete" onclick="obrisiKorisnika(${k.id},'${esc(k.ime)}')">🗑</button>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  function renderKupci(lista) {
+    document.getElementById('cnt-kupci').textContent = `${lista.length} kupaca`;
+    const div = document.getElementById('tbl-kupci');
+    if (!lista.length) {
+      div.innerHTML = '<div class="empty-state"><i class="fas fa-user"></i>Nema kupaca</div>';
+      return;
+    }
+    div.innerHTML = `<table>
+      <thead><tr>
+        <th>#ID</th><th>Ime</th><th>Email</th><th>Telefon</th>
+        <th>Lokacija</th><th>Registrovan</th><th>Akcije</th>
+      </tr></thead>
+      <tbody>${lista.map(k => `
+        <tr>
+          <td style="color:#aaa;font-size:0.8rem;">#${k.id}</td>
+          <td class="cell-truncate">${k.ime || '-'}</td>
+          <td style="font-size:0.82rem;" class="cell-truncate">${k.email}</td>
+          <td>${k.telefon || '-'}</td>
+          <td>${k.lokacija || '-'}</td>
+          <td style="white-space:nowrap;">${fmt(k.created_at)}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-info" onclick="detaljiKorisnika(${k.id})">👁</button>
+            <button class="btn-delete" onclick="obrisiKorisnika(${k.id},'${esc(k.ime)}')">🗑</button>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  function renderProizvodi(lista) {
+    document.getElementById('cnt-proizvodi').textContent = `${lista.length} proizvoda`;
+    const div = document.getElementById('tbl-proizvodi');
+    if (!lista.length) {
+      div.innerHTML = '<div class="empty-state"><i class="fas fa-box"></i>Nema proizvoda</div>';
+      return;
+    }
+    div.innerHTML = `<table>
+      <thead><tr>
+        <th>#ID</th><th>Naziv</th><th>Niša</th><th>Podniša</th>
+        <th>Cena</th><th>Kol.</th><th>Prodavac</th><th>Dodato</th><th>Akcije</th>
+      </tr></thead>
+      <tbody>${lista.map(p => `
+        <tr>
+          <td style="color:#aaa;font-size:0.8rem;">#${p.id}</td>
+          <td class="cell-truncate">${p.naziv}</td>
+          <td><span class="badge badge-yellow">${p.glavnaNisa || '-'}</span></td>
+          <td>${p.podnisa || '-'}</td>
+          <td style="font-weight:600;color:#2e7d32;">${p.cena} RSD</td>
+          <td>${p.kolicina}</td>
+          <td class="cell-truncate">${p.prodavacIme || '-'}</td>
+          <td style="white-space:nowrap;">${fmt(p.created_at)}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-info" onclick="detaljiProizvoda(${p.id})">👁</button>
+            <button class="btn-delete" onclick="obrisiProizvod(${p.id},'${esc(p.naziv)}')">🗑</button>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  function renderObjave(lista) {
+    document.getElementById('cnt-objave').textContent = `${lista.length} objava`;
+    const div = document.getElementById('tbl-objave');
+    if (!lista.length) {
+      div.innerHTML = '<div class="empty-state"><i class="fas fa-newspaper"></i>Nema objava</div>';
+      return;
+    }
+    div.innerHTML = `<table>
+      <thead><tr>
+        <th>#ID</th><th>Tekst</th><th>Slika</th><th>Video</th>
+        <th>Korisnik</th><th>Email</th><th>Objavljeno</th><th>Akcije</th>
+      </tr></thead>
+      <tbody>${lista.map(o => `
+        <tr>
+          <td style="color:#aaa;font-size:0.8rem;">#${o.id}</td>
+          <td class="cell-truncate">${o.tekst}</td>
+          <td>${o.slika ? '<span class="badge badge-green">Da</span>' : '-'}</td>
+          <td>${o.video ? '<span class="badge badge-purple">Da</span>' : '-'}</td>
+          <td class="cell-truncate">${o.korisnikIme || '-'}</td>
+          <td style="font-size:0.82rem;" class="cell-truncate">${o.korisnikEmail || '-'}</td>
+          <td style="white-space:nowrap;">${fmt(o.created_at)}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-info" onclick="detaljiObjave(${o.id})">👁</button>
+            <button class="btn-delete" onclick="obrisiObjavu(${o.id})">🗑</button>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  // ── PRETRAGA ──
+  function filteruj(tip) {
+    const upit = document.getElementById(`srch-${tip}`).value.toLowerCase();
+    if (tip === 'prodavaci') {
+      renderProdavaci(data.prodavaci.filter(k =>
+        (k.ime||'').toLowerCase().includes(upit) ||
+        k.email.toLowerCase().includes(upit) ||
+        (k.lokacija||'').toLowerCase().includes(upit)
+      ));
+    } else if (tip === 'kupci') {
+      renderKupci(data.kupci.filter(k =>
+        (k.ime||'').toLowerCase().includes(upit) ||
+        k.email.toLowerCase().includes(upit) ||
+        (k.lokacija||'').toLowerCase().includes(upit)
+      ));
+    } else if (tip === 'proizvodi') {
+      renderProizvodi(data.proizvodi.filter(p =>
+        p.naziv.toLowerCase().includes(upit) ||
+        (p.glavnaNisa||'').toLowerCase().includes(upit) ||
+        (p.prodavacIme||'').toLowerCase().includes(upit)
+      ));
+    } else if (tip === 'objave') {
+      renderObjave(data.objave.filter(o =>
+        o.tekst.toLowerCase().includes(upit) ||
+        (o.korisnikIme||'').toLowerCase().includes(upit) ||
+        (o.korisnikEmail||'').toLowerCase().includes(upit)
+      ));
+    }
+  }
+
+  // ── DETALJI MODALI ──
+  function detaljiKorisnika(id) {
+    const svi = [...data.prodavaci, ...data.kupci];
+    const k = svi.find(x => x.id === id);
+    if (!k) return;
+    const nise = parseNise(k.nise);
+    document.getElementById('modal-korisnik-body').innerHTML = `
+      <div class="detail-row"><span class="lbl">ID</span><span class="val">#${k.id}</span></div>
+      <div class="detail-row"><span class="lbl">Ime</span><span class="val">${k.ime || '-'}</span></div>
+      <div class="detail-row"><span class="lbl">Email</span><span class="val">${k.email}</span></div>
+      <div class="detail-row"><span class="lbl">Telefon</span><span class="val">${k.telefon || '-'}</span></div>
+      <div class="detail-row"><span class="lbl">Lokacija</span><span class="val">${k.lokacija || '-'}</span></div>
+      <div class="detail-row"><span class="lbl">Tip</span>
+        <span class="val"><span class="badge ${k.tip === 'kupac' ? 'tip-kupac' : 'tip-prodavac'}">${k.tip || 'prodavac'}</span></span>
+      </div>
+      ${nise.length ? `<div class="detail-row"><span class="lbl">Niše</span>
+        <span class="val"><div class="nise-wrap">${nise.map(n => `<span class="badge badge-green">${n}</span>`).join('')}</div></span>
+      </div>` : ''}
+      <div class="detail-row"><span class="lbl">Registrovan</span><span class="val">${fmt(k.created_at)}</span></div>
+      <div style="margin-top:1rem; display:flex; gap:0.8rem;">
+        <button class="btn-delete" style="flex:1;padding:10px;" onclick="obrisiKorisnika(${k.id},'${esc(k.ime)}'); zatvoriModal('modal-korisnik')">
+          🗑 Obriši korisnika
+        </button>
+      </div>`;
+    otvoriModal('modal-korisnik');
+  }
+
+  function detaljiProizvoda(id) {
+    const p = data.proizvodi.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('modal-proizvod-body').innerHTML = `
+      ${p.slika ? `<img src="${p.slika}" style="width:100%;max-height:180px;object-fit:cover;border-radius:10px;margin-bottom:1rem;">` : ''}
+      <div class="detail-row"><span class="lbl">ID</span><span class="val">#${p.id}</span></div>
+      <div class="detail-row"><span class="lbl">Naziv</span><span class="val">${p.naziv}</span></div>
+      <div class="detail-row"><span class="lbl">Cena</span><span class="val" style="color:#2e7d32;">${p.cena} RSD</span></div>
+      <div class="detail-row"><span class="lbl">Količina</span><span class="val">${p.kolicina}</span></div>
+      <div class="detail-row"><span class="lbl">Niša</span><span class="val"><span class="badge badge-yellow">${p.glavnaNisa || '-'}</span></span></div>
+      <div class="detail-row"><span class="lbl">Podniša</span><span class="val">${p.podnisa || '-'}</span></div>
+      <div class="detail-row"><span class="lbl">Opis</span><span class="val">${p.opis || '-'}</span></div>
+      <div class="detail-row"><span class="lbl">Prodavac</span><span class="val">${p.prodavacIme || '-'}</span></div>
+      <div class="detail-row"><span class="lbl">Dodato</span><span class="val">${fmt(p.created_at)}</span></div>
+      <div style="margin-top:1rem;">
+        <button class="btn-delete" style="width:100%;padding:10px;" onclick="obrisiProizvod(${p.id},'${esc(p.naziv)}'); zatvoriModal('modal-proizvod')">
+          🗑 Obriši proizvod
+        </button>
+      </div>`;
+    otvoriModal('modal-proizvod');
+  }
+
+  function detaljiObjave(id) {
+    const o = data.objave.find(x => x.id === id);
+    if (!o) return;
+    document.getElementById('modal-objava-body').innerHTML = `
+      ${o.slika ? `<img src="${o.slika}" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;margin-bottom:1rem;">` : ''}
+      ${o.video ? `<video src="${o.video}" controls style="width:100%;max-height:160px;border-radius:10px;margin-bottom:1rem;"></video>` : ''}
+      <div class="detail-row"><span class="lbl">ID</span><span class="val">#${o.id}</span></div>
+      <div class="detail-row"><span class="lbl">Tekst</span><span class="val" style="max-width:70%;text-align:right;">${o.tekst}</span></div>
+      <div class="detail-row"><span class="lbl">Korisnik</span><span class="val">${o.korisnikIme || '-'}</span></div>
+      <div class="detail-row"><span class="lbl">Email</span><span class="val">${o.korisnikEmail || '-'}</span></div>
+      <div class="detail-row"><span class="lbl">Slika</span><span class="val">${o.slika ? '✅ Da' : '❌ Ne'}</span></div>
+      <div class="detail-row"><span class="lbl">Video</span><span class="val">${o.video ? '✅ Da' : '❌ Ne'}</span></div>
+      <div class="detail-row"><span class="lbl">Objavljeno</span><span class="val">${fmt(o.created_at)}</span></div>
+      <div style="margin-top:1rem;">
+        <button class="btn-delete" style="width:100%;padding:10px;" onclick="obrisiObjavu(${o.id}); zatvoriModal('modal-objava')">
+          🗑 Obriši objavu
+        </button>
+      </div>`;
+    otvoriModal('modal-objava');
+  }
+
+  function otvoriModal(id) { document.getElementById(id).classList.add('open'); }
+  function zatvoriModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  // Zatvaranje klikom na overlay
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+
+  // ── BRISANJE ──
+  async function obrisiKorisnika(id, ime) {
+    if (!confirm(`Obrisati korisnika "${ime}"?\nOvo će obrisati i sve njegove proizvode i objave!`)) return;
+    try {
+      const res = await fetch(`${backendUrl}/admin/korisnik/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': adminLozinka }
+      });
+      if (res.ok) { alert('✅ Korisnik obrisan!'); ucitajSve(); }
+      else alert('Greška pri brisanju');
+    } catch { alert('Greška'); }
+  }
+
+  async function obrisiProizvod(id, naziv) {
+    if (!confirm(`Obrisati proizvod "${naziv}"?`)) return;
+    try {
+      const res = await fetch(`${backendUrl}/admin/proizvod/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': adminLozinka }
+      });
+      if (res.ok) { alert('✅ Proizvod obrisan!'); ucitajProizvode(); ucitajStats(); }
+      else alert('Greška pri brisanju');
+    } catch { alert('Greška'); }
+  }
+
+  async function obrisiObjavu(id) {
+    if (!confirm('Obrisati ovu objavu?')) return;
+    try {
+      const res = await fetch(`${backendUrl}/objava/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': adminLozinka }
+      });
+      if (res.ok) { alert('✅ Objava obrisana!'); ucitajObjave(); ucitajStats(); }
+      else alert('Greška pri brisanju');
+    } catch { alert('Greška'); }
+  }
+
+  // ── POMOĆNE FUNKCIJE ──
+  function prikaziSekciju(naziv, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`sec-${naziv}`).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function parseNise(nise) {
+    try { return JSON.parse(nise) || []; } catch { return []; }
+  }
+
+  function fmt(d) {
+    if (!d) return '-';
+    return new Date(d).toLocaleDateString('sr-RS');
+  }
+
+  function esc(str) {
+    return (str || '').replace(/'/g, "\\'");
   }
 </script>
 </body>
