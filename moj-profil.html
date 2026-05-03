@@ -1495,6 +1495,72 @@ footer p { margin: 0; }
       }
     }
   });
+  // ── EDIT PROIZVOD ──
+  function otvoriEditProizvod(id, naziv, cena, kolicina, opis) {
+    document.getElementById('edit-proizvod-id').value = id;
+    document.getElementById('edit-naziv').value = naziv;
+    document.getElementById('edit-cena').value = cena;
+    document.getElementById('edit-kolicina').value = kolicina;
+    document.getElementById('edit-opis-proizvoda').value = opis || '';
+    document.getElementById('edit-proizvod-modal').style.display = 'flex';
+  }
+
+  function zatvoriEditProizvodModal() {
+    document.getElementById('edit-proizvod-modal').style.display = 'none';
+  }
+
+  async function sacuvajIzmeneProizvoda() {
+    const token = localStorage.getItem('token');
+    if (!token) return alert('Morate biti ulogovani!');
+
+    const id = document.getElementById('edit-proizvod-id').value;
+    const naziv = document.getElementById('edit-naziv').value.trim();
+    const cena = parseFloat(document.getElementById('edit-cena').value);
+    const kolicina = parseInt(document.getElementById('edit-kolicina').value);
+    const opis = document.getElementById('edit-opis-proizvoda').value.trim();
+
+    if (!naziv || !cena || !kolicina) { alert('Popunite sva obavezna polja!'); return; }
+
+    try {
+      const res = await fetch(`${backendUrl}/proizvod/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ naziv, cena, kolicina, opis })
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert('✅ Proizvod izmenjen!');
+        zatvoriEditProizvodModal();
+        pogledajTezgu();
+      } else {
+        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+      }
+    } catch (err) {
+      alert('Greška: ' + err.message);
+    }
+  }
+
+  async function obrisiProizvodTezga(id) {
+    if (!confirm('Obrisati ovaj proizvod?')) return;
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${backendUrl}/proizvod/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        alert('✅ Proizvod obrisan!');
+        pogledajTezgu();
+      } else {
+        alert('Greška pri brisanju.');
+      }
+    } catch (err) {
+      alert('Greška.');
+    }
+  }
+
+  document.getElementById('edit-proizvod-modal').addEventListener('click', function(e) {
+    if (e.target === this) zatvoriEditProizvodModal();
+  });
+
 </script>
-</body>
-</html>
