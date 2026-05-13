@@ -326,7 +326,7 @@ s0.parentNode.insertBefore(s1,s0);
         card.className = 'seller-card';
         card.innerHTML = `
           <div class="seller-img">
-            <img src="${p.slika}" alt="${p.ime}">
+          <img src="${p.slika}" alt="${p.ime}" onerror="this.src='/placeholder-prodavac.svg'">
           </div>
           <div class="seller-info">
             <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
