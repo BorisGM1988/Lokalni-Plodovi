@@ -473,6 +473,55 @@ footer p { margin: 0; }
   display: flex;
   gap: 0.5rem;
 }
+
+/* OCENE STIL */
+.ocena-card {
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.8rem;
+}
+
+.ocena-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.ocena-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ocena-ime { font-weight: 600; color: #333; font-size: 0.95rem; }
+.ocena-zvezdice { color: #f59e0b; font-size: 1rem; }
+.ocena-komentar { color: #555; font-size: 0.95rem; line-height: 1.5; }
+.ocena-vreme { color: #888; font-size: 0.8rem; margin-top: 0.3rem; }
+
+.prosek-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.prosek-broj {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2e7d32;
+  line-height: 1;
+}
+
+.prosek-zvezdice { color: #f59e0b; font-size: 1.3rem; }
+.prosek-info { color: #666; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -569,6 +618,14 @@ footer p { margin: 0; }
 <div id="objave-sekcija" style="margin-top: 3rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
   <h2 id="objave-naslov" style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
   <div id="objave-lista" style="min-height: 120px;"></div>
+</div>
+
+<!-- NOVA SEKCIJA: OCENE -->
+<div id="ocene-sekcija" style="margin-top: 2rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
+  <h2 style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">⭐ Ocene kupaca</h2>
+  <div id="ocene-lista" style="min-height: 80px;">
+    <p style="text-align:center; color:#666; padding:2rem;">Učitavam ocene...</p>
+  </div>
 </div>
 
 <footer>
@@ -739,7 +796,7 @@ footer p { margin: 0; }
   </div>
 </div>
 
-<!-- MODAL OBJAVI NOVOST — sa video uploadom -->
+<!-- MODAL OBJAVI NOVOST -->
 <div id="objavi-novost-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
   <div style="background:white; width:90%; max-width:540px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
     <div style="background:linear-gradient(135deg,#2e7d32,#4caf50); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
@@ -752,7 +809,6 @@ footer p { margin: 0; }
     <div style="padding:2rem;">
       <textarea id="novost-tekst" rows="4" placeholder='npr. "Danas imamo sveže maline po akcijskoj ceni!"' style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit;" onfocus="this.style.borderColor='#4caf50'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
 
-      <!-- Slika -->
       <input type="file" id="novost-slika" accept="image/*" style="display:none;">
       <div onclick="document.getElementById('novost-slika').click()" style="border:2px dashed #4caf50; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#f0fdf4; margin-top:1.2rem;">
         <img id="preview-novost-slika" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; display:none;">
@@ -762,7 +818,6 @@ footer p { margin: 0; }
         </div>
       </div>
 
-      <!-- Video -->
       <input type="file" id="novost-video" accept="video/*" style="display:none;">
       <div onclick="document.getElementById('novost-video').click()" style="border:2px dashed #f59e0b; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#fffbeb; margin-top:0.8rem;">
         <video id="preview-novost-video" style="width:100%; max-height:200px; border-radius:10px; display:none;" controls></video>
@@ -902,9 +957,80 @@ footer p { margin: 0; }
       }
 
       ucitajObjave();
+      ucitajOcene();
+
     } catch (err) {
       console.error('Greška pri učitavanju profila:', err);
       document.getElementById('profileName').textContent = 'Greška pri učitavanju profila';
+    }
+  }
+
+  // ── OCENE ──
+  async function ucitajOcene() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userIdParam = urlParams.get('userId');
+    const token = localStorage.getItem('token');
+    const lista = document.getElementById('ocene-lista');
+
+    let userId = userIdParam;
+    if (!userId && token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload.userId;
+      } catch(e) {}
+    }
+
+    if (!userId) {
+      lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Nema ocena.</p>';
+      return;
+    }
+
+    try {
+      const res = await fetch(`${backendUrl}/ocene/${userId}`);
+      const data = await res.json();
+
+      if (!data.ocene || data.ocene.length === 0) {
+        lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Još nema ocena za ovog prodavca.</p>';
+        return;
+      }
+
+      lista.innerHTML = '';
+
+      // Prosek
+      const prosekDiv = document.createElement('div');
+      prosekDiv.className = 'prosek-wrap';
+      prosekDiv.innerHTML = `
+        <div class="prosek-broj">${data.prosek}</div>
+        <div>
+          <div class="prosek-zvezdice">${'★'.repeat(Math.round(data.prosek))}${'☆'.repeat(5 - Math.round(data.prosek))}</div>
+          <div class="prosek-info">${data.ukupno} ${data.ukupno === 1 ? 'ocena' : data.ukupno < 5 ? 'ocene' : 'ocena'}</div>
+        </div>
+      `;
+      lista.appendChild(prosekDiv);
+
+      // Svaka ocena
+      data.ocene.forEach(o => {
+        const div = document.createElement('div');
+        div.className = 'ocena-card';
+        div.innerHTML = `
+          <div class="ocena-header">
+            ${o.odSlika
+              ? `<img src="${o.odSlika}" class="ocena-avatar" alt="${o.odIme}" onerror="this.src='/placeholder-prodavac.svg'">`
+              : `<div class="ocena-avatar" style="background:#e8f5e9; display:flex; align-items:center; justify-content:center; font-size:1rem;">👤</div>`
+            }
+            <div>
+              <div class="ocena-ime">${o.odIme || 'Kupac'}</div>
+              <div class="ocena-zvezdice">${'★'.repeat(o.ocena)}${'☆'.repeat(5 - o.ocena)}</div>
+            </div>
+          </div>
+          ${o.komentar ? `<div class="ocena-komentar">${o.komentar}</div>` : ''}
+          <div class="ocena-vreme">${new Date(o.created_at).toLocaleDateString('sr-RS')}</div>
+        `;
+        lista.appendChild(div);
+      });
+
+    } catch (err) {
+      lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Greška pri učitavanju ocena.</p>';
     }
   }
 
@@ -1086,63 +1212,62 @@ footer p { margin: 0; }
         return;
       }
 
-     // Provjeri da li je ovo SOPSTVENi profil
-const token = localStorage.getItem('token');
-let mojId = null;
-if (token) {
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    mojId = String(payload.userId);
-  } catch(e) {}
-}
-const isOwnProfile = mojId && String(trenutniUserId) === mojId;
-
-const grupisano = {};
-proizvodi.forEach(p => {
-  const nisa = p.glavnaNisa || 'Ostalo';
-  if (!grupisano[nisa]) grupisano[nisa] = [];
-  grupisano[nisa].push(p);
-});
-
-sadrzaj.innerHTML = '';
-
-Object.entries(grupisano).forEach(([nisa, lista]) => {
-  const grupa = document.createElement('div');
-  grupa.className = 'nisa-grupa';
-
-  const naslov = document.createElement('div');
-  naslov.className = 'nisa-grupa-naslov';
-  naslov.innerHTML = `<span class="nisa-ikona">${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
-  grupa.appendChild(naslov);
-
-  lista.forEach(p => {
-    const item = document.createElement('div');
-    item.className = 'tezga-proizvod';
-    item.innerHTML = `
-      ${p.slika
-        ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">`
-        : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`
+      const token = localStorage.getItem('token');
+      let mojId = null;
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          mojId = String(payload.userId);
+        } catch(e) {}
       }
-      <div class="tezga-info">
-        <div class="tezga-naziv">${p.naziv}</div>
-        <div class="tezga-detalji">
-          ${p.podnisa ? `${p.podnisa} • ` : ''}
-          Dostupno: ${p.kolicina} kg/kom
-          ${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}
-        </div>
-      </div>
-      <div class="tezga-cena">${p.cena} RSD</div>
-      ${isOwnProfile ? `
-      <div class="tezga-akcije">
-        <button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena}, ${p.kolicina}, '${(p.opis||'').replace(/'/g, "\\'")}')">✏️ Izmeni</button>
-        <button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>
-      </div>` : ''}
-    `;
-    grupa.appendChild(item);
-  });
+      const isOwnProfile = mojId && String(trenutniUserId) === mojId;
 
-  sadrzaj.appendChild(grupa);
-});
+      const grupisano = {};
+      proizvodi.forEach(p => {
+        const nisa = p.glavnaNisa || 'Ostalo';
+        if (!grupisano[nisa]) grupisano[nisa] = [];
+        grupisano[nisa].push(p);
+      });
+
+      sadrzaj.innerHTML = '';
+
+      Object.entries(grupisano).forEach(([nisa, lista]) => {
+        const grupa = document.createElement('div');
+        grupa.className = 'nisa-grupa';
+
+        const naslov = document.createElement('div');
+        naslov.className = 'nisa-grupa-naslov';
+        naslov.innerHTML = `<span class="nisa-ikona">${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
+        grupa.appendChild(naslov);
+
+        lista.forEach(p => {
+          const item = document.createElement('div');
+          item.className = 'tezga-proizvod';
+          item.innerHTML = `
+            ${p.slika
+              ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">`
+              : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`
+            }
+            <div class="tezga-info">
+              <div class="tezga-naziv">${p.naziv}</div>
+              <div class="tezga-detalji">
+                ${p.podnisa ? `${p.podnisa} • ` : ''}
+                Dostupno: ${p.kolicina} kg/kom
+                ${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}
+              </div>
+            </div>
+            <div class="tezga-cena">${p.cena} RSD</div>
+            ${isOwnProfile ? `
+            <div class="tezga-akcije">
+              <button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena}, ${p.kolicina}, '${(p.opis||'').replace(/'/g, "\\'")}')">✏️ Izmeni</button>
+              <button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>
+            </div>` : ''}
+          `;
+          grupa.appendChild(item);
+        });
+
+        sadrzaj.appendChild(grupa);
+      });
 
     } catch (err) {
       sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju proizvoda.</p>';
@@ -1479,7 +1604,6 @@ Object.entries(grupisano).forEach(([nisa, lista]) => {
     if (e.target === this) zatvoriModal();
   });
 
-  // Slika preview listener
   document.addEventListener('change', function(e) {
     if (e.target.id === 'novost-slika') {
       const file = e.target.files[0];
@@ -1494,7 +1618,6 @@ Object.entries(grupisano).forEach(([nisa, lista]) => {
       }
     }
 
-    // Video preview listener
     if (e.target.id === 'novost-video') {
       const file = e.target.files[0];
       if (file) {
@@ -1505,7 +1628,7 @@ Object.entries(grupisano).forEach(([nisa, lista]) => {
       }
     }
   });
-  // ── EDIT PROIZVOD ──
+
   function otvoriEditProizvod(id, naziv, cena, kolicina, opis) {
     document.getElementById('edit-proizvod-id').value = id;
     document.getElementById('edit-naziv').value = naziv;
@@ -1574,3 +1697,5 @@ Object.entries(grupisano).forEach(([nisa, lista]) => {
   });
 
 </script>
+</body>
+</html>
