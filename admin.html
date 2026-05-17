@@ -235,6 +235,8 @@
     .badge-blue { background: #dbeafe; color: #1e40af; }
     .badge-yellow { background: #fef3c7; color: #92400e; }
     .badge-purple { background: #ede9fe; color: #5b21b6; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-orange { background: #ffedd5; color: #9a3412; }
 
     .loading { text-align: center; padding: 3rem; color: #666; }
     .empty-state { text-align: center; padding: 3rem; color: #aaa; }
@@ -260,6 +262,8 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+
+    .zvezdice { color: #f59e0b; font-size: 1rem; }
 
     /* MODAL */
     .modal-overlay {
@@ -406,6 +410,9 @@
     <button class="tab" onclick="prikaziSekciju('objave', this)">
       <i class="fas fa-newspaper"></i> Objave
     </button>
+    <button class="tab" onclick="prikaziSekciju('ocene', this); ucitajOcene()">
+      <i class="fas fa-star"></i> Ocene
+    </button>
   </div>
 
   <!-- PRODAVAČI -->
@@ -455,6 +462,18 @@
       <div id="tbl-objave" class="loading">Učitavam...</div>
     </div>
   </div>
+
+  <!-- OCENE -->
+  <div id="sec-ocene" class="section">
+    <div class="toolbar">
+      <input class="search-input" id="srch-ocene" placeholder="🔍 Pretraži ocene..."
+        oninput="filterujOcene()">
+      <span class="count-badge" id="cnt-ocene">0 ocena</span>
+    </div>
+    <div class="table-wrap">
+      <div id="tbl-ocene" class="loading">Klikni tab Ocene da učitaš...</div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL DETALJI KORISNIKA -->
@@ -494,15 +513,14 @@
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   let adminLozinka = '';
 
-  // Podaci
   let data = {
     prodavaci: [],
     kupci: [],
     proizvodi: [],
-    objave: []
+    objave: [],
+    ocene: []
   };
 
-  // Vreme
   setInterval(() => {
     document.getElementById('datum-vreme').textContent = new Date().toLocaleString('sr-RS');
   }, 1000);
@@ -592,6 +610,20 @@
       renderObjave(data.objave);
     } catch {
       document.getElementById('tbl-objave').innerHTML = '<p style="color:red;padding:2rem;">Greška</p>';
+    }
+  }
+
+  async function ucitajOcene() {
+    const div = document.getElementById('tbl-ocene');
+    div.innerHTML = '<div class="loading">Učitavam ocene...</div>';
+    try {
+      const res = await fetch(`${backendUrl}/admin/ocene`, {
+        headers: { 'x-admin-password': adminLozinka }
+      });
+      data.ocene = await res.json();
+      renderOcene(data.ocene);
+    } catch {
+      div.innerHTML = '<p style="color:red;padding:2rem;">Greška pri učitavanju ocena</p>';
     }
   }
 
@@ -713,6 +745,50 @@
       </tbody></table>`;
   }
 
+  function renderOcene(lista) {
+    document.getElementById('cnt-ocene').textContent = `${lista.length} ocena`;
+    const div = document.getElementById('tbl-ocene');
+    if (!lista.length) {
+      div.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i>Nema ocena</div>';
+      return;
+    }
+    div.innerHTML = `<table>
+      <thead><tr>
+        <th>#ID</th>
+        <th>Od kupca</th>
+        <th>Za prodavca</th>
+        <th>Ocena</th>
+        <th>Komentar</th>
+        <th>Datum</th>
+        <th>Akcija</th>
+      </tr></thead>
+      <tbody>${lista.map(o => `
+        <tr>
+          <td style="color:#aaa;font-size:0.8rem;">#${o.id}</td>
+          <td class="cell-truncate">${o.odIme || '#' + o.od_user_id}</td>
+          <td class="cell-truncate">${o.zaIme || '#' + o.za_user_id}</td>
+          <td>
+            <span class="zvezdice">${'★'.repeat(o.ocena)}${'☆'.repeat(5 - o.ocena)}</span>
+            <span class="${o.ocena <= 2 ? 'badge badge-red' : o.ocena === 3 ? 'badge badge-orange' : 'badge badge-green'}">${o.ocena}/5</span>
+          </td>
+          <td class="cell-truncate">${o.komentar || '-'}</td>
+          <td style="white-space:nowrap;">${fmt(o.created_at)}</td>
+          <td>
+            <button class="btn-delete" onclick="obrisiOcenu(${o.id})">🗑 Obriši</button>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  function filterujOcene() {
+    const upit = document.getElementById('srch-ocene').value.toLowerCase();
+    renderOcene(data.ocene.filter(o =>
+      (o.odIme || '').toLowerCase().includes(upit) ||
+      (o.zaIme || '').toLowerCase().includes(upit) ||
+      (o.komentar || '').toLowerCase().includes(upit)
+    ));
+  }
+
   // ── PRETRAGA ──
   function filteruj(tip) {
     const upit = document.getElementById(`srch-${tip}`).value.toLowerCase();
@@ -816,7 +892,6 @@
   function otvoriModal(id) { document.getElementById(id).classList.add('open'); }
   function zatvoriModal(id) { document.getElementById(id).classList.remove('open'); }
 
-  // Zatvaranje klikom na overlay
   document.querySelectorAll('.modal-overlay').forEach(m => {
     m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
   });
@@ -854,6 +929,18 @@
         headers: { 'x-admin-password': adminLozinka }
       });
       if (res.ok) { alert('✅ Objava obrisana!'); ucitajObjave(); ucitajStats(); }
+      else alert('Greška pri brisanju');
+    } catch { alert('Greška'); }
+  }
+
+  async function obrisiOcenu(id) {
+    if (!confirm('Obrisati ovu ocenu?')) return;
+    try {
+      const res = await fetch(`${backendUrl}/admin/ocena/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': adminLozinka }
+      });
+      if (res.ok) { alert('✅ Ocena obrisana!'); ucitajOcene(); }
       else alert('Greška pri brisanju');
     } catch { alert('Greška'); }
   }
