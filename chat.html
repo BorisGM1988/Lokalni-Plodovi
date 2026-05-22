@@ -317,7 +317,8 @@
   loadMessages(currentChannel);
 
   // Header logika
-  const korisnik = localStorage.getItem('trenutniKorisnik');
+  const imeIzStorage = localStorage.getItem('ime');
+  const korisnik = imeIzStorage ? { ime: imeIzStorage } : null;
 
   if (korisnik) {
     document.getElementById('moj-profil-li').style.display = 'list-item';
