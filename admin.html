@@ -265,7 +265,6 @@
 
     .zvezdice { color: #f59e0b; font-size: 1rem; }
 
-    /* MODAL */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -328,15 +327,6 @@
     .detail-row .val { color: #222; font-weight: 600; text-align: right; word-break: break-word; max-width: 65%; }
 
     .nise-wrap { display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: flex-end; }
-
-    .avatar {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      vertical-align: middle;
-      margin-right: 8px;
-      border: 2px solid #e0e0e0;
-    }
 
     .tip-prodavac { background: #d1fae5; color: #065f46; }
     .tip-kupac { background: #dbeafe; color: #1e40af; }
@@ -921,10 +911,11 @@
     } catch { alert('Greška'); }
   }
 
+  // ISPRAVKA: koristi /admin/objava/:id rutu sa x-admin-password headerom
   async function obrisiObjavu(id) {
     if (!confirm('Obrisati ovu objavu?')) return;
     try {
-      const res = await fetch(`${backendUrl}/objava/${id}`, {
+      const res = await fetch(`${backendUrl}/admin/objava/${id}`, {
         method: 'DELETE',
         headers: { 'x-admin-password': adminLozinka }
       });
