@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="sr">
 <head>
@@ -330,6 +331,81 @@
 
     .tip-prodavac { background: #d1fae5; color: #065f46; }
     .tip-kupac { background: #dbeafe; color: #1e40af; }
+
+    /* ===== GRUPNI EMAIL STIL ===== */
+    .email-card {
+      background: white;
+      border-radius: 14px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+      max-width: 600px;
+    }
+
+    .email-card h3 {
+      color: #2e7d32;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #4caf50;
+      outline: none;
+    }
+
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .btn-send-email {
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
+      color: white;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+    }
+
+    .btn-send-email:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-send-email:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .email-status {
+      margin-top: 1rem;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .email-status.uspeh { background: #d1fae5; color: #065f46; display: block; }
+    .email-status.greska { background: #fee2e2; color: #991b1b; display: block; }
   </style>
 </head>
 <body>
@@ -403,6 +479,9 @@
     <button class="tab" onclick="prikaziSekciju('ocene', this); ucitajOcene()">
       <i class="fas fa-star"></i> Ocene
     </button>
+    <button class="tab" onclick="prikaziSekciju('grupni-email', this)">
+      <i class="fas fa-envelope"></i> Grupni Email
+    </button>
   </div>
 
   <!-- PRODAVAČI -->
@@ -462,6 +541,38 @@
     </div>
     <div class="table-wrap">
       <div id="tbl-ocene" class="loading">Klikni tab Ocene da učitaš...</div>
+    </div>
+  </div>
+
+  <!-- GRUPNI EMAIL -->
+  <div id="sec-grupni-email" class="section">
+    <div class="email-card">
+      <h3><i class="fas fa-envelope" style="color:#2e7d32;margin-right:0.5rem;"></i>Pošalji grupni email</h3>
+
+      <div class="form-group">
+        <label>Ciljna grupa</label>
+        <select id="email-grupa">
+          <option value="svi">Svi korisnici (prodavači + kupci)</option>
+          <option value="prodavci">Samo prodavači</option>
+          <option value="kupci">Samo kupci</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Naslov emaila</label>
+        <input type="text" id="email-naslov" placeholder="npr. Novosti na LokalniPlodovi">
+      </div>
+
+      <div class="form-group">
+        <label>Poruka</label>
+        <textarea id="email-poruka" placeholder="Upiši poruku koja će biti poslata korisnicima..."></textarea>
+      </div>
+
+      <button class="btn-send-email" id="btn-posalji-email" onclick="posaljiGrupniEmail()">
+        <i class="fas fa-paper-plane"></i> Pošalji email
+      </button>
+
+      <div id="email-status" class="email-status"></div>
     </div>
   </div>
 </div>
@@ -615,6 +726,55 @@
     } catch {
       div.innerHTML = '<p style="color:red;padding:2rem;">Greška pri učitavanju ocena</p>';
     }
+  }
+
+  // ===== GRUPNI EMAIL =====
+  async function posaljiGrupniEmail() {
+    const naslov = document.getElementById('email-naslov').value.trim();
+    const poruka = document.getElementById('email-poruka').value.trim();
+    const grupa = document.getElementById('email-grupa').value;
+    const statusDiv = document.getElementById('email-status');
+    const btn = document.getElementById('btn-posalji-email');
+
+    if (!naslov || !poruka) {
+      statusDiv.className = 'email-status greska';
+      statusDiv.textContent = '❌ Naslov i poruka su obavezni!';
+      return;
+    }
+
+    if (!confirm(`Poslati email svim korisnicima (${grupa})?\n\nNaslov: ${naslov}`)) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Slanje...';
+    statusDiv.className = 'email-status';
+    statusDiv.textContent = '';
+
+    try {
+      const res = await fetch(`${backendUrl}/admin/grupni-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': adminLozinka
+        },
+        body: JSON.stringify({ naslov, poruka, ciljnaGrupa: grupa })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        statusDiv.className = 'email-status uspeh';
+        statusDiv.textContent = '✅ ' + data.message;
+        document.getElementById('email-naslov').value = '';
+        document.getElementById('email-poruka').value = '';
+      } else {
+        statusDiv.className = 'email-status greska';
+        statusDiv.textContent = '❌ ' + (data.error || 'Greška pri slanju');
+      }
+    } catch {
+      statusDiv.className = 'email-status greska';
+      statusDiv.textContent = '❌ Greška pri povezivanju sa serverom';
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Pošalji email';
   }
 
   // ── RENDER FUNKCIJE ──
@@ -779,7 +939,6 @@
     ));
   }
 
-  // ── PRETRAGA ──
   function filteruj(tip) {
     const upit = document.getElementById(`srch-${tip}`).value.toLowerCase();
     if (tip === 'prodavaci') {
@@ -809,7 +968,6 @@
     }
   }
 
-  // ── DETALJI MODALI ──
   function detaljiKorisnika(id) {
     const svi = [...data.prodavaci, ...data.kupci];
     const k = svi.find(x => x.id === id);
@@ -886,7 +1044,6 @@
     m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
   });
 
-  // ── BRISANJE ──
   async function obrisiKorisnika(id, ime) {
     if (!confirm(`Obrisati korisnika "${ime}"?\nOvo će obrisati i sve njegove proizvode i objave!`)) return;
     try {
@@ -911,7 +1068,6 @@
     } catch { alert('Greška'); }
   }
 
-  // ISPRAVKA: koristi /admin/objava/:id rutu sa x-admin-password headerom
   async function obrisiObjavu(id) {
     if (!confirm('Obrisati ovu objavu?')) return;
     try {
@@ -936,7 +1092,6 @@
     } catch { alert('Greška'); }
   }
 
-  // ── POMOĆNE FUNKCIJE ──
   function prikaziSekciju(naziv, btn) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
