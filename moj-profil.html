@@ -80,10 +80,8 @@ nav a:hover { color: #e0f2f1; }
 
 .profile-cover .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.3);
   z-index: 2;
 }
@@ -96,10 +94,7 @@ nav a:hover { color: #e0f2f1; }
   animation: fadeIn 1s ease-in-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .profile-content {
   max-width: 1400px;
@@ -109,13 +104,10 @@ nav a:hover { color: #e0f2f1; }
   z-index: 10;
 }
 
-.profile-avatar-wrapper {
-  position: relative;
-}
+.profile-avatar-wrapper { position: relative; }
 
 .profile-avatar {
-  width: 200px;
-  height: 200px;
+  width: 200px; height: 200px;
   border-radius: 50%;
   object-fit: cover;
   border: 8px solid white;
@@ -127,9 +119,7 @@ nav a:hover { color: #e0f2f1; }
   transition: transform 0.3s ease;
 }
 
-.profile-avatar:hover {
-  transform: scale(1.05);
-}
+.profile-avatar:hover { transform: scale(1.05); }
 
 .profile-main {
   background: white;
@@ -181,10 +171,7 @@ nav a:hover { color: #e0f2f1; }
   box-shadow: 0 4px 12px rgba(76,175,80,0.3);
 }
 
-.profile-edit-btn:hover {
-  background: #388e3c;
-  box-shadow: 0 6px 16px rgba(76,175,80,0.4);
-}
+.profile-edit-btn:hover { background: #388e3c; }
 
 .btn-poruka {
   background: #1877f2;
@@ -199,9 +186,7 @@ nav a:hover { color: #e0f2f1; }
   display: none;
 }
 
-.btn-poruka:hover {
-  background: #1558b0;
-}
+.btn-poruka:hover { background: #1558b0; }
 
 .btn-inbox {
   background: #7c3aed;
@@ -217,19 +202,15 @@ nav a:hover { color: #e0f2f1; }
   position: relative;
 }
 
-.btn-inbox:hover {
-  background: #6d28d9;
-}
+.btn-inbox:hover { background: #6d28d9; }
 
 .inbox-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -6px; right: -6px;
   background: #ef4444;
   color: white;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 20px; height: 20px;
   font-size: 0.7rem;
   display: flex;
   align-items: center;
@@ -253,9 +234,7 @@ nav a:hover { color: #e0f2f1; }
   transition: box-shadow 0.3s ease;
 }
 
-.detail-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+.detail-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
 .detail-label {
   color: #2e7d32;
@@ -269,11 +248,7 @@ nav a:hover { color: #e0f2f1; }
 
 .detail-label i { color: #4caf50; }
 
-#nise {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
+#nise { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
 .nise-badge {
   padding: 0.5rem 1.2rem;
@@ -311,13 +286,11 @@ nav a:hover { color: #e0f2f1; }
 }
 
 .btn-primary { background: #2e7d32; color: white; border: none; }
-.btn-primary:hover { background: #4caf50; box-shadow: 0 6px 16px rgba(76,175,80,0.3); }
-
+.btn-primary:hover { background: #4caf50; }
 .btn-secondary { background: white; border: 2px solid #2e7d32; color: #2e7d32; }
-.btn-secondary:hover { background: #2e7d32; color: white; box-shadow: 0 6px 16px rgba(46,125,50,0.3); }
-
+.btn-secondary:hover { background: #2e7d32; color: white; }
 .btn-tezga { background: #f59e0b; color: white; border: none; }
-.btn-tezga:hover { background: #d97706; box-shadow: 0 6px 16px rgba(245,158,11,0.3); }
+.btn-tezga:hover { background: #d97706; }
 
 footer {
   background: #4b5563;
@@ -328,106 +301,7 @@ footer {
   font-size: 0.95rem;
 }
 
-footer p { margin: 0; }
-
-@media (max-width: 768px) {
-  .profile-cover { height: 200px; }
-  .profile-content { margin-top: -80px; }
-  .profile-avatar { width: 160px; height: 160px; }
-  .profile-main { padding-top: 100px; }
-  .profile-actions { flex-direction: column; }
-}
-
-#preview-slika {
-  margin-top: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  max-height: 180px;
-  object-fit: cover;
-}
-
-.nisa-grupa { margin-bottom: 1.5rem; }
-
-.nisa-grupa-naslov {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #2e7d32;
-  padding: 0.5rem 0;
-  border-bottom: 2px solid #e8f5e9;
-  margin-bottom: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.tezga-proizvod {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.8rem;
-  border-radius: 10px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 0.6rem;
-  transition: box-shadow 0.2s;
-}
-
-.tezga-proizvod:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-
-.tezga-slika {
-  width: 60px; height: 60px;
-  object-fit: cover; border-radius: 8px; flex-shrink: 0;
-}
-
-.tezga-slika-placeholder {
-  width: 60px; height: 60px;
-  background: #e8f5e9; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; flex-shrink: 0;
-}
-
-.tezga-info { flex: 1; }
-.tezga-naziv { font-weight: 600; color: #333; font-size: 1rem; }
-.tezga-detalji { font-size: 0.85rem; color: #666; margin-top: 0.2rem; }
-.tezga-cena { font-weight: 700; color: #2e7d32; font-size: 1rem; white-space: nowrap; }
-.nisa-ikona { font-size: 1.2rem; }
-
-.tezga-akcije {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  flex-shrink: 0;
-}
-
-.btn-edit-proizvod {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: background 0.2s;
-}
-
-.btn-edit-proizvod:hover { background: #1d4ed8; }
-
-.btn-obrisi-proizvod {
-  background: #d32f2f;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: background 0.2s;
-}
-
-.btn-obrisi-proizvod:hover { background: #b71c1c; }
-
-/* INBOX PORUKA STIL */
+/* PORUKE STILOVI */
 .poruka-card {
   padding: 1rem 1.2rem;
   border-radius: 12px;
@@ -462,19 +336,95 @@ footer p { margin: 0; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.poruka-vreme {
-  color: #888;
-  font-size: 0.82rem;
-}
-
-.poruka-akcije {
-  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-/* OCENE STIL */
+.poruka-vreme { color: #888; font-size: 0.82rem; }
+
+.poruka-akcije { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* KONVERZACIJA STIL */
+.konverzacija-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1rem;
+}
+
+.msg-bubble {
+  max-width: 75%;
+  padding: 0.7rem 1rem;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+
+.msg-bubble.moja {
+  background: #2e7d32;
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-bubble.tudja {
+  background: #f0f0f0;
+  color: #333;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+.msg-vreme {
+  font-size: 0.72rem;
+  color: #999;
+  margin-bottom: 0.8rem;
+}
+
+.msg-vreme.moje { text-align: right; }
+.msg-vreme.tudje { text-align: left; }
+
+.reply-box {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 0.5rem;
+}
+
+.reply-box textarea {
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  min-height: 60px;
+}
+
+.reply-box textarea:focus { border-color: #7c3aed; }
+
+.reply-box button {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  height: 60px;
+}
+
+.reply-box button:hover { background: #6d28d9; }
+
+/* OCENE */
 .ocena-card {
   padding: 1rem 1.2rem;
   border-radius: 12px;
@@ -522,6 +472,101 @@ footer p { margin: 0; }
 
 .prosek-zvezdice { color: #f59e0b; font-size: 1.3rem; }
 .prosek-info { color: #666; font-size: 0.9rem; }
+
+/* TEZGA */
+.nisa-grupa { margin-bottom: 1.5rem; }
+
+.nisa-grupa-naslov {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2e7d32;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid #e8f5e9;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tezga-proizvod {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.6rem;
+  transition: box-shadow 0.2s;
+}
+
+.tezga-proizvod:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+.tezga-slika {
+  width: 60px; height: 60px;
+  object-fit: cover; border-radius: 8px; flex-shrink: 0;
+}
+
+.tezga-slika-placeholder {
+  width: 60px; height: 60px;
+  background: #e8f5e9; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; flex-shrink: 0;
+}
+
+.tezga-info { flex: 1; }
+.tezga-naziv { font-weight: 600; color: #333; font-size: 1rem; }
+.tezga-detalji { font-size: 0.85rem; color: #666; margin-top: 0.2rem; }
+.tezga-cena { font-weight: 700; color: #2e7d32; font-size: 1rem; white-space: nowrap; }
+
+.tezga-akcije {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.btn-edit-proizvod {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.btn-edit-proizvod:hover { background: #1d4ed8; }
+
+.btn-obrisi-proizvod {
+  background: #d32f2f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.btn-obrisi-proizvod:hover { background: #b71c1c; }
+
+#preview-slika {
+  margin-top: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  max-height: 180px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .profile-cover { height: 200px; }
+  .profile-content { margin-top: -80px; }
+  .profile-avatar { width: 160px; height: 160px; }
+  .profile-main { padding-top: 100px; }
+  .profile-actions { flex-direction: column; }
+}
   </style>
 </head>
 <body>
@@ -615,15 +660,14 @@ footer p { margin: 0; }
   </div>
 </div>
 
-<div id="objave-sekcija" style="margin-top: 3rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
-  <h2 id="objave-naslov" style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">Moje objave</h2>
-  <div id="objave-lista" style="min-height: 120px;"></div>
+<div id="objave-sekcija" style="margin-top:3rem; background:white; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:1.5rem 2rem;">
+  <h2 id="objave-naslov" style="margin:0 0 1.2rem; color:#2e7d32; font-size:1.6rem; text-align:center;">Moje objave</h2>
+  <div id="objave-lista" style="min-height:120px;"></div>
 </div>
 
-<!-- NOVA SEKCIJA: OCENE -->
-<div id="ocene-sekcija" style="margin-top: 2rem; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem 2rem;">
-  <h2 style="margin: 0 0 1.2rem 0; color: #2e7d32; font-size: 1.6rem; text-align: center;">⭐ Ocene kupaca</h2>
-  <div id="ocene-lista" style="min-height: 80px;">
+<div id="ocene-sekcija" style="margin-top:2rem; background:white; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:1.5rem 2rem;">
+  <h2 style="margin:0 0 1.2rem; color:#2e7d32; font-size:1.6rem; text-align:center;">⭐ Ocene kupaca</h2>
+  <div id="ocene-lista" style="min-height:80px;">
     <p style="text-align:center; color:#666; padding:2rem;">Učitavam ocene...</p>
   </div>
 </div>
@@ -648,8 +692,7 @@ footer p { margin: 0; }
     </div>
     <div style="padding:1.5rem 2rem;">
       <textarea id="poruka-tekst" rows="5" placeholder="Napišite vašu poruku ovde..." style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit;" onfocus="this.style.borderColor='#1877f2'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
-      <p style="color:#888; font-size:0.85rem; margin:0.5rem 0 1rem;">Morate biti prijavljeni da biste poslali poruku.</p>
-      <div style="display:flex; gap:1rem;">
+      <div style="display:flex; gap:1rem; margin-top:1rem;">
         <button onclick="zatvoriPorukuModal()" style="flex:1; padding:12px; border-radius:50px; background:#f0f0f0; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
         <button onclick="posaljiPoruku()" style="flex:2; padding:12px; border-radius:50px; background:#1877f2; color:white; border:none; font-weight:600; cursor:pointer;">✉️ Pošalji</button>
       </div>
@@ -657,7 +700,7 @@ footer p { margin: 0; }
   </div>
 </div>
 
-<!-- MODAL INBOX -->
+<!-- MODAL INBOX — LISTA KONVERZACIJA -->
 <div id="inbox-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
   <div style="background:white; width:90%; max-width:600px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; display:flex; flex-direction:column;">
     <div style="background:linear-gradient(135deg,#7c3aed,#6d28d9); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
@@ -672,6 +715,32 @@ footer p { margin: 0; }
     </div>
     <div style="padding:1rem 2rem; border-top:1px solid #f0f0f0; flex-shrink:0; text-align:center;">
       <button onclick="zatvoriInbox()" style="background:#f0f0f0; color:#555; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer;">Zatvori</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONVERZACIJA (CHAT SA JEDNOM OSOBOM) -->
+<div id="konverzacija-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:4000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:560px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; display:flex; flex-direction:column;">
+    <div style="background:linear-gradient(135deg,#1877f2,#1558b0); padding:1.2rem 1.5rem; color:white; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+      <div style="display:flex; align-items:center; gap:0.8rem;">
+        <button onclick="zatvoriKonverzaciju()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer;">←</button>
+        <img id="konv-avatar" src="" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.5);" onerror="this.src='https://via.placeholder.com/38'">
+        <div>
+          <div id="konv-ime" style="font-weight:700; font-size:1rem;"></div>
+          <div style="font-size:0.8rem; opacity:0.8;">Razgovor</div>
+        </div>
+      </div>
+      <button onclick="zatvoriKonverzacijuPotpuno()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer;">✕</button>
+    </div>
+    <div id="konv-poruke" style="padding:1rem 1.5rem; overflow-y:auto; flex:1; display:flex; flex-direction:column; min-height:200px; max-height:400px;">
+      <p style="text-align:center; color:#666; padding:2rem;">Učitavam razgovor...</p>
+    </div>
+    <div style="padding:1rem 1.5rem; flex-shrink:0;">
+      <div class="reply-box">
+        <textarea id="konv-odgovor" rows="2" placeholder="Napišite odgovor..."></textarea>
+        <button onclick="posaljiKonvOdgovor()">Pošalji ✉️</button>
+      </div>
     </div>
   </div>
 </div>
@@ -693,9 +762,7 @@ footer p { margin: 0; }
       <button id="tezga-dodaj-btn" onclick="dodajProizvod(); zatvoriTezgu();" style="display:none; background:#2e7d32; color:white; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer; margin-right:1rem;">
         <i class="fas fa-plus"></i> Dodaj novi proizvod
       </button>
-      <button onclick="zatvoriTezgu()" style="background:#f0f0f0; color:#555; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer;">
-        Zatvori
-      </button>
+      <button onclick="zatvoriTezgu()" style="background:#f0f0f0; color:#555; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer;">Zatvori</button>
     </div>
   </div>
 </div>
@@ -743,27 +810,25 @@ footer p { margin: 0; }
 <div id="izmeni-profil-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
   <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); display:flex; flex-direction:column; max-height:90vh; overflow:hidden;">
     <h2 style="margin-top:0; color:#2e7d32; flex-shrink:0;">Izmeni profil</h2>
-    <div style="overflow-y: auto; flex: 1; padding-right: 5px;">
-        <form id="izmeni-profil-form">
-          <label>Ime</label>
-          <input type="text" id="edit-ime" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
-          <label>Opis</label>
-          <textarea id="edit-opis" rows="4" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;"></textarea>
-          <label>Telefon</label>
-          <input type="tel" id="edit-telefon" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
-          <label>Lokacija</label>
-          <input type="text" id="edit-lokacija" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
-          <label>Profilna slika</label>
-          <input type="file" id="edit-profilna-slika" accept="image/*" style="margin:8px 0; display:block;">
-          <img id="preview-profilna" style="width:120px; height:120px; border-radius:50%; object-fit:cover; margin:8px 0; display:none;">
-          <label>Naslovna fotografija</label>
-          <input type="file" id="edit-naslovna-slika" accept="image/*" style="margin:8px 0; display:block;">
-          <img id="preview-naslovna" style="width:100%; max-height:180px; object-fit:cover; margin:8px 0; display:none;">
-        </form>
+    <div style="overflow-y:auto; flex:1; padding-right:5px;">
+      <label>Ime</label>
+      <input type="text" id="edit-ime" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+      <label>Opis</label>
+      <textarea id="edit-opis" rows="4" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;"></textarea>
+      <label>Telefon</label>
+      <input type="tel" id="edit-telefon" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+      <label>Lokacija</label>
+      <input type="text" id="edit-lokacija" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+      <label>Profilna slika</label>
+      <input type="file" id="edit-profilna-slika" accept="image/*" style="margin:8px 0; display:block;">
+      <img id="preview-profilna" style="width:120px; height:120px; border-radius:50%; object-fit:cover; margin:8px 0; display:none;">
+      <label>Naslovna fotografija</label>
+      <input type="file" id="edit-naslovna-slika" accept="image/*" style="margin:8px 0; display:block;">
+      <img id="preview-naslovna" style="width:100%; max-height:180px; object-fit:cover; margin:8px 0; display:none;">
     </div>
     <div style="margin-top:1.5rem; display:flex; gap:1rem; flex-shrink:0;">
-        <button type="button" onclick="zatvoriIzmeniModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
-        <button type="button" onclick="sacuvajIzmene()" style="flex:1; padding:12px; border-radius:50px; background:#2e7d32; color:white; border:none; font-weight:600; cursor:pointer;">Sačuvaj izmene</button>
+      <button type="button" onclick="zatvoriIzmeniModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
+      <button type="button" onclick="sacuvajIzmene()" style="flex:1; padding:12px; border-radius:50px; background:#2e7d32; color:white; border:none; font-weight:600; cursor:pointer;">Sačuvaj izmene</button>
     </div>
   </div>
 </div>
@@ -808,7 +873,6 @@ footer p { margin: 0; }
     </div>
     <div style="padding:2rem;">
       <textarea id="novost-tekst" rows="4" placeholder='npr. "Danas imamo sveže maline po akcijskoj ceni!"' style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit;" onfocus="this.style.borderColor='#4caf50'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
-
       <input type="file" id="novost-slika" accept="image/*" style="display:none;">
       <div onclick="document.getElementById('novost-slika').click()" style="border:2px dashed #4caf50; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#f0fdf4; margin-top:1.2rem;">
         <img id="preview-novost-slika" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; display:none;">
@@ -817,7 +881,6 @@ footer p { margin: 0; }
           <p style="margin:0.4rem 0 0; color:#4caf50; font-weight:600;">Dodaj sliku (opciono)</p>
         </div>
       </div>
-
       <input type="file" id="novost-video" accept="video/*" style="display:none;">
       <div onclick="document.getElementById('novost-video').click()" style="border:2px dashed #f59e0b; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#fffbeb; margin-top:0.8rem;">
         <video id="preview-novost-video" style="width:100%; max-height:200px; border-radius:10px; display:none;" controls></video>
@@ -826,7 +889,6 @@ footer p { margin: 0; }
           <p style="margin:0.4rem 0 0; color:#f59e0b; font-weight:600;">Dodaj kratki video (max 60 sek, opciono)</p>
         </div>
       </div>
-
       <div style="display:flex; gap:1rem; margin-top:1.5rem;">
         <button onclick="zatvoriNovostModal()" style="flex:1; padding:14px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
         <button id="btn-objavi-novost" onclick="posaljiNovost()" style="flex:2; padding:14px; border-radius:50px; background:linear-gradient(135deg,#2e7d32,#4caf50); color:white; border:none; font-weight:600; cursor:pointer;">📢 Objavi</button>
@@ -839,6 +901,7 @@ footer p { margin: 0; }
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   let trenutniUserId = null;
   let profilIme = '';
+  let aktivnaKonverzacijaUserId = null;
 
   const nisaIkone = {
     'Voće': '🍎', 'Povrće': '🥦', 'Mlečni proizvodi': '🥛',
@@ -854,11 +917,8 @@ footer p { margin: 0; }
       document.getElementById('odjavi-se-li').style.display = 'list-item';
       document.getElementById('prijavi-se-li').style.display = 'none';
       document.getElementById('postani-prodavac-li').style.display = 'none';
-
       const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
-      }
+      if (link) link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
     } else {
       document.getElementById('moj-profil-li').style.display = 'none';
       document.getElementById('odjavi-se-li').style.display = 'none';
@@ -939,9 +999,7 @@ footer p { margin: 0; }
       });
 
       const tezgaDodajBtn = document.getElementById('tezga-dodaj-btn');
-      if (tezgaDodajBtn) {
-        tezgaDodajBtn.style.display = isOwnProfile ? 'inline-block' : 'none';
-      }
+      if (tezgaDodajBtn) tezgaDodajBtn.style.display = isOwnProfile ? 'inline-block' : 'none';
 
       if (userIdParam) {
         trenutniUserId = userIdParam;
@@ -952,9 +1010,7 @@ footer p { margin: 0; }
         } catch(e) {}
       }
 
-      if (isOwnProfile && token) {
-        ucitajBrojNeprocitanih();
-      }
+      if (isOwnProfile && token) ucitajBrojNeprocitanih();
 
       ucitajObjave();
       ucitajOcene();
@@ -996,7 +1052,6 @@ footer p { margin: 0; }
 
       lista.innerHTML = '';
 
-      // Prosek
       const prosekDiv = document.createElement('div');
       prosekDiv.className = 'prosek-wrap';
       prosekDiv.innerHTML = `
@@ -1008,7 +1063,6 @@ footer p { margin: 0; }
       `;
       lista.appendChild(prosekDiv);
 
-      // Svaka ocena
       data.ocene.forEach(o => {
         const div = document.createElement('div');
         div.className = 'ocena-card';
@@ -1034,7 +1088,7 @@ footer p { margin: 0; }
     }
   }
 
-  // ── PORUKE ──
+  // ── PORUKE / INBOX ──
   function otvoriPosaljiPoruku() {
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti prijavljeni da biste poslali poruku!'); return; }
@@ -1049,10 +1103,8 @@ footer p { margin: 0; }
   async function posaljiPoruku() {
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti prijavljeni!'); return; }
-
     const tekst = document.getElementById('poruka-tekst').value.trim();
     if (!tekst) { alert('Unesite tekst poruke!'); return; }
-
     try {
       const res = await fetch(`${backendUrl}/poruka`, {
         method: 'POST',
@@ -1115,24 +1167,52 @@ footer p { margin: 0; }
         return;
       }
 
-      sadrzaj.innerHTML = '';
+      // Grupisi po pošiljaocu
+      const konverzacije = {};
       poruke.forEach(p => {
+        if (!konverzacije[p.od_user_id]) {
+          konverzacije[p.od_user_id] = {
+            odIme: p.odIme,
+            odSlika: p.odSlika,
+            odUserId: p.od_user_id,
+            poruke: [],
+            neprocitane: 0
+          };
+        }
+        konverzacije[p.od_user_id].poruke.push(p);
+        if (!p.procitano) konverzacije[p.od_user_id].neprocitane++;
+      });
+
+      sadrzaj.innerHTML = '';
+
+      Object.values(konverzacije).forEach(konv => {
+        const poslednja = konv.poruke[0];
         const div = document.createElement('div');
-        div.className = `poruka-card ${!p.procitano ? 'neprocitana' : ''}`;
+        div.style = `
+          display:flex; align-items:center; gap:1rem;
+          padding:1rem; border-radius:12px;
+          background:${konv.neprocitane > 0 ? '#faf5ff' : '#f9fafb'};
+          border:1px solid ${konv.neprocitane > 0 ? '#7c3aed' : '#e5e7eb'};
+          margin-bottom:0.8rem; cursor:pointer;
+          transition: box-shadow 0.2s;
+        `;
+        div.onmouseenter = () => div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+        div.onmouseleave = () => div.style.boxShadow = 'none';
+        div.onclick = () => otvoriKonverzaciju(konv.odUserId, konv.odIme, konv.odSlika);
         div.innerHTML = `
-          <div class="poruka-od">
-            ${p.odSlika ? `<img src="${p.odSlika}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; margin-right:6px; vertical-align:middle;">` : ''}
-            ${p.odIme || 'Nepoznat'}
-            ${!p.procitano ? '<span style="background:#7c3aed; color:white; font-size:0.7rem; padding:2px 8px; border-radius:50px; margin-left:8px;">Novo</span>' : ''}
+          <img src="${konv.odSlika || 'https://via.placeholder.com/44'}" 
+            style="width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0;"
+            onerror="this.src='https://via.placeholder.com/44'">
+          <div style="flex:1; min-width:0;">
+            <div style="font-weight:700; color:#1e40af; font-size:0.95rem;">${konv.odIme || 'Nepoznat'}</div>
+            <div style="color:#555; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${poslednja.tekst}</div>
+            <div style="color:#888; font-size:0.75rem;">${new Date(poslednja.created_at).toLocaleString('sr-RS')}</div>
           </div>
-          <div class="poruka-tekst">${p.tekst}</div>
-          <div class="poruka-footer">
-            <span class="poruka-vreme">${new Date(p.created_at).toLocaleString('sr-RS')}</span>
-            <div class="poruka-akcije">
-              ${!p.procitano ? `<button onclick="oznациProcitano(${p.id}, this)" style="background:#7c3aed; color:white; border:none; padding:4px 12px; border-radius:8px; cursor:pointer; font-size:0.8rem;">✓ Pročitano</button>` : ''}
-              <button onclick="obrisiPoruku(${p.id}, this)" style="background:#d32f2f; color:white; border:none; padding:4px 12px; border-radius:8px; cursor:pointer; font-size:0.8rem;">🗑</button>
-            </div>
-          </div>
+          ${konv.neprocitane > 0 ? `
+            <div style="background:#7c3aed; color:white; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">
+              ${konv.neprocitane}
+            </div>` : ''}
+          <div style="color:#7c3aed; font-size:1.2rem;">›</div>
         `;
         sadrzaj.appendChild(div);
       });
@@ -1148,34 +1228,111 @@ footer p { margin: 0; }
     ucitajBrojNeprocitanih();
   }
 
-  async function oznациProcitano(id, btn) {
-    const token = localStorage.getItem('token');
-    try {
-      await fetch(`${backendUrl}/poruka/${id}/procitano`, {
-        method: 'PUT',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const card = btn.closest('.poruka-card');
-      card.classList.remove('neprocitana');
-      btn.remove();
-      const novoEl = card.querySelector('span[style*="background:#7c3aed"]');
-      if (novoEl) novoEl.remove();
-    } catch (err) {}
+  // Otvori chat prozor sa jednom osobom
+  async function otvoriKonverzaciju(userId, ime, slika) {
+    aktivnaKonverzacijaUserId = userId;
+    document.getElementById('konv-ime').textContent = ime || 'Korisnik';
+    document.getElementById('konv-avatar').src = slika || 'https://via.placeholder.com/38';
+    document.getElementById('konv-odgovor').value = '';
+    document.getElementById('konverzacija-modal').style.display = 'flex';
+    // Sakrij inbox modal ali ne zatvori ga
+    document.getElementById('inbox-modal').style.display = 'none';
+
+    await ucitajKonverzaciju(userId);
   }
 
-  async function obrisiPoruku(id, btn) {
-    if (!confirm('Obrisati ovu poruku?')) return;
+  async function ucitajKonverzaciju(userId) {
     const token = localStorage.getItem('token');
+    const container = document.getElementById('konv-poruke');
+    container.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Učitavam...</p>';
+
+    let mojId = null;
     try {
-      const res = await fetch(`${backendUrl}/poruka/${id}`, {
-        method: 'DELETE',
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      mojId = payload.userId;
+    } catch(e) {}
+
+    try {
+      const res = await fetch(`${backendUrl}/konverzacija/${userId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.ok) {
-        btn.closest('.poruka-card').remove();
+      const data = await res.json();
+      const poruke = data.poruke || [];
+
+      if (poruke.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Još nema poruka.</p>';
+        return;
       }
-    } catch (err) {}
+
+      container.innerHTML = '';
+      poruke.forEach(p => {
+        const moja = p.od_user_id === mojId || String(p.od_user_id) === String(mojId);
+        const bubble = document.createElement('div');
+        bubble.className = `msg-bubble ${moja ? 'moja' : 'tudja'}`;
+        bubble.textContent = p.tekst;
+        container.appendChild(bubble);
+
+        const vreme = document.createElement('div');
+        vreme.className = `msg-vreme ${moja ? 'moje' : 'tudje'}`;
+        vreme.textContent = new Date(p.created_at).toLocaleString('sr-RS');
+        container.appendChild(vreme);
+      });
+
+      // Skroluj na dno
+      container.scrollTop = container.scrollHeight;
+    } catch (err) {
+      container.innerHTML = '<p style="text-align:center; color:red;">Greška pri učitavanju.</p>';
+    }
   }
+
+  async function posaljiKonvOdgovor() {
+    const token = localStorage.getItem('token');
+    const tekst = document.getElementById('konv-odgovor').value.trim();
+    if (!tekst) { alert('Unesite tekst poruke!'); return; }
+    if (!aktivnaKonverzacijaUserId) return;
+
+    try {
+      const res = await fetch(`${backendUrl}/poruka`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ ka_user_id: aktivnaKonverzacijaUserId, tekst })
+      });
+      const result = await res.json();
+      if (res.ok) {
+        document.getElementById('konv-odgovor').value = '';
+        await ucitajKonverzaciju(aktivnaKonverzacijaUserId);
+      } else {
+        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+      }
+    } catch (err) {
+      alert('Greška pri slanju');
+    }
+  }
+
+  function zatvoriKonverzaciju() {
+    // Vrati se na inbox listu
+    document.getElementById('konverzacija-modal').style.display = 'none';
+    document.getElementById('inbox-modal').style.display = 'flex';
+    otvoriInbox();
+  }
+
+  function zatvoriKonverzacijuPotpuno() {
+    document.getElementById('konverzacija-modal').style.display = 'none';
+    ucitajBrojNeprocitanih();
+  }
+
+  // Enter za slanje u konverzaciji
+  document.addEventListener('DOMContentLoaded', () => {
+    const ta = document.getElementById('konv-odgovor');
+    if (ta) {
+      ta.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          posaljiKonvOdgovor();
+        }
+      });
+    }
+  });
 
   document.getElementById('poruka-modal').addEventListener('click', function(e) {
     if (e.target === this) zatvoriPorukuModal();
@@ -1183,6 +1340,10 @@ footer p { margin: 0; }
 
   document.getElementById('inbox-modal').addEventListener('click', function(e) {
     if (e.target === this) zatvoriInbox();
+  });
+
+  document.getElementById('konverzacija-modal').addEventListener('click', function(e) {
+    if (e.target === this) zatvoriKonverzacijuPotpuno();
   });
 
   // ── TEZGA ──
@@ -1234,10 +1395,9 @@ footer p { margin: 0; }
       Object.entries(grupisano).forEach(([nisa, lista]) => {
         const grupa = document.createElement('div');
         grupa.className = 'nisa-grupa';
-
         const naslov = document.createElement('div');
         naslov.className = 'nisa-grupa-naslov';
-        naslov.innerHTML = `<span class="nisa-ikona">${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
+        naslov.innerHTML = `<span>${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
         grupa.appendChild(naslov);
 
         lista.forEach(p => {
@@ -1372,15 +1532,10 @@ footer p { margin: 0; }
 
     const videoFile = document.getElementById('novost-video').files[0];
     if (videoFile) {
-      if (videoFile.size > 50 * 1024 * 1024) {
-        alert('Video je prevelik! Maksimalno 50MB.');
-        return;
-      }
-
+      if (videoFile.size > 50 * 1024 * 1024) { alert('Video je prevelik! Maksimalno 50MB.'); return; }
       const btn = document.getElementById('btn-objavi-novost');
       btn.textContent = '⏳ Uploadujem video...';
       btn.disabled = true;
-
       try {
         const videoBase64 = await fileToBase64(videoFile);
         const uploadRes = await fetch(`${backendUrl}/upload-video`, {
@@ -1421,7 +1576,7 @@ footer p { margin: 0; }
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.ok) { ucitajObjave(); }
+      if (res.ok) ucitajObjave();
       else alert('Greška pri brisanju');
     } catch { alert('Greška'); }
   }
@@ -1617,7 +1772,6 @@ footer p { margin: 0; }
         reader.readAsDataURL(file);
       }
     }
-
     if (e.target.id === 'novost-video') {
       const file = e.target.files[0];
       if (file) {
@@ -1645,15 +1799,12 @@ footer p { margin: 0; }
   async function sacuvajIzmeneProizvoda() {
     const token = localStorage.getItem('token');
     if (!token) return alert('Morate biti ulogovani!');
-
     const id = document.getElementById('edit-proizvod-id').value;
     const naziv = document.getElementById('edit-naziv').value.trim();
     const cena = parseFloat(document.getElementById('edit-cena').value);
     const kolicina = parseInt(document.getElementById('edit-kolicina').value);
     const opis = document.getElementById('edit-opis-proizvoda').value.trim();
-
     if (!naziv || !cena || !kolicina) { alert('Popunite sva obavezna polja!'); return; }
-
     try {
       const res = await fetch(`${backendUrl}/proizvod/${id}`, {
         method: 'PUT',
@@ -1681,21 +1832,14 @@ footer p { margin: 0; }
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.ok) {
-        alert('✅ Proizvod obrisan!');
-        pogledajTezgu();
-      } else {
-        alert('Greška pri brisanju.');
-      }
-    } catch (err) {
-      alert('Greška.');
-    }
+      if (res.ok) { alert('✅ Proizvod obrisan!'); pogledajTezgu(); }
+      else alert('Greška pri brisanju.');
+    } catch (err) { alert('Greška.'); }
   }
 
   document.getElementById('edit-proizvod-modal').addEventListener('click', function(e) {
     if (e.target === this) zatvoriEditProizvodModal();
   });
-
 </script>
 </body>
 </html>
