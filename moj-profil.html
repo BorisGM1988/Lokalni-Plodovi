@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="sr">
 <head>
@@ -117,6 +118,7 @@ nav a:hover { color: #e0f2f1; }
   position: relative;
   z-index: 10;
   transition: transform 0.3s ease;
+  background: #e8f5e9;
 }
 
 .profile-avatar:hover { transform: scale(1.05); }
@@ -301,7 +303,6 @@ footer {
   font-size: 0.95rem;
 }
 
-/* PORUKE STILOVI */
 .poruka-card {
   padding: 1rem 1.2rem;
   border-radius: 12px;
@@ -317,42 +318,11 @@ footer {
 }
 
 .poruka-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-
-.poruka-od {
-  font-weight: 700;
-  color: #1e40af;
-  font-size: 0.95rem;
-  margin-bottom: 0.3rem;
-}
-
-.poruka-tekst {
-  color: #333;
-  font-size: 1rem;
-  line-height: 1.5;
-  margin-bottom: 0.5rem;
-}
-
-.poruka-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
+.poruka-od { font-weight: 700; color: #1e40af; font-size: 0.95rem; margin-bottom: 0.3rem; }
+.poruka-tekst { color: #333; font-size: 1rem; line-height: 1.5; margin-bottom: 0.5rem; }
+.poruka-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
 .poruka-vreme { color: #888; font-size: 0.82rem; }
-
 .poruka-akcije { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-
-/* KONVERZACIJA STIL */
-.konverzacija-header {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid #e5e7eb;
-  margin-bottom: 1rem;
-}
 
 .msg-bubble {
   max-width: 75%;
@@ -378,12 +348,7 @@ footer {
   border-bottom-left-radius: 4px;
 }
 
-.msg-vreme {
-  font-size: 0.72rem;
-  color: #999;
-  margin-bottom: 0.8rem;
-}
-
+.msg-vreme { font-size: 0.72rem; color: #999; margin-bottom: 0.8rem; }
 .msg-vreme.moje { text-align: right; }
 .msg-vreme.tudje { text-align: left; }
 
@@ -424,141 +389,37 @@ footer {
 
 .reply-box button:hover { background: #6d28d9; }
 
-/* OCENE */
-.ocena-card {
-  padding: 1rem 1.2rem;
-  border-radius: 12px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 0.8rem;
-}
-
-.ocena-header {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 0.4rem;
-}
-
-.ocena-avatar {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
+.ocena-card { padding: 1rem 1.2rem; border-radius: 12px; background: #f9fafb; border: 1px solid #e5e7eb; margin-bottom: 0.8rem; }
+.ocena-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.4rem; }
+.ocena-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 .ocena-ime { font-weight: 600; color: #333; font-size: 0.95rem; }
 .ocena-zvezdice { color: #f59e0b; font-size: 1rem; }
 .ocena-komentar { color: #555; font-size: 0.95rem; line-height: 1.5; }
 .ocena-vreme { color: #888; font-size: 0.8rem; margin-top: 0.3rem; }
 
-.prosek-wrap {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 12px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.prosek-broj {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #2e7d32;
-  line-height: 1;
-}
-
+.prosek-wrap { display: flex; align-items: center; gap: 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
+.prosek-broj { font-size: 2.5rem; font-weight: 700; color: #2e7d32; line-height: 1; }
 .prosek-zvezdice { color: #f59e0b; font-size: 1.3rem; }
 .prosek-info { color: #666; font-size: 0.9rem; }
 
-/* TEZGA */
 .nisa-grupa { margin-bottom: 1.5rem; }
+.nisa-grupa-naslov { font-size: 1.1rem; font-weight: 700; color: #2e7d32; padding: 0.5rem 0; border-bottom: 2px solid #e8f5e9; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
 
-.nisa-grupa-naslov {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #2e7d32;
-  padding: 0.5rem 0;
-  border-bottom: 2px solid #e8f5e9;
-  margin-bottom: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.tezga-proizvod {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.8rem;
-  border-radius: 10px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 0.6rem;
-  transition: box-shadow 0.2s;
-}
-
+.tezga-proizvod { display: flex; align-items: center; gap: 1rem; padding: 0.8rem; border-radius: 10px; background: #f9fafb; border: 1px solid #e5e7eb; margin-bottom: 0.6rem; transition: box-shadow 0.2s; }
 .tezga-proizvod:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-
-.tezga-slika {
-  width: 60px; height: 60px;
-  object-fit: cover; border-radius: 8px; flex-shrink: 0;
-}
-
-.tezga-slika-placeholder {
-  width: 60px; height: 60px;
-  background: #e8f5e9; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; flex-shrink: 0;
-}
-
+.tezga-slika { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+.tezga-slika-placeholder { width: 60px; height: 60px; background: #e8f5e9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
 .tezga-info { flex: 1; }
 .tezga-naziv { font-weight: 600; color: #333; font-size: 1rem; }
 .tezga-detalji { font-size: 0.85rem; color: #666; margin-top: 0.2rem; }
 .tezga-cena { font-weight: 700; color: #2e7d32; font-size: 1rem; white-space: nowrap; }
-
-.tezga-akcije {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  flex-shrink: 0;
-}
-
-.btn-edit-proizvod {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
+.tezga-akcije { display: flex; flex-direction: column; gap: 0.4rem; flex-shrink: 0; }
+.btn-edit-proizvod { background: #2563eb; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
 .btn-edit-proizvod:hover { background: #1d4ed8; }
-
-.btn-obrisi-proizvod {
-  background: #d32f2f;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
+.btn-obrisi-proizvod { background: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
 .btn-obrisi-proizvod:hover { background: #b71c1c; }
 
-#preview-slika {
-  margin-top: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  max-height: 180px;
-  object-fit: cover;
-}
+#preview-slika { margin-top: 1rem; border-radius: 8px; border: 1px solid #ddd; max-height: 180px; object-fit: cover; }
 
 @media (max-width: 768px) {
   .profile-cover { height: 200px; }
@@ -595,7 +456,7 @@ footer {
 
 <div class="profile-container">
   <div class="profile-cover" id="profile-cover">
-    <img src="" alt="Naslovna slika" class="cover-image" id="cover-image">
+    <img src="" alt="Naslovna slika" class="cover-image" id="cover-image" onerror="this.onerror=null; this.src='';">
     <div class="overlay"></div>
     <div class="placeholder-text" id="placeholder-text">
       <h2>Naslovna fotografija</h2>
@@ -605,7 +466,7 @@ footer {
 
   <div class="profile-content">
     <div class="profile-avatar-wrapper">
-      <img src="https://via.placeholder.com/200?text=Profil" alt="Profilna slika" class="profile-avatar" id="profile-avatar">
+      <img src="" alt="Profilna slika" class="profile-avatar" id="profile-avatar" onerror="this.onerror=null; this.src='';">
     </div>
 
     <div class="profile-main">
@@ -700,7 +561,7 @@ footer {
   </div>
 </div>
 
-<!-- MODAL INBOX — LISTA KONVERZACIJA -->
+<!-- MODAL INBOX -->
 <div id="inbox-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
   <div style="background:white; width:90%; max-width:600px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; display:flex; flex-direction:column;">
     <div style="background:linear-gradient(135deg,#7c3aed,#6d28d9); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
@@ -719,13 +580,13 @@ footer {
   </div>
 </div>
 
-<!-- MODAL KONVERZACIJA (CHAT SA JEDNOM OSOBOM) -->
+<!-- MODAL KONVERZACIJA -->
 <div id="konverzacija-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:4000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
   <div style="background:white; width:90%; max-width:560px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; display:flex; flex-direction:column;">
     <div style="background:linear-gradient(135deg,#1877f2,#1558b0); padding:1.2rem 1.5rem; color:white; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
       <div style="display:flex; align-items:center; gap:0.8rem;">
         <button onclick="zatvoriKonverzaciju()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer;">←</button>
-        <img id="konv-avatar" src="" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.5);" onerror="this.src='https://via.placeholder.com/38'">
+        <img id="konv-avatar" src="" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.5); background:#e8f5e9;" onerror="this.onerror=null; this.src='';">
         <div>
           <div id="konv-ime" style="font-weight:700; font-size:1rem;"></div>
           <div style="font-size:0.8rem; opacity:0.8;">Razgovor</div>
@@ -967,7 +828,9 @@ footer {
         niseDiv.textContent = 'Nijedna';
       }
 
-      if (data.slika) document.getElementById('profile-avatar').src = data.slika;
+      if (data.slika) {
+        document.getElementById('profile-avatar').src = data.slika;
+      }
       if (data.coverSlika) {
         document.getElementById('cover-image').src = data.coverSlika;
         document.getElementById('cover-image').style.display = 'block';
@@ -1021,7 +884,6 @@ footer {
     }
   }
 
-  // ── OCENE ──
   async function ucitajOcene() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdParam = urlParams.get('userId');
@@ -1069,7 +931,7 @@ footer {
         div.innerHTML = `
           <div class="ocena-header">
             ${o.odSlika
-              ? `<img src="${o.odSlika}" class="ocena-avatar" alt="${o.odIme}" onerror="this.src='/placeholder-prodavac.svg'">`
+              ? `<img src="${o.odSlika}" class="ocena-avatar" alt="${o.odIme}" onerror="this.onerror=null; this.src=''">`
               : `<div class="ocena-avatar" style="background:#e8f5e9; display:flex; align-items:center; justify-content:center; font-size:1rem;">👤</div>`
             }
             <div>
@@ -1088,7 +950,6 @@ footer {
     }
   }
 
-  // ── PORUKE / INBOX ──
   function otvoriPosaljiPoruku() {
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti prijavljeni da biste poslali poruku!'); return; }
@@ -1167,7 +1028,6 @@ footer {
         return;
       }
 
-      // Grupisi po pošiljaocu
       const konverzacije = {};
       poruke.forEach(p => {
         if (!konverzacije[p.od_user_id]) {
@@ -1188,21 +1048,16 @@ footer {
       Object.values(konverzacije).forEach(konv => {
         const poslednja = konv.poruke[0];
         const div = document.createElement('div');
-        div.style = `
-          display:flex; align-items:center; gap:1rem;
-          padding:1rem; border-radius:12px;
-          background:${konv.neprocitane > 0 ? '#faf5ff' : '#f9fafb'};
-          border:1px solid ${konv.neprocitane > 0 ? '#7c3aed' : '#e5e7eb'};
-          margin-bottom:0.8rem; cursor:pointer;
-          transition: box-shadow 0.2s;
-        `;
+        div.style.cssText = `display:flex; align-items:center; gap:1rem; padding:1rem; border-radius:12px; background:${konv.neprocitane > 0 ? '#faf5ff' : '#f9fafb'}; border:1px solid ${konv.neprocitane > 0 ? '#7c3aed' : '#e5e7eb'}; margin-bottom:0.8rem; cursor:pointer; transition: box-shadow 0.2s;`;
         div.onmouseenter = () => div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
         div.onmouseleave = () => div.style.boxShadow = 'none';
         div.onclick = () => otvoriKonverzaciju(konv.odUserId, konv.odIme, konv.odSlika);
+
+        const avatarSrc = konv.odSlika || '';
         div.innerHTML = `
-          <img src="${konv.odSlika || 'https://via.placeholder.com/44'}" 
-            style="width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0;"
-            onerror="this.src='https://via.placeholder.com/44'">
+          <img src="${avatarSrc}" 
+            style="width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0; background:#e8f5e9;"
+            onerror="this.onerror=null; this.src='';">
           <div style="flex:1; min-width:0;">
             <div style="font-weight:700; color:#1e40af; font-size:0.95rem;">${konv.odIme || 'Nepoznat'}</div>
             <div style="color:#555; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${poslednja.tekst}</div>
@@ -1228,16 +1083,13 @@ footer {
     ucitajBrojNeprocitanih();
   }
 
-  // Otvori chat prozor sa jednom osobom
   async function otvoriKonverzaciju(userId, ime, slika) {
     aktivnaKonverzacijaUserId = userId;
     document.getElementById('konv-ime').textContent = ime || 'Korisnik';
-    document.getElementById('konv-avatar').src = slika || 'https://via.placeholder.com/38';
+    document.getElementById('konv-avatar').src = slika || '';
     document.getElementById('konv-odgovor').value = '';
     document.getElementById('konverzacija-modal').style.display = 'flex';
-    // Sakrij inbox modal ali ne zatvori ga
     document.getElementById('inbox-modal').style.display = 'none';
-
     await ucitajKonverzaciju(userId);
   }
 
@@ -1278,7 +1130,6 @@ footer {
         container.appendChild(vreme);
       });
 
-      // Skroluj na dno
       container.scrollTop = container.scrollHeight;
     } catch (err) {
       container.innerHTML = '<p style="text-align:center; color:red;">Greška pri učitavanju.</p>';
@@ -1310,7 +1161,6 @@ footer {
   }
 
   function zatvoriKonverzaciju() {
-    // Vrati se na inbox listu
     document.getElementById('konverzacija-modal').style.display = 'none';
     document.getElementById('inbox-modal').style.display = 'flex';
     otvoriInbox();
@@ -1321,7 +1171,6 @@ footer {
     ucitajBrojNeprocitanih();
   }
 
-  // Enter za slanje u konverzaciji
   document.addEventListener('DOMContentLoaded', () => {
     const ta = document.getElementById('konv-odgovor');
     if (ta) {
@@ -1346,7 +1195,6 @@ footer {
     if (e.target === this) zatvoriKonverzacijuPotpuno();
   });
 
-  // ── TEZGA ──
   async function pogledajTezgu() {
     document.getElementById('tezga-modal').style.display = 'flex';
     const sadrzaj = document.getElementById('tezga-sadrzaj');
@@ -1442,7 +1290,6 @@ footer {
     if (e.target === this) zatvoriTezgu();
   });
 
-  // ── OBJAVE ──
   async function ucitajObjave() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdParam = urlParams.get('userId');
@@ -1477,7 +1324,7 @@ footer {
       const isOwnProfile = !userIdParam;
       objave.forEach(o => {
         const div = document.createElement('div');
-        div.style = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
+        div.style.cssText = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
         div.innerHTML = `
           ${o.slika ? `<img src="${o.slika}" style="width:auto; max-width:100%; max-height:160px; display:block; margin:0 auto 0.8rem; border-radius:10px;">` : ''}
           ${o.video ? `<video src="${o.video}" controls style="width:100%; max-height:300px; border-radius:10px; margin-bottom:0.8rem;"></video>` : ''}
@@ -1843,3 +1690,4 @@ footer {
 </script>
 </body>
 </html>
+
