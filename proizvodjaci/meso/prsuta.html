@@ -172,6 +172,53 @@
 
     .btn-obrisi:hover { background: #b71c1c; }
 
+    /* ── SKELETON LOADING ── */
+    .skeleton-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    }
+
+    .skeleton-img {
+      height: 200px;
+      background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    .skeleton-body {
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .skeleton-line {
+      height: 14px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    .skeleton-line.naziv { height: 20px; width: 70%; }
+    .skeleton-line.info1 { width: 50%; }
+    .skeleton-line.info2 { width: 60%; }
+    .skeleton-line.info3 { width: 55%; }
+    .skeleton-line.btn {
+      height: 38px;
+      width: 50%;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
     footer {
       background: var(--zemlja);
       color: white;
@@ -227,79 +274,139 @@
 
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
+  const CACHE_KEY = 'prsuta_cache';
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minuta
+
+  function prikaziSkeleton(broj) {
+    const container = document.getElementById('proizvodi-container');
+    const grid = document.createElement('div');
+    grid.className = 'proizvodi-grid';
+    for (let i = 0; i < broj; i++) {
+      grid.innerHTML += `
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line naziv"></div>
+            <div class="skeleton-line info1"></div>
+            <div class="skeleton-line info2"></div>
+            <div class="skeleton-line info3"></div>
+            <div class="skeleton-line btn"></div>
+          </div>
+        </div>
+      `;
+    }
+    container.innerHTML = '';
+    container.appendChild(grid);
+  }
+
+  function prikaziProizvode(proizvodi) {
+    const container = document.getElementById('proizvodi-container');
+    container.innerHTML = '';
+
+    if (proizvodi.length === 0) {
+      container.innerHTML = `
+        <p style="text-align:center; color:#666; font-size:1.1rem; padding:4rem 0;">
+          Još nema proizvoda u ovoj podniši.<br>
+          <strong>Budite prvi koji će dodati pršutu!</strong>
+        </p>`;
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    let currentUserId = null;
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        currentUserId = payload.userId;
+      } catch(e) {}
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'proizvodi-grid';
+
+    proizvodi.forEach(p => {
+      const isOwner = currentUserId && String(p.userId) === String(currentUserId);
+      const datum = p.created_at ? new Date(p.created_at).toLocaleDateString('sr-RS') : '';
+
+      const card = document.createElement('div');
+      card.className = 'proizvod-card';
+      card.innerHTML = `
+        ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <div class="card-body">
+          <div class="card-naziv">${p.naziv}</div>
+          <div class="card-info"><strong>Cena:</strong> ${parseFloat(p.cena || 0).toLocaleString('sr-RS')} RSD</div>
+          <div class="card-info"><strong>Dostupno:</strong> ${p.kolicina || '—'} kg</div>
+          ${p.prodavacIme ? `<div class="card-info"><strong>Prodavac:</strong> ${p.prodavacIme}</div>` : ''}
+          ${p.prodavacLokacija ? `<div class="card-info"><strong>Lokacija:</strong> ${p.prodavacLokacija}</div>` : ''}
+          ${p.opis ? `<div class="card-info"><strong>Opis:</strong> ${p.opis}</div>` : ''}
+          ${datum ? `<div class="card-datum">Dodato: ${datum}</div>` : ''}
+          <div class="card-akcije">
+            ${p.userId
+              ? `<button class="btn-profil" onclick="posetiProfil(${p.userId})">
+                   <i class="fas fa-user"></i> Poseti profil
+                 </button>`
+              : `<span style="color:#999; font-size:0.85rem;">Profil nedostupan</span>`
+            }
+            ${isOwner ? `
+              <button class="btn-obrisi" onclick="obrisiProizvod(${p.id})">
+                <i class="fas fa-trash"></i> Obriši
+              </button>` : ''
+            }
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
+  }
 
   async function ucitajProizvode() {
-    const container = document.getElementById('proizvodi-container');
-    container.innerHTML = '<p style="text-align:center; padding:3rem 0; color:#666;">Učitavam proizvode...</p>';
+    // Pokušaj cache odmah
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const { vreme, podaci } = JSON.parse(cached);
+        if (Date.now() - vreme < CACHE_TTL) {
+          prikaziProizvode(podaci);
+          osvežiUPozadini();
+          return;
+        }
+      }
+    } catch(e) {}
+
+    // Nema cache-a — prikaži skeleton
+    prikaziSkeleton(6);
 
     try {
       const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Meso&podnisa=Pršuta`);
       if (!response.ok) throw new Error('Greška na serveru');
-
       const proizvodi = await response.json();
 
-      const token = localStorage.getItem('token');
-      let currentUserId = null;
-      if (token) {
-        try {
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          currentUserId = payload.userId;
-        } catch(e) {}
-      }
+      // Sačuvaj u cache
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          vreme: Date.now(),
+          podaci: proizvodi
+        }));
+      } catch(e) {}
 
-      container.innerHTML = '';
-
-      if (proizvodi.length === 0) {
-        container.innerHTML = `
-          <p style="text-align:center; color:#666; font-size:1.1rem; padding:4rem 0;">
-            Još nema proizvoda u ovoj podniši.<br>
-            <strong>Budite prvi koji će dodati pršutu!</strong>
-          </p>`;
-        return;
-      }
-
-      const grid = document.createElement('div');
-      grid.className = 'proizvodi-grid';
-
-      proizvodi.forEach(p => {
-        const isOwner = currentUserId && String(p.userId) === String(currentUserId);
-        const datum = p.created_at ? new Date(p.created_at).toLocaleDateString('sr-RS') : '';
-
-        const card = document.createElement('div');
-        card.className = 'proizvod-card';
-        card.innerHTML = `
-          ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}" onerror="this.style.display='none'">` : ''}
-          <div class="card-body">
-            <div class="card-naziv">${p.naziv}</div>
-            <div class="card-info"><strong>Cena:</strong> ${parseFloat(p.cena || 0).toLocaleString('sr-RS')} RSD</div>
-            <div class="card-info"><strong>Dostupno:</strong> ${p.kolicina || '—'} kg</div>
-            ${p.prodavacIme ? `<div class="card-info"><strong>Prodavac:</strong> ${p.prodavacIme}</div>` : ''}
-            ${p.prodavacLokacija ? `<div class="card-info"><strong>Lokacija:</strong> ${p.prodavacLokacija}</div>` : ''}
-            ${p.opis ? `<div class="card-info"><strong>Opis:</strong> ${p.opis}</div>` : ''}
-            ${datum ? `<div class="card-datum">Dodato: ${datum}</div>` : ''}
-            <div class="card-akcije">
-              ${p.userId
-                ? `<button class="btn-profil" onclick="posetiProfil(${p.userId})">
-                     <i class="fas fa-user"></i> Poseti profil
-                   </button>`
-                : `<span style="color:#999; font-size:0.85rem;">Profil nedostupan</span>`
-              }
-              ${isOwner ? `
-                <button class="btn-obrisi" onclick="obrisiProizvod(${p.id})">
-                  <i class="fas fa-trash"></i> Obriši
-                </button>` : ''
-              }
-            </div>
-          </div>`;
-
-        grid.appendChild(card);
-      });
-
-      container.appendChild(grid);
+      prikaziProizvode(proizvodi);
 
     } catch (err) {
-      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.<br>Proveri konekciju sa serverom.</p>`;
+      document.getElementById('proizvodi-container').innerHTML =
+        `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.<br>Proveri konekciju sa serverom.</p>`;
     }
+  }
+
+  async function osvežiUPozadini() {
+    try {
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Meso&podnisa=Pršuta`);
+      if (!response.ok) return;
+      const novi = await response.json();
+      const stari = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}').podaci || [];
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: novi }));
+      if (JSON.stringify(novi) !== JSON.stringify(stari)) prikaziProizvode(novi);
+    } catch(e) {}
   }
 
   function posetiProfil(userId) {
@@ -318,6 +425,7 @@
       });
       if (res.ok) {
         alert('✅ Proizvod je uspešno obrisan.');
+        localStorage.removeItem(CACHE_KEY); // očisti cache posle brisanja
         ucitajProizvode();
       } else {
         alert('Greška pri brisanju.');
@@ -327,23 +435,17 @@
     }
   }
 
-  // JEDINA initNav — čita 'tip' iz localStorage
   function initNav() {
     const token = localStorage.getItem('token');
-    const tip = localStorage.getItem('tip'); // 'kupac' ili 'prodavac'
+    const tip = localStorage.getItem('tip');
 
     if (token) {
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
       document.getElementById('prijavi-se-li').style.display = 'none';
       document.getElementById('postani-prodavac-li').style.display = 'none';
-
       const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac')
-          ? '../../kupac-profil.html'
-          : '../../moj-profil.html';
-      }
+      if (link) link.href = (tip === 'kupac') ? '../../kupac-profil.html' : '../../moj-profil.html';
     } else {
       document.getElementById('moj-profil-li').style.display = 'none';
       document.getElementById('odjavi-se-li').style.display = 'none';
@@ -357,14 +459,12 @@
     window.location.href = '../../index.html';
   }
 
-  // JEDAN DOMContentLoaded — nema duplikata
   document.addEventListener('DOMContentLoaded', () => {
     initNav();
     ucitajProizvode();
   });
 </script>
 
-<!-- Tawk.to — ispravan kompletan script -->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
