@@ -156,9 +156,7 @@
       text-decoration: underline;
     }
 
-    .prikazi-vise-btn:hover {
-      color: #4caf50;
-    }
+    .prikazi-vise-btn:hover { color: #4caf50; }
 
     .seller-btn {
       background: var(--zelena-svetla);
@@ -172,8 +170,54 @@
       display: inline-block;
     }
 
-    .seller-btn:hover {
-      background: var(--zelena);
+    .seller-btn:hover { background: var(--zelena); }
+
+    /* ── SKELETON LOADING ── */
+    .skeleton-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .skeleton-img {
+      height: 220px;
+      background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    .skeleton-info {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .skeleton-line {
+      height: 16px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    .skeleton-line.title { height: 22px; width: 60%; margin: 0 auto; }
+    .skeleton-line.location { width: 40%; margin: 0 auto; }
+    .skeleton-line.desc1 { width: 90%; margin: 0 auto; }
+    .skeleton-line.desc2 { width: 75%; margin: 0 auto; }
+    .skeleton-line.btn {
+      height: 44px;
+      width: 60%;
+      margin: 0.5rem auto 0;
+      border-radius: 50px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     footer {
@@ -198,14 +242,12 @@
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-
-   <li id="moj-profil-li" style="display:none;">
+      <li id="moj-profil-li" style="display:none;">
         <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
       </li>
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
-
       <li id="prijavi-se-li">
         <a href="login.html">Prijavi se</a>
       </li>
@@ -221,12 +263,11 @@
   <h1>Svi prodavci</h1>
 
   <div class="intro">
-    Pronađite proizvođače iz vaše okoline – sveže, domaće i provereno.  
+    Pronađite proizvođače iz vaše okoline – sveže, domaće i provereno.
     Kliknite na profil da vidite detalje, proizvode i kontakt.
   </div>
 
-  <div class="sellers-grid" id="prodavci-grid">
-  </div>
+  <div class="sellers-grid" id="prodavci-grid"></div>
 
 </div>
 
@@ -236,34 +277,11 @@
     <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
     <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
     <p style="margin-top:0.5rem;">
-      <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
+      <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> •
       <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
     </p>
   </div>
 </footer>
-
-<script>
-  // Navigacija
-  document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-    } else {
-      document.getElementById('moj-profil-li').style.display = 'none';
-      document.getElementById('odjavi-se-li').style.display = 'none';
-      document.getElementById('prijavi-se-li').style.display = 'list-item';
-      document.getElementById('postani-prodavac-li').style.display = 'list-item';
-    }
-  });
-
-  function odjaviSe() {
-    localStorage.removeItem('token');
-    window.location.href = 'index.html';
-  }
-</script>
 
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
@@ -282,17 +300,95 @@ s0.parentNode.insertBefore(s1,s0);
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   const MAX_OPIS = 150;
+  const CACHE_KEY = 'prodavci_cache';
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minuta
 
-  // Čuvamo sve prodavce globalno da bi prikaziVise mogao da ih nađe
   let sviProdavci = [];
+
+  // Navigacija
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
+
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      document.getElementById('postani-prodavac-li').style.display = 'none';
+      const link = document.getElementById('moj-profil-link');
+      if (link) link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+    } else {
+      document.getElementById('moj-profil-li').style.display = 'none';
+      document.getElementById('odjavi-se-li').style.display = 'none';
+      document.getElementById('prijavi-se-li').style.display = 'list-item';
+      document.getElementById('postani-prodavac-li').style.display = 'list-item';
+    }
+  });
+
+  function odjaviSe() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+  }
+
+  // Skeleton kartice dok se učitava
+  function prikaziSkeleton(broj) {
+    const grid = document.getElementById('prodavci-grid');
+    grid.innerHTML = '';
+    for (let i = 0; i < broj; i++) {
+      grid.innerHTML += `
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-info">
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line location"></div>
+            <div class="skeleton-line desc1"></div>
+            <div class="skeleton-line desc2"></div>
+            <div class="skeleton-line btn"></div>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function prikaziProdavce(prodavci) {
+    const grid = document.getElementById('prodavci-grid');
+    grid.innerHTML = '';
+
+    if (prodavci.length === 0) {
+      grid.innerHTML = '<p style="text-align:center; color:#666; grid-column:1/-1; padding:3rem;">Još nema registrovanih prodavaca.</p>';
+      return;
+    }
+
+    prodavci.forEach(p => {
+      const opis = p.opis || 'Nema opisa';
+      const dugOpis = opis.length > MAX_OPIS;
+      const kratakOpis = dugOpis ? opis.substring(0, MAX_OPIS) + '...' : opis;
+
+      const card = document.createElement('div');
+      card.className = 'seller-card';
+      card.innerHTML = `
+        <div class="seller-img">
+          <img src="${p.slika || '/placeholder-prodavac.svg'}" alt="${p.ime}" 
+               loading="lazy"
+               onerror="this.src='/placeholder-prodavac.svg'">
+        </div>
+        <div class="seller-info">
+          <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
+          <div class="seller-location">📍 ${p.lokacija || 'Nepoznato'}</div>
+          <p class="seller-description" id="opis-${p.id}">${kratakOpis}</p>
+          ${dugOpis ? `<button class="prikazi-vise-btn" id="btn-${p.id}" onclick="prikaziVise(${p.id})">Prikaži više ▼</button>` : ''}
+          <a href="moj-profil.html?userId=${p.id}" class="seller-btn">Pogledaj profil</a>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
 
   function prikaziVise(id) {
     const p = sviProdavci.find(x => x.id === id);
     if (!p) return;
-
     const opisEl = document.getElementById(`opis-${id}`);
     const btnEl = document.getElementById(`btn-${id}`);
-
     if (btnEl.textContent.includes('više')) {
       opisEl.textContent = p.opis;
       btnEl.textContent = 'Prikaži manje ▲';
@@ -303,74 +399,68 @@ s0.parentNode.insertBefore(s1,s0);
   }
 
   async function ucitajProdavce() {
+    const grid = document.getElementById('prodavci-grid');
+
+    // Pokušaj da učitaš iz cache-a odmah
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const { vreme, podaci } = JSON.parse(cached);
+        if (Date.now() - vreme < CACHE_TTL) {
+          // Cache je svež — prikaži odmah bez skeletona
+          sviProdavci = podaci;
+          prikaziProdavce(podaci);
+          // U pozadini osvježi cache tiho
+          osvežiUPozadini();
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Nema cache-a — prikaži skeleton pa učitaj
+    prikaziSkeleton(8);
+
     try {
       const response = await fetch(`${backendUrl}/svi-prodavci`);
       if (!response.ok) throw new Error(`Server vratio ${response.status}`);
 
       sviProdavci = await response.json();
 
-      const grid = document.getElementById('prodavci-grid');
-      grid.innerHTML = '';
+      // Sačuvaj u cache
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          vreme: Date.now(),
+          podaci: sviProdavci
+        }));
+      } catch (e) {}
 
-      if (sviProdavci.length === 0) {
-        grid.innerHTML = '<p>Još nema registrovanih prodavaca.</p>';
-        return;
-      }
-
-      sviProdavci.forEach(p => {
-        const opis = p.opis || 'Nema opisa';
-        const dugOpis = opis.length > MAX_OPIS;
-        const kratakOpis = dugOpis ? opis.substring(0, MAX_OPIS) + '...' : opis;
-
-        const card = document.createElement('div');
-        card.className = 'seller-card';
-        card.innerHTML = `
-          <div class="seller-img">
-          <img src="${p.slika}" alt="${p.ime}" onerror="this.src='/placeholder-prodavac.svg'">
-          </div>
-          <div class="seller-info">
-            <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
-            <div class="seller-location">${p.lokacija || 'Nepoznato'}</div>
-            <p class="seller-description" id="opis-${p.id}">${kratakOpis}</p>
-            ${dugOpis ? `<button class="prikazi-vise-btn" id="btn-${p.id}" onclick="prikaziVise(${p.id})">Prikaži više ▼</button>` : ''}
-            <a href="moj-profil.html?userId=${p.id}" class="seller-btn">Pogledaj profil</a>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+      prikaziProdavce(sviProdavci);
 
     } catch (err) {
       console.error('Greška pri učitavanju prodavaca:', err);
-      document.getElementById('prodavci-grid').innerHTML = 
-        '<p style="color:red;">Greška pri učitavanju prodavaca</p>';
+      grid.innerHTML = '<p style="color:red; text-align:center; grid-column:1/-1; padding:3rem;">Greška pri učitavanju. Pokušajte ponovo.</p>';
     }
+  }
+
+  // Tiho osvježi u pozadini bez da korisnik vidi loading
+  async function osvežiUPozadini() {
+    try {
+      const response = await fetch(`${backendUrl}/svi-prodavci`);
+      if (!response.ok) return;
+      const novi = await response.json();
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        vreme: Date.now(),
+        podaci: novi
+      }));
+      // Ažuriraj prikaz samo ako se podaci razlikuju
+      if (JSON.stringify(novi) !== JSON.stringify(sviProdavci)) {
+        sviProdavci = novi;
+        prikaziProdavce(novi);
+      }
+    } catch (e) {}
   }
 
   window.addEventListener('load', ucitajProdavce);
 </script>
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const tip = localStorage.getItem('tip');
-
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-
-      const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
-      }
-    }
-  });
-
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
-</script>
 </body>
 </html>
-
