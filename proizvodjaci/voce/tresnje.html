@@ -95,7 +95,6 @@
       border: 1px solid #e0e0e0;
       border-radius: 16px;
       padding: 1.8rem;
-      margin-bottom: 1.5rem;
       box-shadow: 0 4px 15px rgba(0,0,0,0.06);
     }
 
@@ -118,10 +117,6 @@
 <header>
   <nav>
     <div class="logo">LokalniPlodovi</div>
-    <button class="hamburger" style="display:none;" 
-      onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
-      <span></span><span></span><span></span>
-    </button>
     <ul>
       <li><a href="/">Početna</a></li>
       <li><a href="/Prodavci.html">Svi prodavci</a></li>
@@ -141,7 +136,6 @@
 
 <div class="container">
   <h1>Proizvođači Trešnje</h1>
-  
   <div id="proizvodi-container"></div>
 </div>
 
@@ -194,26 +188,19 @@
         const card = document.createElement('div');
         card.className = 'proizvod-card';
         card.innerHTML = `
-        ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}" 
-    style="width:100%; max-width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:1rem;">` : ''}
+        ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:1rem;">` : ''}
           <h3>${p.naziv}</h3>
-          <p class="info"><strong>Cena:</strong> ${p.cena} RSD</p>
-          <p class="info"><strong>Dostupno:</strong> ${p.kolicina} kg/kom</p>
-          <p class="info"><strong>Prodavac:</strong> ${p.prodavacIme || 'Nepoznato'}</p>
-          <p class="info"><strong>Lokacija:</strong> ${p.prodavacLokacija || 'Nije navedeno'}</p>
+          <p><strong>Cena:</strong> ${p.cena} RSD</p>
+          <p><strong>Dostupno:</strong> ${p.kolicina} kg/kom</p>
+          <p><strong>Prodavac:</strong> ${p.prodavacIme || 'Nepoznato'}</p>
+          <p><strong>Lokacija:</strong> ${p.prodavacLokacija || 'Nije navedeno'}</p>
           <small style="color:#777;">Dodato: ${new Date(p.created_at).toLocaleDateString('sr-RS')}</small>
           
           <div style="margin-top:1.2rem; display:flex; gap:12px; flex-wrap:wrap;">
-            <button onclick="posetiProfil(${p.userId})" 
-                    style="background:#2e7d32; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
+            <button onclick="posetiProfil(${p.userId})" style="background:#2e7d32; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
               👤 Poseti profil
             </button>
-            
-            ${isOwner ? `
-            <button onclick="obrisiProizvod(${p.id})" 
-                    style="background:#d32f2f; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">
-              🗑 Obriši
-            </button>` : ''}
+            ${isOwner ? `<button onclick="obrisiProizvod(${p.id})" style="background:#d32f2f; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600;">🗑 Obriši</button>` : ''}
           </div>
         `;
         container.appendChild(card);
@@ -221,18 +208,16 @@
 
     } catch (err) {
       console.error('Greška:', err);
-      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.<br>Proveri konekciju sa serverom.</p>`;
+      container.innerHTML = `<p style="text-align:center; color:red; padding:3rem 0;">Greška pri učitavanju proizvoda.<br>Proveri konekciju.</p>`;
     }
   }
 
   function posetiProfil(userId) {
-    if (!userId) return alert("Profil nije dostupan.");
     window.location.href = `/moj-profil.html?userId=${userId}`;
   }
 
   async function obrisiProizvod(id) {
     if (!confirm('Da li ste sigurni da želite da obrišete ovaj proizvod?')) return;
-
     const token = localStorage.getItem('token');
     if (!token) return alert('Morate biti ulogovani!');
 
@@ -241,15 +226,12 @@
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
       if (res.ok) {
-        alert('✅ Proizvod je uspešno obrisan.');
+        alert('✅ Proizvod obrisan.');
         ucitajProizvode();
-      } else {
-        alert('Greška pri brisanju.');
       }
     } catch (err) {
-      alert('Došlo je do greške pri brisanju.');
+      alert('Greška pri brisanju.');
     }
   }
 
@@ -269,25 +251,18 @@
       document.getElementById('postani-prodavac-li').style.display = 'none';
 
       const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac') ? '/kupac-profil.html' : '/moj-profil.html';
-      }
+      if (link) link.href = (tip === 'kupac') ? '/kupac-profil.html' : '/moj-profil.html';
     }
     ucitajProizvode();
   });
 </script>
 
-<!-- Tawk.to Script -->
+<!-- Tawk.to -->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true; s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
+s1.charset='UTF-8'; s1.setAttribute('crossorigin','*'); s0.parentNode.insertBefore(s1,s0);})();
 </script>
 </body>
 </html>
