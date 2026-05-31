@@ -79,9 +79,17 @@
     .intro {
       text-align: center;
       max-width: 900px;
-      margin: 0 auto 3rem;
+      margin: 0 auto 1rem;
       font-size: 1.15rem;
       color: #444;
+    }
+
+    .loading-info {
+      display: none;
+      text-align: center;
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
     }
 
     .sellers-grid {
@@ -267,6 +275,10 @@
     Kliknite na profil da vidite detalje, proizvode i kontakt.
   </div>
 
+  <div id="loading-info" class="loading-info">
+    ⏳ Server se budi, još nekoliko sekundi...
+  </div>
+
   <div class="sellers-grid" id="prodavci-grid"></div>
 
 </div>
@@ -275,27 +287,13 @@
   <div class="container">
     <h2>LokalniPlodovi</h2>
     <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
-    <p style="margin-top:2rem; opacity:0.9;">© 2025 LokalniPlodovi • Sva prava zadržana</p>
+    <p style="margin-top:2rem; opacity:0.9;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
     <p style="margin-top:0.5rem;">
       <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> •
       <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
     </p>
   </div>
 </footer>
-
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/698e1ba8b9112b1c35ea4530/1jh9ho3bh';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
 
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
@@ -304,6 +302,13 @@ s0.parentNode.insertBefore(s1,s0);
   const CACHE_TTL = 5 * 60 * 1000; // 5 minuta
 
   let sviProdavci = [];
+
+  // Keep-alive ping — drži server budnim dok je tab otvoren
+  function pingBackend() {
+    fetch(`${backendUrl}/test`).catch(() => {});
+  }
+  pingBackend();
+  setInterval(pingBackend, 10 * 60 * 1000);
 
   // Navigacija
   document.addEventListener('DOMContentLoaded', () => {
@@ -407,10 +412,8 @@ s0.parentNode.insertBefore(s1,s0);
       if (cached) {
         const { vreme, podaci } = JSON.parse(cached);
         if (Date.now() - vreme < CACHE_TTL) {
-          // Cache je svež — prikaži odmah bez skeletona
           sviProdavci = podaci;
           prikaziProdavce(podaci);
-          // U pozadini osvježi cache tiho
           osvežiUPozadini();
           return;
         }
@@ -420,13 +423,27 @@ s0.parentNode.insertBefore(s1,s0);
     // Nema cache-a — prikaži skeleton pa učitaj
     prikaziSkeleton(8);
 
+    // Pokaži poruku ako traje duže od 3 sekunde
+    const sporTimer = setTimeout(() => {
+      const info = document.getElementById('loading-info');
+      if (info) info.style.display = 'block';
+    }, 3000);
+
     try {
-      const response = await fetch(`${backendUrl}/svi-prodavci`);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+      const response = await fetch(`${backendUrl}/svi-prodavci`, {
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      clearTimeout(sporTimer);
+      document.getElementById('loading-info').style.display = 'none';
+
       if (!response.ok) throw new Error(`Server vratio ${response.status}`);
 
       sviProdavci = await response.json();
 
-      // Sačuvaj u cache
       try {
         localStorage.setItem(CACHE_KEY, JSON.stringify({
           vreme: Date.now(),
@@ -437,8 +454,20 @@ s0.parentNode.insertBefore(s1,s0);
       prikaziProdavce(sviProdavci);
 
     } catch (err) {
-      console.error('Greška pri učitavanju prodavaca:', err);
-      grid.innerHTML = '<p style="color:red; text-align:center; grid-column:1/-1; padding:3rem;">Greška pri učitavanju. Pokušajte ponovo.</p>';
+      clearTimeout(sporTimer);
+      document.getElementById('loading-info').style.display = 'none';
+
+      if (err.name === 'AbortError') {
+        grid.innerHTML = `<p style="color:#e65100; text-align:center; grid-column:1/-1; padding:3rem;">
+          ⏱️ Server se budi, pokušajte ponovo za nekoliko sekundi.<br><br>
+          <button onclick="ucitajProdavce()" style="background:#2e7d32; color:white; padding:0.8rem 2rem; border:none; border-radius:50px; cursor:pointer; font-size:1rem;">Pokušaj ponovo</button>
+        </p>`;
+      } else {
+        grid.innerHTML = `<p style="color:red; text-align:center; grid-column:1/-1; padding:3rem;">
+          Greška pri učitavanju.
+          <button onclick="ucitajProdavce()" style="background:#2e7d32; color:white; padding:0.8rem 2rem; border:none; border-radius:50px; cursor:pointer; margin-left:1rem;">Pokušaj ponovo</button>
+        </p>`;
+      }
     }
   }
 
@@ -452,7 +481,6 @@ s0.parentNode.insertBefore(s1,s0);
         vreme: Date.now(),
         podaci: novi
       }));
-      // Ažuriraj prikaz samo ako se podaci razlikuju
       if (JSON.stringify(novi) !== JSON.stringify(sviProdavci)) {
         sviProdavci = novi;
         prikaziProdavce(novi);
