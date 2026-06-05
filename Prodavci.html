@@ -3,237 +3,567 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Svi prodavci – LokalniPlodovi</title>
+
+  <!-- SEO -->
+  <title>Svi prodavci  Lokalni proizvođači u Srbiji | LokalniPlodovi</title>
+  <meta name="description" content="Pronađite lokalne proizvođače u vašem kraju. Sveže povrće, voće, med, sir, meso i jaja direktno od farmera u Srbiji. Bez posrednika."/>
+  <meta name="keywords" content="lokalni proizvođači Srbija, domaći farmeri, kupovina od seljaka, sveži proizvodi direktno, pijaca online Srbija"/>
+  <link rel="canonical" href="https://lokalniplodovi.rs/Prodavci.html"/>
+  <meta name="robots" content="index, follow"/>
+  <meta name="language" content="Serbian"/>
+  <meta name="author" content="LokalniPlodovi"/>
+  <meta property="og:title" content="Svi prodavci – Lokalni proizvođači u Srbiji | LokalniPlodovi"/>
+  <meta property="og:description" content="Pronađite lokalne proizvođače u vašem kraju. Direktno od farmera, bez posrednika."/>
+  <meta property="og:url" content="https://lokalniplodovi.rs/Prodavci.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:locale" content="sr_RS"/>
+  <meta property="og:image" content="https://lokalniplodovi.rs/og-slika.jpg"/>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Svi lokalni proizvođači – LokalniPlodovi",
+    "description": "Lista lokalnih proizvođača i farmera u Srbiji",
+    "url": "https://lokalniplodovi.rs/Prodavci.html",
+    "inLanguage": "sr-RS"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Početna", "item": "https://lokalniplodovi.rs/" },
+      { "@type": "ListItem", "position": 2, "name": "Svi prodavci", "item": "https://lokalniplodovi.rs/Prodavci.html" }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="stylesheet" href="mobile.css">
+
   <style>
     :root {
       --zelena: #2e7d32;
       --zelena-svetla: #4caf50;
+      --zelena-tamna: #1b5e20;
+      --zlatna: #f5a623;
+      --zlatna-svetla: #ffd166;
       --zemlja: #5d4037;
-      --siva: #757575;
-      --svetlo: #f8f9f5;
+      --krem: #faf7f0;
+      --krem-tamna: #f0ece0;
       --belo: #ffffff;
+      --tekst: #2c2c2c;
+      --siva: #6b7280;
     }
 
-    * { margin:0; padding:0; box-sizing:border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--svetlo);
-      color: #333;
-      line-height: 1.6;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--krem);
+      color: var(--tekst);
       min-height: 100vh;
-    }
-
-    header {
-      background: rgba(46, 125, 50, 0.94);
-      color: white;
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      width: 100%;
-    }
-
-    .logo { font-size: 1.8rem; font-weight: 700; }
-
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    nav ul {
-      display: flex;
-      list-style: none;
-      gap: 2.5rem;
-      margin: 0;
-      padding: 0;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      transition: 0.2s;
-    }
-
-    nav a:hover { color: #c8e6c9; }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-
-    h1 {
-      color: var(--zemlja);
-      text-align: center;
-      margin: 2rem 0;
-    }
-
-    .intro {
-      text-align: center;
-      max-width: 900px;
-      margin: 0 auto 1rem;
-      font-size: 1.15rem;
-      color: #444;
-    }
-
-    .loading-info {
-      display: none;
-      text-align: center;
-      color: #666;
-      margin-bottom: 2rem;
-      font-size: 0.95rem;
-    }
-
-    .sellers-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2rem;
-    }
-
-    .seller-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.09);
-      transition: all 0.3s ease;
-      text-align: center;
       display: flex;
       flex-direction: column;
     }
 
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, var(--zelena-tamna) 0%, var(--zelena) 100%);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    }
+
+    nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      border: 1.5px solid rgba(255,255,255,0.3);
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700; color: white;
+    }
+
+    .logo-text span { color: var(--zlatna-svetla); }
+
+    nav ul {
+      display: flex; list-style: none; gap: 0.2rem; align-items: center;
+    }
+
+    nav ul li a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 0.88rem; font-weight: 500;
+      padding: 0.45rem 0.85rem;
+      border-radius: 50px;
+      transition: all 0.2s;
+    }
+
+    nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none;
+    }
+
+    .hamburger span {
+      width: 26px; height: 2.5px;
+      background: white; border-radius: 3px; display: block;
+    }
+
+    /* ===== HERO ===== */
+    .page-hero {
+      background: linear-gradient(135deg, #f0f7f0 0%, #e8f5e9 60%, #dcedc8 100%);
+      border-bottom: 1px solid rgba(76,175,80,0.15);
+      padding: 3rem 1.5rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: '🌿';
+      position: absolute;
+      font-size: 14rem; opacity: 0.05;
+      right: -3rem; top: -3rem;
+      line-height: 1; pointer-events: none;
+    }
+
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 0.82rem; color: var(--siva);
+    }
+
+    .breadcrumb a { color: var(--zelena); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { opacity: 0.5; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(76,175,80,0.12);
+      border: 1px solid rgba(76,175,80,0.3);
+      color: var(--zelena);
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 0.35rem 1rem; border-radius: 50px;
+      margin-bottom: 1rem;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; color: var(--zemlja);
+      margin-bottom: 0.8rem; line-height: 1.2;
+    }
+
+    .page-desc {
+      color: var(--siva); font-size: 1rem;
+      max-width: 560px; margin: 0 auto 1.5rem; line-height: 1.7;
+    }
+
+    /* stats mini */
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.88rem;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .hero-stat i { color: var(--zelena); }
+
+    /* ===== TOOLBAR ===== */
+    .toolbar {
+      background: white;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 62px;
+      z-index: 50;
+    }
+
+    .toolbar-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: 0.9rem; top: 50%;
+      transform: translateY(-50%);
+      color: #aaa; font-size: 0.9rem;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 0.6rem 1rem 0.6rem 2.4rem;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--krem);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #search-input:focus { border-color: var(--zelena-svetla); background: white; }
+
+    .filter-group {
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+
+    .filter-label { font-size: 0.82rem; color: var(--siva); font-weight: 500; white-space: nowrap; }
+
+    select.filter-select {
+      padding: 0.55rem 0.9rem;
+      border: 1.5px solid #e0e0e0; border-radius: 10px;
+      font-size: 0.85rem; font-family: 'DM Sans', sans-serif;
+      background: white; color: var(--tekst);
+      cursor: pointer; outline: none;
+      transition: border-color 0.2s;
+    }
+
+    select.filter-select:focus { border-color: var(--zelena-svetla); }
+
+    #count-label {
+      font-size: 0.82rem; color: var(--siva);
+      font-weight: 500; white-space: nowrap;
+      margin-left: auto;
+    }
+
+    /* ===== GRID ===== */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+      flex: 1;
+    }
+
+    .sellers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.8rem;
+    }
+
+    /* ===== KARTICA ===== */
+    .seller-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
+      display: flex;
+      flex-direction: column;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .seller-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 14px 38px rgba(0,0,0,0.15);
+      transform: translateY(-10px) scale(1.01);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.12);
     }
 
     .seller-img {
-      height: 220px;
+      height: 210px;
       overflow: hidden;
-      flex-shrink: 0;
+      position: relative;
+      background: var(--krem-tamna);
     }
 
     .seller-img img {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .seller-card:hover .seller-img img { transform: scale(1.06); }
+
+    .seller-nisa-badge {
+      position: absolute;
+      bottom: 10px; left: 10px;
+      background: rgba(255,255,255,0.93);
+      backdrop-filter: blur(6px);
+      color: var(--zelena);
+      font-size: 0.72rem; font-weight: 700;
+      padding: 0.28rem 0.65rem;
+      border-radius: 50px;
+      letter-spacing: 0.2px;
     }
 
     .seller-info {
-      padding: 1.5rem;
+      padding: 1.4rem 1.5rem 1.5rem;
       display: flex;
       flex-direction: column;
       flex: 1;
     }
 
     .seller-name {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700;
       color: var(--zemlja);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
     }
 
     .seller-location {
       color: var(--siva);
-      font-size: 1rem;
-      margin-bottom: 0.8rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.9rem;
+      display: flex; align-items: center; gap: 0.3rem;
     }
 
     .seller-description {
-      font-size: 0.95rem;
-      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
       color: #555;
+      line-height: 1.6;
       flex: 1;
+      margin-bottom: 0.5rem;
     }
 
     .prikazi-vise-btn {
-      background: none;
-      border: none;
-      color: #2e7d32;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      padding: 0;
-      margin-bottom: 1rem;
-      text-decoration: underline;
+      background: none; border: none;
+      color: var(--zelena);
+      cursor: pointer; font-weight: 600;
+      font-size: 0.82rem; padding: 0;
+      margin-bottom: 1.2rem;
+      font-family: 'DM Sans', sans-serif;
+      text-align: left;
     }
 
-    .prikazi-vise-btn:hover { color: #4caf50; }
+    .prikazi-vise-btn:hover { color: var(--zelena-tamna); }
 
     .seller-btn {
-      background: var(--zelena-svetla);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--zelena);
       color: white;
-      padding: 0.8rem 1.8rem;
+      padding: 0.7rem 1.5rem;
       border-radius: 50px;
       text-decoration: none;
       font-weight: 600;
-      transition: 0.25s;
+      font-size: 0.9rem;
+      transition: all 0.22s;
       margin-top: auto;
-      display: inline-block;
     }
 
-    .seller-btn:hover { background: var(--zelena); }
+    .seller-btn:hover {
+      background: var(--zelena-tamna);
+      transform: scale(1.03);
+    }
 
-    /* ── SKELETON LOADING ── */
+    /* ===== SKELETON ===== */
     .skeleton-card {
       background: white;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.09);
-      display: flex;
-      flex-direction: column;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+      border: 1px solid rgba(0,0,0,0.05);
     }
 
     .skeleton-img {
-      height: 220px;
-      background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+      height: 210px;
+      background: linear-gradient(90deg, #ede9e0 25%, #f5f2ea 50%, #ede9e0 75%);
       background-size: 200% 100%;
       animation: shimmer 1.4s infinite;
     }
 
     .skeleton-info {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
+      padding: 1.4rem 1.5rem;
+      display: flex; flex-direction: column; gap: 0.7rem;
     }
 
     .skeleton-line {
-      height: 16px;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+      height: 14px; border-radius: 8px;
+      background: linear-gradient(90deg, #ede9e0 25%, #f5f2ea 50%, #ede9e0 75%);
       background-size: 200% 100%;
       animation: shimmer 1.4s infinite;
     }
 
-    .skeleton-line.title { height: 22px; width: 60%; margin: 0 auto; }
-    .skeleton-line.location { width: 40%; margin: 0 auto; }
-    .skeleton-line.desc1 { width: 90%; margin: 0 auto; }
-    .skeleton-line.desc2 { width: 75%; margin: 0 auto; }
-    .skeleton-line.btn {
-      height: 44px;
-      width: 60%;
-      margin: 0.5rem auto 0;
-      border-radius: 50px;
-    }
+    .skeleton-line.title { height: 20px; width: 65%; }
+    .skeleton-line.loc { width: 42%; }
+    .skeleton-line.d1 { width: 92%; }
+    .skeleton-line.d2 { width: 78%; }
+    .skeleton-line.d3 { width: 60%; }
+    .skeleton-line.btn { height: 40px; width: 58%; border-radius: 50px; margin-top: 0.4rem; }
 
     @keyframes shimmer {
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
 
-    footer {
-      background: var(--zemlja);
-      color: white;
+    /* ===== SLOW SERVER NOTICE ===== */
+    .server-notice {
+      display: none;
+      background: #fff8e6;
+      border: 1px solid rgba(245,166,35,0.3);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
       text-align: center;
-      padding: 4rem 1rem 2.5rem;
-      margin-top: 6rem;
+      color: #92400e;
+      font-size: 0.9rem;
+    }
+
+    /* ===== EMPTY / ERROR ===== */
+    .state-box {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.06);
+    }
+
+    .state-box .icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    .state-box h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--zemlja); margin-bottom: 0.7rem;
+    }
+
+    .state-box p { color: var(--siva); line-height: 1.6; margin-bottom: 1.5rem; }
+
+    .btn-retry {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--zelena); color: white;
+      padding: 0.8rem 2rem; border-radius: 50px;
+      border: none; cursor: pointer;
+      font-size: 0.95rem; font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .btn-retry:hover { background: var(--zelena-tamna); }
+
+    /* ===== SEO INFO ===== */
+    .seo-info {
+      background: white;
+      border-top: 1px solid #e8e8e8;
+      padding: 3rem 1.5rem;
+    }
+
+    .seo-info-inner { max-width: 900px; margin: 0 auto; }
+
+    .seo-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--zemlja); margin-bottom: 1rem;
+    }
+
+    .seo-info p {
+      color: var(--siva); line-height: 1.8;
+      font-size: 0.95rem; margin-bottom: 1rem;
+    }
+
+    .seo-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+
+    .seo-pill {
+      background: var(--krem-tamna); color: #555;
+      font-size: 0.8rem; padding: 0.3rem 0.75rem;
+      border-radius: 50px; font-weight: 500;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--zemlja); color: white;
+      text-align: center; padding: 3rem 1.5rem 2rem;
+    }
+
+    footer a { color: #c8e6c9; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; margin-bottom: 0.5rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      nav ul {
+        display: none;
+        position: absolute; top: 62px; left: 0; right: 0;
+        background: rgba(27,94,32,0.97);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 1.2rem 1.5rem 1.8rem;
+        gap: 0.4rem; z-index: 999;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      nav ul.open { display: flex; }
+      nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
+
+      .toolbar { top: 62px; }
+      .toolbar-inner { flex-wrap: wrap; }
+      .search-wrap { min-width: 100%; }
+      #count-label { margin-left: 0; }
+
+      .sellers-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .seller-img { height: 160px; }
+      .seller-name { font-size: 1rem; }
+      .seller-info { padding: 1rem; }
+      .page-title { font-size: 1.8rem; }
+      .hero-stats { gap: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .sellers-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 769px) {
+      .hamburger { display: none; }
     }
   </style>
 </head>
@@ -241,11 +571,16 @@
 
 <header>
   <nav>
-    <div class="logo">LokalniPlodovi</div>
-    <button class="hamburger" style="display:none;" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🌿</div>
+      <span class="logo-text">Lokalni<span>Plodovi</span></span>
+    </a>
+
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Meni">
       <span></span><span></span><span></span>
     </button>
-    <ul>
+
+    <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
@@ -256,61 +591,110 @@
       <li id="odjavi-se-li" style="display:none;">
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
-      <li id="prijavi-se-li">
-        <a href="login.html">Prijavi se</a>
-      </li>
-      <li id="postani-prodavac-li">
-        <a href="registracija.html">Registruj se</a>
-      </li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
     </ul>
   </nav>
 </header>
 
-<div class="container">
-
-  <h1>Svi prodavci</h1>
-
-  <div class="intro">
+<!-- HERO -->
+<section class="page-hero">
+  <nav class="breadcrumb" aria-label="breadcrumb">
+    <a href="index.html">Početna</a>
+    <span>›</span>
+    <strong style="color:var(--tekst);">Svi prodavci</strong>
+  </nav>
+  <div class="hero-badge">🌿 Lokalni farmeri</div>
+  <h1 class="page-title">Svi prodavci</h1>
+  <p class="page-desc">
     Pronađite proizvođače iz vaše okoline – sveže, domaće i provereno.
     Kliknite na profil da vidite detalje, proizvode i kontakt.
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat"><i class="fas fa-store"></i> <span id="stat-broj">31+</span> aktivnih prodavaca</div>
+    <div class="hero-stat"><i class="fas fa-map-marker-alt"></i> Cela Srbija</div>
+    <div class="hero-stat"><i class="fas fa-leaf"></i> Direktno sa imanja</div>
   </div>
+</section>
 
-  <div id="loading-info" class="loading-info">
-    ⏳ Server se budi, još nekoliko sekundi...
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" id="search-input" placeholder="Pretraži po imenu, lokaciji ili niši..."
+             oninput="filterProdavci()">
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Sortiraj:</span>
+      <select class="filter-select" id="sort-select" onchange="filterProdavci()">
+        <option value="novo">Najnoviji</option>
+        <option value="ime">Ime (A-Ž)</option>
+      </select>
+    </div>
+    <span id="count-label"></span>
   </div>
-
-  <div class="sellers-grid" id="prodavci-grid"></div>
-
 </div>
 
+<!-- MAIN -->
+<main class="container">
+  <div id="server-notice" class="server-notice">
+    ⏳ Server se budi, još nekoliko sekundi...
+  </div>
+  <div class="sellers-grid" id="prodavci-grid"></div>
+</main>
+
+<!-- SEO INFO -->
+<section class="seo-info">
+  <div class="seo-info-inner">
+    <h2>Pronađite lokalnog proizvođača u vašem kraju</h2>
+    <p>
+      LokalniPlodovi je platforma koja direktno povezuje kupce sa lokalnim farmerima i proizvođačima širom Srbije.
+      Bez posrednika, bez supermarketa  pravo sa imanja do vašeg stola.
+    </p>
+    <p>
+      Svaki prodavac na platformi je proveren lokalni proizvođač koji nudi sveže povrće, voće, med, mlečne proizvode,
+      meso, jaja ili lekovito bilje. Kontaktirajte direktno i dogovorite preuzimanje ili dostavu.
+    </p>
+    <div class="seo-pills">
+      <span class="seo-pill">lokalni proizvođači Srbija</span>
+      <span class="seo-pill">domaći farmer kupovina</span>
+      <span class="seo-pill">sveži proizvodi direktno</span>
+      <span class="seo-pill">bez posrednika Srbija</span>
+      <span class="seo-pill">pijaca online</span>
+      <span class="seo-pill">domaće voće povrće</span>
+      <span class="seo-pill">lokalna hrana Srbija</span>
+    </div>
+  </div>
+</section>
+
 <footer>
-  <div class="container">
-    <h2>LokalniPlodovi</h2>
-    <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
-    <p style="margin-top:2rem; opacity:0.9;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
-    <p style="margin-top:0.5rem;">
-      <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> •
-      <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
+  <div style="max-width:1400px; margin:0 auto;">
+    <div class="footer-logo">LokalniPlodovi</div>
+    <p style="opacity:0.85; margin-bottom:1.5rem;">Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="opacity:0.75; margin-bottom:0.7rem;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
+    <p>
+      <a href="politika-privatnosti.html">Politika privatnosti</a> •
+      <a href="uslovi-koriscenja.html">Uslovi korišćenja</a>
     </p>
   </div>
 </footer>
 
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
-  const MAX_OPIS = 150;
+  const MAX_OPIS = 130;
   const CACHE_KEY = 'prodavci_cache';
-  const CACHE_TTL = 5 * 60 * 1000; // 5 minuta
+  const CACHE_TTL = 5 * 60 * 1000;
 
   let sviProdavci = [];
+  let filtrirani = [];
 
-  // Keep-alive ping — drži server budnim dok je tab otvoren
-  function pingBackend() {
-    fetch(`${backendUrl}/test`).catch(() => {});
-  }
+  // ── Keep-alive ping ──
+  function pingBackend() { fetch(`${backendUrl}/test`).catch(() => {}); }
   pingBackend();
   setInterval(pingBackend, 10 * 60 * 1000);
 
-  // Navigacija
+  // ── Nav ──
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
@@ -330,63 +714,94 @@
     }
   });
 
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
+  function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
+  function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
 
-  // Skeleton kartice dok se učitava
-  function prikaziSkeleton(broj) {
+  // ── Skeleton ──
+  function prikaziSkeleton(n) {
     const grid = document.getElementById('prodavci-grid');
-    grid.innerHTML = '';
-    for (let i = 0; i < broj; i++) {
-      grid.innerHTML += `
-        <div class="skeleton-card">
-          <div class="skeleton-img"></div>
-          <div class="skeleton-info">
-            <div class="skeleton-line title"></div>
-            <div class="skeleton-line location"></div>
-            <div class="skeleton-line desc1"></div>
-            <div class="skeleton-line desc2"></div>
-            <div class="skeleton-line btn"></div>
-          </div>
+    grid.innerHTML = Array(n).fill(`
+      <div class="skeleton-card">
+        <div class="skeleton-img"></div>
+        <div class="skeleton-info">
+          <div class="skeleton-line title"></div>
+          <div class="skeleton-line loc"></div>
+          <div class="skeleton-line d1"></div>
+          <div class="skeleton-line d2"></div>
+          <div class="skeleton-line d3"></div>
+          <div class="skeleton-line btn"></div>
         </div>
-      `;
-    }
+      </div>`).join('');
   }
 
-  function prikaziProdavce(prodavci) {
+  // ── Render ──
+  function renderProdavci(lista) {
     const grid = document.getElementById('prodavci-grid');
-    grid.innerHTML = '';
+    const countLabel = document.getElementById('count-label');
+    countLabel.textContent = lista.length > 0 ? `${lista.length} prodavaca` : '';
 
-    if (prodavci.length === 0) {
-      grid.innerHTML = '<p style="text-align:center; color:#666; grid-column:1/-1; padding:3rem;">Još nema registrovanih prodavaca.</p>';
+    // Ažuriraj stat u hero-u
+    if (sviProdavci.length > 0) {
+      document.getElementById('stat-broj').textContent = sviProdavci.length + '+';
+    }
+
+    if (lista.length === 0) {
+      grid.innerHTML = `
+        <div class="state-box">
+          <div class="icon">🔍</div>
+          <h3>Nema rezultata</h3>
+          <p>Pokušajte sa drugačijim pojmom pretrage.</p>
+        </div>`;
       return;
     }
 
-    prodavci.forEach(p => {
-      const opis = p.opis || 'Nema opisa';
+    grid.innerHTML = '';
+    lista.forEach((p, i) => {
+      const opis = p.opis || '';
       const dugOpis = opis.length > MAX_OPIS;
       const kratakOpis = dugOpis ? opis.substring(0, MAX_OPIS) + '...' : opis;
+      const nisaBadge = p.glavnaNisa ? `<span class="seller-nisa-badge">🌱 ${p.glavnaNisa}</span>` : '';
 
       const card = document.createElement('div');
       card.className = 'seller-card';
+      card.style.animationDelay = `${i * 0.04}s`;
       card.innerHTML = `
         <div class="seller-img">
-          <img src="${p.slika || '/placeholder-prodavac.svg'}" alt="${p.ime}" 
+          <img src="${p.slika || '/placeholder-prodavac.svg'}" alt="${p.ime || 'Prodavac'} – lokalni farmer Srbija"
                loading="lazy"
                onerror="this.src='/placeholder-prodavac.svg'">
+          ${nisaBadge}
         </div>
         <div class="seller-info">
           <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
-          <div class="seller-location">📍 ${p.lokacija || 'Nepoznato'}</div>
-          <p class="seller-description" id="opis-${p.id}">${kratakOpis}</p>
+          <div class="seller-location"><i class="fas fa-map-marker-alt"></i> ${p.lokacija || 'Nepoznato'}</div>
+          <p class="seller-description" id="opis-${p.id}">${kratakOpis || '<em style="color:#bbb;">Nema opisa</em>'}</p>
           ${dugOpis ? `<button class="prikazi-vise-btn" id="btn-${p.id}" onclick="prikaziVise(${p.id})">Prikaži više ▼</button>` : ''}
-          <a href="moj-profil.html?userId=${p.id}" class="seller-btn">Pogledaj profil</a>
-        </div>
-      `;
+          <a href="moj-profil.html?userId=${p.id}" class="seller-btn">
+            <i class="fas fa-user"></i> Pogledaj profil
+          </a>
+        </div>`;
       grid.appendChild(card);
     });
+  }
+
+  // ── Filter + sort ──
+  function filterProdavci() {
+    const q = document.getElementById('search-input').value.toLowerCase().trim();
+    const sort = document.getElementById('sort-select').value;
+
+    let lista = sviProdavci.filter(p => {
+      if (!q) return true;
+      return (p.ime || '').toLowerCase().includes(q)
+        || (p.lokacija || '').toLowerCase().includes(q)
+        || (p.glavnaNisa || '').toLowerCase().includes(q)
+        || (p.opis || '').toLowerCase().includes(q);
+    });
+
+    if (sort === 'ime') lista.sort((a, b) => (a.ime || '').localeCompare(b.ime || '', 'sr'));
+
+    filtrirani = lista;
+    renderProdavci(lista);
   }
 
   function prikaziVise(id) {
@@ -403,92 +818,84 @@
     }
   }
 
+  // ── Učitavanje ──
   async function ucitajProdavce() {
     const grid = document.getElementById('prodavci-grid');
 
-    // Pokušaj da učitaš iz cache-a odmah
+    // Cache odmah
     try {
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
         const { vreme, podaci } = JSON.parse(cached);
         if (Date.now() - vreme < CACHE_TTL) {
           sviProdavci = podaci;
-          prikaziProdavce(podaci);
+          renderProdavci(podaci);
           osvežiUPozadini();
           return;
         }
       }
-    } catch (e) {}
+    } catch(e) {}
 
-    // Nema cache-a — prikaži skeleton pa učitaj
-    prikaziSkeleton(8);
+    prikaziSkeleton(9);
 
-    // Pokaži poruku ako traje duže od 3 sekunde
+    // Pokaži poruku ako traje > 3 sek
     const sporTimer = setTimeout(() => {
-      const info = document.getElementById('loading-info');
-      if (info) info.style.display = 'block';
+      document.getElementById('server-notice').style.display = 'block';
     }, 3000);
 
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-      const response = await fetch(`${backendUrl}/svi-prodavci`, {
-        signal: controller.signal
-      });
+      const response = await fetch(`${backendUrl}/svi-prodavci`, { signal: controller.signal });
       clearTimeout(timeoutId);
       clearTimeout(sporTimer);
-      document.getElementById('loading-info').style.display = 'none';
+      document.getElementById('server-notice').style.display = 'none';
 
-      if (!response.ok) throw new Error(`Server vratio ${response.status}`);
+      if (!response.ok) throw new Error(`${response.status}`);
 
       sviProdavci = await response.json();
 
       try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          vreme: Date.now(),
-          podaci: sviProdavci
-        }));
-      } catch (e) {}
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: sviProdavci }));
+      } catch(e) {}
 
-      prikaziProdavce(sviProdavci);
+      renderProdavci(sviProdavci);
 
-    } catch (err) {
+    } catch(err) {
       clearTimeout(sporTimer);
-      document.getElementById('loading-info').style.display = 'none';
+      document.getElementById('server-notice').style.display = 'none';
 
-      if (err.name === 'AbortError') {
-        grid.innerHTML = `<p style="color:#e65100; text-align:center; grid-column:1/-1; padding:3rem;">
-          ⏱️ Server se budi, pokušajte ponovo za nekoliko sekundi.<br><br>
-          <button onclick="ucitajProdavce()" style="background:#2e7d32; color:white; padding:0.8rem 2rem; border:none; border-radius:50px; cursor:pointer; font-size:1rem;">Pokušaj ponovo</button>
-        </p>`;
-      } else {
-        grid.innerHTML = `<p style="color:red; text-align:center; grid-column:1/-1; padding:3rem;">
-          Greška pri učitavanju.
-          <button onclick="ucitajProdavce()" style="background:#2e7d32; color:white; padding:0.8rem 2rem; border:none; border-radius:50px; cursor:pointer; margin-left:1rem;">Pokušaj ponovo</button>
-        </p>`;
-      }
+      const isTimeout = err.name === 'AbortError';
+      grid.innerHTML = `
+        <div class="state-box">
+          <div class="icon">${isTimeout ? '⏱️' : '⚠️'}</div>
+          <h3>${isTimeout ? 'Server se budi...' : 'Greška pri učitavanju'}</h3>
+          <p>${isTimeout
+            ? 'Server je bio neaktivan. Pokušajte ponovo za nekoliko sekundi.'
+            : 'Proverite internet konekciju i pokušajte ponovo.'}</p>
+          <button class="btn-retry" onclick="ucitajProdavce()">
+            <i class="fas fa-redo"></i> Pokušaj ponovo
+          </button>
+        </div>`;
     }
   }
 
-  // Tiho osvježi u pozadini bez da korisnik vidi loading
   async function osvežiUPozadini() {
     try {
       const response = await fetch(`${backendUrl}/svi-prodavci`);
       if (!response.ok) return;
       const novi = await response.json();
-      localStorage.setItem(CACHE_KEY, JSON.stringify({
-        vreme: Date.now(),
-        podaci: novi
-      }));
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: novi }));
       if (JSON.stringify(novi) !== JSON.stringify(sviProdavci)) {
         sviProdavci = novi;
-        prikaziProdavce(novi);
+        filterProdavci(); // respektuje aktivan filter
       }
-    } catch (e) {}
+    } catch(e) {}
   }
 
   window.addEventListener('load', ucitajProdavce);
 </script>
+
 </body>
 </html>
