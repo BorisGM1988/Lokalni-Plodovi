@@ -908,6 +908,12 @@
     document.getElementById('nav-menu').classList.toggle('open');
   }
 </script>
-
+<script>
+  // Probudi Railway backend u pozadini
+  fetch('https://lokalni-backend-production.up.railway.app/proizvodi?glavnaNisa=Meso&podnisa=Pršuta', {
+    method: 'GET',
+    cache: 'no-store'
+  }).catch(() => {});
+</script>
 </body>
 </html>
