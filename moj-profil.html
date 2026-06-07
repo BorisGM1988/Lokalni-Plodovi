@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="sr">
 <head>
@@ -6,440 +5,588 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Moj profil – LokalniPlodovi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="mobile.css">
   <style>
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zelena-tamna: #1b5e20;
+      --zlatna: #f5a623;
+      --zlatna-svetla: #ffd166;
+      --zemlja: #5d4037;
+      --krem: #faf7f0;
+      --krem-tamna: #f0ece0;
+      --tekst: #2c2c2c;
+      --siva: #6b7280;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'DM Sans', sans-serif;
       background: #f9fafb;
-      margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       color: #333;
     }
 
-header {
-  background: linear-gradient(135deg, #2e7d32, #4caf50);
-  color: white;
-  padding: 1.2rem 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    }
 
-nav {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-.logo { font-size: 1.9rem; font-weight: bold; letter-spacing: 0.5px; }
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+    }
 
-nav ul {
-  display: flex;
-  list-style: none;
-  gap: 2.5rem;
-  margin: 0;
-  padding: 0;
-}
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      border: 1.5px solid rgba(255,255,255,0.3);
+    }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700; color: white;
+    }
 
-nav a:hover { color: #e0f2f1; }
+    .logo-text span { color: var(--zlatna-svetla); }
 
-.profile-cover {
-  height: 280px;
-  background: linear-gradient(135deg, #2e7d32, #4caf50);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.4rem;
-  text-align: center;
-  overflow: hidden;
-  transition: height 0.3s ease;
-}
+    nav ul {
+      display: flex; list-style: none; gap: 0.2rem; align-items: center;
+    }
 
-.profile-cover img.cover-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
+    nav ul li a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 0.88rem; font-weight: 500;
+      padding: 0.45rem 0.85rem;
+      border-radius: 50px;
+      transition: all 0.2s;
+    }
 
-.profile-cover .overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.3);
-  z-index: 2;
-}
+    nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
 
-.profile-cover .placeholder-text {
-  position: relative;
-  z-index: 3;
-  max-width: 80%;
-  padding: 1rem;
-  animation: fadeIn 1s ease-in-out;
-}
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none;
+    }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .hamburger span {
+      width: 26px; height: 2.5px;
+      background: white; border-radius: 3px; display: block;
+    }
 
-.profile-content {
-  max-width: 1400px;
-  margin: -120px auto 0;
-  padding: 0 2rem 4rem;
-  position: relative;
-  z-index: 10;
-}
+    /* ===== COVER ===== */
+    .profile-cover {
+      height: 280px;
+      background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+      transition: height 0.3s ease;
+    }
 
-.profile-avatar-wrapper { position: relative; }
+    .profile-cover img.cover-image {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0; left: 0; z-index: 1;
+    }
 
-.profile-avatar {
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 8px solid white;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  display: block;
-  margin: 0 auto -100px;
-  position: relative;
-  z-index: 10;
-  transition: transform 0.3s ease;
-  background: #e8f5e9;
-}
+    .profile-cover .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.3);
+      z-index: 2;
+    }
 
-.profile-avatar:hover { transform: scale(1.05); }
+    .profile-cover .placeholder-text {
+      position: relative; z-index: 3;
+      max-width: 80%; padding: 1rem;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
 
-.profile-main {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  padding: 120px 2rem 2rem;
-  margin-top: 0;
-}
+    .placeholder-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; margin-bottom: 0.4rem;
+    }
 
-.profile-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
-  position: relative;
-}
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.profile-header-btns {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
-}
+    /* ===== PROFIL SADRŽAJ ===== */
+    .profile-content {
+      max-width: 1400px;
+      margin: -120px auto 0;
+      padding: 0 2rem 4rem;
+      position: relative;
+      z-index: 10;
+    }
 
-.profile-name {
-  font-size: 2.8rem;
-  margin: 0 0 0.5rem;
-  color: #1e40af;
-  font-weight: 700;
-}
+    .profile-avatar {
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 8px solid white;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      display: block;
+      margin: 0 auto -100px;
+      position: relative; z-index: 10;
+      transition: transform 0.3s ease;
+      background: #e8f5e9;
+    }
 
-.profile-bio {
-  font-size: 1.2rem;
-  color: #4b5563;
-  margin: 0 auto;
-  line-height: 1.6;
-  max-width: 800px;
-}
+    .profile-avatar:hover { transform: scale(1.05); }
 
-.profile-edit-btn {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.6rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 12px rgba(76,175,80,0.3);
-}
+    .profile-main {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 120px 2rem 2rem;
+    }
 
-.profile-edit-btn:hover { background: #388e3c; }
+    .profile-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
 
-.btn-poruka {
-  background: #1877f2;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.6rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  box-shadow: 0 4px 12px rgba(24,119,242,0.3);
-  display: none;
-}
+    .profile-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      margin: 0 0 0.5rem;
+      color: #1e40af;
+      font-weight: 700;
+    }
 
-.btn-poruka:hover { background: #1558b0; }
+    .profile-bio {
+      font-size: 1.1rem;
+      color: #4b5563;
+      margin: 0 auto;
+      line-height: 1.6;
+      max-width: 800px;
+    }
 
-.btn-inbox {
-  background: #7c3aed;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.6rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  box-shadow: 0 4px 12px rgba(124,58,237,0.3);
-  display: none;
-  position: relative;
-}
+    .profile-header-btns {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
 
-.btn-inbox:hover { background: #6d28d9; }
+    .profile-edit-btn {
+      background: var(--zelena-svetla);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(76,175,80,0.3);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+    }
 
-.inbox-badge {
-  position: absolute;
-  top: -6px; right: -6px;
-  background: #ef4444;
-  color: white;
-  border-radius: 50%;
-  width: 20px; height: 20px;
-  font-size: 0.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-}
+    .profile-edit-btn:hover { background: #388e3c; transform: scale(1.03); }
 
-.profile-info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin: 2rem 0;
-}
+    .btn-poruka {
+      background: #1877f2;
+      color: white; border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 50px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(24,119,242,0.3);
+      display: none;
+      font-family: 'DM Sans', sans-serif;
+    }
 
-.detail-card {
-  background: #f9fafb;
-  padding: 1.5rem;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: box-shadow 0.3s ease;
-}
+    .btn-poruka:hover { background: #1558b0; }
 
-.detail-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn-inbox {
+      background: #7c3aed;
+      color: white; border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 50px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(124,58,237,0.3);
+      display: none; position: relative;
+      font-family: 'DM Sans', sans-serif;
+    }
 
-.detail-label {
-  color: #2e7d32;
-  font-weight: 600;
-  font-size: 1.1rem;
-  margin-bottom: 0.6rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
+    .btn-inbox:hover { background: #6d28d9; }
 
-.detail-label i { color: #4caf50; }
+    .inbox-badge {
+      position: absolute; top: -6px; right: -6px;
+      background: #ef4444; color: white;
+      border-radius: 50%; width: 20px; height: 20px;
+      font-size: 0.7rem;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+    }
 
-#nise { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    /* ===== INFO GRID ===== */
+    .profile-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
 
-.nise-badge {
-  padding: 0.5rem 1.2rem;
-  background: #d1fae5;
-  color: #065f46;
-  border-radius: 9999px;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
+    .detail-card {
+      background: var(--krem);
+      padding: 1.4rem;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s;
+    }
 
-.profile-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.2rem;
-  justify-content: center;
-  max-width: 800px;
-  margin: 3rem auto 0;
-}
+    .detail-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.09); }
 
-.btn {
-  flex: 1;
-  min-width: 180px;
-  padding: 1.2rem;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+    .detail-label {
+      color: var(--zelena);
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
 
-.btn-primary { background: #2e7d32; color: white; border: none; }
-.btn-primary:hover { background: #4caf50; }
-.btn-secondary { background: white; border: 2px solid #2e7d32; color: #2e7d32; }
-.btn-secondary:hover { background: #2e7d32; color: white; }
-.btn-tezga { background: #f59e0b; color: white; border: none; }
-.btn-tezga:hover { background: #d97706; }
+    .detail-label i { color: var(--zelena-svetla); }
 
-footer {
-  background: #4b5563;
-  color: white;
-  text-align: center;
-  padding: 2rem;
-  margin-top: auto;
-  font-size: 0.95rem;
-}
+    #nise { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
-.poruka-card {
-  padding: 1rem 1.2rem;
-  border-radius: 12px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 0.8rem;
-  transition: box-shadow 0.2s;
-}
+    .nise-badge {
+      padding: 0.4rem 1rem;
+      background: #d1fae5;
+      color: #065f46;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
 
-.poruka-card.neprocitana {
-  border-left: 4px solid #7c3aed;
-  background: #faf5ff;
-}
+    /* ===== AKCIJE ===== */
+    .profile-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      max-width: 800px;
+      margin: 2.5rem auto 0;
+    }
 
-.poruka-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.poruka-od { font-weight: 700; color: #1e40af; font-size: 0.95rem; margin-bottom: 0.3rem; }
-.poruka-tekst { color: #333; font-size: 1rem; line-height: 1.5; margin-bottom: 0.5rem; }
-.poruka-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-.poruka-vreme { color: #888; font-size: 0.82rem; }
-.poruka-akcije { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .btn {
+      flex: 1; min-width: 180px;
+      padding: 1.1rem;
+      border-radius: 50px;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-family: 'DM Sans', sans-serif;
+    }
 
-.msg-bubble {
-  max-width: 75%;
-  padding: 0.7rem 1rem;
-  border-radius: 16px;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 0.5rem;
-  word-break: break-word;
-}
+    .btn-primary { background: var(--zelena); color: white; border: none; }
+    .btn-primary:hover { background: var(--zelena-svetla); transform: scale(1.02); }
+    .btn-secondary { background: white; border: 2px solid var(--zelena); color: var(--zelena); }
+    .btn-secondary:hover { background: var(--zelena); color: white; }
+    .btn-tezga { background: #f59e0b; color: white; border: none; }
+    .btn-tezga:hover { background: #d97706; transform: scale(1.02); }
 
-.msg-bubble.moja {
-  background: #2e7d32;
-  color: white;
-  margin-left: auto;
-  border-bottom-right-radius: 4px;
-}
+    /* ===== SEKCIJE ===== */
+    .profil-sekcija {
+      max-width: 1400px;
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      padding: 1.8rem 2rem;
+    }
 
-.msg-bubble.tudja {
-  background: #f0f0f0;
-  color: #333;
-  margin-right: auto;
-  border-bottom-left-radius: 4px;
-}
+    .profil-sekcija h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--zelena);
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.2rem;
+    }
 
-.msg-vreme { font-size: 0.72rem; color: #999; margin-bottom: 0.8rem; }
-.msg-vreme.moje { text-align: right; }
-.msg-vreme.tudje { text-align: left; }
+    /* ===== OCENE ===== */
+    .prosek-wrap {
+      display: flex; align-items: center; gap: 1rem;
+      background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem;
+    }
 
-.reply-box {
-  display: flex;
-  gap: 0.8rem;
-  align-items: flex-end;
-  padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
-  margin-top: 0.5rem;
-}
+    .prosek-broj { font-size: 2.5rem; font-weight: 700; color: var(--zelena); line-height: 1; }
+    .prosek-zvezdice { color: #f59e0b; font-size: 1.3rem; }
+    .prosek-info { color: #666; font-size: 0.9rem; }
 
-.reply-box textarea {
-  flex: 1;
-  padding: 10px 14px;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  resize: none;
-  outline: none;
-  font-family: inherit;
-  min-height: 60px;
-}
+    .ocena-card {
+      padding: 1rem 1.2rem; border-radius: 12px;
+      background: #f9fafb; border: 1px solid #e5e7eb; margin-bottom: 0.8rem;
+    }
 
-.reply-box textarea:focus { border-color: #7c3aed; }
+    .ocena-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.4rem; }
+    .ocena-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .ocena-ime { font-weight: 600; color: #333; font-size: 0.95rem; }
+    .ocena-zvezdice { color: #f59e0b; font-size: 1rem; }
+    .ocena-komentar { color: #555; font-size: 0.95rem; line-height: 1.5; }
+    .ocena-vreme { color: #888; font-size: 0.8rem; margin-top: 0.3rem; }
 
-.reply-box button {
-  background: #7c3aed;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  height: 60px;
-}
+    /* ===== TEZGA ===== */
+    .nisa-grupa { margin-bottom: 1.5rem; }
+    .nisa-grupa-naslov {
+      font-size: 1.05rem; font-weight: 700; color: var(--zelena);
+      padding: 0.5rem 0; border-bottom: 2px solid #e8f5e9;
+      margin-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
 
-.reply-box button:hover { background: #6d28d9; }
+    .tezga-proizvod {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.8rem; border-radius: 10px;
+      background: #f9fafb; border: 1px solid #e5e7eb;
+      margin-bottom: 0.6rem; transition: box-shadow 0.2s;
+    }
 
-.ocena-card { padding: 1rem 1.2rem; border-radius: 12px; background: #f9fafb; border: 1px solid #e5e7eb; margin-bottom: 0.8rem; }
-.ocena-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.4rem; }
-.ocena-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-.ocena-ime { font-weight: 600; color: #333; font-size: 0.95rem; }
-.ocena-zvezdice { color: #f59e0b; font-size: 1rem; }
-.ocena-komentar { color: #555; font-size: 0.95rem; line-height: 1.5; }
-.ocena-vreme { color: #888; font-size: 0.8rem; margin-top: 0.3rem; }
+    .tezga-proizvod:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .tezga-slika { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+    .tezga-slika-placeholder { width: 60px; height: 60px; background: #e8f5e9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+    .tezga-info { flex: 1; }
+    .tezga-naziv { font-weight: 600; color: #333; font-size: 1rem; }
+    .tezga-detalji { font-size: 0.85rem; color: #666; margin-top: 0.2rem; }
+    .tezga-cena { font-weight: 700; color: var(--zelena); font-size: 1rem; white-space: nowrap; }
+    .tezga-akcije { display: flex; flex-direction: column; gap: 0.4rem; flex-shrink: 0; }
+    .btn-edit-proizvod { background: #2563eb; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+    .btn-edit-proizvod:hover { background: #1d4ed8; }
+    .btn-obrisi-proizvod { background: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+    .btn-obrisi-proizvod:hover { background: #b71c1c; }
 
-.prosek-wrap { display: flex; align-items: center; gap: 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
-.prosek-broj { font-size: 2.5rem; font-weight: 700; color: #2e7d32; line-height: 1; }
-.prosek-zvezdice { color: #f59e0b; font-size: 1.3rem; }
-.prosek-info { color: #666; font-size: 0.9rem; }
+    /* ===== PORUKE ===== */
+    .msg-bubble {
+      max-width: 75%; padding: 0.7rem 1rem;
+      border-radius: 16px; font-size: 0.95rem;
+      line-height: 1.5; margin-bottom: 0.5rem; word-break: break-word;
+    }
 
-.nisa-grupa { margin-bottom: 1.5rem; }
-.nisa-grupa-naslov { font-size: 1.1rem; font-weight: 700; color: #2e7d32; padding: 0.5rem 0; border-bottom: 2px solid #e8f5e9; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+    .msg-bubble.moja { background: var(--zelena); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
+    .msg-bubble.tudja { background: #f0f0f0; color: #333; margin-right: auto; border-bottom-left-radius: 4px; }
+    .msg-vreme { font-size: 0.72rem; color: #999; margin-bottom: 0.8rem; }
+    .msg-vreme.moje { text-align: right; }
+    .msg-vreme.tudje { text-align: left; }
 
-.tezga-proizvod { display: flex; align-items: center; gap: 1rem; padding: 0.8rem; border-radius: 10px; background: #f9fafb; border: 1px solid #e5e7eb; margin-bottom: 0.6rem; transition: box-shadow 0.2s; }
-.tezga-proizvod:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.tezga-slika { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
-.tezga-slika-placeholder { width: 60px; height: 60px; background: #e8f5e9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
-.tezga-info { flex: 1; }
-.tezga-naziv { font-weight: 600; color: #333; font-size: 1rem; }
-.tezga-detalji { font-size: 0.85rem; color: #666; margin-top: 0.2rem; }
-.tezga-cena { font-weight: 700; color: #2e7d32; font-size: 1rem; white-space: nowrap; }
-.tezga-akcije { display: flex; flex-direction: column; gap: 0.4rem; flex-shrink: 0; }
-.btn-edit-proizvod { background: #2563eb; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
-.btn-edit-proizvod:hover { background: #1d4ed8; }
-.btn-obrisi-proizvod { background: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
-.btn-obrisi-proizvod:hover { background: #b71c1c; }
+    .reply-box {
+      display: flex; gap: 0.8rem; align-items: flex-end;
+      padding-top: 1rem; border-top: 1px solid #e5e7eb; margin-top: 0.5rem;
+    }
 
-#preview-slika { margin-top: 1rem; border-radius: 8px; border: 1px solid #ddd; max-height: 180px; object-fit: cover; }
+    .reply-box textarea {
+      flex: 1; padding: 10px 14px;
+      border: 2px solid #e0e0e0; border-radius: 12px;
+      font-size: 0.95rem; resize: none; outline: none;
+      font-family: inherit; min-height: 60px;
+    }
 
-@media (max-width: 768px) {
-  .profile-cover { height: 200px; }
-  .profile-content { margin-top: -80px; }
-  .profile-avatar { width: 160px; height: 160px; }
-  .profile-main { padding-top: 100px; }
-  .profile-actions { flex-direction: column; }
-}
+    .reply-box textarea:focus { border-color: #7c3aed; }
+
+    .reply-box button {
+      background: #7c3aed; color: white; border: none;
+      padding: 10px 20px; border-radius: 12px; font-weight: 600;
+      cursor: pointer; white-space: nowrap; height: 60px;
+    }
+
+    .reply-box button:hover { background: #6d28d9; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--zemlja); color: white;
+      text-align: center; padding: 2rem 1.5rem; margin-top: auto;
+      font-size: 0.95rem;
+    }
+
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.4rem; }
+    footer a { color: #c8e6c9; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ===== PORUKA CARD ===== */
+    .poruka-card {
+      padding: 1rem 1.2rem; border-radius: 12px;
+      background: #f9fafb; border: 1px solid #e5e7eb; margin-bottom: 0.8rem; transition: box-shadow 0.2s;
+    }
+
+    .poruka-card.neprocitana { border-left: 4px solid #7c3aed; background: #faf5ff; }
+    .poruka-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .poruka-od { font-weight: 700; color: #1e40af; font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .poruka-tekst { color: #333; font-size: 1rem; line-height: 1.5; margin-bottom: 0.5rem; }
+    .poruka-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    .poruka-vreme { color: #888; font-size: 0.82rem; }
+
+    /* ===== PREVIEW ===== */
+    #preview-slika { margin-top: 1rem; border-radius: 8px; border: 1px solid #ddd; max-height: 180px; object-fit: cover; }
+
+    /* ===== ONBOARDING TOUR ===== */
+    #tour-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 9000;
+      display: none;
+    }
+
+    #tour-box {
+      position: fixed;
+      z-index: 9001;
+      background: white;
+      border-radius: 20px;
+      padding: 1.8rem 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 360px;
+      width: 90%;
+      animation: tourIn 0.3s ease;
+    }
+
+    @keyframes tourIn {
+      from { opacity: 0; transform: scale(0.92) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .tour-emoji { font-size: 2.5rem; margin-bottom: 0.8rem; display: block; }
+    .tour-korak { font-size: 0.75rem; color: var(--siva); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.4rem; }
+
+    .tour-naslov {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--zemlja);
+      margin-bottom: 0.6rem; font-weight: 700;
+    }
+
+    .tour-opis { color: var(--siva); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.4rem; }
+
+    .tour-btns { display: flex; gap: 0.8rem; }
+
+    .tour-btn-next {
+      flex: 1; background: var(--zelena); color: white;
+      border: none; padding: 0.75rem 1.2rem;
+      border-radius: 50px; font-weight: 600; font-size: 0.92rem;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .tour-btn-next:hover { background: var(--zelena-tamna); }
+
+    .tour-btn-skip {
+      background: #f5f5f5; color: #888;
+      border: none; padding: 0.75rem 1.2rem;
+      border-radius: 50px; font-weight: 500; font-size: 0.88rem;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .tour-btn-skip:hover { background: #e8e8e8; }
+
+    .tour-dots {
+      display: flex; justify-content: center; gap: 0.4rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .tour-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #e0e0e0; transition: background 0.2s;
+    }
+
+    .tour-dot.aktivan { background: var(--zelena); }
+
+    .tour-highlight {
+      position: fixed;
+      border: 3px solid var(--zelena-svetla);
+      border-radius: 12px;
+      box-shadow: 0 0 0 4000px rgba(0,0,0,0.55);
+      z-index: 8999;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      animation: tourPulse 1.5s infinite;
+    }
+
+    @keyframes tourPulse {
+      0%, 100% { box-shadow: 0 0 0 4000px rgba(0,0,0,0.55), 0 0 0 0 rgba(76,175,80,0.5); }
+      50% { box-shadow: 0 0 0 4000px rgba(0,0,0,0.55), 0 0 12px 6px rgba(76,175,80,0.4); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      nav ul {
+        display: none;
+        position: absolute; top: 62px; left: 0; right: 0;
+        background: rgba(27,94,32,0.97);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 1.2rem 1.5rem 1.8rem;
+        gap: 0.4rem; z-index: 999;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      nav ul.open { display: flex; }
+      nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
+      .profile-cover { height: 200px; }
+      .profile-content { margin-top: -80px; padding: 0 1rem 3rem; }
+      .profile-avatar { width: 160px; height: 160px; margin-bottom: -80px; }
+      .profile-main { padding-top: 100px; padding-left: 1rem; padding-right: 1rem; }
+      .profile-actions { flex-direction: column; }
+      .profil-sekcija { margin: 1.5rem 1rem 0; padding: 1.2rem; }
+      #tour-box { bottom: 1rem; left: 50%; transform: translateX(-50%); top: auto; }
+    }
+
+    @media (min-width: 769px) {
+      .hamburger { display: none; }
+      .profil-sekcija { margin-left: 2rem; margin-right: 2rem; }
+    }
   </style>
 </head>
 <body>
 
 <header>
   <nav>
-    <div class="logo">LokalniPlodovi</div>
-    <button class="hamburger" style="display:none;"
-      onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🌿</div>
+      <span class="logo-text">Lokalni<span>Plodovi</span></span>
+    </a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Meni">
       <span></span><span></span><span></span>
     </button>
-    <ul>
+    <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
@@ -474,7 +621,9 @@ footer {
         <h1 class="profile-name" id="profileName">Učitavanje...</h1>
         <p class="profile-bio" id="profileBio">Opis domaćinstva...</p>
         <div class="profile-header-btns">
-          <button class="profile-edit-btn" onclick="izmeniProfil()">Izmeni profil</button>
+          <button class="profile-edit-btn" id="btn-izmeni" onclick="izmeniProfil()">
+            <i class="fas fa-pen"></i> Izmeni profil
+          </button>
           <button class="btn-inbox" id="btn-inbox" onclick="otvoriInbox()">
             <i class="fas fa-inbox"></i> Inbox
             <span class="inbox-badge" id="inbox-badge" style="display:none;">0</span>
@@ -513,33 +662,52 @@ footer {
       </div>
 
       <div class="profile-actions">
-        <button class="btn btn-primary" onclick="objaviNovost()"><i class="fas fa-newspaper"></i> Objavi novost</button>
-        <button class="btn btn-secondary" onclick="dodajProizvod()"><i class="fas fa-plus-circle"></i> Dodaj proizvod</button>
-        <button class="btn btn-tezga" onclick="pogledajTezgu()"><i class="fas fa-store"></i> Moja tezga</button>
+        <button class="btn btn-primary" id="btn-objavi" onclick="objaviNovost()"><i class="fas fa-newspaper"></i> Objavi novost</button>
+        <button class="btn btn-secondary" id="btn-dodaj" onclick="dodajProizvod()"><i class="fas fa-plus-circle"></i> Dodaj proizvod</button>
+        <button class="btn btn-tezga" id="btn-tezga" onclick="pogledajTezgu()"><i class="fas fa-store"></i> Moja tezga</button>
       </div>
     </div>
   </div>
 </div>
 
-<div id="objave-sekcija" style="margin-top:3rem; background:white; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:1.5rem 2rem;">
-  <h2 id="objave-naslov" style="margin:0 0 1.2rem; color:#2e7d32; font-size:1.6rem; text-align:center;">Moje objave</h2>
+<div id="objave-sekcija" class="profil-sekcija" style="margin-top:3rem;">
+  <h2 id="objave-naslov">Moje objave</h2>
   <div id="objave-lista" style="min-height:120px;"></div>
 </div>
 
-<div id="ocene-sekcija" style="margin-top:2rem; background:white; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:1.5rem 2rem;">
-  <h2 style="margin:0 0 1.2rem; color:#2e7d32; font-size:1.6rem; text-align:center;">⭐ Ocene kupaca</h2>
+<div id="ocene-sekcija" class="profil-sekcija" style="margin-top:2rem;">
+  <h2>⭐ Ocene kupaca</h2>
   <div id="ocene-lista" style="min-height:80px;">
     <p style="text-align:center; color:#666; padding:2rem;">Učitavam ocene...</p>
   </div>
 </div>
 
 <footer>
-  <p>© 2025 LokalniPlodovi • Sva prava zadržana</p>
-  <p style="margin-top:0.5rem;">
-    <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
-    <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
-  </p>
+  <div style="max-width:1400px; margin:0 auto;">
+    <div class="footer-logo">LokalniPlodovi</div>
+    <p style="opacity:0.85; margin-bottom:0.5rem;">Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="opacity:0.75; margin-bottom:0.4rem;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
+    <p>
+      <a href="politika-privatnosti.html">Politika privatnosti</a> •
+      <a href="uslovi-koriscenja.html">Uslovi korišćenja</a>
+    </p>
+  </div>
 </footer>
+
+<!-- ===== ONBOARDING TOUR ===== -->
+<div id="tour-overlay"></div>
+<div class="tour-highlight" id="tour-highlight" style="display:none;"></div>
+<div id="tour-box" style="display:none;">
+  <div class="tour-dots" id="tour-dots"></div>
+  <span class="tour-emoji" id="tour-emoji"></span>
+  <div class="tour-korak" id="tour-korak"></div>
+  <div class="tour-naslov" id="tour-naslov"></div>
+  <div class="tour-opis" id="tour-opis"></div>
+  <div class="tour-btns">
+    <button class="tour-btn-skip" onclick="zatvoriTour()">Preskoči</button>
+    <button class="tour-btn-next" id="tour-btn-next" onclick="sledecaTourStep()">Dalje →</button>
+  </div>
+</div>
 
 <!-- MODAL POŠALJI PORUKU -->
 <div id="poruka-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
@@ -616,9 +784,7 @@ footer {
       </div>
       <button onclick="zatvoriTezgu()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
-    <div id="tezga-sadrzaj" style="padding:1.5rem 2rem; overflow-y:auto; flex:1;">
-      <p style="text-align:center; color:#666; padding:2rem;">Učitavam proizvode...</p>
-    </div>
+    <div id="tezga-sadrzaj" style="padding:1.5rem 2rem; overflow-y:auto; flex:1;"></div>
     <div style="padding:1rem 2rem; border-top:1px solid #f0f0f0; flex-shrink:0; text-align:center;">
       <button id="tezga-dodaj-btn" onclick="dodajProizvod(); zatvoriTezgu();" style="display:none; background:#2e7d32; color:white; border:none; padding:12px 2rem; border-radius:50px; font-weight:600; cursor:pointer; margin-right:1rem;">
         <i class="fas fa-plus"></i> Dodaj novi proizvod
@@ -630,8 +796,8 @@ footer {
 
 <!-- MODAL DODAJ PROIZVOD -->
 <div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
-  <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
-    <h2 style="margin-top:0; color:#2e7d32;">Dodaj novi proizvod</h2>
+  <div style="background:white; width:90%; max-width:520px; border-radius:20px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
+    <h2 style="margin-top:0; color:#2e7d32; font-family:'Playfair Display',serif;">Dodaj novi proizvod</h2>
     <label>Naziv proizvoda / sorte *</label>
     <input type="text" id="naziv" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;" required>
     <label>Cena (RSD) *</label>
@@ -667,10 +833,10 @@ footer {
   </div>
 </div>
 
-<!-- MODAL ZA IZMENU PROFILA -->
+<!-- MODAL IZMENI PROFIL -->
 <div id="izmeni-profil-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
-  <div style="background:white; width:90%; max-width:520px; border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); display:flex; flex-direction:column; max-height:90vh; overflow:hidden;">
-    <h2 style="margin-top:0; color:#2e7d32; flex-shrink:0;">Izmeni profil</h2>
+  <div style="background:white; width:90%; max-width:520px; border-radius:20px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); display:flex; flex-direction:column; max-height:90vh; overflow:hidden;">
+    <h2 style="margin-top:0; color:#2e7d32; flex-shrink:0; font-family:'Playfair Display',serif;">Izmeni profil</h2>
     <div style="overflow-y:auto; flex:1; padding-right:5px;">
       <label>Ime</label>
       <input type="text" id="edit-ime" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
@@ -680,10 +846,10 @@ footer {
       <input type="tel" id="edit-telefon" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
       <label>Lokacija</label>
       <input type="text" id="edit-lokacija" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
-      <label>Profilna slika</label>
+      <label>📸 Profilna slika</label>
       <input type="file" id="edit-profilna-slika" accept="image/*" style="margin:8px 0; display:block;">
       <img id="preview-profilna" style="width:120px; height:120px; border-radius:50%; object-fit:cover; margin:8px 0; display:none;">
-      <label>Naslovna fotografija</label>
+      <label>🖼️ Naslovna fotografija</label>
       <input type="file" id="edit-naslovna-slika" accept="image/*" style="margin:8px 0; display:block;">
       <img id="preview-naslovna" style="width:100%; max-height:180px; object-fit:cover; margin:8px 0; display:none;">
     </div>
@@ -758,6 +924,7 @@ footer {
   </div>
 </div>
 
+<!-- ===== SKRIPTA ===== -->
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   let trenutniUserId = null;
@@ -769,6 +936,7 @@ footer {
     'Meso': '🥩', 'Med': '🍯', 'Jaja': '🥚', 'Bilje i Zdravlje': '🌿'
   };
 
+  // ── Nav ──
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
@@ -786,13 +954,18 @@ footer {
       document.getElementById('prijavi-se-li').style.display = 'list-item';
       document.getElementById('postani-prodavac-li').style.display = 'list-item';
     }
+
     ucitajProfil();
   });
 
+  function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
+
+  // ── Profil ──
   async function ucitajProfil() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdParam = urlParams.get('userId');
     const token = localStorage.getItem('token');
+    const isOwnProfile = !userIdParam;
 
     let url = `${backendUrl}/profile`;
     if (userIdParam) url += `?userId=${userIdParam}`;
@@ -828,17 +1001,14 @@ footer {
         niseDiv.textContent = 'Nijedna';
       }
 
-      if (data.slika) {
-        document.getElementById('profile-avatar').src = data.slika;
-      }
+      if (data.slika) document.getElementById('profile-avatar').src = data.slika;
       if (data.coverSlika) {
         document.getElementById('cover-image').src = data.coverSlika;
         document.getElementById('cover-image').style.display = 'block';
         document.getElementById('placeholder-text').style.display = 'none';
       }
 
-      const isOwnProfile = !userIdParam;
-      const editBtn = document.querySelector('.profile-edit-btn');
+      const editBtn = document.getElementById('btn-izmeni');
       if (editBtn) editBtn.style.display = isOwnProfile ? 'inline-block' : 'none';
 
       const btnInbox = document.getElementById('btn-inbox');
@@ -873,7 +1043,11 @@ footer {
         } catch(e) {}
       }
 
-      if (isOwnProfile && token) ucitajBrojNeprocitanih();
+      if (isOwnProfile && token) {
+        ucitajBrojNeprocitanih();
+        // Pokreni onboarding tour samo prvi put
+        pokrniTourAkoTreba();
+      }
 
       ucitajObjave();
       ucitajOcene();
@@ -884,70 +1058,174 @@ footer {
     }
   }
 
+  // ══════════════════════════════════════════
+  // ONBOARDING TOUR
+  // ══════════════════════════════════════════
+  const tourKoraci = [
+    {
+      emoji: '👋',
+      naslov: 'Dobrodošli na vaš profil!',
+      opis: 'Hajde da vam pokažemo kako da podesite profil i počnete da prodajete. Biće kratko — samo 4 koraka!',
+      target: null,
+      pozicija: 'centar'
+    },
+    {
+      emoji: '📸',
+      naslov: 'Dodajte profilnu sliku',
+      opis: 'Kliknite na "Izmeni profil" pa izaberite profilnu sliku. Kupci više veruju prodavcima sa fotografijom.',
+      target: 'btn-izmeni',
+      pozicija: 'ispod'
+    },
+    {
+      emoji: '🖼️',
+      naslov: 'Dodajte naslovnu fotografiju',
+      opis: 'U istom prozoru možete dodati i naslovnu fotografiju — prikažite svoje imanje, plastenik ili proizvode!',
+      target: 'profile-cover',
+      pozicija: 'ispod'
+    },
+    {
+      emoji: '➕',
+      naslov: 'Dodajte prvi proizvod',
+      opis: 'Kliknite "Dodaj proizvod", unesite naziv, cenu, količinu i nišu. Obavezno dodajte i sliku — oglasi sa slikama se 3× više gledaju!',
+      target: 'btn-dodaj',
+      pozicija: 'iznad'
+    },
+    {
+      emoji: '🛒',
+      naslov: 'Pregledajte svoju tezgu',
+      opis: '"Moja tezga" prikazuje sve vaše proizvode. Tu možete izmeniti cene, količine ili obrisati proizvod koji više nije dostupan.',
+      target: 'btn-tezga',
+      pozicija: 'iznad'
+    }
+  ];
+
+  let tourStep = 0;
+
+  function pokrniTourAkoTreba() {
+    if (localStorage.getItem('tour_vidjeno')) return;
+    setTimeout(() => pokrniTour(), 800);
+  }
+
+  function pokrniTour() {
+    tourStep = 0;
+    prikaziTourStep();
+  }
+
+  function prikaziTourStep() {
+    const korak = tourKoraci[tourStep];
+    const overlay = document.getElementById('tour-overlay');
+    const box = document.getElementById('tour-box');
+    const highlight = document.getElementById('tour-highlight');
+
+    // Sadržaj
+    document.getElementById('tour-emoji').textContent = korak.emoji;
+    document.getElementById('tour-korak').textContent = `Korak ${tourStep + 1} od ${tourKoraci.length}`;
+    document.getElementById('tour-naslov').textContent = korak.naslov;
+    document.getElementById('tour-opis').textContent = korak.opis;
+
+    const btnNext = document.getElementById('tour-btn-next');
+    btnNext.textContent = tourStep === tourKoraci.length - 1 ? '✅ Završi' : 'Dalje →';
+
+    // Dots
+    const dots = document.getElementById('tour-dots');
+    dots.innerHTML = tourKoraci.map((_, i) =>
+      `<div class="tour-dot ${i === tourStep ? 'aktivan' : ''}"></div>`
+    ).join('');
+
+    overlay.style.display = 'block';
+    box.style.display = 'block';
+
+    if (korak.target) {
+      const el = document.getElementById(korak.target);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const padding = 8;
+
+        highlight.style.display = 'block';
+        highlight.style.top = (rect.top + window.scrollY - padding) + 'px';
+        highlight.style.left = (rect.left - padding) + 'px';
+        highlight.style.width = (rect.width + padding * 2) + 'px';
+        highlight.style.height = (rect.height + padding * 2) + 'px';
+
+        // Pozicioniraj box
+        const boxWidth = 360;
+        const margin = 16;
+
+        if (korak.pozicija === 'ispod') {
+          box.style.top = (rect.bottom + window.scrollY + margin) + 'px';
+          box.style.left = Math.max(margin, Math.min(window.innerWidth - boxWidth - margin, rect.left)) + 'px';
+          box.style.bottom = 'auto';
+          box.style.transform = 'none';
+        } else {
+          box.style.bottom = (window.innerHeight - rect.top - window.scrollY + margin) + 'px';
+          box.style.top = 'auto';
+          box.style.left = Math.max(margin, Math.min(window.innerWidth - boxWidth - margin, rect.left)) + 'px';
+          box.style.transform = 'none';
+        }
+
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } else {
+      // Centar ekrana
+      highlight.style.display = 'none';
+      box.style.top = '50%';
+      box.style.left = '50%';
+      box.style.transform = 'translate(-50%, -50%)';
+      box.style.bottom = 'auto';
+    }
+  }
+
+  function sledecaToursStep() { sledecaTourStep(); }
+
+  function sledecaTourStep() {
+    if (tourStep < tourKoraci.length - 1) {
+      tourStep++;
+      prikaziTourStep();
+    } else {
+      zatvoriTour();
+    }
+  }
+
+  function zatvoriTour() {
+    document.getElementById('tour-overlay').style.display = 'none';
+    document.getElementById('tour-box').style.display = 'none';
+    document.getElementById('tour-highlight').style.display = 'none';
+    localStorage.setItem('tour_vidjeno', '1');
+  }
+
+  // Klik na overlay zatvara tour
+  document.getElementById('tour-overlay').addEventListener('click', zatvoriTour);
+
+  // ══════════════════════════════════════════
+  // SVE OSTALE FUNKCIJE — IDENTIČNE ORIGINALU
+  // ══════════════════════════════════════════
+
   async function ucitajOcene() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdParam = urlParams.get('userId');
     const token = localStorage.getItem('token');
     const lista = document.getElementById('ocene-lista');
-
     let userId = userIdParam;
     if (!userId && token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        userId = payload.userId;
-      } catch(e) {}
+      try { const payload = JSON.parse(atob(token.split('.')[1])); userId = payload.userId; } catch(e) {}
     }
-
-    if (!userId) {
-      lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Nema ocena.</p>';
-      return;
-    }
-
+    if (!userId) { lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Nema ocena.</p>'; return; }
     try {
       const res = await fetch(`${backendUrl}/ocene/${userId}`);
       const data = await res.json();
-
-      if (!data.ocene || data.ocene.length === 0) {
-        lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Još nema ocena za ovog prodavca.</p>';
-        return;
-      }
-
+      if (!data.ocene || data.ocene.length === 0) { lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Još nema ocena za ovog prodavca.</p>'; return; }
       lista.innerHTML = '';
-
       const prosekDiv = document.createElement('div');
       prosekDiv.className = 'prosek-wrap';
-      prosekDiv.innerHTML = `
-        <div class="prosek-broj">${data.prosek}</div>
-        <div>
-          <div class="prosek-zvezdice">${'★'.repeat(Math.round(data.prosek))}${'☆'.repeat(5 - Math.round(data.prosek))}</div>
-          <div class="prosek-info">${data.ukupno} ${data.ukupno === 1 ? 'ocena' : data.ukupno < 5 ? 'ocene' : 'ocena'}</div>
-        </div>
-      `;
+      prosekDiv.innerHTML = `<div class="prosek-broj">${data.prosek}</div><div><div class="prosek-zvezdice">${'★'.repeat(Math.round(data.prosek))}${'☆'.repeat(5 - Math.round(data.prosek))}</div><div class="prosek-info">${data.ukupno} ${data.ukupno === 1 ? 'ocena' : data.ukupno < 5 ? 'ocene' : 'ocena'}</div></div>`;
       lista.appendChild(prosekDiv);
-
       data.ocene.forEach(o => {
         const div = document.createElement('div');
         div.className = 'ocena-card';
-        div.innerHTML = `
-          <div class="ocena-header">
-            ${o.odSlika
-              ? `<img src="${o.odSlika}" class="ocena-avatar" alt="${o.odIme}" onerror="this.onerror=null; this.src=''">`
-              : `<div class="ocena-avatar" style="background:#e8f5e9; display:flex; align-items:center; justify-content:center; font-size:1rem;">👤</div>`
-            }
-            <div>
-              <div class="ocena-ime">${o.odIme || 'Kupac'}</div>
-              <div class="ocena-zvezdice">${'★'.repeat(o.ocena)}${'☆'.repeat(5 - o.ocena)}</div>
-            </div>
-          </div>
-          ${o.komentar ? `<div class="ocena-komentar">${o.komentar}</div>` : ''}
-          <div class="ocena-vreme">${new Date(o.created_at).toLocaleDateString('sr-RS')}</div>
-        `;
+        div.innerHTML = `<div class="ocena-header">${o.odSlika ? `<img src="${o.odSlika}" class="ocena-avatar" alt="${o.odIme}" onerror="this.onerror=null;">` : `<div class="ocena-avatar" style="background:#e8f5e9;display:flex;align-items:center;justify-content:center;font-size:1rem;">👤</div>`}<div><div class="ocena-ime">${o.odIme || 'Kupac'}</div><div class="ocena-zvezdice">${'★'.repeat(o.ocena)}${'☆'.repeat(5 - o.ocena)}</div></div></div>${o.komentar ? `<div class="ocena-komentar">${o.komentar}</div>` : ''}<div class="ocena-vreme">${new Date(o.created_at).toLocaleDateString('sr-RS')}</div>`;
         lista.appendChild(div);
       });
-
-    } catch (err) {
-      lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Greška pri učitavanju ocena.</p>';
-    }
+    } catch (err) { lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Greška pri učitavanju ocena.</p>'; }
   }
 
   function otvoriPosaljiPoruku() {
@@ -957,9 +1235,7 @@ footer {
     document.getElementById('poruka-modal').style.display = 'flex';
   }
 
-  function zatvoriPorukuModal() {
-    document.getElementById('poruka-modal').style.display = 'none';
-  }
+  function zatvoriPorukuModal() { document.getElementById('poruka-modal').style.display = 'none'; }
 
   async function posaljiPoruku() {
     const token = localStorage.getItem('token');
@@ -967,38 +1243,22 @@ footer {
     const tekst = document.getElementById('poruka-tekst').value.trim();
     if (!tekst) { alert('Unesite tekst poruke!'); return; }
     try {
-      const res = await fetch(`${backendUrl}/poruka`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ ka_user_id: trenutniUserId, tekst })
-      });
+      const res = await fetch(`${backendUrl}/poruka`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ ka_user_id: trenutniUserId, tekst }) });
       const result = await res.json();
-      if (res.ok) {
-        alert('✅ Poruka uspešno poslata!');
-        zatvoriPorukuModal();
-      } else {
-        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
-      }
-    } catch (err) {
-      alert('Greška pri slanju poruke');
-    }
+      if (res.ok) { alert('✅ Poruka uspešno poslata!'); zatvoriPorukuModal(); }
+      else alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+    } catch (err) { alert('Greška pri slanju poruke'); }
   }
 
   async function ucitajBrojNeprocitanih() {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
-      const res = await fetch(`${backendUrl}/inbox/broj`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const res = await fetch(`${backendUrl}/inbox/broj`, { headers: { 'Authorization': `Bearer ${token}` } });
       const data = await res.json();
       const badge = document.getElementById('inbox-badge');
-      if (data.broj > 0) {
-        badge.textContent = data.broj;
-        badge.style.display = 'flex';
-      } else {
-        badge.style.display = 'none';
-      }
+      if (data.broj > 0) { badge.textContent = data.broj; badge.style.display = 'flex'; }
+      else badge.style.display = 'none';
     } catch (err) {}
   }
 
@@ -1006,45 +1266,19 @@ footer {
     document.getElementById('inbox-modal').style.display = 'flex';
     const sadrzaj = document.getElementById('inbox-sadrzaj');
     sadrzaj.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Učitavam poruke...</p>';
-
     const token = localStorage.getItem('token');
-    if (!token) {
-      sadrzaj.innerHTML = '<p style="text-align:center; color:#666;">Morate biti prijavljeni.</p>';
-      return;
-    }
-
+    if (!token) { sadrzaj.innerHTML = '<p style="text-align:center; color:#666;">Morate biti prijavljeni.</p>'; return; }
     try {
-      const res = await fetch(`${backendUrl}/inbox`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const res = await fetch(`${backendUrl}/inbox`, { headers: { 'Authorization': `Bearer ${token}` } });
       const poruke = await res.json();
-
-      if (poruke.length === 0) {
-        sadrzaj.innerHTML = `
-          <div style="text-align:center; padding:3rem 1rem; color:#666;">
-            <div style="font-size:3rem; margin-bottom:1rem;">📭</div>
-            <p style="font-size:1.1rem;">Nema primljenih poruka.</p>
-          </div>`;
-        return;
-      }
-
+      if (poruke.length === 0) { sadrzaj.innerHTML = `<div style="text-align:center; padding:3rem 1rem; color:#666;"><div style="font-size:3rem; margin-bottom:1rem;">📭</div><p style="font-size:1.1rem;">Nema primljenih poruka.</p></div>`; return; }
       const konverzacije = {};
       poruke.forEach(p => {
-        if (!konverzacije[p.od_user_id]) {
-          konverzacije[p.od_user_id] = {
-            odIme: p.odIme,
-            odSlika: p.odSlika,
-            odUserId: p.od_user_id,
-            poruke: [],
-            neprocitane: 0
-          };
-        }
+        if (!konverzacije[p.od_user_id]) konverzacije[p.od_user_id] = { odIme: p.odIme, odSlika: p.odSlika, odUserId: p.od_user_id, poruke: [], neprocitane: 0 };
         konverzacije[p.od_user_id].poruke.push(p);
         if (!p.procitano) konverzacije[p.od_user_id].neprocitane++;
       });
-
       sadrzaj.innerHTML = '';
-
       Object.values(konverzacije).forEach(konv => {
         const poslednja = konv.poruke[0];
         const div = document.createElement('div');
@@ -1052,36 +1286,14 @@ footer {
         div.onmouseenter = () => div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
         div.onmouseleave = () => div.style.boxShadow = 'none';
         div.onclick = () => otvoriKonverzaciju(konv.odUserId, konv.odIme, konv.odSlika);
-
-        const avatarSrc = konv.odSlika || '';
-        div.innerHTML = `
-          <img src="${avatarSrc}" 
-            style="width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0; background:#e8f5e9;"
-            onerror="this.onerror=null; this.src='';">
-          <div style="flex:1; min-width:0;">
-            <div style="font-weight:700; color:#1e40af; font-size:0.95rem;">${konv.odIme || 'Nepoznat'}</div>
-            <div style="color:#555; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${poslednja.tekst}</div>
-            <div style="color:#888; font-size:0.75rem;">${new Date(poslednja.created_at).toLocaleString('sr-RS')}</div>
-          </div>
-          ${konv.neprocitane > 0 ? `
-            <div style="background:#7c3aed; color:white; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">
-              ${konv.neprocitane}
-            </div>` : ''}
-          <div style="color:#7c3aed; font-size:1.2rem;">›</div>
-        `;
+        div.innerHTML = `<img src="${konv.odSlika || ''}" style="width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0; background:#e8f5e9;" onerror="this.onerror=null; this.src='';"><div style="flex:1; min-width:0;"><div style="font-weight:700; color:#1e40af; font-size:0.95rem;">${konv.odIme || 'Nepoznat'}</div><div style="color:#555; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${poslednja.tekst}</div><div style="color:#888; font-size:0.75rem;">${new Date(poslednja.created_at).toLocaleString('sr-RS')}</div></div>${konv.neprocitane > 0 ? `<div style="background:#7c3aed; color:white; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">${konv.neprocitane}</div>` : ''}<div style="color:#7c3aed; font-size:1.2rem;">›</div>`;
         sadrzaj.appendChild(div);
       });
-
       document.getElementById('inbox-badge').style.display = 'none';
-    } catch (err) {
-      sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju.</p>';
-    }
+    } catch (err) { sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju.</p>'; }
   }
 
-  function zatvoriInbox() {
-    document.getElementById('inbox-modal').style.display = 'none';
-    ucitajBrojNeprocitanih();
-  }
+  function zatvoriInbox() { document.getElementById('inbox-modal').style.display = 'none'; ucitajBrojNeprocitanih(); }
 
   async function otvoriKonverzaciju(userId, ime, slika) {
     aktivnaKonverzacijaUserId = userId;
@@ -1097,25 +1309,13 @@ footer {
     const token = localStorage.getItem('token');
     const container = document.getElementById('konv-poruke');
     container.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Učitavam...</p>';
-
     let mojId = null;
+    try { const payload = JSON.parse(atob(token.split('.')[1])); mojId = payload.userId; } catch(e) {}
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      mojId = payload.userId;
-    } catch(e) {}
-
-    try {
-      const res = await fetch(`${backendUrl}/konverzacija/${userId}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const res = await fetch(`${backendUrl}/konverzacija/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } });
       const data = await res.json();
       const poruke = data.poruke || [];
-
-      if (poruke.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Još nema poruka.</p>';
-        return;
-      }
-
+      if (poruke.length === 0) { container.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Još nema poruka.</p>'; return; }
       container.innerHTML = '';
       poruke.forEach(p => {
         const moja = p.od_user_id === mojId || String(p.od_user_id) === String(mojId);
@@ -1123,17 +1323,13 @@ footer {
         bubble.className = `msg-bubble ${moja ? 'moja' : 'tudja'}`;
         bubble.textContent = p.tekst;
         container.appendChild(bubble);
-
         const vreme = document.createElement('div');
         vreme.className = `msg-vreme ${moja ? 'moje' : 'tudje'}`;
         vreme.textContent = new Date(p.created_at).toLocaleString('sr-RS');
         container.appendChild(vreme);
       });
-
       container.scrollTop = container.scrollHeight;
-    } catch (err) {
-      container.innerHTML = '<p style="text-align:center; color:red;">Greška pri učitavanju.</p>';
-    }
+    } catch (err) { container.innerHTML = '<p style="text-align:center; color:red;">Greška pri učitavanju.</p>'; }
   }
 
   async function posaljiKonvOdgovor() {
@@ -1141,105 +1337,43 @@ footer {
     const tekst = document.getElementById('konv-odgovor').value.trim();
     if (!tekst) { alert('Unesite tekst poruke!'); return; }
     if (!aktivnaKonverzacijaUserId) return;
-
     try {
-      const res = await fetch(`${backendUrl}/poruka`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ ka_user_id: aktivnaKonverzacijaUserId, tekst })
-      });
+      const res = await fetch(`${backendUrl}/poruka`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ ka_user_id: aktivnaKonverzacijaUserId, tekst }) });
       const result = await res.json();
-      if (res.ok) {
-        document.getElementById('konv-odgovor').value = '';
-        await ucitajKonverzaciju(aktivnaKonverzacijaUserId);
-      } else {
-        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
-      }
-    } catch (err) {
-      alert('Greška pri slanju');
-    }
+      if (res.ok) { document.getElementById('konv-odgovor').value = ''; await ucitajKonverzaciju(aktivnaKonverzacijaUserId); }
+      else alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+    } catch (err) { alert('Greška pri slanju'); }
   }
 
-  function zatvoriKonverzaciju() {
-    document.getElementById('konverzacija-modal').style.display = 'none';
-    document.getElementById('inbox-modal').style.display = 'flex';
-    otvoriInbox();
-  }
-
-  function zatvoriKonverzacijuPotpuno() {
-    document.getElementById('konverzacija-modal').style.display = 'none';
-    ucitajBrojNeprocitanih();
-  }
+  function zatvoriKonverzaciju() { document.getElementById('konverzacija-modal').style.display = 'none'; document.getElementById('inbox-modal').style.display = 'flex'; otvoriInbox(); }
+  function zatvoriKonverzacijuPotpuno() { document.getElementById('konverzacija-modal').style.display = 'none'; ucitajBrojNeprocitanih(); }
 
   document.addEventListener('DOMContentLoaded', () => {
     const ta = document.getElementById('konv-odgovor');
-    if (ta) {
-      ta.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          posaljiKonvOdgovor();
-        }
-      });
-    }
+    if (ta) ta.addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); posaljiKonvOdgovor(); } });
   });
 
-  document.getElementById('poruka-modal').addEventListener('click', function(e) {
-    if (e.target === this) zatvoriPorukuModal();
-  });
-
-  document.getElementById('inbox-modal').addEventListener('click', function(e) {
-    if (e.target === this) zatvoriInbox();
-  });
-
-  document.getElementById('konverzacija-modal').addEventListener('click', function(e) {
-    if (e.target === this) zatvoriKonverzacijuPotpuno();
-  });
+  document.getElementById('poruka-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriPorukuModal(); });
+  document.getElementById('inbox-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriInbox(); });
+  document.getElementById('konverzacija-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriKonverzacijuPotpuno(); });
 
   async function pogledajTezgu() {
     document.getElementById('tezga-modal').style.display = 'flex';
     const sadrzaj = document.getElementById('tezga-sadrzaj');
     sadrzaj.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Učitavam proizvode...</p>';
-
-    if (!trenutniUserId) {
-      sadrzaj.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Nije moguće učitati proizvode.</p>';
-      return;
-    }
-
+    if (!trenutniUserId) { sadrzaj.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Nije moguće učitati proizvode.</p>'; return; }
     try {
       const response = await fetch(`${backendUrl}/proizvodi?userId=${trenutniUserId}`);
       if (!response.ok) throw new Error('Greška');
-
       const proizvodi = await response.json();
-
-      if (proizvodi.length === 0) {
-        sadrzaj.innerHTML = `
-          <div style="text-align:center; padding:3rem 1rem; color:#666;">
-            <div style="font-size:3rem; margin-bottom:1rem;">🛒</div>
-            <p style="font-size:1.1rem;">Još nema proizvoda na tezgi.</p>
-            <p>Klikni "Dodaj novi proizvod" da počneš!</p>
-          </div>`;
-        return;
-      }
-
+      if (proizvodi.length === 0) { sadrzaj.innerHTML = `<div style="text-align:center; padding:3rem 1rem; color:#666;"><div style="font-size:3rem; margin-bottom:1rem;">🛒</div><p style="font-size:1.1rem;">Još nema proizvoda na tezgi.</p><p>Klikni "Dodaj novi proizvod" da počneš!</p></div>`; return; }
       const token = localStorage.getItem('token');
       let mojId = null;
-      if (token) {
-        try {
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          mojId = String(payload.userId);
-        } catch(e) {}
-      }
+      if (token) { try { const payload = JSON.parse(atob(token.split('.')[1])); mojId = String(payload.userId); } catch(e) {} }
       const isOwnProfile = mojId && String(trenutniUserId) === mojId;
-
       const grupisano = {};
-      proizvodi.forEach(p => {
-        const nisa = p.glavnaNisa || 'Ostalo';
-        if (!grupisano[nisa]) grupisano[nisa] = [];
-        grupisano[nisa].push(p);
-      });
-
+      proizvodi.forEach(p => { const nisa = p.glavnaNisa || 'Ostalo'; if (!grupisano[nisa]) grupisano[nisa] = []; grupisano[nisa].push(p); });
       sadrzaj.innerHTML = '';
-
       Object.entries(grupisano).forEach(([nisa, lista]) => {
         const grupa = document.createElement('div');
         grupa.className = 'nisa-grupa';
@@ -1247,48 +1381,19 @@ footer {
         naslov.className = 'nisa-grupa-naslov';
         naslov.innerHTML = `<span>${nisaIkone[nisa] || '📦'}</span> ${nisa} <span style="color:#999; font-weight:400; font-size:0.9rem;">(${lista.length})</span>`;
         grupa.appendChild(naslov);
-
         lista.forEach(p => {
           const item = document.createElement('div');
           item.className = 'tezga-proizvod';
-          item.innerHTML = `
-            ${p.slika
-              ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">`
-              : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`
-            }
-            <div class="tezga-info">
-              <div class="tezga-naziv">${p.naziv}</div>
-              <div class="tezga-detalji">
-                ${p.podnisa ? `${p.podnisa} • ` : ''}
-                Dostupno: ${p.kolicina} kg/kom
-                ${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}
-              </div>
-            </div>
-            <div class="tezga-cena">${p.cena} RSD</div>
-            ${isOwnProfile ? `
-            <div class="tezga-akcije">
-              <button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena}, ${p.kolicina}, '${(p.opis||'').replace(/'/g, "\\'")}')">✏️ Izmeni</button>
-              <button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>
-            </div>` : ''}
-          `;
+          item.innerHTML = `${p.slika ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">` : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`}<div class="tezga-info"><div class="tezga-naziv">${p.naziv}</div><div class="tezga-detalji">${p.podnisa ? `${p.podnisa} • ` : ''}Dostupno: ${p.kolicina} kg/kom${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}</div></div><div class="tezga-cena">${p.cena} RSD</div>${isOwnProfile ? `<div class="tezga-akcije"><button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena}, ${p.kolicina}, '${(p.opis||'').replace(/'/g, "\\'")}')">✏️ Izmeni</button><button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button></div>` : ''}`;
           grupa.appendChild(item);
         });
-
         sadrzaj.appendChild(grupa);
       });
-
-    } catch (err) {
-      sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju proizvoda.</p>';
-    }
+    } catch (err) { sadrzaj.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri učitavanju proizvoda.</p>'; }
   }
 
-  function zatvoriTezgu() {
-    document.getElementById('tezga-modal').style.display = 'none';
-  }
-
-  document.getElementById('tezga-modal').addEventListener('click', function(e) {
-    if (e.target === this) zatvoriTezgu();
-  });
+  function zatvoriTezgu() { document.getElementById('tezga-modal').style.display = 'none'; }
+  document.getElementById('tezga-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriTezgu(); });
 
   async function ucitajObjave() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -1296,59 +1401,28 @@ footer {
     const token = localStorage.getItem('token');
     const lista = document.getElementById('objave-lista');
     const naslov = document.getElementById('objave-naslov');
-
     try {
       let response;
-      if (userIdParam) {
-        response = await fetch(`${backendUrl}/objave/${userIdParam}`);
-        if (naslov) naslov.textContent = 'Objave prodavca';
-      } else if (token) {
-        response = await fetch(`${backendUrl}/moje-objave`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (naslov) naslov.textContent = 'Moje objave';
-      } else {
-        lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Nema objava.</p>';
-        return;
-      }
-
+      if (userIdParam) { response = await fetch(`${backendUrl}/objave/${userIdParam}`); if (naslov) naslov.textContent = 'Objave prodavca'; }
+      else if (token) { response = await fetch(`${backendUrl}/moje-objave`, { headers: { 'Authorization': `Bearer ${token}` } }); if (naslov) naslov.textContent = 'Moje objave'; }
+      else { lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Nema objava.</p>'; return; }
       if (!response.ok) throw new Error('Greška');
       const objave = await response.json();
       lista.innerHTML = '';
-
-      if (objave.length === 0) {
-        lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>';
-        return;
-      }
-
+      if (objave.length === 0) { lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>'; return; }
       const isOwnProfile = !userIdParam;
       objave.forEach(o => {
         const div = document.createElement('div');
         div.style.cssText = 'padding:1.2rem; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; margin-bottom:1rem;';
-        div.innerHTML = `
-          ${o.slika ? `<img src="${o.slika}" style="width:auto; max-width:100%; max-height:160px; display:block; margin:0 auto 0.8rem; border-radius:10px;">` : ''}
-          ${o.video ? `<video src="${o.video}" controls style="width:100%; max-height:300px; border-radius:10px; margin-bottom:0.8rem;"></video>` : ''}
-          <p style="margin:0 0 0.6rem; font-size:1.05rem; line-height:1.5;">${o.tekst}</p>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <small style="color:#888;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>
-            ${isOwnProfile ? `<button onclick="obrisiObjavu(${o.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;">🗑 Obriši</button>` : ''}
-          </div>
-        `;
+        div.innerHTML = `${o.slika ? `<img src="${o.slika}" style="width:auto; max-width:100%; max-height:160px; display:block; margin:0 auto 0.8rem; border-radius:10px;">` : ''}${o.video ? `<video src="${o.video}" controls style="width:100%; max-height:300px; border-radius:10px; margin-bottom:0.8rem;"></video>` : ''}<p style="margin:0 0 0.6rem; font-size:1.05rem; line-height:1.5;">${o.tekst}</p><div style="display:flex; justify-content:space-between; align-items:center;"><small style="color:#888;">${new Date(o.created_at).toLocaleString('sr-RS')}</small>${isOwnProfile ? `<button onclick="obrisiObjavu(${o.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;">🗑 Obriši</button>` : ''}</div>`;
         lista.appendChild(div);
       });
-    } catch (err) {
-      lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>';
-    }
+    } catch (err) { lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>'; }
   }
 
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
+  function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
 
-  function objaviNovost() {
-    document.getElementById('objavi-novost-modal').style.display = 'flex';
-  }
+  function objaviNovost() { document.getElementById('objavi-novost-modal').style.display = 'flex'; }
 
   function zatvoriNovostModal() {
     document.getElementById('objavi-novost-modal').style.display = 'none';
@@ -1361,8 +1435,7 @@ footer {
     document.getElementById('preview-novost-video').src = '';
     document.getElementById('novost-video-placeholder').style.display = 'block';
     const btn = document.getElementById('btn-objavi-novost');
-    btn.textContent = '📢 Objavi';
-    btn.disabled = false;
+    btn.textContent = '📢 Objavi'; btn.disabled = false;
   }
 
   async function posaljiNovost() {
@@ -1370,48 +1443,32 @@ footer {
     if (!tekst) { alert('Unesite tekst objave!'); return; }
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti ulogovani!'); return; }
-
     let slikaBase64 = null;
     let videoUrl = null;
-
     const slikaFile = document.getElementById('novost-slika').files[0];
     if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
-
     const videoFile = document.getElementById('novost-video').files[0];
     if (videoFile) {
       if (videoFile.size > 50 * 1024 * 1024) { alert('Video je prevelik! Maksimalno 50MB.'); return; }
       const btn = document.getElementById('btn-objavi-novost');
-      btn.textContent = '⏳ Uploadujem video...';
-      btn.disabled = true;
+      btn.textContent = '⏳ Uploadujem video...'; btn.disabled = true;
       try {
         const videoBase64 = await fileToBase64(videoFile);
-        const uploadRes = await fetch(`${backendUrl}/upload-video`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ videoBase64 })
-        });
+        const uploadRes = await fetch(`${backendUrl}/upload-video`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ videoBase64 }) });
         const uploadData = await uploadRes.json();
         if (!uploadRes.ok) throw new Error(uploadData.error || 'Greška pri uploadu');
         videoUrl = uploadData.url;
       } catch (err) {
         alert('Greška pri uploadu videa: ' + err.message);
         const btn = document.getElementById('btn-objavi-novost');
-        btn.textContent = '📢 Objavi';
-        btn.disabled = false;
+        btn.textContent = '📢 Objavi'; btn.disabled = false;
         return;
       }
     }
-
     try {
-      const res = await fetch(`${backendUrl}/objavi-novost`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ tekst, slikaBase64, videoUrl })
-      });
+      const res = await fetch(`${backendUrl}/objavi-novost`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ tekst, slikaBase64, videoUrl }) });
       if (!res.ok) throw new Error();
-      alert('✅ Objava uspešno dodata!');
-      zatvoriNovostModal();
-      ucitajObjave();
+      alert('✅ Objava uspešno dodata!'); zatvoriNovostModal(); ucitajObjave();
     } catch { alert('Greška pri objavljivanju'); }
   }
 
@@ -1419,12 +1476,8 @@ footer {
     if (!confirm('Obrisati ovu objavu?')) return;
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`${backendUrl}/objava/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) ucitajObjave();
-      else alert('Greška pri brisanju');
+      const res = await fetch(`${backendUrl}/objava/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+      if (res.ok) ucitajObjave(); else alert('Greška pri brisanju');
     } catch { alert('Greška'); }
   }
 
@@ -1436,9 +1489,7 @@ footer {
     document.getElementById('izmeni-profil-modal').style.display = 'flex';
   }
 
-  function zatvoriIzmeniModal() {
-    document.getElementById('izmeni-profil-modal').style.display = 'none';
-  }
+  function zatvoriIzmeniModal() { document.getElementById('izmeni-profil-modal').style.display = 'none'; }
 
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -1463,46 +1514,21 @@ footer {
     const naslovnaFile = document.getElementById('edit-naslovna-slika').files[0];
     if (naslovnaFile) podaci.coverSlikaBase64 = await fileToBase64(naslovnaFile);
     try {
-      const response = await fetch(`${backendUrl}/profile/update`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify(podaci)
-      });
+      const response = await fetch(`${backendUrl}/profile/update`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(podaci) });
       const result = await response.json();
-      if (response.ok) {
-        alert('Profil uspešno izmenjen!');
-        zatvoriIzmeniModal();
-        location.reload();
-      } else {
-        alert(result.error || 'Greška pri čuvanju');
-      }
-    } catch (err) {
-      alert('Greška pri slanju na server');
-    }
+      if (response.ok) { alert('Profil uspešno izmenjen!'); zatvoriIzmeniModal(); location.reload(); }
+      else alert(result.error || 'Greška pri čuvanju');
+    } catch (err) { alert('Greška pri slanju na server'); }
   }
 
   document.getElementById('edit-profilna-slika').addEventListener('change', function(e) {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        document.getElementById('preview-profilna').src = ev.target.result;
-        document.getElementById('preview-profilna').style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
+    if (file) { const reader = new FileReader(); reader.onload = ev => { document.getElementById('preview-profilna').src = ev.target.result; document.getElementById('preview-profilna').style.display = 'block'; }; reader.readAsDataURL(file); }
   });
 
   document.getElementById('edit-naslovna-slika').addEventListener('change', function(e) {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        document.getElementById('preview-naslovna').src = ev.target.result;
-        document.getElementById('preview-naslovna').style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
+    if (file) { const reader = new FileReader(); reader.onload = ev => { document.getElementById('preview-naslovna').src = ev.target.result; document.getElementById('preview-naslovna').style.display = 'block'; }; reader.readAsDataURL(file); }
   });
 
   const podnisePoNisi = {
@@ -1511,8 +1537,7 @@ footer {
     'Mlečni proizvodi': ['Kajmak','Sir','Pavlaka','Mleko','Jogurt','Maslac','Surutka'],
     'Meso': ['Sveže meso','Pršuta','Čvarci','Kobasice','Kulen','Slanina'],
     'Med': ['Bagremov med','Livadski med','Šumski med','Lipov med','Kestenov med','Borov med','Med sa saćem','Propolis'],
-    'Jaja': [],
-    'Bilje i Zdravlje': []
+    'Jaja': [], 'Bilje i Zdravlje': []
   };
 
   function popuniPodnise() {
@@ -1522,29 +1547,18 @@ footer {
     const podnise = podnisePoNisi[nisa] || [];
     select.innerHTML = '<option value="">-- Izaberi --</option>';
     if (podnise.length > 0) {
-      podnise.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p; opt.textContent = p;
-        select.appendChild(opt);
-      });
+      podnise.forEach(p => { const opt = document.createElement('option'); opt.value = p; opt.textContent = p; select.appendChild(opt); });
       wrapper.style.display = 'block';
-    } else {
-      wrapper.style.display = 'none';
-    }
+    } else { wrapper.style.display = 'none'; }
   }
 
-  function dodajProizvod() {
-    document.getElementById('dodaj-proizvod-modal').style.display = 'flex';
-  }
+  function dodajProizvod() { document.getElementById('dodaj-proizvod-modal').style.display = 'flex'; }
 
   function zatvoriModal() {
     document.getElementById('dodaj-proizvod-modal').style.display = 'none';
-    document.getElementById('naziv').value = '';
-    document.getElementById('cena').value = '';
-    document.getElementById('kolicina').value = '';
+    ['naziv','cena','kolicina','opis-proizvoda'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('glavna-nisa').value = '';
     document.getElementById('podnisa').value = '';
-    document.getElementById('opis-proizvoda').value = '';
     document.getElementById('slika-proizvoda').value = '';
     document.getElementById('podnisa-wrapper').style.display = 'none';
     document.getElementById('preview-slika').style.display = 'none';
@@ -1558,75 +1572,38 @@ footer {
     const podnisaEl = document.getElementById('podnisa');
     const podnisa = podnisaEl ? podnisaEl.value : '';
     const opis = document.getElementById('opis-proizvoda').value.trim();
-
     if (!naziv) { alert('Molimo unesite naziv proizvoda'); return; }
     if (!cena || cena <= 0) { alert('Molimo unesite validnu cenu'); return; }
     if (!kolicina || kolicina <= 0) { alert('Molimo unesite dostupnu količinu'); return; }
     if (!glavnaNisa) { alert('Molimo izaberite glavnu nišu'); return; }
-
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti ulogovani!'); window.location.href = 'login.html'; return; }
-
     let slikaBase64 = null;
     const slikaFile = document.getElementById('slika-proizvoda').files[0];
     if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
-
     try {
-      const response = await fetch(`${backendUrl}/dodaj-proizvod`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa: podnisa || null, opis: opis || null, slikaBase64 })
-      });
+      const response = await fetch(`${backendUrl}/dodaj-proizvod`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa: podnisa || null, opis: opis || null, slikaBase64 }) });
       const result = await response.json();
-      if (response.ok) {
-        alert('Proizvod je uspešno izložen na pijac!');
-        zatvoriModal();
-      } else {
-        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
-      }
-    } catch (err) {
-      alert('Greška: ' + err.message);
-    }
+      if (response.ok) { alert('Proizvod je uspešno izložen na pijac!'); zatvoriModal(); }
+      else alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+    } catch (err) { alert('Greška: ' + err.message); }
   }
 
   document.getElementById('slika-proizvoda').addEventListener('change', function(e) {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        const preview = document.getElementById('preview-slika');
-        preview.src = ev.target.result;
-        preview.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
+    if (file) { const reader = new FileReader(); reader.onload = ev => { const preview = document.getElementById('preview-slika'); preview.src = ev.target.result; preview.style.display = 'block'; }; reader.readAsDataURL(file); }
   });
 
-  document.getElementById('dodaj-proizvod-modal').addEventListener('click', function(e) {
-    if (e.target === this) zatvoriModal();
-  });
+  document.getElementById('dodaj-proizvod-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriModal(); });
 
   document.addEventListener('change', function(e) {
     if (e.target.id === 'novost-slika') {
       const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = ev => {
-          document.getElementById('preview-novost-slika').src = ev.target.result;
-          document.getElementById('preview-novost-slika').style.display = 'block';
-          document.getElementById('novost-zona-placeholder').style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-      }
+      if (file) { const reader = new FileReader(); reader.onload = ev => { document.getElementById('preview-novost-slika').src = ev.target.result; document.getElementById('preview-novost-slika').style.display = 'block'; document.getElementById('novost-zona-placeholder').style.display = 'none'; }; reader.readAsDataURL(file); }
     }
     if (e.target.id === 'novost-video') {
       const file = e.target.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        document.getElementById('preview-novost-video').src = url;
-        document.getElementById('preview-novost-video').style.display = 'block';
-        document.getElementById('novost-video-placeholder').style.display = 'none';
-      }
+      if (file) { const url = URL.createObjectURL(file); document.getElementById('preview-novost-video').src = url; document.getElementById('preview-novost-video').style.display = 'block'; document.getElementById('novost-video-placeholder').style.display = 'none'; }
     }
   });
 
@@ -1639,9 +1616,7 @@ footer {
     document.getElementById('edit-proizvod-modal').style.display = 'flex';
   }
 
-  function zatvoriEditProizvodModal() {
-    document.getElementById('edit-proizvod-modal').style.display = 'none';
-  }
+  function zatvoriEditProizvodModal() { document.getElementById('edit-proizvod-modal').style.display = 'none'; }
 
   async function sacuvajIzmeneProizvoda() {
     const token = localStorage.getItem('token');
@@ -1653,41 +1628,24 @@ footer {
     const opis = document.getElementById('edit-opis-proizvoda').value.trim();
     if (!naziv || !cena || !kolicina) { alert('Popunite sva obavezna polja!'); return; }
     try {
-      const res = await fetch(`${backendUrl}/proizvod/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ naziv, cena, kolicina, opis })
-      });
+      const res = await fetch(`${backendUrl}/proizvod/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ naziv, cena, kolicina, opis }) });
       const result = await res.json();
-      if (res.ok) {
-        alert('✅ Proizvod izmenjen!');
-        zatvoriEditProizvodModal();
-        pogledajTezgu();
-      } else {
-        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
-      }
-    } catch (err) {
-      alert('Greška: ' + err.message);
-    }
+      if (res.ok) { alert('✅ Proizvod izmenjen!'); zatvoriEditProizvodModal(); pogledajTezgu(); }
+      else alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+    } catch (err) { alert('Greška: ' + err.message); }
   }
 
   async function obrisiProizvodTezga(id) {
     if (!confirm('Obrisati ovaj proizvod?')) return;
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`${backendUrl}/proizvod/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const res = await fetch(`${backendUrl}/proizvod/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
       if (res.ok) { alert('✅ Proizvod obrisan!'); pogledajTezgu(); }
       else alert('Greška pri brisanju.');
     } catch (err) { alert('Greška.'); }
   }
 
-  document.getElementById('edit-proizvod-modal').addEventListener('click', function(e) {
-    if (e.target === this) zatvoriEditProizvodModal();
-  });
+  document.getElementById('edit-proizvod-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriEditProizvodModal(); });
 </script>
 </body>
 </html>
-
