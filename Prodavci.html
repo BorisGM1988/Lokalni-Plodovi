@@ -92,10 +92,7 @@
       align-items: center;
     }
 
-    .logo {
-      display: flex; align-items: center; gap: 0.5rem;
-      text-decoration: none;
-    }
+    .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
 
     .logo-icon {
       width: 38px; height: 38px;
@@ -106,16 +103,10 @@
       border: 1.5px solid rgba(255,255,255,0.3);
     }
 
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; font-weight: 700; color: white;
-    }
-
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white; }
     .logo-text span { color: var(--zlatna-svetla); }
 
-    nav ul {
-      display: flex; list-style: none; gap: 0.2rem; align-items: center;
-    }
+    nav ul { display: flex; list-style: none; gap: 0.2rem; align-items: center; }
 
     nav ul li a {
       color: rgba(255,255,255,0.88);
@@ -128,15 +119,8 @@
 
     nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
 
-    .hamburger {
-      display: none; flex-direction: column; gap: 5px;
-      cursor: pointer; background: none; border: none;
-    }
-
-    .hamburger span {
-      width: 26px; height: 2.5px;
-      background: white; border-radius: 3px; display: block;
-    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 26px; height: 2.5px; background: white; border-radius: 3px; display: block; }
 
     /* ===== HERO ===== */
     .page-hero {
@@ -190,21 +174,11 @@
       max-width: 560px; margin: 0 auto 1.5rem; line-height: 1.7;
     }
 
-    /* stats mini */
-    .hero-stats {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    .hero-stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
 
     .hero-stat {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.88rem;
-      color: #555;
-      font-weight: 500;
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.88rem; color: #555; font-weight: 500;
     }
 
     .hero-stat i { color: var(--zelena); }
@@ -225,15 +199,10 @@
       gap: 1rem; flex-wrap: wrap;
     }
 
-    .search-wrap {
-      flex: 1;
-      min-width: 200px;
-      position: relative;
-    }
+    .search-wrap { flex: 1; min-width: 200px; position: relative; }
 
     .search-wrap i {
-      position: absolute;
-      left: 0.9rem; top: 50%;
+      position: absolute; left: 0.9rem; top: 50%;
       transform: translateY(-50%);
       color: #aaa; font-size: 0.9rem;
     }
@@ -241,21 +210,15 @@
     #search-input {
       width: 100%;
       padding: 0.6rem 1rem 0.6rem 2.4rem;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-family: 'DM Sans', sans-serif;
-      background: var(--krem);
-      outline: none;
+      border: 1.5px solid #e0e0e0; border-radius: 10px;
+      font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
+      background: var(--krem); outline: none;
       transition: border-color 0.2s;
     }
 
     #search-input:focus { border-color: var(--zelena-svetla); background: white; }
 
-    .filter-group {
-      display: flex; align-items: center; gap: 0.6rem;
-    }
-
+    .filter-group { display: flex; align-items: center; gap: 0.6rem; }
     .filter-label { font-size: 0.82rem; color: var(--siva); font-weight: 500; white-space: nowrap; }
 
     select.filter-select {
@@ -263,19 +226,14 @@
       border: 1.5px solid #e0e0e0; border-radius: 10px;
       font-size: 0.85rem; font-family: 'DM Sans', sans-serif;
       background: white; color: var(--tekst);
-      cursor: pointer; outline: none;
-      transition: border-color 0.2s;
+      cursor: pointer; outline: none; transition: border-color 0.2s;
     }
 
     select.filter-select:focus { border-color: var(--zelena-svetla); }
 
-    #count-label {
-      font-size: 0.82rem; color: var(--siva);
-      font-weight: 500; white-space: nowrap;
-      margin-left: auto;
-    }
+    #count-label { font-size: 0.82rem; color: var(--siva); font-weight: 500; white-space: nowrap; margin-left: auto; }
 
-    /* ===== GRID ===== */
+    /* ===== GRID — 4 kolone ===== */
     .container {
       max-width: 1400px;
       margin: 0 auto;
@@ -285,45 +243,60 @@
 
     .sellers-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.8rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.4rem;
     }
 
     /* ===== KARTICA ===== */
     .seller-card {
       background: white;
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
       box-shadow: 0 2px 14px rgba(0,0,0,0.07);
       border: 1px solid rgba(0,0,0,0.05);
       transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
       display: flex;
       flex-direction: column;
-      animation: fadeUp 0.4s ease both;
+      animation: fadeUp 0.3s ease both;
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
+      from { opacity: 0; transform: translateY(14px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .seller-card:hover {
-      transform: translateY(-10px) scale(1.01);
-      box-shadow: 0 20px 48px rgba(0,0,0,0.12);
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.12);
     }
 
+    /* Slika kontejner — placeholder dok se slika učita */
     .seller-img {
-      height: 210px;
+      height: 190px;
       overflow: hidden;
       position: relative;
       background: var(--krem-tamna);
+      /* Shimmer dok se slika učita */
+      background: linear-gradient(90deg, #ede9e0 25%, #f5f2ea 50%, #ede9e0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    /* Kad se slika učita, skloni shimmer */
+    .seller-img.loaded {
+      background: var(--krem-tamna);
+      animation: none;
     }
 
     .seller-img img {
       width: 100%; height: 100%;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      transition: transform 0.5s ease, opacity 0.4s ease;
+      opacity: 0; /* skrivena dok se ne učita */
+      display: block;
     }
+
+    .seller-img img.img-loaded { opacity: 1; }
 
     .seller-card:hover .seller-img img { transform: scale(1.06); }
 
@@ -333,14 +306,14 @@
       background: rgba(255,255,255,0.93);
       backdrop-filter: blur(6px);
       color: var(--zelena);
-      font-size: 0.72rem; font-weight: 700;
-      padding: 0.28rem 0.65rem;
+      font-size: 0.7rem; font-weight: 700;
+      padding: 0.25rem 0.6rem;
       border-radius: 50px;
       letter-spacing: 0.2px;
     }
 
     .seller-info {
-      padding: 1.4rem 1.5rem 1.5rem;
+      padding: 1.2rem 1.3rem 1.4rem;
       display: flex;
       flex-direction: column;
       flex: 1;
@@ -348,101 +321,79 @@
 
     .seller-name {
       font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; font-weight: 700;
+      font-size: 1.1rem; font-weight: 700;
       color: var(--zemlja);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
       line-height: 1.3;
     }
 
     .seller-location {
-      color: var(--siva);
-      font-size: 0.85rem;
-      margin-bottom: 0.9rem;
+      color: var(--siva); font-size: 0.82rem;
+      margin-bottom: 0.8rem;
       display: flex; align-items: center; gap: 0.3rem;
     }
 
     .seller-description {
-      font-size: 0.9rem;
-      color: #555;
-      line-height: 1.6;
-      flex: 1;
+      font-size: 0.88rem; color: #555;
+      line-height: 1.6; flex: 1;
       margin-bottom: 0.5rem;
     }
 
     .prikazi-vise-btn {
       background: none; border: none;
-      color: var(--zelena);
-      cursor: pointer; font-weight: 600;
-      font-size: 0.82rem; padding: 0;
-      margin-bottom: 1.2rem;
-      font-family: 'DM Sans', sans-serif;
-      text-align: left;
+      color: var(--zelena); cursor: pointer; font-weight: 600;
+      font-size: 0.8rem; padding: 0; margin-bottom: 1rem;
+      font-family: 'DM Sans', sans-serif; text-align: left;
     }
 
     .prikazi-vise-btn:hover { color: var(--zelena-tamna); }
 
     .seller-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      background: var(--zelena);
-      color: white;
-      padding: 0.7rem 1.5rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.22s;
-      margin-top: auto;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: var(--zelena); color: white;
+      padding: 0.65rem 1.2rem; border-radius: 50px;
+      text-decoration: none; font-weight: 600; font-size: 0.88rem;
+      transition: all 0.22s; margin-top: auto;
     }
 
-    .seller-btn:hover {
-      background: var(--zelena-tamna);
-      transform: scale(1.03);
-    }
+    .seller-btn:hover { background: var(--zelena-tamna); transform: scale(1.03); }
 
     /* ===== SKELETON ===== */
     .skeleton-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
+      background: white; border-radius: 18px; overflow: hidden;
       box-shadow: 0 2px 14px rgba(0,0,0,0.07);
       border: 1px solid rgba(0,0,0,0.05);
     }
 
     .skeleton-img {
-      height: 210px;
+      height: 190px;
       background: linear-gradient(90deg, #ede9e0 25%, #f5f2ea 50%, #ede9e0 75%);
       background-size: 200% 100%;
       animation: shimmer 1.4s infinite;
     }
 
-    .skeleton-info {
-      padding: 1.4rem 1.5rem;
-      display: flex; flex-direction: column; gap: 0.7rem;
-    }
+    .skeleton-info { padding: 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 0.7rem; }
 
     .skeleton-line {
-      height: 14px; border-radius: 8px;
+      height: 13px; border-radius: 8px;
       background: linear-gradient(90deg, #ede9e0 25%, #f5f2ea 50%, #ede9e0 75%);
       background-size: 200% 100%;
       animation: shimmer 1.4s infinite;
     }
 
-    .skeleton-line.title { height: 20px; width: 65%; }
+    .skeleton-line.title { height: 18px; width: 65%; }
     .skeleton-line.loc { width: 42%; }
     .skeleton-line.d1 { width: 92%; }
     .skeleton-line.d2 { width: 78%; }
-    .skeleton-line.d3 { width: 60%; }
-    .skeleton-line.btn { height: 40px; width: 58%; border-radius: 50px; margin-top: 0.4rem; }
+    .skeleton-line.d3 { width: 55%; }
+    .skeleton-line.btn { height: 38px; width: 55%; border-radius: 50px; margin-top: 0.3rem; }
 
     @keyframes shimmer {
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
 
-    /* ===== SLOW SERVER NOTICE ===== */
+    /* ===== SLOW SERVER ===== */
     .server-notice {
       display: none;
       background: #fff8e6;
@@ -451,27 +402,20 @@
       padding: 1rem 1.5rem;
       margin-bottom: 1.5rem;
       text-align: center;
-      color: #92400e;
-      font-size: 0.9rem;
+      color: #92400e; font-size: 0.9rem;
     }
 
     /* ===== EMPTY / ERROR ===== */
     .state-box {
       grid-column: 1 / -1;
-      text-align: center;
-      padding: 4rem 2rem;
-      background: white;
-      border-radius: 20px;
+      text-align: center; padding: 4rem 2rem;
+      background: white; border-radius: 20px;
       box-shadow: 0 2px 14px rgba(0,0,0,0.06);
     }
 
     .state-box .icon { font-size: 3rem; margin-bottom: 1rem; }
 
-    .state-box h3 {
-      font-family: 'Playfair Display', serif;
-      color: var(--zemlja); margin-bottom: 0.7rem;
-    }
-
+    .state-box h3 { font-family: 'Playfair Display', serif; color: var(--zemlja); margin-bottom: 0.7rem; }
     .state-box p { color: var(--siva); line-height: 1.6; margin-bottom: 1.5rem; }
 
     .btn-retry {
@@ -480,57 +424,32 @@
       padding: 0.8rem 2rem; border-radius: 50px;
       border: none; cursor: pointer;
       font-size: 0.95rem; font-weight: 600;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
     }
 
     .btn-retry:hover { background: var(--zelena-tamna); }
 
     /* ===== SEO INFO ===== */
-    .seo-info {
-      background: white;
-      border-top: 1px solid #e8e8e8;
-      padding: 3rem 1.5rem;
-    }
-
+    .seo-info { background: white; border-top: 1px solid #e8e8e8; padding: 3rem 1.5rem; }
     .seo-info-inner { max-width: 900px; margin: 0 auto; }
-
-    .seo-info h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem; color: var(--zemlja); margin-bottom: 1rem;
-    }
-
-    .seo-info p {
-      color: var(--siva); line-height: 1.8;
-      font-size: 0.95rem; margin-bottom: 1rem;
-    }
-
+    .seo-info h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--zemlja); margin-bottom: 1rem; }
+    .seo-info p { color: var(--siva); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem; }
     .seo-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
-
-    .seo-pill {
-      background: var(--krem-tamna); color: #555;
-      font-size: 0.8rem; padding: 0.3rem 0.75rem;
-      border-radius: 50px; font-weight: 500;
-    }
+    .seo-pill { background: var(--krem-tamna); color: #555; font-size: 0.8rem; padding: 0.3rem 0.75rem; border-radius: 50px; font-weight: 500; }
 
     /* ===== FOOTER ===== */
-    footer {
-      background: var(--zemlja); color: white;
-      text-align: center; padding: 3rem 1.5rem 2rem;
-    }
-
+    footer { background: var(--zemlja); color: white; text-align: center; padding: 3rem 1.5rem 2rem; }
     footer a { color: #c8e6c9; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
-
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; margin-bottom: 0.5rem;
-    }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
 
     /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .sellers-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
     @media (max-width: 768px) {
       .hamburger { display: flex; }
-
       nav ul {
         display: none;
         position: absolute; top: 62px; left: 0; right: 0;
@@ -541,30 +460,26 @@
         gap: 0.4rem; z-index: 999;
         border-bottom: 1px solid rgba(255,255,255,0.1);
       }
-
       nav ul.open { display: flex; }
       nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
-
       .toolbar { top: 62px; }
       .toolbar-inner { flex-wrap: wrap; }
       .search-wrap { min-width: 100%; }
       #count-label { margin-left: 0; }
-
-      .sellers-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
-      .seller-img { height: 160px; }
+      .sellers-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .seller-img { height: 150px; }
       .seller-name { font-size: 1rem; }
       .seller-info { padding: 1rem; }
       .page-title { font-size: 1.8rem; }
       .hero-stats { gap: 1rem; }
+      nav { position: relative; }
     }
 
     @media (max-width: 480px) {
       .sellers-grid { grid-template-columns: 1fr; }
     }
 
-    @media (min-width: 769px) {
-      .hamburger { display: none; }
-    }
+    @media (min-width: 769px) { .hamburger { display: none; } }
   </style>
 </head>
 <body>
@@ -575,11 +490,9 @@
       <div class="logo-icon">🌿</div>
       <span class="logo-text">Lokalni<span>Plodovi</span></span>
     </a>
-
     <button class="hamburger" onclick="toggleMenu()" aria-label="Meni">
       <span></span><span></span><span></span>
     </button>
-
     <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
@@ -597,7 +510,6 @@
   </nav>
 </header>
 
-<!-- HERO -->
 <section class="page-hero">
   <nav class="breadcrumb" aria-label="breadcrumb">
     <a href="index.html">Početna</a>
@@ -607,17 +519,16 @@
   <div class="hero-badge">🌿 Lokalni farmeri</div>
   <h1 class="page-title">Svi prodavci</h1>
   <p class="page-desc">
-    Pronađite proizvođače iz vaše okoline – sveže, domaće i provereno.
+    Pronađite proizvođače iz vaše okoline  sveže, domaće i provereno.
     Kliknite na profil da vidite detalje, proizvode i kontakt.
   </p>
   <div class="hero-stats">
-    <div class="hero-stat"><i class="fas fa-store"></i> <span id="stat-broj">31+</span> aktivnih prodavaca</div>
+    <div class="hero-stat"><i class="fas fa-store"></i> <span id="stat-broj">37+</span> aktivnih prodavaca</div>
     <div class="hero-stat"><i class="fas fa-map-marker-alt"></i> Cela Srbija</div>
     <div class="hero-stat"><i class="fas fa-leaf"></i> Direktno sa imanja</div>
   </div>
 </section>
 
-<!-- TOOLBAR -->
 <div class="toolbar">
   <div class="toolbar-inner">
     <div class="search-wrap">
@@ -636,7 +547,6 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <main class="container">
   <div id="server-notice" class="server-notice">
     ⏳ Server se budi, još nekoliko sekundi...
@@ -644,7 +554,6 @@
   <div class="sellers-grid" id="prodavci-grid"></div>
 </main>
 
-<!-- SEO INFO -->
 <section class="seo-info">
   <div class="seo-info-inner">
     <h2>Pronađite lokalnog proizvođača u vašem kraju</h2>
@@ -687,18 +596,16 @@
   const CACHE_TTL = 5 * 60 * 1000;
 
   let sviProdavci = [];
-  let filtrirani = [];
 
-  // ── Keep-alive ping ──
+  // Keep-alive ping
   function pingBackend() { fetch(`${backendUrl}/test`).catch(() => {}); }
   pingBackend();
   setInterval(pingBackend, 10 * 60 * 1000);
 
-  // ── Nav ──
+  // Nav
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
-
     if (token) {
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
@@ -717,10 +624,9 @@
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
 
-  // ── Skeleton ──
+  // Skeleton
   function prikaziSkeleton(n) {
-    const grid = document.getElementById('prodavci-grid');
-    grid.innerHTML = Array(n).fill(`
+    document.getElementById('prodavci-grid').innerHTML = Array(n).fill(`
       <div class="skeleton-card">
         <div class="skeleton-img"></div>
         <div class="skeleton-info">
@@ -734,13 +640,12 @@
       </div>`).join('');
   }
 
-  // ── Render ──
+  // ── RENDER — kartice se pojave odmah, slike naknadno ──
   function renderProdavci(lista) {
     const grid = document.getElementById('prodavci-grid');
     const countLabel = document.getElementById('count-label');
     countLabel.textContent = lista.length > 0 ? `${lista.length} prodavaca` : '';
 
-    // Ažuriraj stat u hero-u
     if (sviProdavci.length > 0) {
       document.getElementById('stat-broj').textContent = sviProdavci.length + '+';
     }
@@ -756,6 +661,7 @@
     }
 
     grid.innerHTML = '';
+
     lista.forEach((p, i) => {
       const opis = p.opis || '';
       const dugOpis = opis.length > MAX_OPIS;
@@ -764,12 +670,11 @@
 
       const card = document.createElement('div');
       card.className = 'seller-card';
-      card.style.animationDelay = `${i * 0.04}s`;
+      card.style.animationDelay = `${i * 0.03}s`;
+
+      // Kartica se renderuje ODMAH sa imenom i opisom — bez slike
       card.innerHTML = `
-        <div class="seller-img">
-          <img src="${p.slika || '/placeholder-prodavac.svg'}" alt="${p.ime || 'Prodavac'} – lokalni farmer Srbija"
-               loading="lazy"
-               onerror="this.src='/placeholder-prodavac.svg'">
+        <div class="seller-img" id="img-wrap-${p.id}">
           ${nisaBadge}
         </div>
         <div class="seller-info">
@@ -781,11 +686,44 @@
             <i class="fas fa-user"></i> Pogledaj profil
           </a>
         </div>`;
+
       grid.appendChild(card);
+
+      // Slika se učita u pozadini — kad je spremna, pojavi se
+      if (p.slika && p.slika.trim() !== '') {
+        const img = new Image();
+        img.alt = `${p.ime || 'Prodavac'} – lokalni farmer Srbija`;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;display:block;';
+
+        img.onload = () => {
+          const wrap = document.getElementById(`img-wrap-${p.id}`);
+          if (wrap) {
+            wrap.style.background = 'var(--krem-tamna)';
+            wrap.style.animation = 'none';
+            img.style.opacity = '1';
+            wrap.insertBefore(img, wrap.firstChild);
+          }
+        };
+
+        img.onerror = () => {
+          const wrap = document.getElementById(`img-wrap-${p.id}`);
+          if (wrap) {
+            wrap.style.background = 'var(--krem-tamna)';
+            wrap.style.animation = 'none';
+          }
+        };
+
+        // Počni učitavanje slike
+        img.src = p.slika;
+      } else {
+        // Nema slike — skloni shimmer
+        const wrap = document.getElementById(`img-wrap-${p.id}`);
+        if (wrap) { wrap.style.background = 'var(--krem-tamna)'; wrap.style.animation = 'none'; }
+      }
     });
   }
 
-  // ── Filter + sort ──
+  // Filter + sort
   function filterProdavci() {
     const q = document.getElementById('search-input').value.toLowerCase().trim();
     const sort = document.getElementById('sort-select').value;
@@ -800,7 +738,6 @@
 
     if (sort === 'ime') lista.sort((a, b) => (a.ime || '').localeCompare(b.ime || '', 'sr'));
 
-    filtrirani = lista;
     renderProdavci(lista);
   }
 
@@ -818,7 +755,7 @@
     }
   }
 
-  // ── Učitavanje ──
+  // Učitavanje
   async function ucitajProdavce() {
     const grid = document.getElementById('prodavci-grid');
 
@@ -836,9 +773,8 @@
       }
     } catch(e) {}
 
-    prikaziSkeleton(9);
+    prikaziSkeleton(8);
 
-    // Pokaži poruku ako traje > 3 sek
     const sporTimer = setTimeout(() => {
       document.getElementById('server-notice').style.display = 'block';
     }, 3000);
@@ -865,7 +801,6 @@
     } catch(err) {
       clearTimeout(sporTimer);
       document.getElementById('server-notice').style.display = 'none';
-
       const isTimeout = err.name === 'AbortError';
       grid.innerHTML = `
         <div class="state-box">
@@ -889,7 +824,7 @@
       localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: novi }));
       if (JSON.stringify(novi) !== JSON.stringify(sviProdavci)) {
         sviProdavci = novi;
-        filterProdavci(); // respektuje aktivan filter
+        filterProdavci();
       }
     } catch(e) {}
   }
