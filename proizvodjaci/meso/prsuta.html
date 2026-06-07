@@ -286,6 +286,16 @@
       transition: all 0.22s; font-family: 'DM Sans', sans-serif;
     }
     .btn-obrisi:hover { background: #c62828; color: white; border-color: #c62828; }
+    .btn-zelja {
+      display: inline-flex; align-items: center;
+      justify-content: center; gap: 0.4rem;
+      background: #fff0f5; color: #c62870;
+      padding: 0.65rem 0.9rem; border-radius: 10px;
+      font-weight: 600; font-size: 0.88rem;
+      border: 1.5px solid #ffd6e7; cursor: pointer;
+      transition: all 0.22s; font-family: 'DM Sans', sans-serif;
+    }
+    .btn-zelja:hover { background: #c62870; color: white; border-color: #c62870; }
     .loading-wrap {
       display: flex; flex-direction: column;
       align-items: center; padding: 5rem 0; gap: 1rem; color: var(--siva);
@@ -359,6 +369,7 @@
       .card-img-wrap { height: 150px; }
       .card-naziv { font-size: 1rem; }
       .filter-inner { flex-direction: column; align-items: flex-start; }
+      nav { position: relative; }
     }
     @media (max-width: 480px) {
       .proizvodi-grid { grid-template-columns: 1fr; }
@@ -476,7 +487,6 @@
   async function ucitajProizvode() {
     const container = document.getElementById('proizvodi-container');
 
-    // Pokušaj cache odmah
     try {
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
@@ -553,6 +563,7 @@
     }
 
     const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
     let currentUserId = null;
     if (token) {
       try { currentUserId = JSON.parse(atob(token.split('.')[1])).userId; } catch(e) {}
@@ -563,6 +574,7 @@
 
     proizvodi.forEach((p, i) => {
       const isOwner = currentUserId && String(p.userId) === String(currentUserId);
+      const isKupac = tip === 'kupac';
       const slika = p.slika && p.slika.trim() !== ''
         ? p.slika : 'https://via.placeholder.com/400x200?text=Nema+slike';
       const datum = p.created_at
@@ -601,6 +613,12 @@
                  </button>`
               : `<span style="color:#bbb; font-size:0.85rem;">Profil nedostupan</span>`
             }
+            ${isKupac
+              ? `<button class="btn-zelja" onclick="dodajUZelje(${p.id})" title="Sačuvaj u listu želja">
+                   <i class="fas fa-heart"></i>
+                 </button>`
+              : ''
+            }
             ${isOwner
               ? `<button class="btn-obrisi" onclick="obrisiProizvod(${p.id})">
                    <i class="fas fa-trash"></i> Obriši
@@ -614,6 +632,41 @@
 
     container.innerHTML = '';
     container.appendChild(grid);
+  }
+
+  async function dodajUZelje(proizvodId) {
+    const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
+
+    if (!token) {
+      alert('Prijavite se kao kupac da biste sačuvali u listu želja.');
+      return;
+    }
+
+    if (tip !== 'kupac') {
+      alert('Lista želja je dostupna samo kupcima.');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${backendUrl}/lista-zelja`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ proizvod_id: proizvodId })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert('✅ Dodato u listu želja!');
+      } else {
+        alert(data.error || 'Greška pri dodavanju');
+      }
+    } catch (err) {
+      alert('Greška pri dodavanju u listu želja');
+    }
   }
 
   async function obrisiProizvod(id) {
