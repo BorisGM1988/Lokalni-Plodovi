@@ -36,7 +36,6 @@
       flex-direction: column;
     }
 
-    /* ===== HEADER ===== */
     header {
       background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
       color: white;
@@ -55,10 +54,7 @@
       align-items: center;
     }
 
-    .logo {
-      display: flex; align-items: center; gap: 0.5rem;
-      text-decoration: none;
-    }
+    .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
 
     .logo-icon {
       width: 38px; height: 38px;
@@ -69,16 +65,10 @@
       border: 1.5px solid rgba(255,255,255,0.3);
     }
 
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; font-weight: 700; color: white;
-    }
-
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white; }
     .logo-text span { color: var(--zlatna-svetla); }
 
-    nav ul {
-      display: flex; list-style: none; gap: 0.2rem; align-items: center;
-    }
+    nav ul { display: flex; list-style: none; gap: 0.2rem; align-items: center; }
 
     nav ul li a {
       color: rgba(255,255,255,0.88);
@@ -91,17 +81,9 @@
 
     nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
 
-    .hamburger {
-      display: none; flex-direction: column; gap: 5px;
-      cursor: pointer; background: none; border: none;
-    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 26px; height: 2.5px; background: white; border-radius: 3px; display: block; }
 
-    .hamburger span {
-      width: 26px; height: 2.5px;
-      background: white; border-radius: 3px; display: block;
-    }
-
-    /* ===== CONTAINER ===== */
     .container {
       max-width: 1000px;
       margin: 0 auto;
@@ -109,7 +91,6 @@
       flex: 1;
     }
 
-    /* ===== KUPAC HEADER ===== */
     .kupac-header {
       background: white;
       border-radius: 20px;
@@ -132,11 +113,7 @@
       box-shadow: 0 4px 16px rgba(46,125,50,0.3);
     }
 
-    .kupac-info h2 {
-      font-family: 'Playfair Display', serif;
-      color: #1e40af; font-size: 1.8rem; margin-bottom: 0.2rem;
-    }
-
+    .kupac-info h2 { font-family: 'Playfair Display', serif; color: #1e40af; font-size: 1.8rem; margin-bottom: 0.2rem; }
     .kupac-info p { color: var(--siva); font-size: 0.95rem; }
 
     .kupac-badge {
@@ -146,77 +123,52 @@
       display: inline-block; margin-top: 0.5rem;
     }
 
-    /* ===== TABS ===== */
-    .tabs {
-      display: flex;
-      gap: 0.6rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
+    .tabs { display: flex; gap: 0.6rem; margin-bottom: 2rem; flex-wrap: wrap; }
 
     .tab-btn {
       padding: 0.7rem 1.3rem;
       border: 1.5px solid #e0e0e0;
       background: white;
       border-radius: 50px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       position: relative;
       font-family: 'DM Sans', sans-serif;
       color: var(--siva);
     }
 
-    .tab-btn:hover {
-      border-color: var(--zelena-svetla);
-      color: var(--zelena);
-    }
+    .tab-btn:hover { border-color: var(--zelena-svetla); color: var(--zelena); }
 
     .tab-btn.active {
-      background: var(--zelena);
-      color: white;
+      background: var(--zelena); color: white;
       border-color: var(--zelena);
       box-shadow: 0 4px 14px rgba(46,125,50,0.3);
     }
 
     .tab-btn .badge {
-      position: absolute;
-      top: -5px; right: -5px;
+      position: absolute; top: -5px; right: -5px;
       background: #ef4444; color: white;
       border-radius: 50%; width: 18px; height: 18px;
       font-size: 0.7rem; display: none;
       align-items: center; justify-content: center; font-weight: 700;
     }
 
-    /* ===== SECTIONS ===== */
     .section { display: none; }
     .section.active { display: block; }
 
     .card {
-      background: white;
-      border-radius: 20px;
-      padding: 1.8rem;
+      background: white; border-radius: 20px; padding: 1.8rem;
       box-shadow: 0 4px 16px rgba(0,0,0,0.07);
       border: 1px solid rgba(0,0,0,0.04);
     }
 
-    .card h2 {
-      font-family: 'Playfair Display', serif;
-      color: var(--zelena);
-      margin-bottom: 1.5rem;
-      font-size: 1.4rem;
-    }
+    .card h2 { font-family: 'Playfair Display', serif; color: var(--zelena); margin-bottom: 1.5rem; font-size: 1.4rem; }
 
-    /* ===== PORUKE ===== */
     .poruka-card {
-      padding: 1rem 1.2rem;
-      border-radius: 14px;
-      background: var(--krem);
-      border: 1px solid #e5e7eb;
-      margin-bottom: 0.8rem;
-      transition: box-shadow 0.2s;
+      padding: 1rem 1.2rem; border-radius: 14px;
+      background: var(--krem); border: 1px solid #e5e7eb;
+      margin-bottom: 0.8rem; transition: box-shadow 0.2s;
     }
 
     .poruka-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
@@ -226,19 +178,43 @@
     .poruka-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
     .poruka-vreme { color: #aaa; font-size: 0.8rem; }
 
-    /* ===== LISTA ŽELJA ===== */
-    .zelja-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem;
+    /* ===== ODGOVOR FORMA ===== */
+    .odgovor-forma {
+      display: none;
+      margin-top: 0.8rem;
+      background: #f0faf0;
+      border: 1px solid #c8e6c9;
+      border-radius: 10px;
+      padding: 0.9rem;
     }
 
+    .odgovor-forma textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      min-height: 80px;
+    }
+
+    .odgovor-forma textarea:focus { border-color: var(--zelena-svetla); }
+
+    .odgovor-forma-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    .zelja-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+
     .zelja-card {
-      background: var(--krem);
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 1rem;
-      position: relative;
+      background: var(--krem); border: 1px solid #e5e7eb;
+      border-radius: 14px; padding: 1rem; position: relative;
       transition: box-shadow 0.2s;
     }
 
@@ -269,19 +245,14 @@
 
     .zelja-link:hover { background: var(--zelena-tamna); }
 
-    /* ===== OCENE ===== */
     .prodavac-item {
       display: flex; align-items: center; gap: 1rem;
       padding: 1rem; border-radius: 14px;
       background: var(--krem); border: 1px solid #e5e7eb;
-      margin-bottom: 0.8rem; cursor: pointer;
-      transition: all 0.2s;
+      margin-bottom: 0.8rem; cursor: pointer; transition: all 0.2s;
     }
 
-    .prodavac-item:hover {
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-      border-color: var(--zelena-svetla);
-    }
+    .prodavac-item:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); border-color: var(--zelena-svetla); }
 
     .prodavac-item img {
       width: 50px; height: 50px; border-radius: 50%;
@@ -294,14 +265,9 @@
     .prodavac-item-ime { font-weight: 700; color: var(--tekst); font-size: 0.95rem; }
     .prodavac-item-lok { color: var(--siva); font-size: 0.82rem; margin-top: 0.1rem; }
 
-    /* ===== ZVEZDICE ===== */
     .zvezdice { display: flex; gap: 0.4rem; margin: 1rem 0; }
 
-    .zvezda {
-      font-size: 2rem; cursor: pointer; color: #ddd;
-      transition: all 0.15s; line-height: 1;
-    }
-
+    .zvezda { font-size: 2rem; cursor: pointer; color: #ddd; transition: all 0.15s; line-height: 1; }
     .zvezda.aktivna { color: #f59e0b; }
     .zvezda:hover { transform: scale(1.2); }
 
@@ -315,33 +281,21 @@
 
     .ocena-forma textarea:focus { border-color: var(--zelena-svetla); }
 
-    /* ===== PODEŠAVANJA ===== */
     .podesavanja-btn {
       width: 100%; padding: 1rem; margin: 0.6rem 0;
       border: none; border-radius: 14px;
       font-size: 0.95rem; font-weight: 600; cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
     }
 
     .podesavanja-btn:hover { filter: brightness(1.1); transform: scale(1.01); }
 
-    /* ===== FOOTER ===== */
-    footer {
-      background: var(--zemlja); color: white;
-      padding: 2.5rem 1.5rem 2rem; text-align: center;
-    }
-
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem; margin-bottom: 0.4rem;
-    }
-
+    footer { background: var(--zemlja); color: white; padding: 2.5rem 1.5rem 2rem; text-align: center; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.4rem; }
     footer a { color: #c8e6c9; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
-    /* ===== MODAL ===== */
     .modal-overlay {
       display: none; position: fixed; top: 0; left: 0;
       width: 100%; height: 100%;
@@ -362,15 +316,10 @@
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    .modal-box h3 {
-      font-family: 'Playfair Display', serif;
-      color: var(--zemlja); margin-bottom: 0.8rem; font-size: 1.3rem;
-    }
+    .modal-box h3 { font-family: 'Playfair Display', serif; color: var(--zemlja); margin-bottom: 0.8rem; font-size: 1.3rem; }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .hamburger { display: flex; }
-
       nav ul {
         display: none;
         position: absolute; top: 62px; left: 0; right: 0;
@@ -381,22 +330,16 @@
         gap: 0.4rem; z-index: 999;
         border-bottom: 1px solid rgba(255,255,255,0.1);
       }
-
       nav ul.open { display: flex; }
       nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
-
       .tabs { gap: 0.4rem; }
       .tab-btn { padding: 0.6rem 1rem; font-size: 0.82rem; }
       .zelja-grid { grid-template-columns: 1fr 1fr; }
+      nav { position: relative; }
     }
 
-    @media (max-width: 480px) {
-      .zelja-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (min-width: 769px) {
-      .hamburger { display: none; }
-    }
+    @media (max-width: 480px) { .zelja-grid { grid-template-columns: 1fr; } }
+    @media (min-width: 769px) { .hamburger { display: none; } }
   </style>
 </head>
 <body>
@@ -543,7 +486,6 @@
   </div>
 </footer>
 
-<!-- ===== SKRIPTA — IDENTIČNA ORIGINALU ===== -->
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   const token = localStorage.getItem('token');
@@ -554,7 +496,6 @@
     if (!token) { window.location.href = 'login.html'; }
   });
 
-  // Nav
   document.getElementById('moj-profil-li').style.display = 'list-item';
   document.getElementById('odjavi-se-li').style.display = 'list-item';
   document.getElementById('prijavi-se-li').style.display = 'none';
@@ -593,6 +534,18 @@
       const res = await fetch(`${backendUrl}/inbox`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+
+      // Provjeri expired token
+      if (res.status === 401) {
+        const data = await res.json().catch(() => ({}));
+        if (data.error && data.error.toLowerCase().includes('expired')) {
+          localStorage.clear();
+          alert('Sesija je istekla. Prijavite se ponovo.');
+          window.location.href = 'login.html';
+          return;
+        }
+      }
+
       const poruke = await res.json();
 
       const neprocitane = poruke.filter(p => !p.procitano).length;
@@ -617,9 +570,26 @@
           <div class="poruka-tekst">${p.tekst}</div>
           <div class="poruka-footer">
             <span class="poruka-vreme">${new Date(p.created_at).toLocaleString('sr-RS')}</span>
-            <div style="display:flex;gap:0.5rem;">
-              ${!p.procitano ? `<button onclick="oznациProcitano(${p.id},this)" style="background:#7c3aed;color:white;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-size:0.8rem;">✓</button>` : ''}
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button onclick="toggleOdgovor(${p.id})"
+                style="background:#2e7d32;color:white;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-size:0.8rem;">
+                ↩ Odgovori
+              </button>
+              ${!p.procitano ? `<button onclick="oznаciProcitano(${p.id},this)" style="background:#7c3aed;color:white;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-size:0.8rem;">✓</button>` : ''}
               <button onclick="obrisiPoruku(${p.id},this)" style="background:#d32f2f;color:white;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-size:0.8rem;">🗑</button>
+            </div>
+          </div>
+          <div class="odgovor-forma" id="odgovor-${p.id}">
+            <textarea id="tekst-${p.id}" placeholder="Napiši odgovor za ${p.odIme || 'prodavca'}..."></textarea>
+            <div class="odgovor-forma-footer">
+              <button onclick="toggleOdgovor(${p.id})"
+                style="padding:6px 14px;border-radius:8px;background:#f0f0f0;color:#555;border:none;font-weight:600;cursor:pointer;font-size:0.85rem;font-family:'DM Sans',sans-serif;">
+                Otkaži
+              </button>
+              <button onclick="posaljiOdgovor(${p.id}, ${p.od_user_id})"
+                style="padding:6px 14px;border-radius:8px;background:#2e7d32;color:white;border:none;font-weight:600;cursor:pointer;font-size:0.85rem;font-family:'DM Sans',sans-serif;">
+                <i class="fas fa-paper-plane"></i> Pošalji
+              </button>
             </div>
           </div>`;
         lista.appendChild(div);
@@ -629,7 +599,50 @@
     }
   }
 
-  async function oznациProcitano(id, btn) {
+  function toggleOdgovor(id) {
+    const forma = document.getElementById(`odgovor-${id}`);
+    const prikazana = forma.style.display === 'block';
+    forma.style.display = prikazana ? 'none' : 'block';
+    if (!prikazana) {
+      document.getElementById(`tekst-${id}`).focus();
+    }
+  }
+
+  async function posaljiOdgovor(porukаId, kaUserId) {
+    const tekst = document.getElementById(`tekst-${porukаId}`).value.trim();
+    if (!tekst) { alert('Unesite tekst poruke!'); return; }
+
+    try {
+      const res = await fetch(`${backendUrl}/poruka`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ ka_user_id: kaUserId, tekst })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        document.getElementById(`odgovor-${porukаId}`).style.display = 'none';
+        document.getElementById(`tekst-${porukаId}`).value = '';
+        // Prikaži potvrdu
+        const card = document.getElementById(`odgovor-${porukаId}`).closest('.poruka-card');
+        const potvrda = document.createElement('div');
+        potvrda.style.cssText = 'background:#d1fae5;color:#065f46;padding:6px 12px;border-radius:8px;font-size:0.85rem;font-weight:600;margin-top:0.5rem;';
+        potvrda.textContent = '✅ Poruka poslata!';
+        card.appendChild(potvrda);
+        setTimeout(() => potvrda.remove(), 3000);
+      } else {
+        alert(data.error || 'Greška pri slanju poruke');
+      }
+    } catch (err) {
+      alert('Greška pri slanju poruke');
+    }
+  }
+
+  async function oznаciProcitano(id, btn) {
     try {
       await fetch(`${backendUrl}/poruka/${id}/procitano`, {
         method: 'PUT',
@@ -747,7 +760,6 @@
   }
 
   function zatvoriOcenaModal() { document.getElementById('ocena-modal').style.display = 'none'; }
-
   function postaviOcenu(n) { odabranaOcena = n; osvežiZvezdice(n); }
 
   function osvežiZvezdice(n) {
