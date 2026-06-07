@@ -6,80 +6,181 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Moj profil kupca • LokalniPlodovi.rs</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="mobile.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
-    :root { --zelena: #2e7d32; --zelena-svetla: #4caf50; --zemlja: #5d4037; }
-    * { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zelena-tamna: #1b5e20;
+      --zlatna-svetla: #ffd166;
+      --zemlja: #5d4037;
+      --krem: #faf7f0;
+      --krem-tamna: #f0ece0;
+      --tekst: #2c2c2c;
+      --siva: #6b7280;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #f8f9f5;
-      color: #333;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--krem);
+      color: var(--tekst);
       line-height: 1.6;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
+
+    /* ===== HEADER ===== */
     header {
-      background: rgba(46, 125, 50, 0.94);
+      background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
       color: white;
-      padding: 1rem 2rem;
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
     }
-    .logo { font-size: 1.8rem; font-weight: 700; }
-    nav { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
-    nav ul { display: flex; list-style: none; gap: 2rem; }
-    nav a { color: white; text-decoration: none; font-weight: 500; }
 
-    .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+    nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      border: 1.5px solid rgba(255,255,255,0.3);
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700; color: white;
+    }
+
+    .logo-text span { color: var(--zlatna-svetla); }
+
+    nav ul {
+      display: flex; list-style: none; gap: 0.2rem; align-items: center;
+    }
+
+    nav ul li a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 0.88rem; font-weight: 500;
+      padding: 0.45rem 0.85rem;
+      border-radius: 50px;
+      transition: all 0.2s;
+    }
+
+    nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none;
+    }
+
+    .hamburger span {
+      width: 26px; height: 2.5px;
+      background: white; border-radius: 3px; display: block;
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+      flex: 1;
+    }
+
+    /* ===== KUPAC HEADER ===== */
     .kupac-header {
       background: white;
       border-radius: 20px;
       padding: 2rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
       display: flex;
       align-items: center;
       gap: 1.5rem;
       margin-bottom: 2rem;
       flex-wrap: wrap;
+      border: 1px solid rgba(0,0,0,0.04);
     }
+
     .kupac-avatar {
       width: 80px; height: 80px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #2e7d32, #4caf50);
+      background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.5rem; color: white; flex-shrink: 0;
+      font-size: 2.2rem; color: white; flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(46,125,50,0.3);
     }
-    .kupac-info h2 { color: #1e40af; font-size: 1.8rem; margin-bottom: 0.2rem; }
-    .kupac-info p { color: #666; }
+
+    .kupac-info h2 {
+      font-family: 'Playfair Display', serif;
+      color: #1e40af; font-size: 1.8rem; margin-bottom: 0.2rem;
+    }
+
+    .kupac-info p { color: var(--siva); font-size: 0.95rem; }
+
     .kupac-badge {
       background: #d1fae5; color: #065f46;
       padding: 0.3rem 1rem; border-radius: 50px;
-      font-size: 0.85rem; font-weight: 600;
+      font-size: 0.82rem; font-weight: 600;
       display: inline-block; margin-top: 0.5rem;
     }
 
+    /* ===== TABS ===== */
     .tabs {
       display: flex;
-      gap: 0.8rem;
+      gap: 0.6rem;
       margin-bottom: 2rem;
       flex-wrap: wrap;
     }
+
     .tab-btn {
-      padding: 0.8rem 1.5rem;
-      border: none;
+      padding: 0.7rem 1.3rem;
+      border: 1.5px solid #e0e0e0;
       background: white;
       border-radius: 50px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       position: relative;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--siva);
     }
-    .tab-btn.active { background: var(--zelena); color: white; }
+
+    .tab-btn:hover {
+      border-color: var(--zelena-svetla);
+      color: var(--zelena);
+    }
+
+    .tab-btn.active {
+      background: var(--zelena);
+      color: white;
+      border-color: var(--zelena);
+      box-shadow: 0 4px 14px rgba(46,125,50,0.3);
+    }
+
     .tab-btn .badge {
       position: absolute;
       top: -5px; right: -5px;
@@ -89,126 +190,227 @@
       align-items: center; justify-content: center; font-weight: 700;
     }
 
+    /* ===== SECTIONS ===== */
     .section { display: none; }
     .section.active { display: block; }
 
     .card {
       background: white;
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+      border-radius: 20px;
+      padding: 1.8rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      border: 1px solid rgba(0,0,0,0.04);
     }
-    .card h2 { color: var(--zelena); margin-bottom: 1.5rem; font-size: 1.4rem; }
 
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--zelena);
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+    }
+
+    /* ===== PORUKE ===== */
     .poruka-card {
       padding: 1rem 1.2rem;
-      border-radius: 12px;
-      background: #f9fafb;
+      border-radius: 14px;
+      background: var(--krem);
       border: 1px solid #e5e7eb;
       margin-bottom: 0.8rem;
-    }
-    .poruka-card.neprocitana { border-left: 4px solid #7c3aed; background: #faf5ff; }
-    .poruka-od { font-weight: 700; color: #1e40af; margin-bottom: 0.3rem; }
-    .poruka-tekst { color: #333; margin-bottom: 0.5rem; }
-    .poruka-footer { display: flex; justify-content: space-between; align-items: center; }
-    .poruka-vreme { color: #888; font-size: 0.82rem; }
-
-    .zelja-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1rem;
-    }
-    .zelja-card {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 1rem;
-      position: relative;
-    }
-    .zelja-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; }
-    .zelja-naziv { font-weight: 600; color: #333; margin-bottom: 0.3rem; }
-    .zelja-cena { color: var(--zelena); font-weight: 700; font-size: 1.1rem; }
-    .zelja-prodavac { color: #888; font-size: 0.85rem; }
-    .zelja-ukloni {
-      position: absolute; top: 0.5rem; right: 0.5rem;
-      background: #fee2e2; color: #d32f2f;
-      border: none; border-radius: 50%; width: 28px; height: 28px;
-      cursor: pointer; font-size: 0.8rem;
-    }
-
-    .zvezdice { display: flex; gap: 0.3rem; margin: 1rem 0; }
-    .zvezda {
-      font-size: 2rem; cursor: pointer; color: #ddd;
-      transition: color 0.2s;
-    }
-    .zvezda.aktivna { color: #f59e0b; }
-    .ocena-forma textarea {
-      width: 100%; padding: 10px; border: 1px solid #ddd;
-      border-radius: 8px; font-size: 1rem; resize: vertical;
-      box-sizing: border-box; margin-bottom: 1rem;
-    }
-    .ocena-card {
-      padding: 1rem; border-radius: 12px;
-      background: #f9fafb; border: 1px solid #e5e7eb;
-      margin-bottom: 0.8rem;
-    }
-    .ocena-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem; }
-    .ocena-ime { font-weight: 600; color: #333; }
-    .ocena-zvezdice { color: #f59e0b; }
-    .ocena-komentar { color: #555; font-size: 0.95rem; }
-    .ocena-vreme { color: #888; font-size: 0.8rem; margin-top: 0.3rem; }
-
-    .podesavanja-btn {
-      width: 100%; padding: 1rem; margin: 0.8rem 0;
-      border: none; border-radius: 12px;
-      font-size: 1rem; font-weight: 600; cursor: pointer;
-    }
-
-    .prodavac-item {
-      display: flex; align-items: center; gap: 1rem;
-      padding: 1rem; border-radius: 12px;
-      background: #f9fafb; border: 1px solid #e5e7eb;
-      margin-bottom: 0.8rem; cursor: pointer;
       transition: box-shadow 0.2s;
     }
-    .prodavac-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+    .poruka-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .poruka-card.neprocitana { border-left: 4px solid #7c3aed; background: #faf5ff; }
+    .poruka-od { font-weight: 700; color: #1e40af; margin-bottom: 0.3rem; font-size: 0.95rem; }
+    .poruka-tekst { color: #333; margin-bottom: 0.5rem; line-height: 1.5; }
+    .poruka-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    .poruka-vreme { color: #aaa; font-size: 0.8rem; }
+
+    /* ===== LISTA ŽELJA ===== */
+    .zelja-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .zelja-card {
+      background: var(--krem);
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 1rem;
+      position: relative;
+      transition: box-shadow 0.2s;
+    }
+
+    .zelja-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+    .zelja-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; margin-bottom: 0.8rem; }
+    .zelja-naziv { font-weight: 600; color: #333; margin-bottom: 0.3rem; font-size: 0.95rem; }
+    .zelja-cena { color: var(--zelena); font-weight: 700; font-size: 1.05rem; }
+    .zelja-prodavac { color: #aaa; font-size: 0.82rem; margin-top: 0.2rem; }
+
+    .zelja-ukloni {
+      position: absolute; top: 0.6rem; right: 0.6rem;
+      background: #fee2e2; color: #d32f2f;
+      border: none; border-radius: 50%; width: 28px; height: 28px;
+      cursor: pointer; font-size: 0.82rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .zelja-ukloni:hover { background: #d32f2f; color: white; }
+
+    .zelja-link {
+      display: block; margin-top: 0.8rem; text-align: center;
+      background: var(--zelena); color: white;
+      padding: 0.5rem; border-radius: 8px;
+      text-decoration: none; font-size: 0.88rem; font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .zelja-link:hover { background: var(--zelena-tamna); }
+
+    /* ===== OCENE ===== */
+    .prodavac-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem; border-radius: 14px;
+      background: var(--krem); border: 1px solid #e5e7eb;
+      margin-bottom: 0.8rem; cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .prodavac-item:hover {
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      border-color: var(--zelena-svetla);
+    }
+
     .prodavac-item img {
       width: 50px; height: 50px; border-radius: 50%;
       object-fit: cover; flex-shrink: 0;
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
+
     .prodavac-item-info { flex: 1; }
-    .prodavac-item-ime { font-weight: 600; color: #333; }
-    .prodavac-item-lok { color: #888; font-size: 0.85rem; }
+    .prodavac-item-ime { font-weight: 700; color: var(--tekst); font-size: 0.95rem; }
+    .prodavac-item-lok { color: var(--siva); font-size: 0.82rem; margin-top: 0.1rem; }
 
-    footer {
-      background: #5d4037; color: white;
-      padding: 3rem 1rem 2rem; text-align: center;
+    /* ===== ZVEZDICE ===== */
+    .zvezdice { display: flex; gap: 0.4rem; margin: 1rem 0; }
+
+    .zvezda {
+      font-size: 2rem; cursor: pointer; color: #ddd;
+      transition: all 0.15s; line-height: 1;
     }
 
+    .zvezda.aktivna { color: #f59e0b; }
+    .zvezda:hover { transform: scale(1.2); }
+
+    .ocena-forma textarea {
+      width: 100%; padding: 10px 14px; border: 1.5px solid #e0e0e0;
+      border-radius: 10px; font-size: 0.95rem; resize: vertical;
+      box-sizing: border-box; margin-bottom: 1rem;
+      font-family: 'DM Sans', sans-serif; outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .ocena-forma textarea:focus { border-color: var(--zelena-svetla); }
+
+    /* ===== PODEŠAVANJA ===== */
+    .podesavanja-btn {
+      width: 100%; padding: 1rem; margin: 0.6rem 0;
+      border: none; border-radius: 14px;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+
+    .podesavanja-btn:hover { filter: brightness(1.1); transform: scale(1.01); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--zemlja); color: white;
+      padding: 2.5rem 1.5rem 2rem; text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; margin-bottom: 0.4rem;
+    }
+
+    footer a { color: #c8e6c9; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ===== MODAL ===== */
     .modal-overlay {
-      display: none; position: fixed; top:0; left:0;
-      width:100%; height:100%;
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
       background: rgba(0,0,0,0.75);
       z-index: 3000; justify-content: center; align-items: center;
       backdrop-filter: blur(4px);
     }
+
     .modal-box {
-      background: white; width: 90%; max-width: 480px;
-      border-radius: 20px; padding: 2rem;
+      background: white; width: 90%; max-width: 460px;
+      border-radius: 24px; padding: 2rem;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: modalIn 0.25s ease;
     }
-    .modal-box h3 { color: var(--zelena); margin-bottom: 1rem; }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.94) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-box h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--zemlja); margin-bottom: 0.8rem; font-size: 1.3rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      nav ul {
+        display: none;
+        position: absolute; top: 62px; left: 0; right: 0;
+        background: rgba(27,94,32,0.97);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 1.2rem 1.5rem 1.8rem;
+        gap: 0.4rem; z-index: 999;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      nav ul.open { display: flex; }
+      nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
+
+      .tabs { gap: 0.4rem; }
+      .tab-btn { padding: 0.6rem 1rem; font-size: 0.82rem; }
+      .zelja-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .zelja-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 769px) {
+      .hamburger { display: none; }
+    }
   </style>
 </head>
 <body>
 
 <header>
   <nav>
-    <div class="logo">LokalniPlodovi</div>
-    <button class="hamburger" style="display:none;" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🌿</div>
+      <span class="logo-text">Lokalni<span>Plodovi</span></span>
+    </a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Meni">
       <span></span><span></span><span></span>
     </button>
-    <ul>
+    <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
@@ -234,14 +436,21 @@
 
   <div class="tabs">
     <button class="tab-btn active" onclick="showSection('inbox', this)">
-      📥 Inbox
+      <i class="fas fa-inbox"></i> Inbox
       <span class="badge" id="inbox-badge">0</span>
     </button>
-    <button class="tab-btn" onclick="showSection('lista-zelja', this)">❤️ Lista želja</button>
-    <button class="tab-btn" onclick="showSection('ocene', this)">⭐ Oceni prodavca</button>
-    <button class="tab-btn" onclick="showSection('podesavanja', this)">⚙️ Podešavanja</button>
+    <button class="tab-btn" onclick="showSection('lista-zelja', this)">
+      <i class="fas fa-heart"></i> Lista želja
+    </button>
+    <button class="tab-btn" onclick="showSection('ocene', this)">
+      <i class="fas fa-star"></i> Oceni prodavca
+    </button>
+    <button class="tab-btn" onclick="showSection('podesavanja', this)">
+      <i class="fas fa-cog"></i> Podešavanja
+    </button>
   </div>
 
+  <!-- INBOX -->
   <div id="inbox" class="section active">
     <div class="card">
       <h2>📬 Primljene poruke</h2>
@@ -251,6 +460,7 @@
     </div>
   </div>
 
+  <!-- LISTA ŽELJA -->
   <div id="lista-zelja" class="section">
     <div class="card">
       <h2>❤️ Lista želja</h2>
@@ -260,32 +470,36 @@
     </div>
   </div>
 
+  <!-- OCENE -->
   <div id="ocene" class="section">
     <div class="card">
       <h2>⭐ Oceni prodavca</h2>
-      <p style="color:#666; margin-bottom:1.5rem;">Klikni na prodavca da ostaviš ocenu i komentar:</p>
+      <p style="color:var(--siva); margin-bottom:1.5rem;">Klikni na prodavca da ostaviš ocenu i komentar:</p>
       <div id="prodavci-lista">
         <p style="text-align:center; color:#666; padding:2rem;">Učitavam prodavce...</p>
       </div>
     </div>
   </div>
 
+  <!-- PODEŠAVANJA -->
   <div id="podesavanja" class="section">
     <div class="card">
       <h2>⚙️ Podešavanja naloga</h2>
       <div style="max-width:400px; margin:0 auto;">
-        <p style="color:#666; margin-bottom:1.5rem;">Pozdrav, <strong id="podesavanja-ime"></strong>!</p>
-        <button class="podesavanja-btn" style="background:#2e7d32; color:white;" onclick="alert('Funkcija u razvoju')">
-          🔑 Promeni lozinku
+        <p style="color:var(--siva); margin-bottom:1.5rem;">
+          Pozdrav, <strong id="podesavanja-ime" style="color:var(--tekst);"></strong>! 👋
+        </p>
+        <button class="podesavanja-btn" style="background:var(--zelena); color:white;" onclick="alert('Funkcija u razvoju')">
+          <i class="fas fa-key"></i> Promeni lozinku
         </button>
         <button class="podesavanja-btn" style="background:#1877f2; color:white;" onclick="window.location.href='Prodavci.html'">
-          🌿 Pregledaj prodavce
+          <i class="fas fa-store"></i> Pregledaj prodavce
         </button>
         <button class="podesavanja-btn" style="background:#f59e0b; color:white;" onclick="window.location.href='index.html'">
-          🏠 Idi na početnu
+          <i class="fas fa-home"></i> Idi na početnu
         </button>
         <button class="podesavanja-btn" style="background:#d32f2f; color:white;" onclick="odjaviSe()">
-          🚪 Odjavi se
+          <i class="fas fa-sign-out-alt"></i> Odjavi se
         </button>
       </div>
     </div>
@@ -293,10 +507,11 @@
 
 </div>
 
+<!-- MODAL OCENA -->
 <div class="modal-overlay" id="ocena-modal">
   <div class="modal-box">
     <h3 id="ocena-modal-naslov">Oceni prodavca</h3>
-    <p style="color:#666; margin-bottom:1rem;">Klikni na zvezdu da oceniš:</p>
+    <p style="color:var(--siva); margin-bottom:0.5rem;">Klikni na zvezdu da oceniš:</p>
     <div class="zvezdice" id="zvezdice">
       <span class="zvezda" onclick="postaviOcenu(1)">★</span>
       <span class="zvezda" onclick="postaviOcenu(2)">★</span>
@@ -308,42 +523,44 @@
       <label style="font-weight:600; color:#333; display:block; margin-bottom:0.5rem;">Komentar (opciono):</label>
       <textarea id="ocena-komentar" rows="4" placeholder="Opišite vaše iskustvo sa ovim prodavcem..."></textarea>
     </div>
-    <p id="ocena-poruka" style="color:green; min-height:20px; text-align:center;"></p>
+    <p id="ocena-poruka" style="color:green; min-height:20px; text-align:center; margin-bottom:0.8rem;"></p>
     <div style="display:flex; gap:1rem;">
-      <button onclick="zatvoriOcenaModal()" style="flex:1; padding:12px; border-radius:50px; background:#f0f0f0; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
-      <button onclick="posaljiOcenu()" style="flex:2; padding:12px; border-radius:50px; background:#f59e0b; color:white; border:none; font-weight:600; cursor:pointer;">⭐ Oceni</button>
+      <button onclick="zatvoriOcenaModal()" style="flex:1; padding:12px; border-radius:50px; background:#f0f0f0; color:#555; border:none; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;">Otkaži</button>
+      <button onclick="posaljiOcenu()" style="flex:2; padding:12px; border-radius:50px; background:#f59e0b; color:white; border:none; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;">⭐ Oceni</button>
     </div>
   </div>
 </div>
 
 <footer>
-  <h2>LokalniPlodovi</h2>
-  <p>Prirodno • Zdravo • Direktno sa imanja</p>
-  <p style="margin-top:1.5rem; opacity:0.9;">© 2026 LokalniPlodovi</p>
-  <p style="margin-top:0.5rem;">
-    <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
-    <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
-  </p>
+  <div style="max-width:1400px; margin:0 auto;">
+    <div class="footer-logo">LokalniPlodovi</div>
+    <p style="opacity:0.85; margin-bottom:1rem;">Prirodno • Zdravo • Direktno sa imanja</p>
+    <p style="opacity:0.75; margin-bottom:0.5rem;">© 2026 LokalniPlodovi</p>
+    <p>
+      <a href="politika-privatnosti.html">Politika privatnosti</a> •
+      <a href="uslovi-koriscenja.html">Uslovi korišćenja</a>
+    </p>
+  </div>
 </footer>
 
+<!-- ===== SKRIPTA — IDENTIČNA ORIGINALU ===== -->
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   const token = localStorage.getItem('token');
   let odabraniProdavacId = null;
   let odabranaOcena = 0;
 
-  // Proveri da li je ulogovan
   document.addEventListener('DOMContentLoaded', () => {
-    if (!token) {
-      window.location.href = 'login.html';
-    }
+    if (!token) { window.location.href = 'login.html'; }
   });
 
-  // Navigacija
+  // Nav
   document.getElementById('moj-profil-li').style.display = 'list-item';
   document.getElementById('odjavi-se-li').style.display = 'list-item';
   document.getElementById('prijavi-se-li').style.display = 'none';
   document.getElementById('postani-prodavac-li').style.display = 'none';
+
+  function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
 
   function odjaviSe() {
     localStorage.removeItem('token');
@@ -380,17 +597,10 @@
 
       const neprocitane = poruke.filter(p => !p.procitano).length;
       const badge = document.getElementById('inbox-badge');
-      if (neprocitane > 0) {
-        badge.textContent = neprocitane;
-        badge.style.display = 'flex';
-      }
+      if (neprocitane > 0) { badge.textContent = neprocitane; badge.style.display = 'flex'; }
 
       if (poruke.length === 0) {
-        lista.innerHTML = `
-          <div style="text-align:center; padding:3rem; color:#666;">
-            <div style="font-size:3rem; margin-bottom:1rem;">📭</div>
-            <p>Nema primljenih poruka.</p>
-          </div>`;
+        lista.innerHTML = `<div style="text-align:center; padding:3rem; color:#666;"><div style="font-size:3rem; margin-bottom:1rem;">📭</div><p>Nema primljenih poruka.</p></div>`;
         return;
       }
 
@@ -411,8 +621,7 @@
               ${!p.procitano ? `<button onclick="oznациProcitano(${p.id},this)" style="background:#7c3aed;color:white;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-size:0.8rem;">✓</button>` : ''}
               <button onclick="obrisiPoruku(${p.id},this)" style="background:#d32f2f;color:white;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-size:0.8rem;">🗑</button>
             </div>
-          </div>
-        `;
+          </div>`;
         lista.appendChild(div);
       });
     } catch (err) {
@@ -454,12 +663,7 @@
       const proizvodi = await res.json();
 
       if (proizvodi.length === 0) {
-        lista.innerHTML = `
-          <div style="text-align:center;padding:3rem;color:#666;grid-column:1/-1;">
-            <div style="font-size:3rem;margin-bottom:1rem;">❤️</div>
-            <p>Lista želja je prazna.</p>
-            <a href="index.html" style="color:#2e7d32;font-weight:600;">Pregledaj proizvode →</a>
-          </div>`;
+        lista.innerHTML = `<div style="text-align:center;padding:3rem;color:#666;grid-column:1/-1;"><div style="font-size:3rem;margin-bottom:1rem;">❤️</div><p>Lista želja je prazna.</p><a href="index.html" style="color:#2e7d32;font-weight:600;">Pregledaj proizvode →</a></div>`;
         return;
       }
 
@@ -470,12 +674,11 @@
         div.id = `zelja-${p.id}`;
         div.innerHTML = `
           <button class="zelja-ukloni" onclick="ukloniIzZelja(${p.id})" title="Ukloni">✕</button>
-          ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}">` : `<div style="width:100%;height:140px;background:#e8f5e9;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:0.8rem;">📦</div>`}
+          ${p.slika ? `<img src="${p.slika}" alt="${p.naziv}">` : `<div style="width:100%;height:140px;background:#e8f5e9;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:0.8rem;">📦</div>`}
           <div class="zelja-naziv">${p.naziv}</div>
           <div class="zelja-cena">${p.cena} RSD</div>
           <div class="zelja-prodavac">👤 ${p.prodavacIme}</div>
-          <a href="moj-profil.html?userId=${p.userId}" style="display:block;margin-top:0.8rem;text-align:center;background:#2e7d32;color:white;padding:0.5rem;border-radius:8px;text-decoration:none;font-size:0.9rem;">Pogledaj prodavca</a>
-        `;
+          <a href="moj-profil.html?userId=${p.userId}" class="zelja-link">Pogledaj prodavca</a>`;
         lista.appendChild(div);
       });
     } catch (err) {
@@ -489,10 +692,7 @@
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.ok) {
-        const el = document.getElementById(`zelja-${proizvodId}`);
-        if (el) el.remove();
-      }
+      if (res.ok) { const el = document.getElementById(`zelja-${proizvodId}`); if (el) el.remove(); }
     } catch (err) {}
   }
 
@@ -502,10 +702,7 @@
       const res = await fetch(`${backendUrl}/svi-prodavci`);
       const prodavci = await res.json();
 
-      if (prodavci.length === 0) {
-        lista.innerHTML = '<p style="text-align:center;color:#666;">Nema prodavaca.</p>';
-        return;
-      }
+      if (prodavci.length === 0) { lista.innerHTML = '<p style="text-align:center;color:#666;">Nema prodavaca.</p>'; return; }
 
       lista.innerHTML = '';
       prodavci.forEach(p => {
@@ -518,13 +715,10 @@
             <div class="prodavac-item-ime">${p.ime}</div>
             <div class="prodavac-item-lok">📍 ${p.lokacija || 'Nepoznato'}</div>
           </div>
-          <span style="color:#f59e0b;font-size:1.5rem;">→</span>
-        `;
+          <span style="color:var(--zelena-svetla);font-size:1.3rem;">›</span>`;
         lista.appendChild(div);
       });
-    } catch (err) {
-      lista.innerHTML = '<p style="color:red;text-align:center;">Greška pri učitavanju.</p>';
-    }
+    } catch (err) { lista.innerHTML = '<p style="color:red;text-align:center;">Greška pri učitavanju.</p>'; }
   }
 
   async function otvoriOcenaModal(prodavacId, prodavacIme) {
@@ -533,7 +727,6 @@
     document.getElementById('ocena-modal-naslov').textContent = `Oceni: ${prodavacIme}`;
     document.getElementById('ocena-komentar').value = '';
     document.getElementById('ocena-poruka').textContent = '';
-
     document.querySelectorAll('.zvezda').forEach(z => z.classList.remove('aktivna'));
 
     try {
@@ -553,14 +746,9 @@
     document.getElementById('ocena-modal').style.display = 'flex';
   }
 
-  function zatvoriOcenaModal() {
-    document.getElementById('ocena-modal').style.display = 'none';
-  }
+  function zatvoriOcenaModal() { document.getElementById('ocena-modal').style.display = 'none'; }
 
-  function postaviOcenu(n) {
-    odabranaOcena = n;
-    osvežiZvezdice(n);
-  }
+  function postaviOcenu(n) { odabranaOcena = n; osvežiZvezdice(n); }
 
   function osvežiZvezdice(n) {
     document.querySelectorAll('.zvezda').forEach((z, i) => {
@@ -574,9 +762,7 @@
       document.getElementById('ocena-poruka').style.color = 'red';
       return;
     }
-
     const komentar = document.getElementById('ocena-komentar').value.trim();
-
     try {
       const res = await fetch(`${backendUrl}/ocena`, {
         method: 'POST',
@@ -584,7 +770,6 @@
         body: JSON.stringify({ za_user_id: odabraniProdavacId, ocena: odabranaOcena, komentar })
       });
       const result = await res.json();
-
       if (res.ok) {
         document.getElementById('ocena-poruka').textContent = '✅ Ocena uspešno dodata!';
         document.getElementById('ocena-poruka').style.color = 'green';
