@@ -301,12 +301,12 @@
       flex-wrap: wrap;
       gap: 1rem;
       justify-content: center;
-      max-width: 800px;
+      max-width: 900px;
       margin: 2.5rem auto 0;
     }
 
     .btn {
-      flex: 1; min-width: 180px;
+      flex: 1; min-width: 160px;
       padding: 1.1rem;
       border-radius: 50px;
       font-size: 0.95rem; font-weight: 600;
@@ -323,6 +323,9 @@
     .btn-secondary:hover { background: var(--zelena); color: white; }
     .btn-tezga { background: #f59e0b; color: white; border: none; }
     .btn-tezga:hover { background: #d97706; transform: scale(1.02); }
+    /* ===== BLOG DUGME ===== */
+    .btn-blog { background: #0ea5e9; color: white; border: none; }
+    .btn-blog:hover { background: #0284c7; transform: scale(1.02); }
 
     /* ===== SEKCIJE ===== */
     .profil-sekcija {
@@ -591,6 +594,7 @@
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
+      <li><a href="blog.html">Blog</a></li>
       <li id="moj-profil-li" style="display:none;">
         <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
       </li>
@@ -665,6 +669,9 @@
         <button class="btn btn-primary" id="btn-objavi" onclick="objaviNovost()"><i class="fas fa-newspaper"></i> Objavi novost</button>
         <button class="btn btn-secondary" id="btn-dodaj" onclick="dodajProizvod()"><i class="fas fa-plus-circle"></i> Dodaj proizvod</button>
         <button class="btn btn-tezga" id="btn-tezga" onclick="pogledajTezgu()"><i class="fas fa-store"></i> Moja tezga</button>
+        <!-- ===== NOVO: BLOG DUGME ===== -->
+        <button class="btn btn-blog" id="btn-blog" onclick="otvoriNapišiBlog()"><i class="fas fa-pen-nib"></i> Napiši blog</button>
+        <!-- ============================= -->
       </div>
     </div>
   </div>
@@ -674,6 +681,15 @@
   <h2 id="objave-naslov">Moje objave</h2>
   <div id="objave-lista" style="min-height:120px;"></div>
 </div>
+
+<!-- ===== NOVO: BLOG SEKCIJA NA PROFILU ===== -->
+<div id="blog-sekcija" class="profil-sekcija" style="margin-top:2rem;">
+  <h2 id="blog-naslov">📝 Blog postovi</h2>
+  <div id="blog-lista" style="min-height:80px;">
+    <p style="text-align:center; color:#666; padding:2rem;">Učitavam blog postove...</p>
+  </div>
+</div>
+<!-- ========================================== -->
 
 <div id="ocene-sekcija" class="profil-sekcija" style="margin-top:2rem;">
   <h2>⭐ Ocene kupaca</h2>
@@ -924,6 +940,66 @@
   </div>
 </div>
 
+<!-- ===== NOVO: MODAL NAPIŠI BLOG ===== -->
+<div id="blog-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:640px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:92vh; display:flex; flex-direction:column;">
+    <div style="background:linear-gradient(135deg,#0ea5e9,#0284c7); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+      <div>
+        <h2 style="margin:0; font-size:1.5rem;">✍️ Napiši blog post</h2>
+        <p style="margin:0.3rem 0 0; opacity:0.85; font-size:0.9rem;">Podeli znanje i iskustvo sa zajednicom</p>
+      </div>
+      <button onclick="zatvoriNapišiBlog()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+
+    <div style="padding:1.8rem 2rem; overflow-y:auto; flex:1;">
+      <!-- Naslov -->
+      <label style="font-weight:600; color:#333; display:block; margin-bottom:6px;">Naslov bloga *</label>
+      <input type="text" id="blog-naslov-input" placeholder='npr. "Kako uzgajam maline bez hemije"'
+        style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; outline:none; font-family:inherit; margin-bottom:1.2rem;"
+        onfocus="this.style.borderColor='#0ea5e9'" onblur="this.style.borderColor='#e0e0e0'">
+
+      <!-- Tekst -->
+      <label style="font-weight:600; color:#333; display:block; margin-bottom:6px;">Sadržaj bloga *</label>
+      <textarea id="blog-tekst-input" rows="8"
+        placeholder="Opišite vaše iskustvo, savete, recepte, priče sa imanja..."
+        style="width:100%; padding:12px 14px; border:2px solid #e0e0e0; border-radius:12px; font-size:1rem; box-sizing:border-box; resize:vertical; outline:none; font-family:inherit; line-height:1.7; margin-bottom:1.2rem;"
+        onfocus="this.style.borderColor='#0ea5e9'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+
+      <!-- Slika -->
+      <label style="font-weight:600; color:#333; display:block; margin-bottom:6px;">Naslovna slika (opciono)</label>
+      <input type="file" id="blog-slika-input" accept="image/*" style="display:none;">
+      <div onclick="document.getElementById('blog-slika-input').click()"
+        id="blog-slika-zona"
+        style="border:2px dashed #0ea5e9; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#f0f9ff; margin-bottom:1.2rem; transition:background 0.2s;">
+        <img id="preview-blog-slika" style="width:100%; max-height:220px; object-fit:cover; border-radius:10px; display:none;">
+        <div id="blog-slika-placeholder">
+          <div style="font-size:2rem;">📸</div>
+          <p style="margin:0.4rem 0 0; color:#0ea5e9; font-weight:600; font-size:0.95rem;">Klikni da dodaš naslovnu sliku</p>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <label style="font-weight:600; color:#333; display:block; margin-bottom:6px;">Video (opciono, max 60 sek)</label>
+      <input type="file" id="blog-video-input" accept="video/*" style="display:none;">
+      <div onclick="document.getElementById('blog-video-input').click()"
+        id="blog-video-zona"
+        style="border:2px dashed #f59e0b; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; background:#fffbeb; transition:background 0.2s;">
+        <video id="preview-blog-video" style="width:100%; max-height:220px; border-radius:10px; display:none;" controls></video>
+        <div id="blog-video-placeholder">
+          <div style="font-size:2rem;">🎥</div>
+          <p style="margin:0.4rem 0 0; color:#f59e0b; font-weight:600; font-size:0.95rem;">Klikni da dodaš video</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:1.2rem 2rem; border-top:1px solid #f0f0f0; flex-shrink:0; display:flex; gap:1rem;">
+      <button onclick="zatvoriNapišiBlog()" style="flex:1; padding:14px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer; font-family:inherit;">Otkaži</button>
+      <button id="btn-objavi-blog" onclick="posaljiBlog()" style="flex:2; padding:14px; border-radius:50px; background:linear-gradient(135deg,#0ea5e9,#0284c7); color:white; border:none; font-weight:700; cursor:pointer; font-family:inherit; font-size:1rem;">✍️ Objavi blog</button>
+    </div>
+  </div>
+</div>
+<!-- ===================================== -->
+
 <!-- ===== SKRIPTA ===== -->
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
@@ -1026,6 +1102,9 @@
           btn.innerHTML = isOwnProfile
             ? '<i class="fas fa-store"></i> Moja tezga'
             : '<i class="fas fa-store"></i> Pogledaj tezgu';
+        } else if (btn.id === 'btn-blog') {
+          // Blog dugme: prikazati samo vlasniku profila
+          btn.style.display = isOwnProfile ? 'flex' : 'none';
         } else {
           btn.style.display = isOwnProfile ? 'flex' : 'none';
         }
@@ -1045,11 +1124,11 @@
 
       if (isOwnProfile && token) {
         ucitajBrojNeprocitanih();
-        // Pokreni onboarding tour samo prvi put
         pokrniTourAkoTreba();
       }
 
       ucitajObjave();
+      ucitajBlogove();
       ucitajOcene();
 
     } catch (err) {
@@ -1117,7 +1196,6 @@
     const box = document.getElementById('tour-box');
     const highlight = document.getElementById('tour-highlight');
 
-    // Sadržaj
     document.getElementById('tour-emoji').textContent = korak.emoji;
     document.getElementById('tour-korak').textContent = `Korak ${tourStep + 1} od ${tourKoraci.length}`;
     document.getElementById('tour-naslov').textContent = korak.naslov;
@@ -1126,7 +1204,6 @@
     const btnNext = document.getElementById('tour-btn-next');
     btnNext.textContent = tourStep === tourKoraci.length - 1 ? '✅ Završi' : 'Dalje →';
 
-    // Dots
     const dots = document.getElementById('tour-dots');
     dots.innerHTML = tourKoraci.map((_, i) =>
       `<div class="tour-dot ${i === tourStep ? 'aktivan' : ''}"></div>`
@@ -1147,7 +1224,6 @@
         highlight.style.width = (rect.width + padding * 2) + 'px';
         highlight.style.height = (rect.height + padding * 2) + 'px';
 
-        // Pozicioniraj box
         const boxWidth = 360;
         const margin = 16;
 
@@ -1166,7 +1242,6 @@
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     } else {
-      // Centar ekrana
       highlight.style.display = 'none';
       box.style.top = '50%';
       box.style.left = '50%';
@@ -1174,8 +1249,6 @@
       box.style.bottom = 'auto';
     }
   }
-
-  function sledecaToursStep() { sledecaTourStep(); }
 
   function sledecaTourStep() {
     if (tourStep < tourKoraci.length - 1) {
@@ -1193,13 +1266,11 @@
     localStorage.setItem('tour_vidjeno', '1');
   }
 
-  // Klik na overlay zatvara tour
   document.getElementById('tour-overlay').addEventListener('click', zatvoriTour);
 
   // ══════════════════════════════════════════
-  // SVE OSTALE FUNKCIJE — IDENTIČNE ORIGINALU
+  // OCENE
   // ══════════════════════════════════════════
-
   async function ucitajOcene() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdParam = urlParams.get('userId');
@@ -1228,6 +1299,9 @@
     } catch (err) { lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Greška pri učitavanju ocena.</p>'; }
   }
 
+  // ══════════════════════════════════════════
+  // PORUKE
+  // ══════════════════════════════════════════
   function otvoriPosaljiPoruku() {
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti prijavljeni da biste poslali poruku!'); return; }
@@ -1357,6 +1431,7 @@
   document.getElementById('inbox-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriInbox(); });
   document.getElementById('konverzacija-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriKonverzacijuPotpuno(); });
 
+  // ── Tezga ──
   async function pogledajTezgu() {
     document.getElementById('tezga-modal').style.display = 'flex';
     const sadrzaj = document.getElementById('tezga-sadrzaj');
@@ -1395,6 +1470,7 @@
   function zatvoriTezgu() { document.getElementById('tezga-modal').style.display = 'none'; }
   document.getElementById('tezga-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriTezgu(); });
 
+  // ── Objave ──
   async function ucitajObjave() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdParam = urlParams.get('userId');
@@ -1420,6 +1496,198 @@
     } catch (err) { lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema objava.</p>'; }
   }
 
+  // ══════════════════════════════════════════
+  // BLOG FUNKCIJE
+  // ══════════════════════════════════════════
+
+  function otvoriNapišiBlog() {
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti prijavljeni da biste pisali blog!'); return; }
+    // Reset forme
+    document.getElementById('blog-naslov-input').value = '';
+    document.getElementById('blog-tekst-input').value = '';
+    document.getElementById('blog-slika-input').value = '';
+    document.getElementById('blog-video-input').value = '';
+    document.getElementById('preview-blog-slika').style.display = 'none';
+    document.getElementById('preview-blog-slika').src = '';
+    document.getElementById('blog-slika-placeholder').style.display = 'block';
+    document.getElementById('preview-blog-video').style.display = 'none';
+    document.getElementById('preview-blog-video').src = '';
+    document.getElementById('blog-video-placeholder').style.display = 'block';
+    const btn = document.getElementById('btn-objavi-blog');
+    btn.textContent = '✍️ Objavi blog';
+    btn.disabled = false;
+    document.getElementById('blog-modal').style.display = 'flex';
+  }
+
+  function zatvoriNapišiBlog() {
+    document.getElementById('blog-modal').style.display = 'none';
+  }
+
+  document.getElementById('blog-modal').addEventListener('click', function(e) {
+    if (e.target === this) zatvoriNapišiBlog();
+  });
+
+  // Preview slike za blog
+  document.addEventListener('change', function(e) {
+    if (e.target.id === 'blog-slika-input') {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          document.getElementById('preview-blog-slika').src = ev.target.result;
+          document.getElementById('preview-blog-slika').style.display = 'block';
+          document.getElementById('blog-slika-placeholder').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    if (e.target.id === 'blog-video-input') {
+      const file = e.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        document.getElementById('preview-blog-video').src = url;
+        document.getElementById('preview-blog-video').style.display = 'block';
+        document.getElementById('blog-video-placeholder').style.display = 'none';
+      }
+    }
+  });
+
+  async function posaljiBlog() {
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti prijavljeni!'); return; }
+
+    const naslov = document.getElementById('blog-naslov-input').value.trim();
+    const tekst = document.getElementById('blog-tekst-input').value.trim();
+
+    if (!naslov) { alert('Unesite naslov bloga!'); document.getElementById('blog-naslov-input').focus(); return; }
+    if (!tekst) { alert('Unesite sadržaj bloga!'); document.getElementById('blog-tekst-input').focus(); return; }
+    if (tekst.length < 50) { alert('Blog post mora imati najmanje 50 karaktera teksta.'); return; }
+
+    const btn = document.getElementById('btn-objavi-blog');
+    btn.disabled = true;
+    btn.textContent = '⏳ Objavljujem...';
+
+    let slikaBase64 = null;
+    let videoUrl = null;
+
+    const slikaFile = document.getElementById('blog-slika-input').files[0];
+    if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
+
+    const videoFile = document.getElementById('blog-video-input').files[0];
+    if (videoFile) {
+      if (videoFile.size > 50 * 1024 * 1024) { alert('Video je prevelik! Maksimalno 50MB.'); btn.disabled = false; btn.textContent = '✍️ Objavi blog'; return; }
+      btn.textContent = '⏳ Uploadujem video...';
+      try {
+        const videoBase64 = await fileToBase64(videoFile);
+        const uploadRes = await fetch(`${backendUrl}/upload-video`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ videoBase64 })
+        });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) throw new Error(uploadData.error || 'Greška pri uploadu');
+        videoUrl = uploadData.url;
+      } catch (err) {
+        alert('Greška pri uploadu videa: ' + err.message);
+        btn.disabled = false;
+        btn.textContent = '✍️ Objavi blog';
+        return;
+      }
+    }
+
+    try {
+      const res = await fetch(`${backendUrl}/blog`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ naslov, tekst, slikaBase64, videoUrl })
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert('✅ Blog uspešno objavljen! Možete ga videti na stranici Blog.');
+        zatvoriNapišiBlog();
+        ucitajBlogove();
+      } else {
+        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+        btn.disabled = false;
+        btn.textContent = '✍️ Objavi blog';
+      }
+    } catch (err) {
+      alert('Greška: ' + err.message);
+      btn.disabled = false;
+      btn.textContent = '✍️ Objavi blog';
+    }
+  }
+
+  async function ucitajBlogove() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userIdParam = urlParams.get('userId');
+    const token = localStorage.getItem('token');
+    const lista = document.getElementById('blog-lista');
+    const naslov = document.getElementById('blog-naslov');
+    let userId = userIdParam;
+    if (!userId && token) {
+      try { const payload = JSON.parse(atob(token.split('.')[1])); userId = payload.userId; } catch(e) {}
+    }
+    if (!userId) { lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Nema blog postova.</p>'; return; }
+
+    if (naslov) naslov.textContent = userIdParam ? '📝 Blog postovi' : '📝 Moji blog postovi';
+
+    try {
+      const res = await fetch(`${backendUrl}/blogovi?userId=${userId}`);
+      if (!res.ok) throw new Error('Greška');
+      const blogovi = await res.json();
+      lista.innerHTML = '';
+      if (blogovi.length === 0) {
+        lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Još nema blog postova.</p>';
+        return;
+      }
+      const isOwnProfile = !userIdParam;
+      blogovi.forEach(b => {
+        const div = document.createElement('div');
+        div.style.cssText = 'padding:1.4rem; border-radius:14px; background:#f0f9ff; border:1px solid #bae6fd; margin-bottom:1rem; transition: box-shadow 0.2s;';
+        div.onmouseenter = () => div.style.boxShadow = '0 4px 12px rgba(14,165,233,0.15)';
+        div.onmouseleave = () => div.style.boxShadow = 'none';
+
+        const skraceniTekst = b.tekst.length > 180 ? b.tekst.substring(0, 180) + '...' : b.tekst;
+        const blogUrl = `https://lokalniplodovi.rs/blog.html?id=${b.id}`;
+
+        div.innerHTML = `
+          ${b.slika ? `<img src="${b.slika}" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; margin-bottom:0.8rem;">` : ''}
+          <h3 style="margin:0 0 0.5rem; font-family:'Playfair Display',serif; color:#0284c7; font-size:1.2rem;">${b.naslov}</h3>
+          <p style="margin:0 0 0.8rem; color:#444; font-size:0.95rem; line-height:1.6;">${skraceniTekst}</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <small style="color:#888;">${new Date(b.created_at).toLocaleDateString('sr-RS')}</small>
+            <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+              <a href="${blogUrl}" style="background:#0ea5e9; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem; font-weight:600; text-decoration:none;">👁 Čitaj više</a>
+              <button onclick="podeliBlogFacebook(${b.id})" style="background:#1877f2; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem; font-weight:600;">📘 Podeli</button>
+              ${isOwnProfile ? `<button onclick="obrisiBlog(${b.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem; font-weight:600;">🗑 Obriši</button>` : ''}
+            </div>
+          </div>`;
+        lista.appendChild(div);
+      });
+    } catch (err) {
+      lista.innerHTML = '<p style="color:#666; text-align:center; padding:1.5rem 0;">Greška pri učitavanju blog postova.</p>';
+    }
+  }
+
+  function podeliBlogFacebook(blogId) {
+    const url = `https://lokalniplodovi.rs/blog.html?id=${blogId}`;
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(fbUrl, '_blank', 'width=600,height=400');
+  }
+
+  async function obrisiBlog(id) {
+    if (!confirm('Obrisati ovaj blog post?')) return;
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${backendUrl}/blog/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+      if (res.ok) { alert('✅ Blog obrisan!'); ucitajBlogove(); }
+      else alert('Greška pri brisanju');
+    } catch { alert('Greška'); }
+  }
+
+  // ── Ostale funkcije ──
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
 
   function objaviNovost() { document.getElementById('objavi-novost-modal').style.display = 'flex'; }
