@@ -848,10 +848,11 @@
     }
   });
 
+  // ── Facebook deljenje — koristi /blog-share/ rutu da FB dobije ispravne OG tagove ──
   function podeliFacebook(blogId) {
-    const url = `https://lokalniplodovi.rs/blog.html?id=${blogId}`;
+    const shareUrl = `${backendUrl}/blog-share/${blogId}`;
     window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
       '_blank', 'width=600,height=400'
     );
   }
