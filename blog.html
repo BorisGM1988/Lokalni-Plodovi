@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title id="page-title">Blog – LokalniPlodovi</title>
   <meta name="description" content="Saveti, recepti i priče lokalnih farmera u Srbiji. Pročitajte blog postove prodavaca sa LokalniPlodovi platforme."/>
+  <!-- Open Graph tagovi — ažuriraju se dinamički kada se otvori post -->
+  <meta property="og:type"        content="article" id="og-type"/>
+  <meta property="og:site_name"   content="LokalniPlodovi"/>
+  <meta property="og:title"       content="Blog – LokalniPlodovi" id="og-title"/>
+  <meta property="og:description" content="Saveti, recepti i priče lokalnih farmera u Srbiji." id="og-description"/>
+  <meta property="og:url"         content="https://lokalniplodovi.rs/blog.html" id="og-url"/>
+  <meta property="og:image"       content="https://lokalniplodovi.rs/og-slika.jpg" id="og-image"/>
+  <meta property="og:locale"      content="sr_RS"/>
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -746,11 +754,16 @@
       if (!res.ok) throw new Error('Nije pronađen');
       const b = await res.json();
 
-      // Ažuriraj title i meta za deljenje
-      document.title = `${b.naslov} – LokalniPlodovi Blog`;
-      document.getElementById('page-title').textContent = `${b.naslov} – LokalniPlodovi Blog`;
-
+      // Ažuriraj title i OG meta tagove za deljenje
       const blogUrl = `https://lokalniplodovi.rs/blog.html?id=${b.id}`;
+      const skraceniOpis = b.tekst.length > 160 ? b.tekst.substring(0, 160) + '...' : b.tekst;
+
+      document.title = b.naslov;
+      document.getElementById('page-title').textContent = b.naslov;
+      document.getElementById('og-title').setAttribute('content', b.naslov);
+      document.getElementById('og-description').setAttribute('content', skraceniOpis);
+      document.getElementById('og-url').setAttribute('content', blogUrl);
+      if (b.slika) document.getElementById('og-image').setAttribute('content', b.slika);
       const profilUrl = `moj-profil.html?userId=${b.autorId || b.userId}`;
 
       sadrzaj.innerHTML = `
