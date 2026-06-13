@@ -278,6 +278,10 @@
       cursor: pointer;
       transition: all 0.22s;
       font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      line-height: 1;
     }
 
     .btn-fb:hover { background: #1558b0; }
@@ -434,6 +438,7 @@
       transition: all 0.22s;
       font-family: inherit;
       box-shadow: 0 4px 16px rgba(24,119,242,0.35);
+      text-decoration: none;
     }
 
     .btn-share-fb:hover {
@@ -660,6 +665,12 @@
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
 
+  // Pomoćna funkcija — pravi Facebook sharer link za dati blog ID
+  function fbSharerUrl(blogId) {
+    const shareUrl = `${backendUrl}/blog-share/${blogId}`;
+    return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+  }
+
   // ── Učitaj sve blogove ──
   async function ucitajSveBlogove() {
     const grid = document.getElementById('blog-grid');
@@ -711,9 +722,9 @@
               <button class="btn-citaj" onclick="event.stopPropagation(); otvoriPost(${b.id})">
                 👁 Čitaj više
               </button>
-              <button class="btn-fb" onclick="event.stopPropagation(); podeliFacebook(${b.id})">
+              <a class="btn-fb" href="${fbSharerUrl(b.id)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
                 📘 Podeli
-              </button>
+              </a>
             </div>
           </div>`;
 
@@ -794,9 +805,9 @@
         <div class="post-share">
           <h3>📘 Podelite ovaj post</h3>
           <p>Pomozite da priča dospe do više ljudi — podelite na Facebook!</p>
-          <button class="btn-share-fb" onclick="podeliFacebook(${b.id})">
+          <a class="btn-share-fb" href="${fbSharerUrl(b.id)}" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-facebook"></i> Podeli na Facebook
-          </button>
+          </a>
         </div>
 
         <div class="post-autor-card">
@@ -847,15 +858,6 @@
       document.title = 'Blog – LokalniPlodovi';
     }
   });
-
-  // ── Facebook deljenje — koristi /blog-share/ rutu da FB dobije ispravne OG tagove ──
-  function podeliFacebook(blogId) {
-    const shareUrl = `${backendUrl}/blog-share/${blogId}`;
-    window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-      '_blank', 'noopener,noreferrer'
-    );
-  }
 </script>
 </body>
 </html>
