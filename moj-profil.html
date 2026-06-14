@@ -1673,7 +1673,12 @@
 
 function podeliBlogFacebook(blogId) {
   const shareUrl = `${backendUrl}/blog-share/${blogId}`;
-  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400');
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+  if (/Mobi|Android/i.test(navigator.userAgent)) {
+    window.location.href = fbUrl;
+  } else {
+    window.open(fbUrl, '_blank', 'width=600,height=400');
+  }
 }
 
   async function obrisiBlog(id) {
