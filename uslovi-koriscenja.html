@@ -6,265 +6,598 @@
   <title>Uslovi korišćenja – LokalniPlodovi</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --zelena: #2e7d32;
       --zelena-svetla: #4caf50;
+      --zelena-tamna: #1b5e20;
+      --zlatna: #f5a623;
+      --zlatna-svetla: #ffd166;
       --zemlja: #5d4037;
+      --krem: #faf7f0;
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #f8f9f5;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--krem);
       color: #333;
       line-height: 1.8;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
+
+    /* ===== HEADER ===== */
     header {
-      background: rgba(46, 125, 50, 0.94);
+      background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
       color: white;
-      padding: 1rem 2rem;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
     }
-    .logo { font-size: 1.8rem; font-weight: 700; }
+
     nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1400px;
-      margin: 0 auto;
     }
-    nav ul {
-      display: flex;
-      list-style: none;
-      gap: 2.5rem;
-      margin: 0; padding: 0;
-    }
-    nav a {
-      color: white;
+
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
       text-decoration: none;
-      font-weight: 500;
-      transition: 0.2s;
     }
-    nav a:hover { color: #c8e6c9; }
-    .container {
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 0 1.5rem;
-      flex: 1;
+
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      border: 1.5px solid rgba(255,255,255,0.3);
     }
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 3rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700; color: white;
     }
-    h1 {
-      color: var(--zelena);
-      font-size: 2.2rem;
-      margin-bottom: 0.5rem;
+
+    .logo-text span { color: var(--zlatna-svetla); }
+
+    nav ul {
+      display: flex; list-style: none; gap: 0.2rem; align-items: center;
     }
-    .datum {
-      color: #888;
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 2px solid #e8f5e9;
+
+    nav ul li a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 0.88rem; font-weight: 500;
+      padding: 0.45rem 0.85rem;
+      border-radius: 50px;
+      transition: all 0.2s;
     }
-    h2 {
-      color: var(--zemlja);
-      font-size: 1.3rem;
-      margin: 2rem 0 0.8rem 0;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+
+    nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none;
     }
-    h2::before {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 1.3rem;
-      background: var(--zelena-svetla);
-      border-radius: 2px;
+
+    .hamburger span {
+      width: 26px; height: 2.5px;
+      background: white; border-radius: 3px; display: block;
     }
-    p { margin-bottom: 1rem; color: #444; }
-    ul {
-      margin: 0.5rem 0 1rem 1.5rem;
-      color: #444;
-    }
-    ul li { margin-bottom: 0.4rem; }
-    .highlight {
-      background: #e8f5e9;
-      border-left: 4px solid var(--zelena);
-      padding: 1rem 1.5rem;
-      border-radius: 0 8px 8px 0;
-      margin: 1.5rem 0;
-    }
-    .warning {
-      background: #fff3e0;
-      border-left: 4px solid #ff9800;
-      padding: 1rem 1.5rem;
-      border-radius: 0 8px 8px 0;
-      margin: 1.5rem 0;
-    }
-    .kontakt-box {
-      background: #f1f8e9;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-top: 2rem;
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--zemlja) 0%, #795548 100%);
+      color: white;
+      padding: 4rem 2rem 3rem;
       text-align: center;
     }
-    .kontakt-box a { color: var(--zelena); font-weight: 600; }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.9);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      opacity: 0.82;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ===== SADRŽAJ ===== */
+    .sadrzaj-wrap {
+      max-width: 860px;
+      margin: 3rem auto;
+      padding: 0 1.5rem 5rem;
+      flex: 1;
+    }
+
+    /* BRZA NAVIGACIJA */
+    .brza-nav {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #e8e0d0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .brza-nav-naslov {
+      font-weight: 700;
+      color: var(--zemlja);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+    }
+
+    .brza-nav ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+
+    .brza-nav ul li a {
+      color: var(--zelena);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0;
+      transition: color 0.2s;
+    }
+
+    .brza-nav ul li a:hover { color: var(--zelena-svetla); }
+
+    /* HIGHLIGHT BOX */
+    .highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid var(--zelena);
+      padding: 1.2rem 1.5rem;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 2rem;
+      font-size: 0.97rem;
+      color: #166534;
+      line-height: 1.6;
+    }
+
+    .warning {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f97316;
+      padding: 1.2rem 1.5rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      color: #9a3412;
+      line-height: 1.6;
+    }
+
+    /* SEKCIJE */
+    .sekcija {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #e8e0d0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      padding: 2rem;
+      margin-bottom: 1.2rem;
+      scroll-margin-top: 80px;
+    }
+
+    .sekcija h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--zemlja);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .sekcija-ikona {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: #f0fdf4;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .sekcija p {
+      color: #444;
+      font-size: 0.97rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.75;
+    }
+
+    .sekcija p:last-child { margin-bottom: 0; }
+
+    .sekcija ul {
+      list-style: none;
+      margin: 0.5rem 0;
+    }
+
+    .sekcija ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      color: #444;
+      font-size: 0.95rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #f5f5f5;
+      line-height: 1.5;
+    }
+
+    .sekcija ul li:last-child { border-bottom: none; }
+
+    .sekcija ul li::before {
+      content: '→';
+      color: var(--zelena-svetla);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* DATUM */
+    .datum-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e8e0d0;
+      padding: 0.9rem 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.88rem;
+      color: #888;
+    }
+
+    .datum-bar strong { color: var(--zemlja); }
+
+    /* KONTAKT BOX */
+    .kontakt-box {
+      background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+      color: white;
+      margin-top: 2rem;
+    }
+
+    .kontakt-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .kontakt-box p {
+      opacity: 0.88;
+      font-size: 0.97rem;
+      margin-bottom: 1.2rem;
+      line-height: 1.6;
+    }
+
+    .kontakt-box a.btn-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      color: var(--zelena);
+      padding: 0.8rem 1.8rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.22s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    .kontakt-box a.btn-email:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ===== FOOTER ===== */
     footer {
       background: var(--zemlja);
       color: white;
       text-align: center;
-      padding: 2rem 1rem;
-      margin-top: auto;
+      padding: 2rem 1.5rem;
+      font-size: 0.95rem;
     }
+
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.4rem; }
     footer a { color: #c8e6c9; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      nav ul {
+        display: none;
+        position: absolute; top: 62px; left: 0; right: 0;
+        background: rgba(27,94,32,0.97);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 1.2rem 1.5rem 1.8rem;
+        gap: 0.4rem; z-index: 999;
+      }
+      nav ul.open { display: flex; }
+      nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
+      .hero { padding: 3rem 1.2rem 2.5rem; }
+      .brza-nav ul { grid-template-columns: 1fr; }
+      .sekcija { padding: 1.4rem; }
+      .kontakt-box { padding: 1.8rem 1.2rem; }
+      .datum-bar { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (min-width: 769px) { .hamburger { display: none; } }
   </style>
 </head>
 <body>
 
 <header>
   <nav>
-    <div class="logo">LokalniPlodovi</div>
-    <ul>
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🌿</div>
+      <span class="logo-text">Lokalni<span>Plodovi</span></span>
+    </a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Meni">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li id="moj-profil-li" style="display:none;">
+        <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
+      </li>
       <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
       <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Postani prodavac</a></li>
+      <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
     </ul>
   </nav>
 </header>
 
-<div class="container">
-  <div class="card">
-    <h1><i class="fas fa-file-contract"></i> Uslovi korišćenja</h1>
-    <div class="datum">Poslednje ažuriranje: April 2026 | lokalniplodovi.rs</div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag"><i class="fas fa-file-contract"></i> Pravni dokument</div>
+  <h1>Uslovi korišćenja</h1>
+  <p>Pročitajte pre korišćenja platforme — kratko, jasno i bez pravničkog žargona.</p>
+</section>
 
-    <div class="highlight">
-      <strong>Molimo vas da pažljivo pročitate ove uslove.</strong> Registracijom i korišćenjem platforme LokalniPlodovi potvrđujete da ste pročitali, razumeli i prihvatili sve navedene uslove.
-    </div>
+<!-- SADRŽAJ -->
+<div class="sadrzaj-wrap">
 
-    <h2>1. O platformi</h2>
-    <p>LokalniPlodovi (lokalniplodovi.rs) je digitalna platforma koja služi kao oglasnik za povezivanje lokalnih poljoprivrednih proizvođača i kupaca u Srbiji. Platforma <strong>nije posrednik</strong> u transakcijama — sve kupoprodaje se odvijaju direktno između korisnika.</p>
+  <div class="datum-bar">
+    <span><strong>Poslednje ažuriranje:</strong> Jun 2026</span>
+    <span><strong>Važi za:</strong> lokalniplodovi.rs</span>
+    <span><strong>Verzija:</strong> 2.0</span>
+  </div>
 
-    <h2>2. Registracija i nalog</h2>
+  <div class="highlight">
+    <strong>Kratak rezime:</strong> LokalniPlodovi je oglasnik koji povezuje farmere i kupce. Mi nismo posrednici u kupoprodaji — sve transakcije se dogovaraju direktno između korisnika. Korišćenjem sajta prihvatate ove uslove.
+  </div>
+
+  <!-- BRZA NAVIGACIJA -->
+  <div class="brza-nav">
+    <div class="brza-nav-naslov">📋 Sadržaj dokumenta</div>
+    <ul>
+      <li><a href="#platforma">1. O platformi</a></li>
+      <li><a href="#registracija">2. Registracija i nalog</a></li>
+      <li><a href="#prodavci">3. Pravila za prodavce</a></li>
+      <li><a href="#kupci">4. Pravila za kupce</a></li>
+      <li><a href="#sadrzaj">5. Zabranjen sadržaj</a></li>
+      <li><a href="#odgovornost">6. Ograničenje odgovornosti</a></li>
+      <li><a href="#privatnost">7. Privatnost i podaci</a></li>
+      <li><a href="#svojina">8. Intelektualna svojina</a></li>
+      <li><a href="#ukidanje">9. Ukidanje naloga</a></li>
+      <li><a href="#izmene">10. Izmene uslova</a></li>
+    </ul>
+  </div>
+
+  <!-- 1 -->
+  <div class="sekcija" id="platforma">
+    <h2><div class="sekcija-ikona">🌿</div> 1. O platformi</h2>
+    <p>LokalniPlodovi (lokalniplodovi.rs) je digitalna platforma — oglasnik koji povezuje lokalne poljoprivredne proizvođače i kupce u Srbiji.</p>
+    <p>Platforma <strong>nije posrednik</strong> u transakcijama. Sve kupoprodaje, dogovori o ceni, načinu plaćanja i preuzimanju odvijaju se <strong>direktno između korisnika</strong>, bez učešća platforme.</p>
+    <p>Platforma je pokrenuta 2026. godine s ciljem da podrži male farmere i omogući kupcima direktan pristup svežim, domaćim proizvodima bez posrednika.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="sekcija" id="registracija">
+    <h2><div class="sekcija-ikona">👤</div> 2. Registracija i nalog</h2>
     <ul>
       <li>Registracijom potvrđujete da imate najmanje 18 godina</li>
-      <li>Dužni ste da unesete tačne i istinite podatke</li>
+      <li>Obavezni ste da unesete tačne i istinite podatke</li>
       <li>Odgovorni ste za čuvanje lozinke i bezbednost svog naloga</li>
       <li>Jedan korisnik može imati samo jedan nalog</li>
-      <li>Zabranjeno je kreiranje lažnih ili duplih naloga</li>
+      <li>Zabranjeno je kreiranje lažnih, duplih ili automatizovanih naloga</li>
+      <li>Nalog nije prenosiv na drugu osobu</li>
     </ul>
+  </div>
 
-    <h2>3. Pravila za prodavce</h2>
+  <!-- 3 -->
+  <div class="sekcija" id="prodavci">
+    <h2><div class="sekcija-ikona">🛒</div> 3. Pravila za prodavce</h2>
     <p>Kao prodavac na platformi obavezujete se da:</p>
     <ul>
       <li>Prodajete isključivo sopstvene, domaće proizvode</li>
-      <li>Navedete tačne informacije o proizvodima (naziv, cena, količina)</li>
-      <li>Poštujete važeće propise Republike Srbije o prometu hrane</li>
-      <li>Odgovorite na upite kupaca u razumnom roku</li>
-      <li>Ne objavljujete lažne ili zavaravajuće informacije</li>
-      <li>Ne koristite platformu za prodaju zabranjenih proizvoda</li>
+      <li>Navedete tačne informacije o proizvodima — naziv, cena, količina, opis</li>
+      <li>Ažurirate dostupnost i uklonite proizvode koji više nisu dostupni</li>
+      <li>Poštujete važeće propise Republike Srbije o prometu hrane i poljoprivrednih proizvoda</li>
+      <li>Odgovorite na upite kupaca u razumnom roku (preporučeno: 24 sata)</li>
+      <li>Ne objavljujete lažne, preuveličane ili zavaravajuće informacije</li>
+      <li>Ne koristite platformu za prodaju zabranjenih, uvoznih ili lažnih proizvoda</li>
     </ul>
-
     <div class="warning">
-      <strong>⚠️ Važno:</strong> LokalniPlodovi nije odgovoran za kvalitet, bezbednost niti isporuku proizvoda. Odgovornost za sve prodaje snosi isključivo prodavac.
+      <strong>⚠️ Napomena:</strong> LokalniPlodovi nije odgovoran za kvalitet, bezbednost, poreklo niti isporuku proizvoda. Odgovornost za svaku prodaju snosi isključivo prodavac, u skladu sa zakonima Republike Srbije.
     </div>
+  </div>
 
-    <h2>4. Pravila za kupce</h2>
+  <!-- 4 -->
+  <div class="sekcija" id="kupci">
+    <h2><div class="sekcija-ikona">🧺</div> 4. Pravila za kupce</h2>
     <ul>
-      <li>Kontaktirajte prodavce isključivo u poslovne svrhe</li>
+      <li>Kontaktirajte prodavce isključivo u legitimne poslovne svrhe</li>
       <li>Ne zloupotrebljavajte kontakt podatke prodavaca</li>
       <li>Prijavite sumnjive oglase ili prevare putem kontakt emaila</li>
-      <li>LokalniPlodovi ne garantuje kvalitet niti isporuku kupljenih proizvoda</li>
+      <li>Platforma ne garantuje kvalitet, tačnost informacija ni isporuku proizvoda</li>
+      <li>Pre kupovine proverite informacije direktno sa prodavcem</li>
+      <li>Sistem ocena koristite iskreno i samo za prodavce sa kojima ste komunicirali</li>
     </ul>
+  </div>
 
-    <h2>5. Zabranjen sadržaj</h2>
-    <p>Strogo je zabranjeno objavljivati:</p>
+  <!-- 5 -->
+  <div class="sekcija" id="sadrzaj">
+    <h2><div class="sekcija-ikona">🚫</div> 5. Zabranjen sadržaj</h2>
+    <p>Strogo je zabranjeno objavljivati ili deliti:</p>
     <ul>
-      <li>Lažne, zavaravajuće ili nepotpune informacije</li>
-      <li>Uvredljiv, diskriminatorski ili nelegalan sadržaj</li>
+      <li>Lažne, zavaravajuće ili nepotpune informacije o proizvodima</li>
+      <li>Uvredljiv, diskriminatorski, uznemirujući ili nelegalan sadržaj</li>
       <li>Proizvode koji nisu domaćeg porekla ili nisu u vlasništvu prodavca</li>
-      <li>Zabranjene supstance ili predmete</li>
+      <li>Zabranjene supstance, lekove ili predmete</li>
       <li>Sadržaj koji krši autorska prava trećih lica</li>
-      <li>Spam poruke ili neželjene komercijalne poruke</li>
+      <li>Spam poruke, neželjene komercijalne poruke ili automatizovane upite</li>
+      <li>Lične podatke trećih lica bez njihovog pristanka</li>
     </ul>
+  </div>
 
-    <h2>6. Ograničenje odgovornosti</h2>
+  <!-- 6 -->
+  <div class="sekcija" id="odgovornost">
+    <h2><div class="sekcija-ikona">⚖️</div> 6. Ograničenje odgovornosti</h2>
     <p>LokalniPlodovi se ograđuje od odgovornosti za:</p>
     <ul>
       <li>Sporove između kupaca i prodavaca</li>
-      <li>Kvalitet, bezbednost ili poreklo prodatih proizvoda</li>
-      <li>Štetu nastalu usled neispravnih informacija u oglasima</li>
-      <li>Privremenu nedostupnost platforme usled tehničkih problema</li>
-      <li>Gubitak podataka usled više sile ili tehničkih kvarova</li>
+      <li>Kvalitet, bezbednost, poreklo ili isporuku prodatih proizvoda</li>
+      <li>Štetu nastalu usled netačnih informacija u oglasima</li>
+      <li>Privremenu nedostupnost platforme usled tehničkih problema ili više sile</li>
+      <li>Gubitak podataka usled hakerskih napada ili tehničkih kvarova</li>
+      <li>Finansijsku štetu nastalu usled prevare između korisnika</li>
     </ul>
+    <p>Preporučujemo da se pre svake kupovine dogovorite direktno sa prodavcem i proverite kvalitet proizvoda lično.</p>
+  </div>
 
-    <h2>7. Intelektualna svojina</h2>
-    <p>Sav sadržaj na platformi (dizajn, logo, tekstovi) je vlasništvo LokalniPlodovi i zaštićen je autorskim pravom. Fotografije koje korisnici uploaduju ostaju njihovo vlasništvo, ali korisnici daju platformi pravo prikaza tih fotografija.</p>
+  <!-- 7 -->
+  <div class="sekcija" id="privatnost">
+    <h2><div class="sekcija-ikona">🔒</div> 7. Privatnost i podaci</h2>
+    <p>Prikupljamo minimalne podatke potrebne za funkcionisanje platforme: ime, email, telefon i lokacija. Ovi podaci se koriste isključivo za prikaz profila i komunikaciju između korisnika.</p>
+    <ul>
+      <li>Ne prodajemo vaše podatke trećim licima</li>
+      <li>Podaci se čuvaju na zaštićenim serverima (Railway/PostgreSQL)</li>
+      <li>Slike se čuvaju na Cloudinary platformi sa SSL enkripcijom</li>
+      <li>Možete zatražiti brisanje naloga i svih podataka u bilo kom trenutku</li>
+      <li>Kolačići se koriste isključivo za čuvanje sesije prijave</li>
+    </ul>
+    <p>Za više detalja pogledajte našu <a href="politika-privatnosti.html" style="color:var(--zelena); font-weight:600;">Politiku privatnosti</a>.</p>
+  </div>
 
-    <h2>8. Ukidanje naloga</h2>
-    <p>Zadržavamo pravo da bez prethodnog obaveštenja ukinemo nalog korisnika koji:</p>
+  <!-- 8 -->
+  <div class="sekcija" id="svojina">
+    <h2><div class="sekcija-ikona">©️</div> 8. Intelektualna svojina</h2>
+    <p>Sav sadržaj platforme — dizajn, logo, tekstovi, kod — vlasništvo je LokalniPlodovi i zaštićen je autorskim pravom.</p>
+    <p>Fotografije koje korisnici postavljaju ostaju njihovo vlasništvo. Postavljanjem fotografija korisnik daje platformi pravo prikaza tih fotografija u okviru oglasa. Fotografije se ne koriste u komercijalne svrhe van platforme.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="sekcija" id="ukidanje">
+    <h2><div class="sekcija-ikona">🔴</div> 9. Ukidanje naloga</h2>
+    <p>Zadržavamo pravo da bez prethodnog obaveštenja privremeno ili trajno suspendujemo nalog korisnika koji:</p>
     <ul>
       <li>Krši ove uslove korišćenja</li>
-      <li>Objavljuje lažne informacije</li>
-      <li>Zloupotrebljava platformu na bilo koji način</li>
-      <li>Vrši prevaru ili obmanjuje druge korisnike</li>
+      <li>Objavljuje lažne ili zavaravajuće informacije</li>
+      <li>Zloupotrebljava platformu, chat ili sistem ocena</li>
+      <li>Vrši prevaru, obmanjuje ili uznemirava druge korisnike</li>
+      <li>Automatizovano pristupa platformi (botovi, skripte)</li>
     </ul>
-
-    <h2>9. Izmene uslova</h2>
-    <p>Zadržavamo pravo izmene ovih uslova u bilo koje vreme. Korisnici će biti obavešteni o značajnim promenama. Nastavak korišćenja platforme nakon obaveštenja znači prihvatanje izmenjenih uslova.</p>
-
-    <h2>10. Merodavno pravo</h2>
-    <p>Na ove uslove korišćenja primenjuje se pravo Republike Srbije. Za sve sporove nadležan je sud u Republici Srbiji.</p>
-
-    <div class="kontakt-box">
-      <p><strong>Imate pitanja vezana za uslove korišćenja?</strong></p>
-      <p>Kontaktirajte nas na: <a href="mailto:lokalniplodovi@gmail.com">lokalniplodovi@gmail.com</a></p>
-      <p style="margin-top:0.5rem; font-size:0.9rem; color:#666;">Odgovaramo u roku od 48 sati</p>
-    </div>
-
+    <p>Korisnik može sam zatražiti brisanje naloga slanjem emaila na <a href="mailto:lokalniplodovi@gmail.com" style="color:var(--zelena); font-weight:600;">lokalniplodovi@gmail.com</a>.</p>
   </div>
+
+  <!-- 10 -->
+  <div class="sekcija" id="izmene">
+    <h2><div class="sekcija-ikona">📋</div> 10. Izmene uslova i merodavno pravo</h2>
+    <p>Zadržavamo pravo izmene ovih uslova u bilo koje vreme. O značajnim promenama obaveštavamo korisnike putem emaila ili obaveštenjem na sajtu.</p>
+    <p>Nastavak korišćenja platforme nakon objave izmena znači prihvatanje novih uslova.</p>
+    <p>Na ove uslove primenjuje se pravo <strong>Republike Srbije</strong>. Za sve sporove nadležan je sud u Republici Srbiji.</p>
+  </div>
+
+  <!-- KONTAKT -->
+  <div class="kontakt-box">
+    <h3>Imate pitanja?</h3>
+    <p>Stojimo vam na raspolaganju. Odgovaramo na sve upite u roku od 48 sati.</p>
+    <a href="mailto:lokalniplodovi@gmail.com" class="btn-email">
+      <i class="fas fa-envelope"></i> lokalniplodovi@gmail.com
+    </a>
+  </div>
+
 </div>
 
+<!-- FOOTER -->
 <footer>
-  <p>© 2026 LokalniPlodovi • Sva prava zadržana</p>
-  <p style="margin-top:0.5rem;">
-    <a href="politika-privatnosti.html">Politika privatnosti</a> •
-    <a href="uslovi-koriscenja.html">Uslovi korišćenja</a> •
-    <a href="index.html">Početna</a>
-  </p>
+  <div style="max-width:1400px; margin:0 auto;">
+    <div class="footer-logo">LokalniPlodovi</div>
+    <p style="opacity:0.85; margin-bottom:0.5rem;">Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="opacity:0.75; margin-bottom:0.4rem;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
+    <p>
+      <a href="politika-privatnosti.html">Politika privatnosti</a> •
+      <a href="uslovi-koriscenja.html">Uslovi korišćenja</a>
+    </p>
+  </div>
 </footer>
 
 <script>
+  function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
+  function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
+
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
     if (token) {
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
       document.getElementById('prijavi-se-li').style.display = 'none';
       document.getElementById('postani-prodavac-li').style.display = 'none';
+      const link = document.getElementById('moj-profil-link');
+      if (link) link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
     }
   });
-  function odjaviSe() {
-    localStorage.removeItem('token');
-    window.location.href = 'index.html';
-  }
 </script>
-
 </body>
 </html>
+
