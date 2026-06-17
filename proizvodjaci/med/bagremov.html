@@ -161,7 +161,7 @@
     container.innerHTML = '<p style="text-align:center; padding:3rem 0; color:#666;">Učitavam proizvode...</p>';
 
     try {
-      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Med&podnisa=Bagremov`);
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Med&podnisa=Bagremov med`);
       if (!response.ok) throw new Error('Greška na serveru');
       
       const proizvodi = await response.json();
