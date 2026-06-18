@@ -4,424 +4,378 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Panel – LokalniPlodovi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
+    :root {
+      --green-900: #1b5e20;
+      --green-700: #2e7d32;
+      --green-500: #4caf50;
+      --green-100: #e8f5e9;
+      --green-50:  #f1f8f1;
+      --blue:   #2563eb;
+      --amber:  #f59e0b;
+      --red:    #d32f2f;
+      --purple: #7c3aed;
+      --bg:     #f0f2f5;
+      --white:  #ffffff;
+      --text:   #1a1a1a;
+      --muted:  #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.14);
+    }
+
     * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f2f5;
-      color: #333;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
+      font-size: 14px;
     }
 
-    header {
-      background: linear-gradient(135deg, #1b5e20, #2e7d32);
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    header h1 { font-size: 1.5rem; }
-
+    /* ── LOGIN ── */
     #login-screen {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: flex; justify-content: center; align-items: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, #1b5e20, #4caf50);
+      background: linear-gradient(135deg, var(--green-900) 0%, var(--green-500) 100%);
     }
-
     .login-box {
-      background: white;
-      padding: 2.5rem;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
+      background: white; padding: 2.5rem; border-radius: 20px;
+      box-shadow: var(--shadow-lg); width: 100%; max-width: 380px; text-align: center;
     }
-
-    .login-box h2 { color: #2e7d32; margin-bottom: 0.5rem; font-size: 1.8rem; }
-    .login-box p { color: #666; margin-bottom: 2rem; }
-
+    .login-logo { font-size: 3rem; margin-bottom: 1rem; }
+    .login-box h2 { color: var(--green-700); font-size: 1.6rem; margin-bottom: .3rem; }
+    .login-box p { color: var(--muted); margin-bottom: 2rem; font-size: .9rem; }
     .login-box input {
-      width: 100%;
-      padding: 1rem;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 1rem;
-      margin-bottom: 1rem;
+      width:100%; padding:.9rem 1rem; border: 2px solid var(--border);
+      border-radius: 10px; font-size: 1rem; margin-bottom: 1rem;
+      font-family: inherit; transition: .2s;
     }
-
-    .login-box input:focus { border-color: #4caf50; outline: none; }
-
+    .login-box input:focus { border-color: var(--green-500); outline: none; }
     .login-box button {
-      width: 100%;
-      padding: 1rem;
-      background: #2e7d32;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
+      width:100%; padding:.9rem; background: var(--green-700); color:white;
+      border:none; border-radius:10px; font-size:1rem; font-weight:600;
+      cursor:pointer; transition:.2s; font-family:inherit;
     }
+    .login-box button:hover { background: var(--green-500); }
+    #login-error { color: var(--red); margin-top:.5rem; font-size:.85rem; }
 
-    .login-box button:hover { background: #4caf50; }
-    #login-error { color: red; margin-top: 0.5rem; font-size: 0.9rem; }
-
+    /* ── LAYOUT ── */
     #admin-panel { display: none; }
+    header {
+      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      color: white; padding: .9rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,.2); position: sticky; top:0; z-index:200;
+    }
+    .header-left { display:flex; align-items:center; gap:.8rem; }
+    .header-left h1 { font-size: 1.2rem; font-weight:700; }
+    .header-right { display:flex; align-items:center; gap:1rem; }
+    #datum-vreme { opacity:.7; font-size:.78rem; }
+    .btn-logout {
+      background: rgba(255,255,255,.15); color:white;
+      border: 1px solid rgba(255,255,255,.3); padding:.4rem 1rem;
+      border-radius:50px; cursor:pointer; font-weight:600; font-size:.82rem;
+      transition:.2s; font-family:inherit;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,.25); }
 
+    /* ── STATS ── */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1rem;
-      padding: 1.5rem 2rem 0.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem; padding: 1.5rem 1.5rem .5rem;
     }
-
     .stat-card {
-      background: white;
-      border-radius: 14px;
-      padding: 1.2rem;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-      transition: transform 0.2s;
+      background: white; border-radius: var(--radius); padding: 1.2rem 1.4rem;
+      box-shadow: var(--shadow); position:relative; overflow:hidden;
+      transition: transform .2s, box-shadow .2s; cursor: default;
     }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .stat-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.3rem; }
+    .stat-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .stat-icon-green  { background: var(--green-100); color: var(--green-700); }
+    .stat-icon-blue   { background: #dbeafe; color: var(--blue); }
+    .stat-icon-amber  { background: #fef3c7; color: var(--amber); }
+    .stat-icon-purple { background: #ede9fe; color: var(--purple); }
+    .stat-icon-gray   { background: #f1f5f9; color: var(--muted); }
+    .stat-number { font-size: 2rem; font-weight:700; line-height:1; margin-bottom:.15rem; }
+    .stat-label { font-size:.78rem; color: var(--muted); font-weight:500; }
+    .stat-chart { height:40px; margin-top:.6rem; }
+    .stat-trend { font-size:.72rem; margin-top:.4rem; }
+    .trend-up   { color: var(--green-700); }
+    .trend-flat { color: var(--muted); }
+    .stat-refresh { cursor:pointer; }
+    .stat-refresh:hover { background: var(--green-50); }
 
-    .stat-card:hover { transform: translateY(-2px); }
-    .stat-card .broj { font-size: 2.4rem; font-weight: 700; }
-    .stat-card .naziv { color: #666; font-size: 0.85rem; margin-top: 0.2rem; }
-    .stat-card i { font-size: 1.6rem; margin-bottom: 0.3rem; display: block; }
-
-    .stat-prodavaci .broj, .stat-prodavaci i { color: #2e7d32; }
-    .stat-kupci .broj, .stat-kupci i { color: #1877f2; }
-    .stat-proizvodi .broj, .stat-proizvodi i { color: #f59e0b; }
-    .stat-objave .broj, .stat-objave i { color: #7c3aed; }
-    .stat-refresh { cursor: pointer; }
-    .stat-refresh .broj { font-size: 1.4rem; color: #666; margin-top: 0.4rem; }
-    .stat-refresh i { color: #666; }
-
+    /* ── TABS ── */
     .tabs {
-      display: flex;
-      gap: 0.5rem;
-      padding: 1rem 2rem 0.5rem;
-      flex-wrap: wrap;
+      display:flex; gap:.4rem; padding: 1rem 1.5rem .5rem; flex-wrap:wrap;
     }
-
     .tab {
-      padding: 0.65rem 1.2rem;
-      background: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: 600;
-      color: #666;
-      transition: 0.2s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      font-size: 0.88rem;
+      padding:.55rem 1.1rem; background:white; border:none; border-radius:50px;
+      cursor:pointer; font-weight:600; color: var(--muted); transition:.2s;
+      box-shadow: var(--shadow); font-size:.82rem; font-family:inherit;
+      display:flex; align-items:center; gap:.4rem;
     }
+    .tab.active { background: var(--green-700); color:white; }
+    .tab:hover:not(.active) { background: var(--green-100); color: var(--green-700); }
 
-    .tab.active { background: #2e7d32; color: white; }
-    .tab:hover:not(.active) { background: #e8f5e9; color: #2e7d32; }
+    /* ── SECTION ── */
+    .section { display:none; padding:.8rem 1.5rem 2rem; }
+    .section.active { display:block; }
 
-    .section { display: none; padding: 0.8rem 2rem 2rem; }
-    .section.active { display: block; }
-
+    /* ── TOOLBAR ── */
     .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-      gap: 0.8rem;
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:1rem; flex-wrap:wrap; gap:.7rem;
     }
-
+    .toolbar-left { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+    .toolbar-right { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
     .search-input {
-      padding: 0.65rem 1.1rem;
-      border: 2px solid #e0e0e0;
-      border-radius: 50px;
-      font-size: 0.9rem;
-      min-width: 260px;
-      transition: 0.2s;
+      padding:.6rem 1rem; border: 2px solid var(--border);
+      border-radius:50px; font-size:.88rem; min-width:240px; transition:.2s;
+      font-family:inherit;
     }
-
-    .search-input:focus { border-color: #4caf50; outline: none; }
-
+    .search-input:focus { border-color: var(--green-500); outline:none; }
     .count-badge {
-      background: #e8f5e9;
-      color: #2e7d32;
-      padding: 0.35rem 0.9rem;
-      border-radius: 50px;
-      font-weight: 600;
-      font-size: 0.85rem;
+      background: var(--green-100); color: var(--green-700);
+      padding:.3rem .85rem; border-radius:50px; font-weight:600; font-size:.8rem;
     }
 
+    /* ── BUTTONS ── */
+    .btn {
+      padding:.45rem .9rem; border:none; border-radius:8px; cursor:pointer;
+      font-size:.8rem; font-weight:600; transition:.15s; font-family:inherit;
+      display:inline-flex; align-items:center; gap:.35rem;
+    }
+    .btn-primary { background: var(--green-700); color:white; }
+    .btn-primary:hover { background: var(--green-500); }
+    .btn-danger  { background: var(--red); color:white; }
+    .btn-danger:hover  { background: #b71c1c; }
+    .btn-info    { background: var(--blue); color:white; }
+    .btn-info:hover    { background: #1d4ed8; }
+    .btn-edit    { background: var(--amber); color:white; }
+    .btn-edit:hover    { background: #d97706; }
+    .btn-ghost   { background: #f1f5f9; color: var(--muted); }
+    .btn-ghost:hover   { background: var(--border); }
+    .btn-sm { padding:.32rem .7rem; font-size:.76rem; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+
+    /* ── TABLE ── */
     .table-wrap {
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-      overflow: hidden;
-      overflow-x: auto;
+      background:white; border-radius: var(--radius); box-shadow: var(--shadow);
+      overflow:hidden; overflow-x:auto;
     }
-
-    table { width: 100%; border-collapse: collapse; min-width: 580px; }
-
+    table { width:100%; border-collapse:collapse; min-width:600px; }
     th {
-      background: #2e7d32;
-      color: white;
-      padding: 0.85rem 1rem;
-      text-align: left;
-      font-weight: 600;
-      font-size: 0.85rem;
-      white-space: nowrap;
+      background: var(--green-700); color:white; padding:.75rem 1rem;
+      text-align:left; font-weight:600; font-size:.8rem; white-space:nowrap;
+      user-select:none;
     }
-
+    th.sortable { cursor:pointer; }
+    th.sortable:hover { background: var(--green-900); }
+    th .sort-arrow { margin-left:.3rem; opacity:.5; font-size:.7rem; }
+    th.sort-asc .sort-arrow::after  { content: '▲'; opacity:1; }
+    th.sort-desc .sort-arrow::after { content: '▼'; opacity:1; }
+    th .sort-arrow::after { content: '⇅'; }
     td {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 0.88rem;
-      vertical-align: middle;
+      padding:.7rem 1rem; border-bottom:1px solid #f0f0f0;
+      font-size:.85rem; vertical-align:middle;
     }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background: #fafafa; }
+    tr.selected td { background: #f0fdf4; }
+    .cell-truncate { max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .thumb { width:36px; height:36px; border-radius:6px; object-fit:cover; }
+    .thumb-placeholder { width:36px; height:36px; border-radius:6px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; font-size:.9rem; color:#ccc; }
 
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #f9fafb; }
+    /* Bulk checkbox */
+    .cb-wrap { display:flex; align-items:center; justify-content:center; }
+    input[type=checkbox] { width:15px; height:15px; cursor:pointer; accent-color: var(--green-700); }
 
-    .btn-delete {
-      background: #d32f2f;
-      color: white;
-      border: none;
-      padding: 0.38rem 0.85rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      transition: 0.2s;
+    /* Bulk bar */
+    .bulk-bar {
+      display:none; align-items:center; gap:.7rem;
+      background: var(--green-700); color:white;
+      padding:.6rem 1rem; border-radius: var(--radius);
+      margin-bottom:.7rem; font-size:.85rem; font-weight:600;
     }
+    .bulk-bar.visible { display:flex; }
+    .bulk-bar .btn-danger { background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.3); }
+    .bulk-bar .btn-danger:hover { background:rgba(220,50,50,.6); border-color:transparent; }
 
-    .btn-delete:hover { background: #b71c1c; }
-
-    .btn-info {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 0.38rem 0.85rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      transition: 0.2s;
-      margin-right: 0.3rem;
+    /* Pagination */
+    .pagination {
+      display:flex; align-items:center; gap:.4rem;
+      justify-content:center; margin-top:1rem; flex-wrap:wrap;
     }
-
-    .btn-info:hover { background: #1d4ed8; }
-
-    .btn-username {
-      background: #2e7d32;
-      color: white;
-      border: none;
-      padding: 0.38rem 0.7rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      transition: 0.2s;
-      white-space: nowrap;
+    .page-btn {
+      width:34px; height:34px; border:none; border-radius:8px; cursor:pointer;
+      font-size:.82rem; font-weight:600; font-family:inherit; transition:.15s;
+      background:white; color: var(--muted); box-shadow: var(--shadow);
     }
+    .page-btn:hover { background: var(--green-100); color: var(--green-700); }
+    .page-btn.active { background: var(--green-700); color:white; }
+    .page-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .page-info { font-size:.8rem; color: var(--muted); padding:0 .3rem; }
 
-    .btn-username:hover { background: #4caf50; }
-
-    .username-input {
-      padding: 0.3rem 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 0.8rem;
-      width: 110px;
-    }
-
+    /* ── BADGES ── */
     .badge {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 600;
+      display:inline-block; padding:.18rem .6rem; border-radius:50px;
+      font-size:.72rem; font-weight:600;
     }
+    .badge-green  { background:#d1fae5; color:#065f46; }
+    .badge-blue   { background:#dbeafe; color:#1e40af; }
+    .badge-yellow { background:#fef3c7; color:#92400e; }
+    .badge-purple { background:#ede9fe; color:#5b21b6; }
+    .badge-red    { background:#fee2e2; color:#991b1b; }
+    .badge-orange { background:#ffedd5; color:#9a3412; }
 
-    .badge-green { background: #d1fae5; color: #065f46; }
-    .badge-blue { background: #dbeafe; color: #1e40af; }
-    .badge-yellow { background: #fef3c7; color: #92400e; }
-    .badge-purple { background: #ede9fe; color: #5b21b6; }
-    .badge-red { background: #fee2e2; color: #991b1b; }
-    .badge-orange { background: #ffedd5; color: #9a3412; }
-
-    .loading { text-align: center; padding: 3rem; color: #666; }
-    .empty-state { text-align: center; padding: 3rem; color: #aaa; }
-    .empty-state i { font-size: 2.5rem; margin-bottom: 0.8rem; display: block; }
-
-    .btn-logout {
-      background: rgba(255,255,255,0.2);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.4);
-      padding: 0.45rem 1.1rem;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
-      font-size: 0.9rem;
+    /* ── SKELETON ── */
+    .skeleton { background:#e2e8f0; border-radius:6px; animation: shimmer 1.4s infinite; }
+    @keyframes shimmer {
+      0%   { opacity:.6; }
+      50%  { opacity:1; }
+      100% { opacity:.6; }
     }
+    .skeleton-row { display:flex; gap:1rem; padding:.8rem 1rem; border-bottom:1px solid #f0f0f0; align-items:center; }
+    .skeleton-row .sk-id   { width:32px; height:14px; }
+    .skeleton-row .sk-name { width:140px; height:14px; }
+    .skeleton-row .sk-tag  { width:60px; height:18px; border-radius:50px; }
+    .skeleton-row .sk-num  { width:70px; height:14px; }
+    .skeleton-row .sk-long { width:120px; height:14px; }
+    .skeleton-row .sk-btn  { width:60px; height:26px; border-radius:8px; margin-left:auto; }
 
-    .btn-logout:hover { background: rgba(255,255,255,0.3); }
-
-    .cell-truncate {
-      max-width: 160px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .zvezdice { color: #f59e0b; font-size: 1rem; }
-
+    /* ── MODALS ── */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65);
-      z-index: 3000;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(3px);
+      display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,.55); z-index:3000;
+      justify-content:center; align-items:center;
+      backdrop-filter: blur(4px); padding:1rem;
     }
-
-    .modal-overlay.open { display: flex; }
-
+    .modal-overlay.open { display:flex; }
     .modal-box {
-      background: white;
-      width: 90%;
-      max-width: 500px;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-      max-height: 85vh;
-      overflow-y: auto;
+      background:white; width:100%; max-width:520px; border-radius:20px;
+      box-shadow: var(--shadow-lg); max-height:90vh; overflow-y:auto;
     }
-
+    .modal-box.modal-sm { max-width:380px; }
     .modal-header {
-      padding: 1.1rem 1.5rem;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding:1.1rem 1.4rem; color:white;
+      display:flex; justify-content:space-between; align-items:center;
+      position:sticky; top:0; z-index:1;
     }
-
-    .modal-header h3 { margin: 0; font-size: 1.1rem; }
-
+    .modal-header h3 { margin:0; font-size:1rem; font-weight:700; }
     .modal-close {
-      background: rgba(255,255,255,0.2);
-      border: none;
-      color: white;
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      font-size: 1rem;
-      cursor: pointer;
+      background:rgba(255,255,255,.2); border:none; color:white;
+      width:28px; height:28px; border-radius:50%; font-size:.9rem; cursor:pointer;
     }
+    .modal-body { padding:1.3rem 1.4rem; }
 
-    .modal-body { padding: 1.2rem 1.5rem; }
-
+    /* Detail rows (view modal) */
     .detail-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 0.55rem 0;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 0.9rem;
-      gap: 1rem;
+      display:flex; justify-content:space-between; align-items:flex-start;
+      padding:.5rem 0; border-bottom:1px solid #f0f0f0;
+      font-size:.88rem; gap:1rem;
     }
+    .detail-row:last-child { border-bottom:none; }
+    .detail-row .lbl { color: var(--muted); font-weight:500; white-space:nowrap; }
+    .detail-row .val { color:var(--text); font-weight:600; text-align:right; word-break:break-word; max-width:65%; }
+    .nise-wrap { display:flex; flex-wrap:wrap; gap:.3rem; justify-content:flex-end; }
 
-    .detail-row:last-child { border-bottom: none; }
-    .detail-row .lbl { color: #888; font-weight: 500; white-space: nowrap; }
-    .detail-row .val { color: #222; font-weight: 600; text-align: right; word-break: break-word; max-width: 65%; }
+    /* Edit form */
+    .form-row { margin-bottom:1rem; }
+    .form-row label { display:block; font-weight:600; color:#444; margin-bottom:.35rem; font-size:.82rem; }
+    .form-row input, .form-row select, .form-row textarea {
+      width:100%; padding:.7rem .9rem; border:2px solid var(--border);
+      border-radius:9px; font-size:.9rem; font-family:inherit; transition:.2s;
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+      border-color: var(--green-500); outline:none;
+    }
+    .form-row textarea { resize:vertical; min-height:80px; }
+    .form-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+    .modal-actions {
+      display:flex; gap:.7rem; margin-top:1.4rem; padding-top:1rem;
+      border-top:1px solid var(--border);
+    }
+    .modal-actions .btn { flex:1; justify-content:center; padding:.75rem; font-size:.88rem; }
 
-    .nise-wrap { display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: flex-end; }
+    /* Confirm dialog */
+    .confirm-box { padding:1.5rem; text-align:center; }
+    .confirm-box .confirm-icon { font-size:2.5rem; margin-bottom:.6rem; display:block; }
+    .confirm-box h3 { margin-bottom:.5rem; font-size:1.1rem; }
+    .confirm-box p { color: var(--muted); font-size:.88rem; margin-bottom:1.4rem; line-height:1.5; }
+    .confirm-actions { display:flex; gap:.7rem; }
+    .confirm-actions .btn { flex:1; justify-content:center; padding:.75rem; font-size:.9rem; }
 
-    .tip-prodavac { background: #d1fae5; color: #065f46; }
-    .tip-kupac { background: #dbeafe; color: #1e40af; }
+    /* ── TOAST ── */
+    #toast-container {
+      position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999;
+      display:flex; flex-direction:column; gap:.5rem; pointer-events:none;
+    }
+    .toast {
+      background:white; border-radius:12px; padding:.8rem 1.1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.15); font-size:.85rem; font-weight:600;
+      display:flex; align-items:center; gap:.6rem; min-width:260px;
+      animation: slideIn .25s ease; pointer-events:all;
+      border-left:4px solid var(--green-500);
+    }
+    .toast.toast-error { border-left-color: var(--red); }
+    .toast.toast-warn  { border-left-color: var(--amber); }
+    .toast.fade-out    { animation: fadeOut .3s ease forwards; }
+    @keyframes slideIn  { from { transform:translateX(40px); opacity:0; } to { transform:none; opacity:1; } }
+    @keyframes fadeOut  { to { transform:translateX(40px); opacity:0; } }
 
+    /* ── EMAIL FORM ── */
     .email-card {
-      background: white;
-      border-radius: 14px;
-      padding: 2rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-      max-width: 600px;
+      background:white; border-radius: var(--radius); padding:2rem;
+      box-shadow: var(--shadow); max-width:620px;
     }
-
-    .email-card h3 {
-      color: #2e7d32;
-      margin-bottom: 1.5rem;
-      font-size: 1.2rem;
+    .email-card h3 { color: var(--green-700); margin-bottom:1.4rem; font-size:1.1rem; }
+    .form-group { margin-bottom:1.1rem; }
+    .form-group label { display:block; font-weight:600; color:#555; margin-bottom:.35rem; font-size:.85rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width:100%; padding:.75rem 1rem; border:2px solid var(--border);
+      border-radius:9px; font-size:.9rem; font-family:inherit; transition:.2s;
     }
-
-    .form-group { margin-bottom: 1.2rem; }
-
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 0.4rem;
-      font-size: 0.9rem;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      transition: 0.2s;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus { border-color: #4caf50; outline: none; }
-
-    .form-group textarea { resize: vertical; min-height: 120px; }
-
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--green-500); outline:none; }
+    .form-group textarea { resize:vertical; min-height:120px; }
     .btn-send-email {
-      background: linear-gradient(135deg, #2e7d32, #4caf50);
-      color: white;
-      border: none;
-      padding: 0.9rem 2rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-      width: 100%;
+      background: linear-gradient(135deg, var(--green-700), var(--green-500));
+      color:white; border:none; padding:.9rem 2rem; border-radius:9px;
+      font-size:.95rem; font-weight:700; cursor:pointer; transition:.2s;
+      width:100%; font-family:inherit;
+    }
+    .btn-send-email:hover { opacity:.92; transform:translateY(-1px); }
+    .btn-send-email:disabled { opacity:.55; cursor:not-allowed; transform:none; }
+
+    /* ── USERNAME inline ── */
+    .username-input {
+      padding:.28rem .5rem; border:1.5px solid var(--border); border-radius:6px;
+      font-size:.76rem; width:108px; font-family:inherit;
     }
 
-    .btn-send-email:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-send-email:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .zvezdice { color: var(--amber); }
+    .tip-prodavac { background:#d1fae5; color:#065f46; }
+    .tip-kupac    { background:#dbeafe; color:#1e40af; }
 
-    .email-status {
-      margin-top: 1rem;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      font-weight: 600;
-      display: none;
+    /* CSV export button */
+    .btn-csv { background:#0f766e; color:white; }
+    .btn-csv:hover { background:#0d6160; }
+
+    @media (max-width:640px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-grid2 { grid-template-columns:1fr; }
+      .toolbar { flex-direction:column; align-items:stretch; }
+      .search-input { min-width:100%; }
     }
-
-    .email-status.uspeh { background: #d1fae5; color: #065f46; display: block; }
-    .email-status.greska { background: #fee2e2; color: #991b1b; display: block; }
   </style>
 </head>
 <body>
@@ -429,7 +383,7 @@
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
-    <div style="font-size:3rem; margin-bottom:1rem;">🌿</div>
+    <div class="login-logo">🌿</div>
     <h2>Admin Panel</h2>
     <p>LokalniPlodovi upravljačka tabla</p>
     <input type="password" id="admin-lozinka" placeholder="Admin lozinka"
@@ -442,128 +396,172 @@
 <!-- PANEL -->
 <div id="admin-panel">
   <header>
-    <h1>🌿 LokalniPlodovi Admin</h1>
-    <div style="display:flex; align-items:center; gap:1rem;">
-      <span style="opacity:0.75; font-size:0.82rem;" id="datum-vreme"></span>
+    <div class="header-left">
+      <h1>🌿 LokalniPlodovi Admin</h1>
+    </div>
+    <div class="header-right">
+      <span id="datum-vreme"></span>
       <button class="btn-logout" onclick="odjaviSe()"><i class="fas fa-sign-out-alt"></i> Odjavi se</button>
     </div>
   </header>
 
   <!-- STATS -->
   <div class="stats-grid">
-    <div class="stat-card stat-prodavaci">
-      <i class="fas fa-store"></i>
-      <div class="broj" id="stat-prodavaci">-</div>
-      <div class="naziv">Prodavača</div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <div>
+          <div class="stat-number" id="stat-prodavaci" style="color:var(--green-700)">-</div>
+          <div class="stat-label">Prodavača</div>
+        </div>
+        <div class="stat-icon stat-icon-green"><i class="fas fa-store"></i></div>
+      </div>
+      <div class="stat-chart"><canvas id="chart-prodavaci"></canvas></div>
     </div>
-    <div class="stat-card stat-kupci">
-      <i class="fas fa-user"></i>
-      <div class="broj" id="stat-kupci">-</div>
-      <div class="naziv">Kupaca</div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <div>
+          <div class="stat-number" id="stat-kupci" style="color:var(--blue)">-</div>
+          <div class="stat-label">Kupaca</div>
+        </div>
+        <div class="stat-icon stat-icon-blue"><i class="fas fa-user"></i></div>
+      </div>
+      <div class="stat-chart"><canvas id="chart-kupci"></canvas></div>
     </div>
-    <div class="stat-card stat-proizvodi">
-      <i class="fas fa-box"></i>
-      <div class="broj" id="stat-proizvodi">-</div>
-      <div class="naziv">Proizvoda</div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <div>
+          <div class="stat-number" id="stat-proizvodi" style="color:var(--amber)">-</div>
+          <div class="stat-label">Proizvoda</div>
+        </div>
+        <div class="stat-icon stat-icon-amber"><i class="fas fa-box"></i></div>
+      </div>
+      <div class="stat-chart"><canvas id="chart-proizvodi"></canvas></div>
     </div>
-    <div class="stat-card stat-objave">
-      <i class="fas fa-newspaper"></i>
-      <div class="broj" id="stat-objave">-</div>
-      <div class="naziv">Objava</div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <div>
+          <div class="stat-number" id="stat-objave" style="color:var(--purple)">-</div>
+          <div class="stat-label">Objava</div>
+        </div>
+        <div class="stat-icon stat-icon-purple"><i class="fas fa-newspaper"></i></div>
+      </div>
+      <div class="stat-chart"><canvas id="chart-objave"></canvas></div>
     </div>
-    <div class="stat-card stat-refresh" onclick="osvezi()" title="Osvezi podatke">
-      <i class="fas fa-sync-alt"></i>
-      <div class="broj">↻</div>
-      <div class="naziv">Osvezi sve</div>
+    <div class="stat-card stat-refresh" onclick="osvezi()" title="Osveži podatke">
+      <div class="stat-top">
+        <div>
+          <div class="stat-number" style="font-size:1.4rem;color:var(--muted)">↻</div>
+          <div class="stat-label">Osveži sve</div>
+        </div>
+        <div class="stat-icon stat-icon-gray"><i class="fas fa-sync-alt"></i></div>
+      </div>
     </div>
   </div>
 
-  <!-- TABOVI -->
+  <!-- TABS -->
   <div class="tabs">
-    <button class="tab active" onclick="prikaziSekciju('prodavaci', this)">
-      <i class="fas fa-store"></i> Prodavači
-    </button>
-    <button class="tab" onclick="prikaziSekciju('kupci', this)">
-      <i class="fas fa-user"></i> Kupci
-    </button>
-    <button class="tab" onclick="prikaziSekciju('proizvodi', this)">
-      <i class="fas fa-box"></i> Proizvodi
-    </button>
-    <button class="tab" onclick="prikaziSekciju('objave', this)">
-      <i class="fas fa-newspaper"></i> Objave
-    </button>
-    <button class="tab" onclick="prikaziSekciju('ocene', this); ucitajOcene()">
-      <i class="fas fa-star"></i> Ocene
-    </button>
-    <button class="tab" onclick="prikaziSekciju('grupni-email', this)">
-      <i class="fas fa-envelope"></i> Grupni Email
-    </button>
+    <button class="tab active" onclick="prikaziSekciju('prodavaci',this)"><i class="fas fa-store"></i> Prodavači</button>
+    <button class="tab" onclick="prikaziSekciju('kupci',this)"><i class="fas fa-user"></i> Kupci</button>
+    <button class="tab" onclick="prikaziSekciju('proizvodi',this)"><i class="fas fa-box"></i> Proizvodi</button>
+    <button class="tab" onclick="prikaziSekciju('objave',this)"><i class="fas fa-newspaper"></i> Objave</button>
+    <button class="tab" onclick="prikaziSekciju('ocene',this);ucitajOcene()"><i class="fas fa-star"></i> Ocene</button>
+    <button class="tab" onclick="prikaziSekciju('grupni-email',this)"><i class="fas fa-envelope"></i> Grupni Email</button>
   </div>
 
   <!-- PRODAVAČI -->
   <div id="sec-prodavaci" class="section active">
     <div class="toolbar">
-      <input class="search-input" id="srch-prodavaci" placeholder="🔍 Pretraži prodavače..."
-        oninput="filteruj('prodavaci')">
-      <span class="count-badge" id="cnt-prodavaci">0 prodavača</span>
+      <div class="toolbar-left">
+        <input class="search-input" id="srch-prodavaci" placeholder="🔍 Pretraži prodavače..." oninput="filteruj('prodavaci')">
+        <span class="count-badge" id="cnt-prodavaci">0 prodavača</span>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-csv" onclick="exportCSV('prodavaci')"><i class="fas fa-download"></i> CSV</button>
+      </div>
     </div>
-    <div class="table-wrap">
-      <div id="tbl-prodavaci" class="loading">Učitavam...</div>
+    <div class="bulk-bar" id="bulk-prodavaci">
+      <span id="bulk-prodavaci-count">0 izabrano</span>
+      <button class="btn btn-danger btn-sm" onclick="bulkObrisi('prodavaci')"><i class="fas fa-trash"></i> Obriši izabrane</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearBulk('prodavaci')" style="margin-left:auto"><i class="fas fa-times"></i></button>
     </div>
+    <div class="table-wrap"><div id="tbl-prodavaci"><!-- skeleton --></div></div>
+    <div class="pagination" id="pag-prodavaci"></div>
   </div>
 
   <!-- KUPCI -->
   <div id="sec-kupci" class="section">
     <div class="toolbar">
-      <input class="search-input" id="srch-kupci" placeholder="🔍 Pretraži kupce..."
-        oninput="filteruj('kupci')">
-      <span class="count-badge" id="cnt-kupci">0 kupaca</span>
+      <div class="toolbar-left">
+        <input class="search-input" id="srch-kupci" placeholder="🔍 Pretraži kupce..." oninput="filteruj('kupci')">
+        <span class="count-badge" id="cnt-kupci">0 kupaca</span>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-csv" onclick="exportCSV('kupci')"><i class="fas fa-download"></i> CSV</button>
+      </div>
     </div>
-    <div class="table-wrap">
-      <div id="tbl-kupci" class="loading">Učitavam...</div>
+    <div class="bulk-bar" id="bulk-kupci">
+      <span id="bulk-kupci-count">0 izabrano</span>
+      <button class="btn btn-danger btn-sm" onclick="bulkObrisi('kupci')"><i class="fas fa-trash"></i> Obriši izabrane</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearBulk('kupci')" style="margin-left:auto"><i class="fas fa-times"></i></button>
     </div>
+    <div class="table-wrap"><div id="tbl-kupci"><!-- skeleton --></div></div>
+    <div class="pagination" id="pag-kupci"></div>
   </div>
 
   <!-- PROIZVODI -->
   <div id="sec-proizvodi" class="section">
     <div class="toolbar">
-      <input class="search-input" id="srch-proizvodi" placeholder="🔍 Pretraži proizvode..."
-        oninput="filteruj('proizvodi')">
-      <span class="count-badge" id="cnt-proizvodi">0 proizvoda</span>
+      <div class="toolbar-left">
+        <input class="search-input" id="srch-proizvodi" placeholder="🔍 Pretraži proizvode..." oninput="filteruj('proizvodi')">
+        <span class="count-badge" id="cnt-proizvodi">0 proizvoda</span>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-csv" onclick="exportCSV('proizvodi')"><i class="fas fa-download"></i> CSV</button>
+      </div>
     </div>
-    <div class="table-wrap">
-      <div id="tbl-proizvodi" class="loading">Učitavam...</div>
+    <div class="bulk-bar" id="bulk-proizvodi">
+      <span id="bulk-proizvodi-count">0 izabrano</span>
+      <button class="btn btn-danger btn-sm" onclick="bulkObrisi('proizvodi')"><i class="fas fa-trash"></i> Obriši izabrane</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearBulk('proizvodi')" style="margin-left:auto"><i class="fas fa-times"></i></button>
     </div>
+    <div class="table-wrap"><div id="tbl-proizvodi"><!-- skeleton --></div></div>
+    <div class="pagination" id="pag-proizvodi"></div>
   </div>
 
   <!-- OBJAVE -->
   <div id="sec-objave" class="section">
     <div class="toolbar">
-      <input class="search-input" id="srch-objave" placeholder="🔍 Pretraži objave..."
-        oninput="filteruj('objave')">
-      <span class="count-badge" id="cnt-objave">0 objava</span>
+      <div class="toolbar-left">
+        <input class="search-input" id="srch-objave" placeholder="🔍 Pretraži objave..." oninput="filteruj('objave')">
+        <span class="count-badge" id="cnt-objave">0 objava</span>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-csv" onclick="exportCSV('objave')"><i class="fas fa-download"></i> CSV</button>
+      </div>
     </div>
-    <div class="table-wrap">
-      <div id="tbl-objave" class="loading">Učitavam...</div>
-    </div>
+    <div class="table-wrap"><div id="tbl-objave"><!-- skeleton --></div></div>
+    <div class="pagination" id="pag-objave"></div>
   </div>
 
   <!-- OCENE -->
   <div id="sec-ocene" class="section">
     <div class="toolbar">
-      <input class="search-input" id="srch-ocene" placeholder="🔍 Pretraži ocene..."
-        oninput="filterujOcene()">
-      <span class="count-badge" id="cnt-ocene">0 ocena</span>
+      <div class="toolbar-left">
+        <input class="search-input" id="srch-ocene" placeholder="🔍 Pretraži ocene..." oninput="filterujOcene()">
+        <span class="count-badge" id="cnt-ocene">0 ocena</span>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-csv" onclick="exportCSV('ocene')"><i class="fas fa-download"></i> CSV</button>
+      </div>
     </div>
-    <div class="table-wrap">
-      <div id="tbl-ocene" class="loading">Klikni tab Ocene da učitaš...</div>
-    </div>
+    <div class="table-wrap"><div id="tbl-ocene" style="padding:2rem;text-align:center;color:var(--muted)">Klikni tab Ocene da učitaš...</div></div>
+    <div class="pagination" id="pag-ocene"></div>
   </div>
 
   <!-- GRUPNI EMAIL -->
   <div id="sec-grupni-email" class="section">
     <div class="email-card">
-      <h3><i class="fas fa-envelope" style="color:#2e7d32;margin-right:0.5rem;"></i>Pošalji grupni email</h3>
+      <h3><i class="fas fa-envelope" style="color:var(--green-700);margin-right:.5rem;"></i>Pošalji grupni email</h3>
       <div class="form-group">
         <label>Ciljna grupa</label>
         <select id="email-grupa">
@@ -583,15 +581,14 @@
       <button class="btn-send-email" id="btn-posalji-email" onclick="posaljiGrupniEmail()">
         <i class="fas fa-paper-plane"></i> Pošalji email
       </button>
-      <div id="email-status" class="email-status"></div>
     </div>
   </div>
 </div>
 
-<!-- MODAL DETALJI KORISNIKA -->
+<!-- MODAL: DETALJI KORISNIKA -->
 <div class="modal-overlay" id="modal-korisnik">
   <div class="modal-box">
-    <div class="modal-header" style="background:linear-gradient(135deg,#2e7d32,#4caf50);">
+    <div class="modal-header" style="background:linear-gradient(135deg,var(--green-900),var(--green-500))">
       <h3>👤 Detalji korisnika</h3>
       <button class="modal-close" onclick="zatvoriModal('modal-korisnik')">✕</button>
     </div>
@@ -599,10 +596,10 @@
   </div>
 </div>
 
-<!-- MODAL DETALJI PROIZVODA -->
+<!-- MODAL: DETALJI PROIZVODA (view) -->
 <div class="modal-overlay" id="modal-proizvod">
   <div class="modal-box">
-    <div class="modal-header" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+    <div class="modal-header" style="background:linear-gradient(135deg,#d97706,var(--amber))">
       <h3>📦 Detalji proizvoda</h3>
       <button class="modal-close" onclick="zatvoriModal('modal-proizvod')">✕</button>
     </div>
@@ -610,10 +607,61 @@
   </div>
 </div>
 
-<!-- MODAL DETALJI OBJAVE -->
+<!-- MODAL: EDIT PROIZVODA -->
+<div class="modal-overlay" id="modal-edit-proizvod">
+  <div class="modal-box">
+    <div class="modal-header" style="background:linear-gradient(135deg,var(--green-900),var(--green-700))">
+      <h3>✏️ Izmeni proizvod</h3>
+      <button class="modal-close" onclick="zatvoriModal('modal-edit-proizvod')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id">
+      <div class="form-row">
+        <label>Naziv *</label>
+        <input type="text" id="edit-naziv" placeholder="Naziv proizvoda">
+      </div>
+      <div class="form-grid2">
+        <div class="form-row">
+          <label>Cena (RSD) *</label>
+          <input type="number" id="edit-cena" placeholder="npr. 300" min="0">
+        </div>
+        <div class="form-row">
+          <label>Količina *</label>
+          <input type="number" id="edit-kolicina" placeholder="npr. 50" min="0">
+        </div>
+      </div>
+      <div class="form-grid2">
+        <div class="form-row">
+          <label>Glavna niša *</label>
+          <select id="edit-nisa">
+            <option value="">— Izaberi —</option>
+            <option>Voće</option><option>Povrće</option><option>Meso</option>
+            <option>Mlečni proizvodi</option><option>Med</option><option>Jaja</option>
+            <option>Začini</option><option>Žitarice</option><option>Prerađevine</option>
+            <option>Ostalo</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Podniša</label>
+          <input type="text" id="edit-podnisa" placeholder="npr. Jagoda, Sir...">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Opis</label>
+        <textarea id="edit-opis" placeholder="Kratak opis proizvoda..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="zatvoriModal('modal-edit-proizvod')">Odustani</button>
+        <button class="btn btn-primary" onclick="sacuvajProizvod()"><i class="fas fa-save"></i> Sačuvaj izmene</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DETALJI OBJAVE -->
 <div class="modal-overlay" id="modal-objava">
   <div class="modal-box">
-    <div class="modal-header" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">
+    <div class="modal-header" style="background:linear-gradient(135deg,#6d28d9,var(--purple))">
       <h3>📢 Detalji objave</h3>
       <button class="modal-close" onclick="zatvoriModal('modal-objava')">✕</button>
     </div>
@@ -621,535 +669,759 @@
   </div>
 </div>
 
-<script>
-  const backendUrl = 'https://lokalni-backend-production.up.railway.app';
-  let adminLozinka = '';
-
-  let data = {
-    prodavaci: [],
-    kupci: [],
-    proizvodi: [],
-    objave: [],
-    ocene: []
-  };
-
-  setInterval(() => {
-    document.getElementById('datum-vreme').textContent = new Date().toLocaleString('sr-RS');
-  }, 1000);
-
-  async function prijavi() {
-    const lozinka = document.getElementById('admin-lozinka').value.trim();
-    if (!lozinka) return;
-    try {
-      const res = await fetch(`${backendUrl}/admin/stats`, {
-        headers: { 'x-admin-password': lozinka }
-      });
-      if (res.ok) {
-        adminLozinka = lozinka;
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('admin-panel').style.display = 'block';
-        ucitajSve();
-      } else {
-        document.getElementById('login-error').textContent = '❌ Pogrešna lozinka!';
-      }
-    } catch {
-      document.getElementById('login-error').textContent = 'Greška pri povezivanju sa serverom';
-    }
-  }
-
-  function odjaviSe() {
-    adminLozinka = '';
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('admin-panel').style.display = 'none';
-    document.getElementById('admin-lozinka').value = '';
-  }
-
-  async function osvezi() { await ucitajSve(); }
-
-  async function ucitajSve() {
-    await Promise.all([ucitajKorisnike(), ucitajProizvode(), ucitajObjave()]);
-    await ucitajStats();
-  }
-
-  async function ucitajStats() {
-    try {
-      const res = await fetch(`${backendUrl}/admin/stats`, {
-        headers: { 'x-admin-password': adminLozinka }
-      });
-      const s = await res.json();
-      document.getElementById('stat-prodavaci').textContent = s.korisnici - s.kupci;
-      document.getElementById('stat-kupci').textContent = s.kupci;
-      document.getElementById('stat-proizvodi').textContent = s.proizvodi;
-      document.getElementById('stat-objave').textContent = s.objave;
-    } catch {}
-  }
-
-  async function ucitajKorisnike() {
-    try {
-      const res = await fetch(`${backendUrl}/admin/korisnici`, {
-        headers: { 'x-admin-password': adminLozinka }
-      });
-      const svi = await res.json();
-      data.prodavaci = svi.filter(k => k.tip !== 'kupac');
-      data.kupci = svi.filter(k => k.tip === 'kupac');
-      renderProdavaci(data.prodavaci);
-      renderKupci(data.kupci);
-    } catch {
-      document.getElementById('tbl-prodavaci').innerHTML = '<p style="color:red;padding:2rem;">Greška</p>';
-    }
-  }
-
-  async function ucitajProizvode() {
-    try {
-      const res = await fetch(`${backendUrl}/admin/proizvodi`, {
-        headers: { 'x-admin-password': adminLozinka }
-      });
-      data.proizvodi = await res.json();
-      renderProizvodi(data.proizvodi);
-    } catch {
-      document.getElementById('tbl-proizvodi').innerHTML = '<p style="color:red;padding:2rem;">Greška</p>';
-    }
-  }
-
-  async function ucitajObjave() {
-    try {
-      const res = await fetch(`${backendUrl}/admin/objave`, {
-        headers: { 'x-admin-password': adminLozinka }
-      });
-      data.objave = await res.json();
-      renderObjave(data.objave);
-    } catch {
-      document.getElementById('tbl-objave').innerHTML = '<p style="color:red;padding:2rem;">Greška</p>';
-    }
-  }
-
-  async function ucitajOcene() {
-    const div = document.getElementById('tbl-ocene');
-    div.innerHTML = '<div class="loading">Učitavam ocene...</div>';
-    try {
-      const res = await fetch(`${backendUrl}/admin/ocene`, {
-        headers: { 'x-admin-password': adminLozinka }
-      });
-      data.ocene = await res.json();
-      renderOcene(data.ocene);
-    } catch {
-      div.innerHTML = '<p style="color:red;padding:2rem;">Greška pri učitavanju ocena</p>';
-    }
-  }
-
-  // ===== USERNAME =====
-  async function postaviUsername(id) {
-    const input = document.getElementById(`username-input-${id}`);
-    const username = input.value.trim().toLowerCase();
-    if (!username) { alert('Unesite username!'); return; }
-    try {
-      const res = await fetch(`${backendUrl}/admin/set-username/${id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-password': adminLozinka
-        },
-        body: JSON.stringify({ username })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert(`✅ Username postavljen!\nLink: ${data.link}`);
-        ucitajKorisnike();
-      } else {
-        alert('❌ ' + (data.error || 'Greška'));
-      }
-    } catch { alert('Greška pri povezivanju'); }
-  }
-
-  // ===== GRUPNI EMAIL =====
-  async function posaljiGrupniEmail() {
-    const naslov = document.getElementById('email-naslov').value.trim();
-    const poruka = document.getElementById('email-poruka').value.trim();
-    const grupa = document.getElementById('email-grupa').value;
-    const statusDiv = document.getElementById('email-status');
-    const btn = document.getElementById('btn-posalji-email');
-
-    if (!naslov || !poruka) {
-      statusDiv.className = 'email-status greska';
-      statusDiv.textContent = '❌ Naslov i poruka su obavezni!';
-      return;
-    }
-
-    if (!confirm(`Poslati email svim korisnicima (${grupa})?\n\nNaslov: ${naslov}`)) return;
-
-    btn.disabled = true;
-    btn.textContent = 'Slanje...';
-    statusDiv.className = 'email-status';
-    statusDiv.textContent = '';
-
-    try {
-      const res = await fetch(`${backendUrl}/admin/grupni-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-password': adminLozinka
-        },
-        body: JSON.stringify({ naslov, poruka, ciljnaGrupa: grupa })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        statusDiv.className = 'email-status uspeh';
-        statusDiv.textContent = '✅ ' + data.message;
-        document.getElementById('email-naslov').value = '';
-        document.getElementById('email-poruka').value = '';
-      } else {
-        statusDiv.className = 'email-status greska';
-        statusDiv.textContent = '❌ ' + (data.error || 'Greška pri slanju');
-      }
-    } catch {
-      statusDiv.className = 'email-status greska';
-      statusDiv.textContent = '❌ Greška pri povezivanju sa serverom';
-    }
-
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Pošalji email';
-  }
-
-  // ── RENDER FUNKCIJE ──
-
-  function renderProdavaci(lista) {
-    document.getElementById('cnt-prodavaci').textContent = `${lista.length} prodavača`;
-    const div = document.getElementById('tbl-prodavaci');
-    if (!lista.length) {
-      div.innerHTML = '<div class="empty-state"><i class="fas fa-store"></i>Nema prodavača</div>';
-      return;
-    }
-    div.innerHTML = `<table>
-      <thead><tr>
-        <th>#ID</th><th>Ime</th><th>Email</th><th>Telefon</th>
-        <th>Lokacija</th><th>Niše</th><th>Username / Link</th><th>Registrovan</th><th>Akcije</th>
-      </tr></thead>
-      <tbody>${lista.map(k => `
-        <tr>
-          <td style="color:#aaa;font-size:0.8rem;">#${k.id}</td>
-          <td class="cell-truncate">${k.ime || '-'}</td>
-          <td style="font-size:0.82rem;" class="cell-truncate">${k.email}</td>
-          <td>${k.telefon || '-'}</td>
-          <td>${k.lokacija || '-'}</td>
-          <td>${parseNise(k.nise).slice(0,2).map(n => `<span class="badge badge-green">${n}</span>`).join(' ') || '-'}</td>
-          <td style="min-width:200px;">
-            ${k.username
-              ? `<span class="badge badge-green">@${k.username}</span>
-                 <a href="https://lokalniplodovi.rs/p/${k.username}" target="_blank" style="font-size:0.75rem;color:#2e7d32;margin-left:4px;">🔗 link</a>
-                 <br><input class="username-input" id="username-input-${k.id}" placeholder="novi username" style="margin-top:4px;">
-                 <button class="btn-username" style="margin-top:4px;" onclick="postaviUsername(${k.id})">Promeni</button>`
-              : `<input class="username-input" id="username-input-${k.id}" placeholder="npr. baca-iz-jarka">
-                 <button class="btn-username" onclick="postaviUsername(${k.id})">Postavi</button>`
-            }
-          </td>
-          <td style="white-space:nowrap;">${fmt(k.created_at)}</td>
-          <td style="white-space:nowrap;">
-            <button class="btn-info" onclick="detaljiKorisnika(${k.id})">👁</button>
-            <button class="btn-delete" onclick="obrisiKorisnika(${k.id},'${esc(k.ime)}')">🗑</button>
-          </td>
-        </tr>`).join('')}
-      </tbody></table>`;
-  }
-
-  function renderKupci(lista) {
-    document.getElementById('cnt-kupci').textContent = `${lista.length} kupaca`;
-    const div = document.getElementById('tbl-kupci');
-    if (!lista.length) {
-      div.innerHTML = '<div class="empty-state"><i class="fas fa-user"></i>Nema kupaca</div>';
-      return;
-    }
-    div.innerHTML = `<table>
-      <thead><tr>
-        <th>#ID</th><th>Ime</th><th>Email</th><th>Telefon</th>
-        <th>Lokacija</th><th>Registrovan</th><th>Akcije</th>
-      </tr></thead>
-      <tbody>${lista.map(k => `
-        <tr>
-          <td style="color:#aaa;font-size:0.8rem;">#${k.id}</td>
-          <td class="cell-truncate">${k.ime || '-'}</td>
-          <td style="font-size:0.82rem;" class="cell-truncate">${k.email}</td>
-          <td>${k.telefon || '-'}</td>
-          <td>${k.lokacija || '-'}</td>
-          <td style="white-space:nowrap;">${fmt(k.created_at)}</td>
-          <td style="white-space:nowrap;">
-            <button class="btn-info" onclick="detaljiKorisnika(${k.id})">👁</button>
-            <button class="btn-delete" onclick="obrisiKorisnika(${k.id},'${esc(k.ime)}')">🗑</button>
-          </td>
-        </tr>`).join('')}
-      </tbody></table>`;
-  }
-
-  function renderProizvodi(lista) {
-    document.getElementById('cnt-proizvodi').textContent = `${lista.length} proizvoda`;
-    const div = document.getElementById('tbl-proizvodi');
-    if (!lista.length) {
-      div.innerHTML = '<div class="empty-state"><i class="fas fa-box"></i>Nema proizvoda</div>';
-      return;
-    }
-    div.innerHTML = `<table>
-      <thead><tr>
-        <th>#ID</th><th>Naziv</th><th>Niša</th><th>Podniša</th>
-        <th>Cena</th><th>Kol.</th><th>Prodavac</th><th>Dodato</th><th>Akcije</th>
-      </tr></thead>
-      <tbody>${lista.map(p => `
-        <tr>
-          <td style="color:#aaa;font-size:0.8rem;">#${p.id}</td>
-          <td class="cell-truncate">${p.naziv}</td>
-          <td><span class="badge badge-yellow">${p.glavnaNisa || '-'}</span></td>
-          <td>${p.podnisa || '-'}</td>
-          <td style="font-weight:600;color:#2e7d32;">${p.cena} RSD</td>
-          <td>${p.kolicina}</td>
-          <td class="cell-truncate">${p.prodavacIme || '-'}</td>
-          <td style="white-space:nowrap;">${fmt(p.created_at)}</td>
-          <td style="white-space:nowrap;">
-            <button class="btn-info" onclick="detaljiProizvoda(${p.id})">👁</button>
-            <button class="btn-delete" onclick="obrisiProizvod(${p.id},'${esc(p.naziv)}')">🗑</button>
-          </td>
-        </tr>`).join('')}
-      </tbody></table>`;
-  }
-
-  function renderObjave(lista) {
-    document.getElementById('cnt-objave').textContent = `${lista.length} objava`;
-    const div = document.getElementById('tbl-objave');
-    if (!lista.length) {
-      div.innerHTML = '<div class="empty-state"><i class="fas fa-newspaper"></i>Nema objava</div>';
-      return;
-    }
-    div.innerHTML = `<table>
-      <thead><tr>
-        <th>#ID</th><th>Tekst</th><th>Slika</th><th>Video</th>
-        <th>Korisnik</th><th>Email</th><th>Objavljeno</th><th>Akcije</th>
-      </tr></thead>
-      <tbody>${lista.map(o => `
-        <tr>
-          <td style="color:#aaa;font-size:0.8rem;">#${o.id}</td>
-          <td class="cell-truncate">${o.tekst}</td>
-          <td>${o.slika ? '<span class="badge badge-green">Da</span>' : '-'}</td>
-          <td>${o.video ? '<span class="badge badge-purple">Da</span>' : '-'}</td>
-          <td class="cell-truncate">${o.korisnikIme || '-'}</td>
-          <td style="font-size:0.82rem;" class="cell-truncate">${o.korisnikEmail || '-'}</td>
-          <td style="white-space:nowrap;">${fmt(o.created_at)}</td>
-          <td style="white-space:nowrap;">
-            <button class="btn-info" onclick="detaljiObjave(${o.id})">👁</button>
-            <button class="btn-delete" onclick="obrisiObjavu(${o.id})">🗑</button>
-          </td>
-        </tr>`).join('')}
-      </tbody></table>`;
-  }
-
-  function renderOcene(lista) {
-    document.getElementById('cnt-ocene').textContent = `${lista.length} ocena`;
-    const div = document.getElementById('tbl-ocene');
-    if (!lista.length) {
-      div.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i>Nema ocena</div>';
-      return;
-    }
-    div.innerHTML = `<table>
-      <thead><tr>
-        <th>#ID</th><th>Od kupca</th><th>Za prodavca</th>
-        <th>Ocena</th><th>Komentar</th><th>Datum</th><th>Akcija</th>
-      </tr></thead>
-      <tbody>${lista.map(o => `
-        <tr>
-          <td style="color:#aaa;font-size:0.8rem;">#${o.id}</td>
-          <td class="cell-truncate">${o.odIme || '#' + o.od_user_id}</td>
-          <td class="cell-truncate">${o.zaIme || '#' + o.za_user_id}</td>
-          <td>
-            <span class="zvezdice">${'★'.repeat(o.ocena)}${'☆'.repeat(5 - o.ocena)}</span>
-            <span class="${o.ocena <= 2 ? 'badge badge-red' : o.ocena === 3 ? 'badge badge-orange' : 'badge badge-green'}">${o.ocena}/5</span>
-          </td>
-          <td class="cell-truncate">${o.komentar || '-'}</td>
-          <td style="white-space:nowrap;">${fmt(o.created_at)}</td>
-          <td>
-            <button class="btn-delete" onclick="obrisiOcenu(${o.id})">🗑 Obriši</button>
-          </td>
-        </tr>`).join('')}
-      </tbody></table>`;
-  }
-
-  function filterujOcene() {
-    const upit = document.getElementById('srch-ocene').value.toLowerCase();
-    renderOcene(data.ocene.filter(o =>
-      (o.odIme || '').toLowerCase().includes(upit) ||
-      (o.zaIme || '').toLowerCase().includes(upit) ||
-      (o.komentar || '').toLowerCase().includes(upit)
-    ));
-  }
-
-  function filteruj(tip) {
-    const upit = document.getElementById(`srch-${tip}`).value.toLowerCase();
-    if (tip === 'prodavaci') {
-      renderProdavaci(data.prodavaci.filter(k =>
-        (k.ime||'').toLowerCase().includes(upit) ||
-        k.email.toLowerCase().includes(upit) ||
-        (k.lokacija||'').toLowerCase().includes(upit)
-      ));
-    } else if (tip === 'kupci') {
-      renderKupci(data.kupci.filter(k =>
-        (k.ime||'').toLowerCase().includes(upit) ||
-        k.email.toLowerCase().includes(upit) ||
-        (k.lokacija||'').toLowerCase().includes(upit)
-      ));
-    } else if (tip === 'proizvodi') {
-      renderProizvodi(data.proizvodi.filter(p =>
-        p.naziv.toLowerCase().includes(upit) ||
-        (p.glavnaNisa||'').toLowerCase().includes(upit) ||
-        (p.prodavacIme||'').toLowerCase().includes(upit)
-      ));
-    } else if (tip === 'objave') {
-      renderObjave(data.objave.filter(o =>
-        o.tekst.toLowerCase().includes(upit) ||
-        (o.korisnikIme||'').toLowerCase().includes(upit) ||
-        (o.korisnikEmail||'').toLowerCase().includes(upit)
-      ));
-    }
-  }
-
-  function detaljiKorisnika(id) {
-    const svi = [...data.prodavaci, ...data.kupci];
-    const k = svi.find(x => x.id === id);
-    if (!k) return;
-    const nise = parseNise(k.nise);
-    document.getElementById('modal-korisnik-body').innerHTML = `
-      <div class="detail-row"><span class="lbl">ID</span><span class="val">#${k.id}</span></div>
-      <div class="detail-row"><span class="lbl">Ime</span><span class="val">${k.ime || '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Email</span><span class="val">${k.email}</span></div>
-      <div class="detail-row"><span class="lbl">Telefon</span><span class="val">${k.telefon || '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Lokacija</span><span class="val">${k.lokacija || '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Tip</span>
-        <span class="val"><span class="badge ${k.tip === 'kupac' ? 'tip-kupac' : 'tip-prodavac'}">${k.tip || 'prodavac'}</span></span>
+<!-- MODAL: CONFIRM -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal-box modal-sm">
+    <div class="modal-body">
+      <div class="confirm-box">
+        <span class="confirm-icon" id="confirm-icon">⚠️</span>
+        <h3 id="confirm-title">Potvrdi akciju</h3>
+        <p id="confirm-msg">Da li ste sigurni?</p>
+        <div class="confirm-actions">
+          <button class="btn btn-ghost" onclick="zatvoriModal('modal-confirm')">Otkaži</button>
+          <button class="btn btn-danger" id="confirm-ok-btn">Potvrdi</button>
+        </div>
       </div>
-      ${nise.length ? `<div class="detail-row"><span class="lbl">Niše</span>
-        <span class="val"><div class="nise-wrap">${nise.map(n => `<span class="badge badge-green">${n}</span>`).join('')}</div></span>
-      </div>` : ''}
-      <div class="detail-row"><span class="lbl">Username</span><span class="val">${k.username ? '@' + k.username : '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Registrovan</span><span class="val">${fmt(k.created_at)}</span></div>
-      <div style="margin-top:1rem; display:flex; gap:0.8rem;">
-        <button class="btn-delete" style="flex:1;padding:10px;" onclick="obrisiKorisnika(${k.id},'${esc(k.ime)}'); zatvoriModal('modal-korisnik')">
-          🗑 Obriši korisnika
-        </button>
-      </div>`;
-    otvoriModal('modal-korisnik');
-  }
+    </div>
+  </div>
+</div>
 
-  function detaljiProizvoda(id) {
-    const p = data.proizvodi.find(x => x.id === id);
-    if (!p) return;
-    document.getElementById('modal-proizvod-body').innerHTML = `
-      ${p.slika ? `<img src="${p.slika}" style="width:100%;max-height:180px;object-fit:cover;border-radius:10px;margin-bottom:1rem;">` : ''}
-      <div class="detail-row"><span class="lbl">ID</span><span class="val">#${p.id}</span></div>
-      <div class="detail-row"><span class="lbl">Naziv</span><span class="val">${p.naziv}</span></div>
-      <div class="detail-row"><span class="lbl">Cena</span><span class="val" style="color:#2e7d32;">${p.cena} RSD</span></div>
-      <div class="detail-row"><span class="lbl">Količina</span><span class="val">${p.kolicina}</span></div>
-      <div class="detail-row"><span class="lbl">Niša</span><span class="val"><span class="badge badge-yellow">${p.glavnaNisa || '-'}</span></span></div>
-      <div class="detail-row"><span class="lbl">Podniša</span><span class="val">${p.podnisa || '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Opis</span><span class="val">${p.opis || '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Prodavac</span><span class="val">${p.prodavacIme || '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Dodato</span><span class="val">${fmt(p.created_at)}</span></div>
-      <div style="margin-top:1rem;">
-        <button class="btn-delete" style="width:100%;padding:10px;" onclick="obrisiProizvod(${p.id},'${esc(p.naziv)}'); zatvoriModal('modal-proizvod')">
-          🗑 Obriši proizvod
-        </button>
-      </div>`;
-    otvoriModal('modal-proizvod');
-  }
+<!-- TOASTS -->
+<div id="toast-container"></div>
 
-  function detaljiObjave(id) {
-    const o = data.objave.find(x => x.id === id);
-    if (!o) return;
-    document.getElementById('modal-objava-body').innerHTML = `
-      ${o.slika ? `<img src="${o.slika}" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;margin-bottom:1rem;">` : ''}
-      ${o.video ? `<video src="${o.video}" controls style="width:100%;max-height:160px;border-radius:10px;margin-bottom:1rem;"></video>` : ''}
-      <div class="detail-row"><span class="lbl">ID</span><span class="val">#${o.id}</span></div>
-      <div class="detail-row"><span class="lbl">Tekst</span><span class="val" style="max-width:70%;text-align:right;">${o.tekst}</span></div>
-      <div class="detail-row"><span class="lbl">Korisnik</span><span class="val">${o.korisnikIme || '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Email</span><span class="val">${o.korisnikEmail || '-'}</span></div>
-      <div class="detail-row"><span class="lbl">Slika</span><span class="val">${o.slika ? '✅ Da' : '❌ Ne'}</span></div>
-      <div class="detail-row"><span class="lbl">Video</span><span class="val">${o.video ? '✅ Da' : '❌ Ne'}</span></div>
-      <div class="detail-row"><span class="lbl">Objavljeno</span><span class="val">${fmt(o.created_at)}</span></div>
-      <div style="margin-top:1rem;">
-        <button class="btn-delete" style="width:100%;padding:10px;" onclick="obrisiObjavu(${o.id}); zatvoriModal('modal-objava')">
-          🗑 Obriši objavu
-        </button>
-      </div>`;
-    otvoriModal('modal-objava');
-  }
+<script>
+const backendUrl = 'https://lokalni-backend-production.up.railway.app';
+let adminLozinka = '';
 
-  function otvoriModal(id) { document.getElementById(id).classList.add('open'); }
-  function zatvoriModal(id) { document.getElementById(id).classList.remove('open'); }
+const PAGE_SIZE = 25;
+const state = {
+  prodavaci: { data:[], filtered:[], page:1, sort:null, dir:1, selected:new Set() },
+  kupci:     { data:[], filtered:[], page:1, sort:null, dir:1, selected:new Set() },
+  proizvodi: { data:[], filtered:[], page:1, sort:null, dir:1, selected:new Set() },
+  objave:    { data:[], filtered:[], page:1, sort:null, dir:1 },
+  ocene:     { data:[], filtered:[], page:1, sort:null, dir:1 },
+};
 
-  document.querySelectorAll('.modal-overlay').forEach(m => {
-    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+// ── TOAST ──
+function toast(msg, type='ok', duration=3000) {
+  const c = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = 'toast' + (type==='error'?' toast-error':type==='warn'?' toast-warn':'');
+  const icon = type==='error'?'❌':type==='warn'?'⚠️':'✅';
+  el.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+  c.appendChild(el);
+  setTimeout(() => {
+    el.classList.add('fade-out');
+    setTimeout(() => el.remove(), 300);
+  }, duration);
+}
+
+// ── CONFIRM ──
+function confirm2(title, msg, onOk, icon='⚠️') {
+  document.getElementById('confirm-icon').textContent = icon;
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').textContent = msg;
+  const btn = document.getElementById('confirm-ok-btn');
+  btn.onclick = () => { zatvoriModal('modal-confirm'); onOk(); };
+  otvoriModal('modal-confirm');
+}
+
+// ── SPARKLINE ──
+const sparkCharts = {};
+function renderSparkline(canvasId, values, color) {
+  const ctx = document.getElementById(canvasId);
+  if (!ctx) return;
+  if (sparkCharts[canvasId]) sparkCharts[canvasId].destroy();
+  sparkCharts[canvasId] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: values.map((_,i) => i),
+      datasets: [{ data: values, borderColor: color, borderWidth: 2, fill: true,
+        backgroundColor: color + '22', tension: .4, pointRadius: 0 }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{ legend:{display:false}, tooltip:{enabled:false} },
+      scales:{ x:{display:false}, y:{display:false} }
+    }
   });
+}
 
-  async function obrisiKorisnika(id, ime) {
-    if (!confirm(`Obrisati korisnika "${ime}"?\nOvo će obrisati i sve njegove proizvode i objave!`)) return;
+function buildSparklines(korisnici, proizvodi, objave) {
+  // group registrations by day (last 7 days)
+  const now = new Date();
+  const days7 = Array.from({length:7}, (_,i) => {
+    const d = new Date(now); d.setDate(d.getDate()-6+i); return d.toISOString().slice(0,10);
+  });
+  const countByDay = (arr, field) => {
+    const m = {};
+    arr.forEach(x => { const d=(x[field]||'').slice(0,10); m[d]=(m[d]||0)+1; });
+    return days7.map(d => m[d]||0);
+  };
+  const prodavaci = korisnici.filter(k => k.tip !== 'kupac');
+  const kupci     = korisnici.filter(k => k.tip === 'kupac');
+  renderSparkline('chart-prodavaci', countByDay(prodavaci,'created_at'), '#2e7d32');
+  renderSparkline('chart-kupci',     countByDay(kupci,    'created_at'), '#2563eb');
+  renderSparkline('chart-proizvodi', countByDay(proizvodi,'created_at'), '#f59e0b');
+  renderSparkline('chart-objave',    countByDay(objave,   'created_at'), '#7c3aed');
+}
+
+// ── CLOCK ──
+setInterval(() => {
+  document.getElementById('datum-vreme').textContent = new Date().toLocaleString('sr-RS');
+}, 1000);
+
+// ── AUTH ──
+async function prijavi() {
+  const loz = document.getElementById('admin-lozinka').value.trim();
+  if (!loz) return;
+  try {
+    const res = await fetch(`${backendUrl}/admin/stats`, { headers:{ 'x-admin-password':loz } });
+    if (res.ok) {
+      adminLozinka = loz;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+      ucitajSve();
+    } else {
+      document.getElementById('login-error').textContent = '❌ Pogrešna lozinka!';
+    }
+  } catch { document.getElementById('login-error').textContent = 'Greška pri povezivanju'; }
+}
+
+function odjaviSe() {
+  adminLozinka = '';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('admin-lozinka').value = '';
+}
+
+async function osvezi() { await ucitajSve(); toast('Podaci osveženi'); }
+
+// ── SKELETON ──
+function showSkeleton(id, cols=6) {
+  const rows = Array.from({length:8}, () => `
+    <div class="skeleton-row">
+      <div class="skeleton sk-id"></div>
+      <div class="skeleton sk-name"></div>
+      ${cols>2?'<div class="skeleton sk-tag"></div>':''}
+      ${cols>3?'<div class="skeleton sk-num"></div>':''}
+      ${cols>4?'<div class="skeleton sk-long"></div>':''}
+      <div class="skeleton sk-btn"></div>
+    </div>`).join('');
+  document.getElementById(id).innerHTML = rows;
+}
+
+// ── LOAD ALL ──
+async function ucitajSve() {
+  showSkeleton('tbl-prodavaci'); showSkeleton('tbl-kupci');
+  showSkeleton('tbl-proizvodi'); showSkeleton('tbl-objave');
+  const [k, p, o] = await Promise.all([ucitajKorisnike(), ucitajProizvode(), ucitajObjave()]);
+  await ucitajStats();
+  buildSparklines(k||[], p||[], o||[]);
+}
+
+async function ucitajStats() {
+  try {
+    const res = await fetch(`${backendUrl}/admin/stats`, { headers:{ 'x-admin-password':adminLozinka } });
+    const s = await res.json();
+    document.getElementById('stat-prodavaci').textContent = s.korisnici - s.kupci;
+    document.getElementById('stat-kupci').textContent = s.kupci;
+    document.getElementById('stat-proizvodi').textContent = s.proizvodi;
+    document.getElementById('stat-objave').textContent = s.objave;
+  } catch {}
+}
+
+async function ucitajKorisnike() {
+  try {
+    const res = await fetch(`${backendUrl}/admin/korisnici`, { headers:{ 'x-admin-password':adminLozinka } });
+    const svi = await res.json();
+    state.prodavaci.data = svi.filter(k => k.tip !== 'kupac');
+    state.kupci.data     = svi.filter(k => k.tip === 'kupac');
+    applyFilter('prodavaci'); applyFilter('kupci');
+    return svi;
+  } catch { document.getElementById('tbl-prodavaci').innerHTML = '<p style="color:red;padding:2rem">Greška</p>'; }
+}
+
+async function ucitajProizvode() {
+  try {
+    const res = await fetch(`${backendUrl}/admin/proizvodi`, { headers:{ 'x-admin-password':adminLozinka } });
+    state.proizvodi.data = await res.json();
+    applyFilter('proizvodi');
+    return state.proizvodi.data;
+  } catch { document.getElementById('tbl-proizvodi').innerHTML = '<p style="color:red;padding:2rem">Greška</p>'; }
+}
+
+async function ucitajObjave() {
+  try {
+    const res = await fetch(`${backendUrl}/admin/objave`, { headers:{ 'x-admin-password':adminLozinka } });
+    state.objave.data = await res.json();
+    applyFilter('objave');
+    return state.objave.data;
+  } catch { document.getElementById('tbl-objave').innerHTML = '<p style="color:red;padding:2rem">Greška</p>'; }
+}
+
+async function ucitajOcene() {
+  document.getElementById('tbl-ocene').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Učitavam...</div>';
+  try {
+    const res = await fetch(`${backendUrl}/admin/ocene`, { headers:{ 'x-admin-password':adminLozinka } });
+    state.ocene.data = await res.json();
+    applyFilter('ocene');
+  } catch { document.getElementById('tbl-ocene').innerHTML = '<p style="color:red;padding:2rem">Greška</p>'; }
+}
+
+// ── FILTER + SORT ──
+const searchFields = {
+  prodavaci: k => `${k.ime||''} ${k.email||''} ${k.lokacija||''}`,
+  kupci:     k => `${k.ime||''} ${k.email||''} ${k.lokacija||''}`,
+  proizvodi: p => `${p.naziv||''} ${p.glavnaNisa||''} ${p.podnisa||''} ${p.prodavacIme||''}`,
+  objave:    o => `${o.tekst||''} ${o.korisnikIme||''} ${o.korisnikEmail||''}`,
+  ocene:     o => `${o.odIme||''} ${o.zaIme||''} ${o.komentar||''}`,
+};
+
+function filteruj(tip) {
+  state[tip].page = 1;
+  applyFilter(tip);
+}
+function filterujOcene() { state.ocene.page=1; applyFilter('ocene'); }
+
+function applyFilter(tip) {
+  const q = (document.getElementById(`srch-${tip}`)?.value||'').toLowerCase();
+  const s = state[tip];
+  s.filtered = q
+    ? s.data.filter(x => searchFields[tip](x).toLowerCase().includes(q))
+    : [...s.data];
+  if (s.sort) applySort(tip, false);
+  renderTable(tip);
+}
+
+function sortBy(tip, col) {
+  const s = state[tip];
+  if (s.sort === col) s.dir *= -1; else { s.sort = col; s.dir = 1; }
+  s.page = 1;
+  applySort(tip, true);
+}
+
+function applySort(tip, rerender=true) {
+  const s = state[tip];
+  if (!s.sort) return;
+  s.filtered.sort((a,b) => {
+    let va = a[s.sort]||'', vb = b[s.sort]||'';
+    if (!isNaN(va) && !isNaN(vb)) { va=+va; vb=+vb; }
+    return (va < vb ? -1 : va > vb ? 1 : 0) * s.dir;
+  });
+  if (rerender) renderTable(tip);
+}
+
+// ── RENDER ──
+function renderTable(tip) {
+  const s = state[tip];
+  const total = s.filtered.length;
+  const start = (s.page-1)*PAGE_SIZE;
+  const page  = s.filtered.slice(start, start+PAGE_SIZE);
+  const cntEl = document.getElementById(`cnt-${tip}`);
+  const labels = { prodavaci:'prodavača', kupci:'kupaca', proizvodi:'proizvoda', objave:'objava', ocene:'ocena' };
+  if (cntEl) cntEl.textContent = `${total} ${labels[tip]}`;
+
+  const renderers = {
+    prodavaci: renderProdavaciTable,
+    kupci:     renderKupciTable,
+    proizvodi: renderProizvodiTable,
+    objave:    renderObjaveTable,
+    ocene:     renderOceneTable,
+  };
+  renderers[tip](page, tip);
+  renderPagination(tip, total);
+}
+
+function sortHeader(tip, col, label) {
+  const s = state[tip];
+  let cls = '';
+  if (s.sort===col) cls = s.dir===1 ? 'sort-asc' : 'sort-desc';
+  return `<th class="sortable ${cls}" onclick="sortBy('${tip}','${col}')">${label}<span class="sort-arrow"></span></th>`;
+}
+
+function renderProdavaciTable(lista, tip) {
+  const div = document.getElementById(`tbl-${tip}`);
+  if (!lista.length) { div.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)"><i class="fas fa-store" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Nema prodavača</div>'; return; }
+  const s = state[tip];
+  div.innerHTML = `<table>
+    <thead><tr>
+      <th style="width:36px"><input type="checkbox" onchange="toggleAllBulk('${tip}',this)"></th>
+      ${sortHeader(tip,'id','#ID')}
+      ${sortHeader(tip,'ime','Ime')}
+      ${sortHeader(tip,'email','Email')}
+      <th>Telefon</th>
+      ${sortHeader(tip,'lokacija','Lokacija')}
+      <th>Niše</th>
+      <th>Username</th>
+      ${sortHeader(tip,'created_at','Registrovan')}
+      <th>Akcije</th>
+    </tr></thead>
+    <tbody>${lista.map(k => `
+      <tr class="${s.selected.has(k.id)?'selected':''}">
+        <td class="cb-wrap"><input type="checkbox" ${s.selected.has(k.id)?'checked':''} onchange="toggleBulk('${tip}',${k.id},this)"></td>
+        <td style="color:var(--muted);font-size:.78rem">#${k.id}</td>
+        <td class="cell-truncate">${k.ime||'-'}</td>
+        <td class="cell-truncate" style="font-size:.8rem">${k.email}</td>
+        <td>${k.telefon||'-'}</td>
+        <td class="cell-truncate">${k.lokacija||'-'}</td>
+        <td>${parseNise(k.nise).slice(0,2).map(n=>`<span class="badge badge-green">${n}</span>`).join(' ')||'-'}</td>
+        <td style="min-width:180px">
+          ${k.username
+            ? `<span class="badge badge-green">@${k.username}</span>
+               <a href="https://lokalniplodovi.rs/p/${k.username}" target="_blank" style="font-size:.72rem;color:var(--green-700);margin-left:4px">🔗</a><br>
+               <input class="username-input" id="ui-${k.id}" placeholder="novi username" style="margin-top:4px">
+               <button class="btn btn-primary btn-sm" style="margin-top:4px" onclick="postaviUsername(${k.id})">Promeni</button>`
+            : `<input class="username-input" id="ui-${k.id}" placeholder="npr. baca-iz-jarka">
+               <button class="btn btn-primary btn-sm" onclick="postaviUsername(${k.id})">Postavi</button>`
+          }
+        </td>
+        <td style="white-space:nowrap">${fmt(k.created_at)}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-info btn-sm" onclick="detaljiKorisnika(${k.id})"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}')"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function renderKupciTable(lista, tip) {
+  const div = document.getElementById(`tbl-${tip}`);
+  if (!lista.length) { div.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)"><i class="fas fa-user" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Nema kupaca</div>'; return; }
+  const s = state[tip];
+  div.innerHTML = `<table>
+    <thead><tr>
+      <th style="width:36px"><input type="checkbox" onchange="toggleAllBulk('${tip}',this)"></th>
+      ${sortHeader(tip,'id','#ID')}
+      ${sortHeader(tip,'ime','Ime')}
+      ${sortHeader(tip,'email','Email')}
+      <th>Telefon</th>
+      ${sortHeader(tip,'lokacija','Lokacija')}
+      ${sortHeader(tip,'created_at','Registrovan')}
+      <th>Akcije</th>
+    </tr></thead>
+    <tbody>${lista.map(k=>`
+      <tr class="${s.selected.has(k.id)?'selected':''}">
+        <td class="cb-wrap"><input type="checkbox" ${s.selected.has(k.id)?'checked':''} onchange="toggleBulk('${tip}',${k.id},this)"></td>
+        <td style="color:var(--muted);font-size:.78rem">#${k.id}</td>
+        <td class="cell-truncate">${k.ime||'-'}</td>
+        <td class="cell-truncate" style="font-size:.8rem">${k.email}</td>
+        <td>${k.telefon||'-'}</td>
+        <td class="cell-truncate">${k.lokacija||'-'}</td>
+        <td style="white-space:nowrap">${fmt(k.created_at)}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-info btn-sm" onclick="detaljiKorisnika(${k.id})"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}')"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function renderProizvodiTable(lista, tip) {
+  const div = document.getElementById(`tbl-${tip}`);
+  if (!lista.length) { div.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)"><i class="fas fa-box" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Nema proizvoda</div>'; return; }
+  const s = state[tip];
+  div.innerHTML = `<table>
+    <thead><tr>
+      <th style="width:36px"><input type="checkbox" onchange="toggleAllBulk('${tip}',this)"></th>
+      ${sortHeader(tip,'id','#ID')}
+      <th>Slika</th>
+      ${sortHeader(tip,'naziv','Naziv')}
+      ${sortHeader(tip,'glavnaNisa','Niša')}
+      ${sortHeader(tip,'podnisa','Podniša')}
+      ${sortHeader(tip,'cena','Cena')}
+      ${sortHeader(tip,'kolicina','Kol.')}
+      ${sortHeader(tip,'prodavacIme','Prodavac')}
+      ${sortHeader(tip,'created_at','Dodato')}
+      <th>Akcije</th>
+    </tr></thead>
+    <tbody>${lista.map(p=>`
+      <tr class="${s.selected.has(p.id)?'selected':''}">
+        <td class="cb-wrap"><input type="checkbox" ${s.selected.has(p.id)?'checked':''} onchange="toggleBulk('${tip}',${p.id},this)"></td>
+        <td style="color:var(--muted);font-size:.78rem">#${p.id}</td>
+        <td>${p.slika?`<img src="${p.slika}" class="thumb" loading="lazy">`:`<div class="thumb-placeholder">📦</div>`}</td>
+        <td class="cell-truncate">${p.naziv}</td>
+        <td><span class="badge badge-yellow">${p.glavnaNisa||'-'}</span></td>
+        <td>${p.podnisa?`<span class="badge badge-green">${p.podnisa}</span>`:'<span style="color:var(--muted)">—</span>'}</td>
+        <td style="font-weight:700;color:var(--green-700)">${p.cena} RSD</td>
+        <td>${p.kolicina}</td>
+        <td class="cell-truncate">${p.prodavacIme||'-'}</td>
+        <td style="white-space:nowrap">${fmt(p.created_at)}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-info btn-sm" onclick="detaljiProizvoda(${p.id})"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-edit btn-sm" onclick="otvoriEditProizvoda(${p.id})"><i class="fas fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeProizvoda(${p.id},'${esc(p.naziv)}')"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function renderObjaveTable(lista, tip) {
+  const div = document.getElementById(`tbl-${tip}`);
+  if (!lista.length) { div.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)"><i class="fas fa-newspaper" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Nema objava</div>'; return; }
+  div.innerHTML = `<table>
+    <thead><tr>
+      ${sortHeader(tip,'id','#ID')}
+      <th>Tekst</th>
+      <th>Slika</th><th>Video</th>
+      ${sortHeader(tip,'korisnikIme','Korisnik')}
+      ${sortHeader(tip,'created_at','Objavljeno')}
+      <th>Akcije</th>
+    </tr></thead>
+    <tbody>${lista.map(o=>`
+      <tr>
+        <td style="color:var(--muted);font-size:.78rem">#${o.id}</td>
+        <td class="cell-truncate">${o.tekst}</td>
+        <td>${o.slika?'<span class="badge badge-green">Da</span>':'-'}</td>
+        <td>${o.video?'<span class="badge badge-purple">Da</span>':'-'}</td>
+        <td class="cell-truncate">${o.korisnikIme||'-'}</td>
+        <td style="white-space:nowrap">${fmt(o.created_at)}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-info btn-sm" onclick="detaljiObjave(${o.id})"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeObjave(${o.id})"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function renderOceneTable(lista, tip) {
+  const div = document.getElementById(`tbl-${tip}`);
+  if (!lista.length) { div.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)"><i class="fas fa-star" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Nema ocena</div>'; return; }
+  div.innerHTML = `<table>
+    <thead><tr>
+      ${sortHeader(tip,'id','#ID')}
+      ${sortHeader(tip,'odIme','Od kupca')}
+      ${sortHeader(tip,'zaIme','Za prodavca')}
+      ${sortHeader(tip,'ocena','Ocena')}
+      <th>Komentar</th>
+      ${sortHeader(tip,'created_at','Datum')}
+      <th>Akcija</th>
+    </tr></thead>
+    <tbody>${lista.map(o=>`
+      <tr>
+        <td style="color:var(--muted);font-size:.78rem">#${o.id}</td>
+        <td class="cell-truncate">${o.odIme||'#'+o.od_user_id}</td>
+        <td class="cell-truncate">${o.zaIme||'#'+o.za_user_id}</td>
+        <td>
+          <span class="zvezdice">${'★'.repeat(o.ocena)}${'☆'.repeat(5-o.ocena)}</span>
+          <span class="badge ${o.ocena<=2?'badge-red':o.ocena===3?'badge-orange':'badge-green'}">${o.ocena}/5</span>
+        </td>
+        <td class="cell-truncate">${o.komentar||'-'}</td>
+        <td style="white-space:nowrap">${fmt(o.created_at)}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeOcene(${o.id})"><i class="fas fa-trash"></i> Obriši</button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+// ── PAGINATION ──
+function renderPagination(tip, total) {
+  const el = document.getElementById(`pag-${tip}`);
+  if (!el) return;
+  const pages = Math.ceil(total/PAGE_SIZE);
+  if (pages <= 1) { el.innerHTML=''; return; }
+  const cur = state[tip].page;
+  let html = `<button class="page-btn" onclick="goPage('${tip}',${cur-1})" ${cur===1?'disabled':''}>‹</button>`;
+  for (let i=1; i<=pages; i++) {
+    if (i===1||i===pages||Math.abs(i-cur)<=1) {
+      html += `<button class="page-btn ${i===cur?'active':''}" onclick="goPage('${tip}',${i})">${i}</button>`;
+    } else if (Math.abs(i-cur)===2) {
+      html += `<span class="page-info">…</span>`;
+    }
+  }
+  html += `<button class="page-btn" onclick="goPage('${tip}',${cur+1})" ${cur===pages?'disabled':''}>›</button>`;
+  html += `<span class="page-info">${(cur-1)*PAGE_SIZE+1}–${Math.min(cur*PAGE_SIZE,total)} od ${total}</span>`;
+  el.innerHTML = html;
+}
+
+function goPage(tip, p) {
+  const pages = Math.ceil(state[tip].filtered.length/PAGE_SIZE);
+  if (p<1||p>pages) return;
+  state[tip].page = p;
+  renderTable(tip);
+  document.getElementById(`sec-${tip}`)?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── BULK ──
+function toggleBulk(tip, id, cb) {
+  const s = state[tip];
+  if (cb.checked) s.selected.add(id); else s.selected.delete(id);
+  updateBulkBar(tip);
+  renderTable(tip);
+}
+
+function toggleAllBulk(tip, masterCb) {
+  const s = state[tip];
+  const page = s.filtered.slice((s.page-1)*PAGE_SIZE, s.page*PAGE_SIZE);
+  if (masterCb.checked) page.forEach(x => s.selected.add(x.id));
+  else page.forEach(x => s.selected.delete(x.id));
+  updateBulkBar(tip);
+  renderTable(tip);
+}
+
+function updateBulkBar(tip) {
+  const n = state[tip].selected?.size || 0;
+  const bar = document.getElementById(`bulk-${tip}`);
+  if (!bar) return;
+  bar.classList.toggle('visible', n>0);
+  document.getElementById(`bulk-${tip}-count`).textContent = `${n} izabrano`;
+}
+
+function clearBulk(tip) {
+  state[tip].selected.clear();
+  updateBulkBar(tip);
+  renderTable(tip);
+}
+
+async function bulkObrisi(tip) {
+  const ids = [...state[tip].selected];
+  if (!ids.length) return;
+  confirm2('Masovno brisanje', `Obrisati ${ids.length} stavki? Ova akcija je nepovratna.`, async () => {
+    const endpoint = tip==='prodavaci'||tip==='kupci' ? 'korisnik' : tip==='proizvodi' ? 'admin/proizvod' : null;
+    if (!endpoint) return;
+    let ok=0, fail=0;
+    for (const id of ids) {
+      try {
+        const res = await fetch(`${backendUrl}/admin/${endpoint==='korisnik'?'korisnik':endpoint.replace('admin/','')}/${id}`,{
+          method:'DELETE', headers:{'x-admin-password':adminLozinka}
+        });
+        if (res.ok) ok++; else fail++;
+      } catch { fail++; }
+    }
+    toast(`Obrisano ${ok}${fail?', greška: '+fail:''}`, fail?'warn':'ok');
+    clearBulk(tip);
+    if (tip==='proizvodi') { await ucitajProizvode(); await ucitajStats(); }
+    else await ucitajKorisnike();
+  }, '🗑️');
+}
+
+// ── USERNAME ──
+async function postaviUsername(id) {
+  const input = document.getElementById(`ui-${id}`);
+  const username = input.value.trim().toLowerCase();
+  if (!username) { toast('Unesite username!', 'warn'); return; }
+  try {
+    const res = await fetch(`${backendUrl}/admin/set-username/${id}`, {
+      method:'POST', headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
+      body: JSON.stringify({ username })
+    });
+    const d = await res.json();
+    if (res.ok) { toast(`Username postavljen! ${d.link}`); ucitajKorisnike(); }
+    else toast('❌ ' + (d.error||'Greška'), 'error');
+  } catch { toast('Greška pri povezivanju', 'error'); }
+}
+
+// ── MODALS ──
+function otvoriModal(id)  { document.getElementById(id).classList.add('open'); }
+function zatvoriModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target===m) m.classList.remove('open'); });
+});
+
+function detaljiKorisnika(id) {
+  const svi = [...state.prodavaci.data, ...state.kupci.data];
+  const k = svi.find(x=>x.id===id); if (!k) return;
+  const nise = parseNise(k.nise);
+  document.getElementById('modal-korisnik-body').innerHTML = `
+    ${k.slika?`<img src="${k.slika}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 1rem">`: ''}
+    <div class="detail-row"><span class="lbl">ID</span><span class="val">#${k.id}</span></div>
+    <div class="detail-row"><span class="lbl">Ime</span><span class="val">${k.ime||'-'}</span></div>
+    <div class="detail-row"><span class="lbl">Email</span><span class="val">${k.email}</span></div>
+    <div class="detail-row"><span class="lbl">Telefon</span><span class="val">${k.telefon||'-'}</span></div>
+    <div class="detail-row"><span class="lbl">Lokacija</span><span class="val">${k.lokacija||'-'}</span></div>
+    <div class="detail-row"><span class="lbl">Tip</span><span class="val"><span class="badge ${k.tip==='kupac'?'tip-kupac':'tip-prodavac'}">${k.tip||'prodavac'}</span></span></div>
+    ${nise.length?`<div class="detail-row"><span class="lbl">Niše</span><span class="val"><div class="nise-wrap">${nise.map(n=>`<span class="badge badge-green">${n}</span>`).join('')}</div></span></div>`:''}
+    <div class="detail-row"><span class="lbl">Username</span><span class="val">${k.username?'@'+k.username:'-'}</span></div>
+    <div class="detail-row"><span class="lbl">Registrovan</span><span class="val">${fmt(k.created_at)}</span></div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}');zatvoriModal('modal-korisnik')"><i class="fas fa-trash"></i> Obriši korisnika</button>
+    </div>`;
+  otvoriModal('modal-korisnik');
+}
+
+function detaljiProizvoda(id) {
+  const p = state.proizvodi.data.find(x=>x.id===id); if (!p) return;
+  document.getElementById('modal-proizvod-body').innerHTML = `
+    ${p.slika?`<img src="${p.slika}" style="width:100%;max-height:180px;object-fit:cover;border-radius:10px;margin-bottom:1rem">`:''}
+    <div class="detail-row"><span class="lbl">ID</span><span class="val">#${p.id}</span></div>
+    <div class="detail-row"><span class="lbl">Naziv</span><span class="val">${p.naziv}</span></div>
+    <div class="detail-row"><span class="lbl">Cena</span><span class="val" style="color:var(--green-700)">${p.cena} RSD</span></div>
+    <div class="detail-row"><span class="lbl">Količina</span><span class="val">${p.kolicina}</span></div>
+    <div class="detail-row"><span class="lbl">Niša</span><span class="val"><span class="badge badge-yellow">${p.glavnaNisa||'-'}</span></span></div>
+    <div class="detail-row"><span class="lbl">Podniša</span><span class="val">${p.podnisa||'—'}</span></div>
+    <div class="detail-row"><span class="lbl">Opis</span><span class="val">${p.opis||'-'}</span></div>
+    <div class="detail-row"><span class="lbl">Prodavac</span><span class="val">${p.prodavacIme||'-'}</span></div>
+    <div class="detail-row"><span class="lbl">Dodato</span><span class="val">${fmt(p.created_at)}</span></div>
+    <div class="modal-actions">
+      <button class="btn btn-edit" onclick="zatvoriModal('modal-proizvod');otvoriEditProizvoda(${p.id})"><i class="fas fa-pen"></i> Izmeni</button>
+      <button class="btn btn-danger" onclick="potvrdiBrisanjeProizvoda(${p.id},'${esc(p.naziv)}');zatvoriModal('modal-proizvod')"><i class="fas fa-trash"></i> Obriši</button>
+    </div>`;
+  otvoriModal('modal-proizvod');
+}
+
+function otvoriEditProizvoda(id) {
+  const p = state.proizvodi.data.find(x=>x.id===id); if (!p) return;
+  document.getElementById('edit-id').value      = p.id;
+  document.getElementById('edit-naziv').value   = p.naziv||'';
+  document.getElementById('edit-cena').value    = p.cena||'';
+  document.getElementById('edit-kolicina').value= p.kolicina||'';
+  document.getElementById('edit-opis').value    = p.opis||'';
+  document.getElementById('edit-podnisa').value = p.podnisa||'';
+  const nisaSel = document.getElementById('edit-nisa');
+  // try to match existing option, else add
+  let found = false;
+  for (let opt of nisaSel.options) { if (opt.value===p.glavnaNisa) { opt.selected=true; found=true; break; } }
+  if (!found && p.glavnaNisa) {
+    const opt = document.createElement('option');
+    opt.value = opt.textContent = p.glavnaNisa;
+    opt.selected = true;
+    nisaSel.appendChild(opt);
+  }
+  otvoriModal('modal-edit-proizvod');
+}
+
+async function sacuvajProizvod() {
+  const id      = document.getElementById('edit-id').value;
+  const naziv   = document.getElementById('edit-naziv').value.trim();
+  const cena    = parseFloat(document.getElementById('edit-cena').value);
+  const kolicina= parseFloat(document.getElementById('edit-kolicina').value);
+  const glavnaNisa = document.getElementById('edit-nisa').value;
+  const podnisa = document.getElementById('edit-podnisa').value.trim();
+  const opis    = document.getElementById('edit-opis').value.trim();
+
+  if (!naziv || isNaN(cena) || isNaN(kolicina) || !glavnaNisa) {
+    toast('Popunite sva obavezna polja!', 'warn'); return;
+  }
+  try {
+    const res = await fetch(`${backendUrl}/admin/proizvod/${id}`, {
+      method:'PUT',
+      headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
+      body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa, opis })
+    });
+    const d = await res.json();
+    if (res.ok) {
+      toast('Proizvod uspešno izmenjen!');
+      zatvoriModal('modal-edit-proizvod');
+      await ucitajProizvode();
+    } else {
+      toast(d.error||'Greška pri čuvanju', 'error');
+    }
+  } catch { toast('Greška pri povezivanju', 'error'); }
+}
+
+function detaljiObjave(id) {
+  const o = state.objave.data.find(x=>x.id===id); if (!o) return;
+  document.getElementById('modal-objava-body').innerHTML = `
+    ${o.slika?`<img src="${o.slika}" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;margin-bottom:1rem">`:''}
+    ${o.video?`<video src="${o.video}" controls style="width:100%;max-height:160px;border-radius:10px;margin-bottom:1rem"></video>`:''}
+    <div class="detail-row"><span class="lbl">ID</span><span class="val">#${o.id}</span></div>
+    <div class="detail-row"><span class="lbl">Tekst</span><span class="val" style="max-width:70%;text-align:right">${o.tekst}</span></div>
+    <div class="detail-row"><span class="lbl">Korisnik</span><span class="val">${o.korisnikIme||'-'}</span></div>
+    <div class="detail-row"><span class="lbl">Email</span><span class="val">${o.korisnikEmail||'-'}</span></div>
+    <div class="detail-row"><span class="lbl">Slika</span><span class="val">${o.slika?'✅ Da':'❌ Ne'}</span></div>
+    <div class="detail-row"><span class="lbl">Video</span><span class="val">${o.video?'✅ Da':'❌ Ne'}</span></div>
+    <div class="detail-row"><span class="lbl">Objavljeno</span><span class="val">${fmt(o.created_at)}</span></div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" onclick="potvrdiBrisanjeObjave(${o.id});zatvoriModal('modal-objava')"><i class="fas fa-trash"></i> Obriši objavu</button>
+    </div>`;
+  otvoriModal('modal-objava');
+}
+
+// ── BRISANJE (sve ide kroz confirm2) ──
+function potvrdiBrisanjeKorisnika(id, ime) {
+  confirm2('Obriši korisnika', `"${ime}" — biće obrisani i svi njegovi proizvodi, objave i poruke.`, async () => {
+    const res = await fetch(`${backendUrl}/admin/korisnik/${id}`,{method:'DELETE',headers:{'x-admin-password':adminLozinka}});
+    if (res.ok) { toast('Korisnik obrisan'); ucitajSve(); }
+    else toast('Greška pri brisanju', 'error');
+  }, '🗑️');
+}
+
+function potvrdiBrisanjeProizvoda(id, naziv) {
+  confirm2('Obriši proizvod', `"${naziv}" će biti trajno obrisan.`, async () => {
+    const res = await fetch(`${backendUrl}/admin/proizvod/${id}`,{method:'DELETE',headers:{'x-admin-password':adminLozinka}});
+    if (res.ok) { toast('Proizvod obrisan'); ucitajProizvode(); ucitajStats(); }
+    else toast('Greška pri brisanju', 'error');
+  }, '🗑️');
+}
+
+function potvrdiBrisanjeObjave(id) {
+  confirm2('Obriši objavu', 'Ova objava će biti trajno obrisana.', async () => {
+    const res = await fetch(`${backendUrl}/admin/objava/${id}`,{method:'DELETE',headers:{'x-admin-password':adminLozinka}});
+    if (res.ok) { toast('Objava obrisana'); ucitajObjave(); ucitajStats(); }
+    else toast('Greška pri brisanju', 'error');
+  }, '🗑️');
+}
+
+function potvrdiBrisanjeOcene(id) {
+  confirm2('Obriši ocenu', 'Ova ocena će biti trajno obrisana.', async () => {
+    const res = await fetch(`${backendUrl}/admin/ocena/${id}`,{method:'DELETE',headers:{'x-admin-password':adminLozinka}});
+    if (res.ok) { toast('Ocena obrisana'); ucitajOcene(); }
+    else toast('Greška pri brisanju', 'error');
+  }, '🗑️');
+}
+
+// ── GRUPNI EMAIL ──
+async function posaljiGrupniEmail() {
+  const naslov = document.getElementById('email-naslov').value.trim();
+  const poruka = document.getElementById('email-poruka').value.trim();
+  const grupa  = document.getElementById('email-grupa').value;
+  if (!naslov||!poruka) { toast('Naslov i poruka su obavezni!', 'warn'); return; }
+  confirm2('Pošalji email', `Slanje svim korisnicima (${grupa})?\n\nNaslov: "${naslov}"`, async () => {
+    const btn = document.getElementById('btn-posalji-email');
+    btn.disabled=true; btn.textContent='Slanje...';
     try {
-      const res = await fetch(`${backendUrl}/admin/korisnik/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-admin-password': adminLozinka }
+      const res = await fetch(`${backendUrl}/admin/grupni-email`,{
+        method:'POST', headers:{'Content-Type':'application/json','x-admin-password':adminLozinka},
+        body: JSON.stringify({naslov, poruka, ciljnaGrupa:grupa})
       });
-      if (res.ok) { alert('✅ Korisnik obrisan!'); ucitajSve(); }
-      else alert('Greška pri brisanju');
-    } catch { alert('Greška'); }
-  }
+      const d = await res.json();
+      if (res.ok) {
+        toast(d.message); document.getElementById('email-naslov').value=''; document.getElementById('email-poruka').value='';
+      } else toast(d.error||'Greška pri slanju', 'error');
+    } catch { toast('Greška pri povezivanju', 'error'); }
+    btn.disabled=false; btn.innerHTML='<i class="fas fa-paper-plane"></i> Pošalji email';
+  }, '📧');
+}
 
-  async function obrisiProizvod(id, naziv) {
-    if (!confirm(`Obrisati proizvod "${naziv}"?`)) return;
-    try {
-      const res = await fetch(`${backendUrl}/admin/proizvod/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-admin-password': adminLozinka }
-      });
-      if (res.ok) { alert('✅ Proizvod obrisan!'); ucitajProizvode(); ucitajStats(); }
-      else alert('Greška pri brisanju');
-    } catch { alert('Greška'); }
-  }
+// ── CSV EXPORT ──
+function exportCSV(tip) {
+  const datasets = {
+    prodavaci: { data: state.prodavaci.filtered, cols: ['id','ime','email','telefon','lokacija','tip','username','created_at'] },
+    kupci:     { data: state.kupci.filtered,     cols: ['id','ime','email','telefon','lokacija','tip','created_at'] },
+    proizvodi: { data: state.proizvodi.filtered, cols: ['id','naziv','glavnaNisa','podnisa','cena','kolicina','prodavacIme','created_at'] },
+    objave:    { data: state.objave.filtered,    cols: ['id','tekst','korisnikIme','korisnikEmail','created_at'] },
+    ocene:     { data: state.ocene.filtered,     cols: ['id','odIme','zaIme','ocena','komentar','created_at'] },
+  };
+  const {data, cols} = datasets[tip];
+  if (!data.length) { toast('Nema podataka za export', 'warn'); return; }
+  const csvRows = [cols.join(',')];
+  data.forEach(row => {
+    csvRows.push(cols.map(c => {
+      const v = row[c]??'';
+      return `"${String(v).replace(/"/g,'""')}"`;
+    }).join(','));
+  });
+  const blob = new Blob(['\uFEFF'+csvRows.join('\n')], { type:'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href=url; a.download=`${tip}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  toast(`CSV export: ${data.length} redova`);
+}
 
-  async function obrisiObjavu(id) {
-    if (!confirm('Obrisati ovu objavu?')) return;
-    try {
-      const res = await fetch(`${backendUrl}/admin/objava/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-admin-password': adminLozinka }
-      });
-      if (res.ok) { alert('✅ Objava obrisana!'); ucitajObjave(); ucitajStats(); }
-      else alert('Greška pri brisanju');
-    } catch { alert('Greška'); }
-  }
+// ── NAV ──
+function prikaziSekciju(naziv, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(`sec-${naziv}`).classList.add('active');
+  btn.classList.add('active');
+}
 
-  async function obrisiOcenu(id) {
-    if (!confirm('Obrisati ovu ocenu?')) return;
-    try {
-      const res = await fetch(`${backendUrl}/admin/ocena/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-admin-password': adminLozinka }
-      });
-      if (res.ok) { alert('✅ Ocena obrisana!'); ucitajOcene(); }
-      else alert('Greška pri brisanju');
-    } catch { alert('Greška'); }
-  }
-
-  function prikaziSekciju(naziv, btn) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(`sec-${naziv}`).classList.add('active');
-    btn.classList.add('active');
-  }
-
-  function parseNise(nise) {
-    try { return JSON.parse(nise) || []; } catch { return []; }
-  }
-
-  function fmt(d) {
-    if (!d) return '-';
-    return new Date(d).toLocaleDateString('sr-RS');
-  }
-
-  function esc(str) {
-    return (str || '').replace(/'/g, "\\'");
-  }
+// ── UTILS ──
+function parseNise(nise) { try { return JSON.parse(nise)||[]; } catch { return []; } }
+function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString('sr-RS'); }
+function esc(str) { return (str||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
 </script>
 </body>
 </html>
