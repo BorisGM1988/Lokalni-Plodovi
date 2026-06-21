@@ -1138,6 +1138,27 @@
   }
 
   // ══════════════════════════════════════════
+  // CLOUDINARY DIRECTNI UPLOAD (zaobilazi Railway server)
+  // ══════════════════════════════════════════
+  const CLOUDINARY_CLOUD_NAME = 'dlpavplfl';
+  const CLOUDINARY_UPLOAD_PRESET = 'LokalniPlodovi';
+
+  async function uploadDoCloudinary(file, jeVideo = false) {
+    const resourceType = jeVideo ? 'video' : 'image';
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`,
+      { method: 'POST', body: formData }
+    );
+    if (!response.ok) throw new Error('Upload na Cloudinary nije uspeo');
+    const data = await response.json();
+    return data.secure_url;
+  }
+
+  // ══════════════════════════════════════════
   // ONBOARDING TOUR
   // ══════════════════════════════════════════
   const tourKoraci = [
@@ -1572,22 +1593,17 @@
     let videoUrl = null;
 
     const slikaFile = document.getElementById('blog-slika-input').files[0];
-    if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
+    if (slikaFile) {
+      try { slikaBase64 = await uploadDoCloudinary(slikaFile); }
+      catch (err) { alert('Greška pri uploadu slike: ' + err.message); btn.disabled = false; btn.textContent = '✍️ Objavi blog'; return; }
+    }
 
     const videoFile = document.getElementById('blog-video-input').files[0];
     if (videoFile) {
       if (videoFile.size > 50 * 1024 * 1024) { alert('Video je prevelik! Maksimalno 50MB.'); btn.disabled = false; btn.textContent = '✍️ Objavi blog'; return; }
       btn.textContent = '⏳ Uploadujem video...';
       try {
-        const videoBase64 = await fileToBase64(videoFile);
-        const uploadRes = await fetch(`${backendUrl}/upload-video`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ videoBase64 })
-        });
-        const uploadData = await uploadRes.json();
-        if (!uploadRes.ok) throw new Error(uploadData.error || 'Greška pri uploadu');
-        videoUrl = uploadData.url;
+        videoUrl = await uploadDoCloudinary(videoFile, true);
       } catch (err) {
         alert('Greška pri uploadu videa: ' + err.message);
         btn.disabled = false;
@@ -1720,21 +1736,19 @@ function podeliBlogFacebook(blogId) {
     let slikaBase64 = null;
     let videoUrl = null;
     const slikaFile = document.getElementById('novost-slika').files[0];
-    if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
+    if (slikaFile) {
+      try { slikaBase64 = await uploadDoCloudinary(slikaFile); }
+      catch (err) { alert('Greška pri uploadu slike: ' + err.message); return; }
+    }
     const videoFile = document.getElementById('novost-video').files[0];
     if (videoFile) {
       if (videoFile.size > 50 * 1024 * 1024) { alert('Video je prevelik! Maksimalno 50MB.'); return; }
       const btn = document.getElementById('btn-objavi-novost');
       btn.textContent = '⏳ Uploadujem video...'; btn.disabled = true;
       try {
-        const videoBase64 = await fileToBase64(videoFile);
-        const uploadRes = await fetch(`${backendUrl}/upload-video`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ videoBase64 }) });
-        const uploadData = await uploadRes.json();
-        if (!uploadRes.ok) throw new Error(uploadData.error || 'Greška pri uploadu');
-        videoUrl = uploadData.url;
+        videoUrl = await uploadDoCloudinary(videoFile, true);
       } catch (err) {
         alert('Greška pri uploadu videa: ' + err.message);
-        const btn = document.getElementById('btn-objavi-novost');
         btn.textContent = '📢 Objavi'; btn.disabled = false;
         return;
       }
@@ -1784,9 +1798,15 @@ function podeliBlogFacebook(blogId) {
       lokacija: document.getElementById('edit-lokacija').value.trim()
     };
     const profilnaFile = document.getElementById('edit-profilna-slika').files[0];
-    if (profilnaFile) podaci.slikaBase64 = await fileToBase64(profilnaFile);
+    if (profilnaFile) {
+      try { podaci.slikaBase64 = await uploadDoCloudinary(profilnaFile); }
+      catch (err) { alert('Greška pri uploadu profilne slike: ' + err.message); return; }
+    }
     const naslovnaFile = document.getElementById('edit-naslovna-slika').files[0];
-    if (naslovnaFile) podaci.coverSlikaBase64 = await fileToBase64(naslovnaFile);
+    if (naslovnaFile) {
+      try { podaci.coverSlikaBase64 = await uploadDoCloudinary(naslovnaFile); }
+      catch (err) { alert('Greška pri uploadu naslovne slike: ' + err.message); return; }
+    }
     try {
       const response = await fetch(`${backendUrl}/profile/update`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(podaci) });
       const result = await response.json();
@@ -1854,7 +1874,10 @@ function podeliBlogFacebook(blogId) {
     if (!token) { alert('Morate biti ulogovani!'); window.location.href = 'login.html'; return; }
     let slikaBase64 = null;
     const slikaFile = document.getElementById('slika-proizvoda').files[0];
-    if (slikaFile) slikaBase64 = await fileToBase64(slikaFile);
+    if (slikaFile) {
+      try { slikaBase64 = await uploadDoCloudinary(slikaFile); }
+      catch (err) { alert('Greška pri uploadu slike: ' + err.message); return; }
+    }
     try {
       const response = await fetch(`${backendUrl}/dodaj-proizvod`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa: podnisa || null, opis: opis || null, slikaBase64 }) });
       const result = await response.json();
