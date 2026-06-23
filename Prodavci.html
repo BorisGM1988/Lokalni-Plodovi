@@ -476,7 +476,7 @@
     }
 
     @media (max-width: 480px) {
-      .sellers-grid { grid-template-columns: 1fr; }
+      .sellers-grid { grid-column: 1fr; }
     }
 
     @media (min-width: 769px) { .hamburger { display: none; } }
@@ -523,7 +523,7 @@
     Kliknite na profil da vidite detalje, proizvode i kontakt.
   </p>
   <div class="hero-stats">
-    <div class="hero-stat"><i class="fas fa-store"></i> <span id="stat-broj">37+</span> aktivnih prodavaca</div>
+    <div class="hero-stat"><i class="fas fa-store"></i> <span id="stat-broj">...</span> aktivnih prodavaca</div>
     <div class="hero-stat"><i class="fas fa-map-marker-alt"></i> Cela Srbija</div>
     <div class="hero-stat"><i class="fas fa-leaf"></i> Direktno sa imanja</div>
   </div>
@@ -537,10 +537,18 @@
              oninput="filterProdavci()">
     </div>
     <div class="filter-group">
+      <span class="filter-label">Niša:</span>
+      <select class="filter-select" id="nisa-select" onchange="filterProdavci()">
+        <option value="">Sve niše</option>
+      </select>
+    </div>
+    <div class="filter-group">
       <span class="filter-label">Sortiraj:</span>
       <select class="filter-select" id="sort-select" onchange="filterProdavci()">
         <option value="novo">Najnoviji</option>
         <option value="ime">Ime (A-Ž)</option>
+        <option value="lokacija">Lokacija (A-Ž)</option>
+        <option value="nisa">Niša (A-Ž)</option>
       </select>
     </div>
     <span id="count-label"></span>
@@ -619,10 +627,30 @@
       document.getElementById('prijavi-se-li').style.display = 'list-item';
       document.getElementById('postani-prodavac-li').style.display = 'list-item';
     }
+
+    // Toolbar top dinamički
+    const headerH = document.querySelector('header').offsetHeight;
+    document.querySelector('.toolbar').style.top = headerH + 'px';
   });
 
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
+
+  // Popuni nisa filter dropdown
+  function popuniNiseFilter() {
+    const nise = [...new Set(sviProdavci.map(p => p.glavnaNisa).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'sr'));
+    const select = document.getElementById('nisa-select');
+    // Zadrži trenutnu vrednost ako postoji
+    const trenutna = select.value;
+    select.innerHTML = '<option value="">Sve niše</option>';
+    nise.forEach(n => {
+      const opt = document.createElement('option');
+      opt.value = n;
+      opt.textContent = n;
+      if (n === trenutna) opt.selected = true;
+      select.appendChild(opt);
+    });
+  }
 
   // Skeleton
   function prikaziSkeleton(n) {
@@ -678,10 +706,10 @@
           ${nisaBadge}
         </div>
         <div class="seller-info">
-          <h2 class="seller-name">${p.ime || 'Bez imena'}</h2>
+          <h3 class="seller-name">${p.ime || 'Bez imena'}</h3>
           <div class="seller-location"><i class="fas fa-map-marker-alt"></i> ${p.lokacija || 'Nepoznato'}</div>
           <p class="seller-description" id="opis-${p.id}">${kratakOpis || '<em style="color:#bbb;">Nema opisa</em>'}</p>
-          ${dugOpis ? `<button class="prikazi-vise-btn" id="btn-${p.id}" onclick="prikaziVise(${p.id})">Prikaži više ▼</button>` : ''}
+          ${dugOpis ? `<button class="prikazi-vise-btn" id="btn-${p.id}" onclick="prikaziVise('${p.id}')">Prikaži više ▼</button>` : ''}
           <a href="moj-profil.html?userId=${p.id}" class="seller-btn">
             <i class="fas fa-user"></i> Pogledaj profil
           </a>
@@ -727,22 +755,26 @@
   function filterProdavci() {
     const q = document.getElementById('search-input').value.toLowerCase().trim();
     const sort = document.getElementById('sort-select').value;
+    const nisaFilter = document.getElementById('nisa-select').value;
 
     let lista = sviProdavci.filter(p => {
-      if (!q) return true;
-      return (p.ime || '').toLowerCase().includes(q)
+      const matchQ = !q || (p.ime || '').toLowerCase().includes(q)
         || (p.lokacija || '').toLowerCase().includes(q)
         || (p.glavnaNisa || '').toLowerCase().includes(q)
         || (p.opis || '').toLowerCase().includes(q);
+      const matchNisa = !nisaFilter || (p.glavnaNisa || '') === nisaFilter;
+      return matchQ && matchNisa;
     });
 
     if (sort === 'ime') lista.sort((a, b) => (a.ime || '').localeCompare(b.ime || '', 'sr'));
+    if (sort === 'lokacija') lista.sort((a, b) => (a.lokacija || '').localeCompare(b.lokacija || '', 'sr'));
+    if (sort === 'nisa') lista.sort((a, b) => (a.glavnaNisa || '').localeCompare(b.glavnaNisa || '', 'sr'));
 
     renderProdavci(lista);
   }
 
   function prikaziVise(id) {
-    const p = sviProdavci.find(x => x.id === id);
+    const p = sviProdavci.find(x => String(x.id) === String(id));
     if (!p) return;
     const opisEl = document.getElementById(`opis-${id}`);
     const btnEl = document.getElementById(`btn-${id}`);
@@ -766,6 +798,7 @@
         const { vreme, podaci } = JSON.parse(cached);
         if (Date.now() - vreme < CACHE_TTL) {
           sviProdavci = podaci;
+          popuniNiseFilter();
           renderProdavci(podaci);
           osvežiUPozadini();
           return;
@@ -781,7 +814,7 @@
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       const response = await fetch(`${backendUrl}/svi-prodavci`, { signal: controller.signal });
       clearTimeout(timeoutId);
@@ -796,6 +829,7 @@
         localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: sviProdavci }));
       } catch(e) {}
 
+      popuniNiseFilter();
       renderProdavci(sviProdavci);
 
     } catch(err) {
@@ -824,6 +858,7 @@
       localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: novi }));
       if (JSON.stringify(novi) !== JSON.stringify(sviProdavci)) {
         sviProdavci = novi;
+        popuniNiseFilter();
         filterProdavci();
       }
     } catch(e) {}
