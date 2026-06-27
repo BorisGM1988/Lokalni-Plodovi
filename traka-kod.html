@@ -1,0 +1,184 @@
+<!-- 
+=======================================================
+UPUTSTVO: Ubaci ovo u index.html
+=======================================================
+
+1. CSS — dodaj u <style> blok (pre zatvarajućeg </style>)
+2. HTML — dodaj između stats-bar i nise-section
+3. JS — dodaj u <script> blok (pre zatvarajućeg </script>)
+=======================================================
+-->
+
+
+<!-- ========== 1. CSS ========== -->
+<!-- Dodaj ovo u <style> blok -->
+<style id="KOPIRAJ-OVO-CSS">
+/* ===== REKLAMNA TRAKA ===== */
+.traka-section {
+  background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
+  padding: 0;
+  overflow: hidden;
+  border-top: 3px solid var(--zlatna);
+  border-bottom: 3px solid var(--zlatna);
+  position: relative;
+}
+
+.traka-naslov {
+  background: var(--zlatna);
+  color: #1b1b1b;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0 1.2rem;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  z-index: 10;
+  gap: 0.4rem;
+}
+
+.traka-wrapper {
+  display: flex;
+  align-items: stretch;
+  height: 90px;
+}
+
+.traka-scroll {
+  display: flex;
+  animation: trakaSroll 40s linear infinite;
+  will-change: transform;
+  margin-left: 140px;
+}
+
+.traka-scroll:hover { animation-play-state: paused; }
+
+@keyframes trakaSroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.traka-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.6rem 1.4rem;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  min-width: 200px;
+  max-width: 220px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+  color: white;
+}
+
+.traka-item:hover { background: rgba(255,255,255,0.08); }
+
+.traka-nisa {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.traka-naziv {
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.15rem;
+}
+
+.traka-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.traka-cena {
+  color: var(--zlatna-svetla);
+  font-weight: 700;
+}
+
+.traka-separator { opacity: 0.4; }
+
+@media (max-width: 768px) {
+  .traka-naslov { font-size: 0.7rem; padding: 0 0.8rem; }
+  .traka-scroll { margin-left: 110px; }
+  .traka-item { min-width: 170px; padding: 0.5rem 1rem; }
+  .traka-naziv { font-size: 0.88rem; }
+}
+</style>
+
+
+<!-- ========== 2. HTML ========== -->
+<!-- Dodaj OVO između </div> stats-bar i <section class="nise-section"> -->
+<section class="traka-section" id="traka-section" style="display:none;">
+  <div class="traka-wrapper">
+    <div class="traka-naslov">
+      🛒 Na pijaci
+    </div>
+    <div class="traka-scroll" id="traka-scroll">
+      <!-- JS puni ovde -->
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 3. JS ========== -->
+<!-- Dodaj OVO u <script> blok, pre zatvarajućeg </script> -->
+<script id="KOPIRAJ-OVO-JS">
+const nisaEmoji = {
+  'Povrće': '🥕',
+  'Voće': '🍎',
+  'Mlečni proizvodi': '🧀',
+  'Meso i mesne prerađevine': '🥩',
+  'Med i pčelinji proizvodi': '🍯',
+  'Jaja': '🥚',
+  'Bilje i zdravlje': '🌿'
+};
+
+async function ucitajTraku() {
+  try {
+    const res = await fetch('https://lokalni-backend-production.up.railway.app/random-proizvodi');
+    if (!res.ok) return;
+    const proizvodi = await res.json();
+    if (!proizvodi.length) return;
+
+    const scroll = document.getElementById('traka-scroll');
+
+    // Dupliraj listu da bi se vrtila bez prekida
+    const svi = [...proizvodi, ...proizvodi];
+
+    scroll.innerHTML = svi.map(p => {
+      const emoji = nisaEmoji[p.glavnaNisa] || '🌱';
+      const nisa = p.podnisa || p.glavnaNisa || '';
+      const cena = p.cena ? `${Number(p.cena).toLocaleString('sr-RS')} din` : '';
+      const lokacija = p.prodavacLokacija ? p.prodavacLokacija.split(',')[0].trim() : '';
+
+      return `<a class="traka-item" href="moj-profil.html?userId=${p.prodavacId}">
+        <div class="traka-nisa">${emoji} ${nisa}</div>
+        <div class="traka-naziv">${p.naziv}</div>
+        <div class="traka-info">
+          ${cena ? `<span class="traka-cena">${cena}</span>` : ''}
+          ${cena && lokacija ? `<span class="traka-separator">•</span>` : ''}
+          ${lokacija ? `<span>${lokacija}</span>` : ''}
+        </div>
+      </a>`;
+    }).join('');
+
+    document.getElementById('traka-section').style.display = 'block';
+  } catch (err) {
+    console.log('Traka nije učitana:', err.message);
+  }
+}
+
+// Pozovi zajedno sa blog preview
+ucitajTraku();
+</script>
