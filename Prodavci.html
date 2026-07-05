@@ -608,6 +608,30 @@
 
   // Keep-alive ping
   function pingBackend() { fetch(`${backendUrl}/test`).catch(() => {}); }
+
+  // Ista logika kao u generisi-prodavce.js — pravi isti naziv fajla
+  // za statičku stranicu prodavca (npr. "ПГ ПРОТИЋ" -> "pg-protic")
+  function napraviSlug(ime) {
+    const cirilicaLatinica = {
+      а:'a', б:'b', в:'v', г:'g', д:'d', ђ:'dj', е:'e', ж:'z', з:'z', и:'i',
+      ј:'j', к:'k', л:'l', љ:'lj', м:'m', н:'n', њ:'nj', о:'o', п:'p', р:'r',
+      с:'s', т:'t', ћ:'c', у:'u', ф:'f', х:'h', ц:'c', ч:'c', џ:'dz', ш:'s',
+      А:'a', Б:'b', В:'v', Г:'g', Д:'d', Ђ:'dj', Е:'e', Ж:'z', З:'z', И:'i',
+      Ј:'j', К:'k', Л:'l', Љ:'lj', М:'m', Н:'n', Њ:'nj', О:'o', П:'p', Р:'r',
+      С:'s', Т:'t', Ћ:'c', У:'u', Ф:'f', Х:'h', Ц:'c', Ч:'c', Џ:'dz', Ш:'s',
+    };
+    const latinicaKvacice = { č: 'c', ć: 'c', š: 's', đ: 'dj', ž: 'z', Č: 'c', Ć: 'c', Š: 's', Đ: 'dj', Ž: 'z' };
+    const zamene = { ...cirilicaLatinica, ...latinicaKvacice };
+    return (ime || 'prodavac')
+      .split('').map(k => zamene[k] || k).join('')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  }
+
+  function linkKaProfilu(p) {
+    return `prodavac/${napraviSlug(p.ime)}-${p.id}.html`;
+  }
   pingBackend();
   setInterval(pingBackend, 10 * 60 * 1000);
 
@@ -711,7 +735,7 @@
           <div class="seller-location"><i class="fas fa-map-marker-alt"></i> ${p.lokacija || 'Nepoznato'}</div>
           <p class="seller-description" id="opis-${p.id}">${kratakOpis || '<em style="color:#bbb;">Nema opisa</em>'}</p>
           ${dugOpis ? `<button class="prikazi-vise-btn" id="btn-${p.id}" onclick="prikaziVise('${p.id}')">Prikaži više ▼</button>` : ''}
-          <a href="moj-profil.html?userId=${p.id}" class="seller-btn">
+          <a href="${linkKaProfilu(p)}" class="seller-btn">
             <i class="fas fa-user"></i> Pogledaj profil
           </a>
         </div>`;
