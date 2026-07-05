@@ -394,6 +394,30 @@
     document.getElementById('nav-menu').classList.toggle('open');
   }
 
+  // Ista logika kao u generisi-prodavce.js — pravi isti naziv fajla
+  // za statičku stranicu prodavca (npr. "ПГ ПРОТИЋ" -> "pg-protic")
+  function napraviSlug(ime) {
+    const cirilicaLatinica = {
+      а:'a', б:'b', в:'v', г:'g', д:'d', ђ:'dj', е:'e', ж:'z', з:'z', и:'i',
+      ј:'j', к:'k', л:'l', љ:'lj', м:'m', н:'n', њ:'nj', о:'o', п:'p', р:'r',
+      с:'s', т:'t', ћ:'c', у:'u', ф:'f', х:'h', ц:'c', ч:'c', џ:'dz', ш:'s',
+      А:'a', Б:'b', В:'v', Г:'g', Д:'d', Ђ:'dj', Е:'e', Ж:'z', З:'z', И:'i',
+      Ј:'j', К:'k', Л:'l', Љ:'lj', М:'m', Н:'n', Њ:'nj', О:'o', П:'p', Р:'r',
+      С:'s', Т:'t', Ћ:'c', У:'u', Ф:'f', Х:'h', Ц:'c', Ч:'c', Џ:'dz', Ш:'s',
+    };
+    const latinicaKvacice = { č: 'c', ć: 'c', š: 's', đ: 'dj', ž: 'z', Č: 'c', Ć: 'c', Š: 's', Đ: 'dj', Ž: 'z' };
+    const zamene = { ...cirilicaLatinica, ...latinicaKvacice };
+    return (ime || 'prodavac')
+      .split('').map(k => zamene[k] || k).join('')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  }
+
+  function linkKaProfilu(p) {
+    return `prodavac/${napraviSlug(p.ime)}-${p.id}.html`;
+  }
+
   // ── Mapa — IDENTIČNA LOGIKA KAO ORIGINAL ──
   const map = L.map('map').setView([44.0165, 21.0059], 7);
 
@@ -445,7 +469,7 @@
             <div class="popup-name">${p.ime}</div>
             ${niseText}
             <div class="popup-lokacija">📍 ${p.lokacija}</div>
-            <a href="moj-profil.html?userId=${p.id}" class="popup-btn">
+            <a href="${linkKaProfilu(p)}" class="popup-btn">
               <i class="fas fa-user"></i> Pogledaj profil
             </a>
           </div>`;
