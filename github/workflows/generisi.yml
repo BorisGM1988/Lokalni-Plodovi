@@ -1,0 +1,33 @@
+name: Generisi stranice prodavaca
+
+# Kada se ovo pokreće:
+on:
+  schedule:
+    - cron: '0 3,9,15,21 * * *'   # 4x dnevno (03h, 09h, 15h, 21h UTC)
+  workflow_dispatch:               # + dugme za ručno pokretanje na GitHub-u
+
+permissions:
+  contents: write   # dozvola da workflow sam commit-uje promene u repo
+
+jobs:
+  generisi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preuzmi repo
+        uses: actions/checkout@v4
+
+      - name: Podesi Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Pokreni skriptu za generisanje stranica
+        run: node generisi-prodavce.js
+
+      - name: Sačuvaj promene (ako ih ima)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add prodavac/ sitemap.xml
+          git diff --staged --quiet || git commit -m "Automatsko azuriranje stranica prodavaca i sitemap-a"
+          git push
