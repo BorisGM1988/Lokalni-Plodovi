@@ -80,7 +80,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background: url('https://thumbs.dreamstime.com/b/serbian-rural-village-green-springtime-landscape-mountains-serbia-very-123806888.jpg') no-repeat center center;
+      background: url('hero-pozadina.jpg') no-repeat center center;
       background-size: cover;
       overflow: hidden;
     }
@@ -89,7 +89,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(10,40,10,0.62) 0%, rgba(20,60,20,0.45) 40%, rgba(30,70,20,0.70) 100%);
+      background: linear-gradient(180deg, rgba(5,20,5,0.78) 0%, rgba(10,35,10,0.62) 40%, rgba(15,45,10,0.82) 100%);
       z-index: 1;
     }
 
@@ -180,10 +180,10 @@
 
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.5rem;
-      background: rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.28);
       border: 1px solid rgba(255,255,255,0.25);
       backdrop-filter: blur(8px);
-      color: rgba(255,255,255,0.92);
+      color: rgba(255,255,255,0.95);
       padding: 0.45rem 1.1rem; border-radius: 50px;
       font-size: 0.82rem; font-weight: 500;
       letter-spacing: 0.5px; margin-bottom: 1.4rem;
@@ -207,7 +207,7 @@
       font-size: clamp(2.8rem, 6vw, 5rem);
       font-weight: 700; color: white;
       line-height: 1.1; margin-bottom: 1.2rem;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+      text-shadow: 0 2px 24px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.6);
       animation: fadeDown 0.7s ease 0.1s both;
     }
 
@@ -215,9 +215,10 @@
 
     .hero-subtitle {
       font-size: 1.1rem;
-      color: rgba(255,255,255,0.82);
+      color: rgba(255,255,255,0.92);
       max-width: 520px; margin-bottom: 2.5rem;
       line-height: 1.7;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.5);
       animation: fadeDown 0.7s ease 0.2s both;
     }
 
@@ -243,14 +244,14 @@
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.12); color: white;
+      background: rgba(0,0,0,0.32); color: white;
       padding: 0.9rem 2.2rem; border-radius: 50px;
       text-decoration: none; font-weight: 600; font-size: 0.95rem;
-      border: 1.5px solid rgba(255,255,255,0.35);
+      border: 1.5px solid rgba(255,255,255,0.45);
       backdrop-filter: blur(8px); transition: all 0.25s;
     }
 
-    .btn-secondary:hover { background: rgba(255,255,255,0.22); transform: translateY(-2px); }
+    .btn-secondary:hover { background: rgba(0,0,0,0.45); transform: translateY(-2px); }
 
     .scroll-hint {
       position: absolute; bottom: 2rem; left: 50%;
@@ -258,8 +259,9 @@
       z-index: 10;
       display: flex; flex-direction: column;
       align-items: center; gap: 0.4rem;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.65);
       font-size: 0.75rem; letter-spacing: 1px;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.5);
       animation: fadeDown 1s ease 0.8s both;
     }
 
@@ -421,6 +423,8 @@
       transform: translateY(-10px) scale(1.01);
       box-shadow: 0 20px 48px rgba(0,0,0,0.13);
     }
+
+    .card-img-link { display: block; }
 
     .card-img-wrap { height: 220px; overflow: hidden; position: relative; }
 
@@ -724,10 +728,12 @@
 
   <div class="nise-grid">
     <div class="nise-card">
-      <div class="card-img-wrap">
-        <img src="https://thumbs.dreamstime.com/b/fresh-organic-vegetables-rustic-wooden-table-healthy-cooking-concepts-generative-ai-vibrant-assortment-fresh-organic-344221452.jpg" alt="Sveže domaće povrće od lokalnih proizvođača u Srbiji" loading="lazy">
-        <span class="card-badge">🥕 Sezonsko</span>
-      </div>
+      <a href="povrce.html" class="card-img-link">
+        <div class="card-img-wrap">
+          <img src="paprika.jpg" alt="Sveže domaće povrće od lokalnih proizvođača u Srbiji" loading="lazy">
+          <span class="card-badge">🥕 Sezonsko</span>
+        </div>
+      </a>
       <div class="card-body">
         <h3 class="card-title">Povrće</h3>
         <a href="povrce.html" class="card-btn">Pogledaj</a>
@@ -735,10 +741,12 @@
     </div>
 
     <div class="nise-card">
-      <div class="card-img-wrap">
-        <img src="https://thumbs.dreamstime.com/b/plums-collected-wooden-box-under-sun-beautiful-orchard-ripe-plums-rest-rustic-wooden-box-surrounded-lush-408272680.jpg" alt="Sveže domaće voće direktno sa imanja u Srbiji" loading="lazy">
-        <span class="card-badge">🍎 Sveže</span>
-      </div>
+      <a href="voce.html" class="card-img-link">
+        <div class="card-img-wrap">
+          <img src="jabuka.jpg" alt="Sveže domaće voće direktno sa imanja u Srbiji" loading="lazy">
+          <span class="card-badge">🍎 Sveže</span>
+        </div>
+      </a>
       <div class="card-body">
         <h3 class="card-title">Voće</h3>
         <a href="voce.html" class="card-btn">Pogledaj</a>
@@ -746,10 +754,12 @@
     </div>
 
     <div class="nise-card">
-      <div class="card-img-wrap">
-        <img src="https://www.thespruceeats.com/thmb/TB1E61jiouvN7guW5iijfFmIGBg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/traditional-serbian-kajmak-recipe-1135791-hero-01-4cfbd4a92cbd4dce83ae0ade3d221069.jpg" alt="Domaći mlečni proizvodi, kajmak i sir od lokalnih farmera" loading="lazy">
-        <span class="card-badge">🧀 Domaće</span>
-      </div>
+      <a href="mlecni.html" class="card-img-link">
+        <div class="card-img-wrap">
+          <img src="kajmak.jpg" alt="Domaći mlečni proizvodi, kajmak i sir od lokalnih farmera" loading="lazy">
+          <span class="card-badge">🧀 Domaće</span>
+        </div>
+      </a>
       <div class="card-body">
         <h3 class="card-title">Mlečni proizvodi</h3>
         <a href="mlecni.html" class="card-btn">Pogledaj</a>
@@ -757,10 +767,12 @@
     </div>
 
     <div class="nise-card">
-      <div class="card-img-wrap">
-        <img src="https://cdn.tasteatlas.com/images/ingredients/5658752de16147489fba72f27e2bf34b.jpg?w=1476&h=830" alt="Domaće meso i mesne prerađevine od lokalnih proizvođača" loading="lazy">
-        <span class="card-badge">🥩 Prirodno</span>
-      </div>
+      <a href="meso.html" class="card-img-link">
+        <div class="card-img-wrap">
+          <img src="svezemeso.jpg" alt="Domaće meso i mesne prerađevine od lokalnih proizvođača" loading="lazy">
+          <span class="card-badge">🥩 Prirodno</span>
+        </div>
+      </a>
       <div class="card-body">
         <h3 class="card-title">Meso i prerađevine</h3>
         <a href="meso.html" class="card-btn">Pogledaj</a>
@@ -768,10 +780,12 @@
     </div>
 
     <div class="nise-card">
-      <div class="card-img-wrap">
-        <img src="https://thumbs.dreamstime.com/b/jars-honey-serbian-srpski-med-display-market-belgrade-traditional-production-serbia-april-picture-stall-selling-316678971.jpg" alt="Srpski med i pčelinji proizvodi od lokalnih pčelara" loading="lazy">
-        <span class="card-badge">🍯 Organski</span>
-      </div>
+      <a href="med.html" class="card-img-link">
+        <div class="card-img-wrap">
+          <img src="med-sa-sacom.jpg" alt="Srpski med i pčelinji proizvodi od lokalnih pčelara" loading="lazy">
+          <span class="card-badge">🍯 Organski</span>
+        </div>
+      </a>
       <div class="card-body">
         <h3 class="card-title">Med i pčelinji proizvodi</h3>
         <a href="med.html" class="card-btn">Pogledaj</a>
@@ -779,10 +793,12 @@
     </div>
 
     <div class="nise-card">
-      <div class="card-img-wrap">
-        <img src="https://thumbs.dreamstime.com/b/belgrade-serbia-july-fresh-eggs-cortical-tray-serbian-zeleni-venac-farmer-s-market-106407499.jpg" alt="Sveža domaća jaja od slobodnih kokoški" loading="lazy">
-        <span class="card-badge">🥚 Slobodni uzgoj</span>
-      </div>
+      <a href="jaja.html" class="card-img-link">
+        <div class="card-img-wrap">
+          <img src="https://images.pexels.com/photos/2223238/pexels-photo-2223238.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Sveža domaća jaja od slobodnih kokoški" loading="lazy">
+          <span class="card-badge">🥚 Slobodni uzgoj</span>
+        </div>
+      </a>
       <div class="card-body">
         <h3 class="card-title">Jaja</h3>
         <a href="jaja.html" class="card-btn">Pogledaj</a>
@@ -790,10 +806,12 @@
     </div>
 
     <div class="nise-card">
-      <div class="card-img-wrap">
-        <img src="https://media.springernature.com/lw1200/springer-static/image/art%3A10.1186%2Fs13002-024-00647-2/MediaObjects/13002_2024_647_Fig6_HTML.jpg" alt="Domaće lekovito bilje i prirodni zdravstveni proizvodi iz Srbije" loading="lazy">
-        <span class="card-badge">🌿 Lekovito</span>
-      </div>
+      <a href="zdravlje.html" class="card-img-link">
+        <div class="card-img-wrap">
+          <img src="https://images.pexels.com/photos/14379617/pexels-photo-14379617.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Domaće lekovito bilje i prirodni zdravstveni proizvodi iz Srbije" loading="lazy">
+          <span class="card-badge">🌿 Lekovito</span>
+        </div>
+      </a>
       <div class="card-body">
         <h3 class="card-title">Bilje i zdravlje</h3>
         <a href="zdravlje.html" class="card-btn">Pogledaj</a>
