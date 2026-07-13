@@ -624,6 +624,9 @@
       <div class="profile-header">
         <h1 class="profile-name" id="profileName">Učitavanje...</h1>
         <p class="profile-bio" id="profileBio">Opis domaćinstva...</p>
+        <div id="neaktivan-baner" style="display:none; background:#fff3cd; border:1px solid #ffe69c; color:#664d03; padding:0.7rem 1.2rem; border-radius:12px; margin:0.8rem auto 0; max-width:600px; font-size:0.92rem; font-weight:600;">
+          ⏸️ Vaš profil je trenutno neaktivan i nije vidljiv kupcima. Uključite ga ponovo klikom na "Izmeni profil".
+        </div>
         <div class="profile-header-btns">
           <button class="profile-edit-btn" id="btn-izmeni" onclick="izmeniProfil()">
             <i class="fas fa-pen"></i> Izmeni profil
@@ -862,6 +865,18 @@
       <input type="tel" id="edit-telefon" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
       <label>Lokacija</label>
       <input type="text" id="edit-lokacija" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+
+      <div style="margin:16px 0; padding:14px; background:#f5f5f5; border-radius:10px;">
+        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600; margin:0;">
+          <input type="checkbox" id="edit-aktivan" checked style="width:20px; height:20px; cursor:pointer;">
+          Profil je aktivan (vidljiv kupcima)
+        </label>
+        <p style="margin:8px 0 0; font-size:0.85rem; color:#666;">
+          Ako trenutno nemate proizvode (npr. van sezone), isključite ovo — vaš profil se privremeno sklanja sa sajta,
+          ali svi vaši podaci i proizvodi ostaju sačuvani. Uvek možete da se vratite kad poželite.
+        </p>
+      </div>
+
       <label>📸 Profilna slika</label>
       <input type="file" id="edit-profilna-slika" accept="image/*" style="margin:8px 0; display:block;">
       <img id="preview-profilna" style="width:120px; height:120px; border-radius:50%; object-fit:cover; margin:8px 0; display:none;">
@@ -1006,6 +1021,7 @@
   let trenutniUserId = null;
   let profilIme = '';
   let aktivnaKonverzacijaUserId = null;
+  let trenutniProdavacAktivan = true;
 
   const nisaIkone = {
     'Voće': '🍎', 'Povrće': '🥦', 'Mlečni proizvodi': '🥛',
@@ -1083,6 +1099,10 @@
         document.getElementById('cover-image').style.display = 'block';
         document.getElementById('placeholder-text').style.display = 'none';
       }
+
+      trenutniProdavacAktivan = (data.aktivan !== false);
+      const neaktivanBaner = document.getElementById('neaktivan-baner');
+      if (neaktivanBaner) neaktivanBaner.style.display = (isOwnProfile && !trenutniProdavacAktivan) ? 'block' : 'none';
 
       const editBtn = document.getElementById('btn-izmeni');
       if (editBtn) editBtn.style.display = isOwnProfile ? 'inline-block' : 'none';
@@ -1774,6 +1794,7 @@ function podeliBlogFacebook(blogId) {
     document.getElementById('edit-opis').value = document.getElementById('profileBio').textContent || '';
     document.getElementById('edit-telefon').value = document.getElementById('telefon').textContent || '';
     document.getElementById('edit-lokacija').value = document.getElementById('lokacija').textContent || '';
+    document.getElementById('edit-aktivan').checked = trenutniProdavacAktivan;
     document.getElementById('izmeni-profil-modal').style.display = 'flex';
   }
 
@@ -1795,7 +1816,8 @@ function podeliBlogFacebook(blogId) {
       ime: document.getElementById('edit-ime').value.trim(),
       opis: document.getElementById('edit-opis').value.trim(),
       telefon: document.getElementById('edit-telefon').value.trim(),
-      lokacija: document.getElementById('edit-lokacija').value.trim()
+      lokacija: document.getElementById('edit-lokacija').value.trim(),
+      aktivan: document.getElementById('edit-aktivan').checked
     };
     const profilnaFile = document.getElementById('edit-profilna-slika').files[0];
     if (profilnaFile) {
