@@ -1482,11 +1482,16 @@
       const response = await fetch(`${backendUrl}/proizvodi?userId=${trenutniUserId}`);
       if (!response.ok) throw new Error('Greška');
       const proizvodi = await response.json();
-      if (proizvodi.length === 0) { sadrzaj.innerHTML = `<div style="text-align:center; padding:3rem 1rem; color:#666;"><div style="font-size:3rem; margin-bottom:1rem;">🛒</div><p style="font-size:1.1rem;">Još nema proizvoda na tezgi.</p><p>Klikni "Dodaj novi proizvod" da počneš!</p></div>`; return; }
       const token = localStorage.getItem('token');
       let mojId = null;
       if (token) { try { const payload = JSON.parse(atob(token.split('.')[1])); mojId = String(payload.userId); } catch(e) {} }
       const isOwnProfile = mojId && String(trenutniUserId) === mojId;
+      if (proizvodi.length === 0) {
+        sadrzaj.innerHTML = isOwnProfile
+          ? `<div style="text-align:center; padding:3rem 1rem; color:#666;"><div style="font-size:3rem; margin-bottom:1rem;">🛒</div><p style="font-size:1.1rem;">Još nema proizvoda na tezgi.</p><p>Klikni "Dodaj novi proizvod" da počneš!</p></div>`
+          : `<div style="text-align:center; padding:3rem 1rem; color:#666;"><div style="font-size:3rem; margin-bottom:1rem;">🛒</div><p style="font-size:1.1rem;">Ovaj prodavac trenutno nema proizvoda na tezgi.</p><p>Svratite ponovo uskoro!</p></div>`;
+        return;
+      }
       const grupisano = {};
       proizvodi.forEach(p => { const nisa = p.glavnaNisa || 'Ostalo'; if (!grupisano[nisa]) grupisano[nisa] = []; grupisano[nisa].push(p); });
       sadrzaj.innerHTML = '';
