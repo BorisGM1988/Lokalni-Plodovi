@@ -229,6 +229,58 @@
       margin-bottom: 3rem;
     }
 
+    .hero-search {
+      display: flex; gap: 0.6rem;
+      max-width: 560px; width: 100%;
+      margin: 0 auto 1.8rem;
+      animation: fadeDown 0.7s ease 0.25s both;
+    }
+
+    .hero-search input {
+      flex: 1; padding: 0.9rem 1.3rem;
+      border-radius: 50px; border: none;
+      font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+      outline: none; box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    .hero-search button {
+      background: var(--zelena-svetla); color: white;
+      border: none; padding: 0 1.6rem;
+      border-radius: 50px; font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    }
+
+    .hero-search button:hover { background: var(--zelena-tamna); transform: translateY(-2px); }
+
+    #pretraga-rezultati {
+      max-width: 1200px; margin: 2rem auto; padding: 0 2rem;
+    }
+
+    #pretraga-rezultati h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--zelena-tamna); font-size: 1.6rem;
+      margin: 1.5rem 0 1rem;
+    }
+
+    .pretraga-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .pretraga-karta {
+      background: white; border-radius: 14px;
+      padding: 1.2rem; border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-decoration: none; color: inherit;
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: block;
+    }
+
+    .pretraga-karta:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .pretraga-karta-naziv { font-weight: 700; color: #1b5e20; margin-bottom: 0.3rem; }
+    .pretraga-karta-info { font-size: 0.88rem; color: #666; }
+
     .btn-primary {
       background: var(--zlatna); color: #1b1b1b;
       padding: 0.9rem 2.2rem; border-radius: 50px;
@@ -676,6 +728,11 @@
       Povežite se sa lokalnim proizvođačima u Srbiji. Bez posrednika, bez supermarketa pravo sa imanja do vašeg stola.
     </p>
 
+    <div class="hero-search">
+      <input type="text" id="pretraga-input" placeholder="Pretraži proizvode ili prodavce (npr. med, paradajz, Novi Sad)..." onkeydown="if(event.key==='Enter') izvrsiPretragu();">
+      <button onclick="izvrsiPretragu()"><i class="fas fa-search"></i> Pretraži</button>
+    </div>
+
     <div class="hero-btns">
       <a href="Prodavci.html" class="btn-primary">🛒 Pronađi prodavce</a>
       <a href="registracija-prodavca.html" id="btn-postani-prodavac" class="btn-secondary">🌿 Postani prodavac</a>
@@ -687,6 +744,12 @@
     <i class="fas fa-chevron-down"></i>
   </div>
 </section>
+
+<!-- ===== REZULTATI PRETRAGE ===== -->
+<div id="pretraga-rezultati" style="display:none;">
+  <h2 id="pretraga-naslov"></h2>
+  <div id="pretraga-lista"></div>
+</div>
 
 <!-- ===== STATS ===== -->
 <div class="stats-bar">
@@ -983,6 +1046,58 @@
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
   function prihvatiDisclaimer() { localStorage.setItem('disclaimer_prihvacen', 'true'); document.getElementById('disclaimer-banner').style.display = 'none'; }
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
+
+  async function izvrsiPretragu() {
+    const q = document.getElementById('pretraga-input').value.trim();
+    const rezultatiDiv = document.getElementById('pretraga-rezultati');
+    const naslov = document.getElementById('pretraga-naslov');
+    const lista = document.getElementById('pretraga-lista');
+    if (!q) return;
+
+    rezultatiDiv.style.display = 'block';
+    naslov.textContent = `Pretraga: "${q}"`;
+    lista.innerHTML = '<p style="text-align:center; color:#666; padding:2rem;">Pretražujem...</p>';
+    rezultatiDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    try {
+      const res = await fetch(`${backendUrl}/pretraga?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+      const { proizvodi = [], prodavci = [] } = data;
+
+      if (proizvodi.length === 0 && prodavci.length === 0) {
+        lista.innerHTML = `<p style="text-align:center; color:#666; padding:2rem;">Nema rezultata za "${q}". Probajte drugi pojam.</p>`;
+        return;
+      }
+
+      let html = '';
+
+      if (prodavci.length > 0) {
+        html += `<h3 style="color:#2e7d32; margin-bottom:0.8rem;">🧑‍🌾 Prodavci (${prodavci.length})</h3><div class="pretraga-grid" style="margin-bottom:2rem;">`;
+        prodavci.forEach(p => {
+          html += `<a href="moj-profil.html?userId=${p.id}" class="pretraga-karta">
+            <div class="pretraga-karta-naziv">${p.ime}</div>
+            <div class="pretraga-karta-info">${p.lokacija || 'Lokacija nije navedena'}</div>
+          </a>`;
+        });
+        html += `</div>`;
+      }
+
+      if (proizvodi.length > 0) {
+        html += `<h3 style="color:#2e7d32; margin-bottom:0.8rem;">🛒 Proizvodi (${proizvodi.length})</h3><div class="pretraga-grid">`;
+        proizvodi.forEach(p => {
+          html += `<a href="moj-profil.html?userId=${p.userId}" class="pretraga-karta">
+            <div class="pretraga-karta-naziv">${p.naziv}</div>
+            <div class="pretraga-karta-info">${p.cena} RSD • ${p.prodavacIme || 'Prodavac'}</div>
+          </a>`;
+        });
+        html += `</div>`;
+      }
+
+      lista.innerHTML = html;
+    } catch (err) {
+      lista.innerHTML = '<p style="text-align:center; color:red; padding:2rem;">Greška pri pretrazi. Pokušajte ponovo.</p>';
+    }
+  }
 
   // ── Reklamna traka ──
   async function ucitajTraku() {
