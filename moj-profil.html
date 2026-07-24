@@ -638,6 +638,9 @@
           <button class="btn-poruka" id="btn-poruka" onclick="otvoriPosaljiPoruku()">
             <i class="fas fa-envelope"></i> Pošalji poruku
           </button>
+          <button class="btn-inbox" id="btn-podeli" onclick="otvoriPodeliModal()" style="display:inline-block; background:#0ea5e9; box-shadow:0 4px 12px rgba(14,165,233,0.3);">
+            <i class="fas fa-share-alt"></i> Podeli profil
+          </button>
         </div>
       </div>
 
@@ -725,6 +728,29 @@
   <div class="tour-btns">
     <button class="tour-btn-skip" onclick="zatvoriTour()">Preskoči</button>
     <button class="tour-btn-next" id="tour-btn-next" onclick="sledecaTourStep()">Dalje →</button>
+  </div>
+</div>
+
+<!-- MODAL PODELI PROFIL -->
+<div id="podeli-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:440px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#0ea5e9,#0284c7); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2 style="margin:0; font-size:1.3rem;">📤 Podeli profil</h2>
+      </div>
+      <button onclick="zatvoriPodeliModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:1.8rem 2rem; display:flex; flex-direction:column; gap:1rem;">
+      <button onclick="podeliProfilFacebook()" style="display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:14px; border-radius:14px; background:#1877f2; color:white; border:none; font-weight:600; font-size:1rem; cursor:pointer;">
+        <i class="fab fa-facebook"></i> Podeli na Fejsbuku
+      </button>
+      <button onclick="preuzmiSlikuZaStory(event)" style="display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:14px; border-radius:14px; background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:white; border:none; font-weight:600; font-size:1rem; cursor:pointer;">
+        <i class="fab fa-instagram"></i> Preuzmi sliku za Instagram Story
+      </button>
+      <p style="font-size:0.85rem; color:#888; margin:0; text-align:center;">
+        Instagram ne dozvoljava automatsko objavljivanje — preuzmi sliku, pa je ručno dodaj u svoju Story.
+      </p>
+    </div>
   </div>
 </div>
 
@@ -883,6 +909,15 @@
       <label>🖼️ Naslovna fotografija</label>
       <input type="file" id="edit-naslovna-slika" accept="image/*" style="margin:8px 0; display:block;">
       <img id="preview-naslovna" style="width:100%; max-height:180px; object-fit:cover; margin:8px 0; display:none;">
+
+      <div style="margin:20px 0 8px; padding-top:16px; border-top:1px solid #eee;">
+        <label style="font-weight:700; color:#2e7d32;">🔒 Promeni lozinku (opciono)</label>
+        <p style="margin:4px 0 10px; font-size:0.85rem; color:#666;">Ostavite prazno ako ne želite da menjate lozinku.</p>
+        <input type="password" id="edit-trenutna-lozinka" placeholder="Trenutna lozinka" autocomplete="current-password" style="width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+        <input type="password" id="edit-nova-lozinka" placeholder="Nova lozinka (min. 6 karaktera)" autocomplete="new-password" style="width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+        <input type="password" id="edit-potvrdi-lozinku" placeholder="Potvrdi novu lozinku" autocomplete="new-password" style="width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+        <button type="button" onclick="promeniLozinku()" style="width:100%; margin-top:8px; padding:11px; border-radius:50px; background:#d97706; color:white; border:none; font-weight:600; cursor:pointer;">🔒 Promeni lozinku</button>
+      </div>
     </div>
     <div style="margin-top:1.5rem; display:flex; gap:1rem; flex-shrink:0;">
       <button type="button" onclick="zatvoriIzmeniModal()" style="flex:1; padding:12px; border-radius:50px; background:#ccc; color:black; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
@@ -1724,6 +1759,127 @@ function podeliBlogFacebook(blogId) {
   }
 }
 
+  // ══════════════════════════════════════════
+  // PODELI PROFIL (Fejsbuk + Instagram Story)
+  // ══════════════════════════════════════════
+  function otvoriPodeliModal() {
+    if (!trenutniUserId) { alert('Profil se još učitava, sačekajte trenutak.'); return; }
+    document.getElementById('podeli-modal').style.display = 'flex';
+  }
+
+  function zatvoriPodeliModal() { document.getElementById('podeli-modal').style.display = 'none'; }
+
+  document.getElementById('podeli-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriPodeliModal(); });
+
+  function podeliProfilFacebook() {
+    const shareUrl = encodeURIComponent(`${backendUrl}/prodavac-share/${trenutniUserId}`);
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+    if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      window.open(`fb://share?u=${shareUrl}`, '_blank');
+      setTimeout(() => { window.location.href = fbUrl; }, 1000);
+    } else {
+      window.open(fbUrl, '_blank', 'width=600,height=400');
+    }
+  }
+
+  async function preuzmiSlikuZaStory(event) {
+    const btn = event.target.closest('button');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '⏳ Pravim sliku...';
+    btn.disabled = true;
+
+    try {
+      await document.fonts.ready;
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const ctx = canvas.getContext('2d');
+
+      // Pozadina - gradijent
+      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      grad.addColorStop(0, '#1b5e20');
+      grad.addColorStop(1, '#2e7d32');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Logo tekst
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '600 44px "DM Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🌿 LokalniPlodovi', canvas.width / 2, 160);
+
+      // Avatar (krug)
+      const avatarSrc = document.getElementById('profile-avatar').src;
+      const avatarSize = 420;
+      const avatarY = 420;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.clip();
+      try {
+        const img = await new Promise((resolve, reject) => {
+          const image = new Image();
+          image.crossOrigin = 'anonymous';
+          image.onload = () => resolve(image);
+          image.onerror = reject;
+          image.src = avatarSrc;
+        });
+        ctx.drawImage(img, canvas.width / 2 - avatarSize / 2, avatarY, avatarSize, avatarSize);
+      } catch (e) {
+        ctx.fillStyle = '#e8f5e9';
+        ctx.fillRect(canvas.width / 2 - avatarSize / 2, avatarY, avatarSize, avatarSize);
+        ctx.fillStyle = '#2e7d32';
+        ctx.font = '160px sans-serif';
+        ctx.fillText('🧑‍🌾', canvas.width / 2, avatarY + avatarSize / 2 + 55);
+      }
+      ctx.restore();
+
+      // Beli okvir oko avatara
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+
+      // Ime prodavca
+      const ime = document.getElementById('profileName').textContent || 'Prodavac';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 64px "Playfair Display", serif';
+      ctx.fillText(ime, canvas.width / 2, avatarY + avatarSize + 110, canvas.width - 100);
+
+      // Lokacija
+      const lokacija = document.getElementById('lokacija').textContent || '';
+      if (lokacija && lokacija !== 'Nije navedeno' && lokacija !== 'Učitavanje...') {
+        ctx.font = '400 40px "DM Sans", sans-serif';
+        ctx.fillStyle = '#e8f5e9';
+        ctx.fillText('📍 ' + lokacija, canvas.width / 2, avatarY + avatarSize + 175, canvas.width - 100);
+      }
+
+      // Poziv na akciju na dnu
+      ctx.font = '600 46px "DM Sans", sans-serif';
+      ctx.fillStyle = '#ffd166';
+      ctx.fillText('Pronađite me na', canvas.width / 2, canvas.height - 220);
+      ctx.font = '700 52px "DM Sans", sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('lokalniplodovi.rs', canvas.width / 2, canvas.height - 150);
+
+      // Preuzimanje
+      const link = document.createElement('a');
+      link.download = `${ime.replace(/\s+/g, '-')}-story.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+      btn.innerHTML = '✅ Slika preuzeta!';
+      setTimeout(() => { btn.innerHTML = originalHTML; btn.disabled = false; }, 2000);
+    } catch (err) {
+      alert('Greška pri pravljenju slike: ' + err.message);
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+    }
+  }
+
+
   async function obrisiBlog(id) {
     if (!confirm('Obrisati ovaj blog post?')) return;
     const token = localStorage.getItem('token');
@@ -1804,6 +1960,38 @@ function podeliBlogFacebook(blogId) {
   }
 
   function zatvoriIzmeniModal() { document.getElementById('izmeni-profil-modal').style.display = 'none'; }
+
+  async function promeniLozinku() {
+    const trenutnaLozinka = document.getElementById('edit-trenutna-lozinka').value;
+    const novaLozinka = document.getElementById('edit-nova-lozinka').value;
+    const potvrdaLozinke = document.getElementById('edit-potvrdi-lozinku').value;
+
+    if (!trenutnaLozinka || !novaLozinka || !potvrdaLozinke) { alert('Popunite sva tri polja za lozinku!'); return; }
+    if (novaLozinka.length < 6) { alert('Nova lozinka mora imati najmanje 6 karaktera.'); return; }
+    if (novaLozinka !== potvrdaLozinke) { alert('Nova lozinka i potvrda se ne poklapaju!'); return; }
+
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti ulogovani'); return; }
+
+    try {
+      const response = await fetch(`${backendUrl}/promeni-lozinku`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ trenutnaLozinka, novaLozinka })
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert('✅ Lozinka uspešno promenjena!');
+        document.getElementById('edit-trenutna-lozinka').value = '';
+        document.getElementById('edit-nova-lozinka').value = '';
+        document.getElementById('edit-potvrdi-lozinku').value = '';
+      } else {
+        alert('❌ ' + (result.error || 'Greška pri promeni lozinke'));
+      }
+    } catch (err) {
+      alert('Greška pri slanju na server');
+    }
+  }
 
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
