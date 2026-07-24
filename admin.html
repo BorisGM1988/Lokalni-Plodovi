@@ -161,6 +161,8 @@
     .btn-danger:hover  { background: #b71c1c; }
     .btn-info    { background: var(--blue); color:white; }
     .btn-info:hover    { background: #1d4ed8; }
+    .btn-warning { background: #d97706; color:white; }
+    .btn-warning:hover { background: #b45309; }
     .btn-edit    { background: var(--amber); color:white; }
     .btn-edit:hover    { background: #d97706; }
     .btn-ghost   { background: #f1f5f9; color: var(--muted); }
@@ -979,6 +981,7 @@ function renderProdavaciTable(lista, tip) {
         <td style="white-space:nowrap">${fmt(k.created_at)}</td>
         <td style="white-space:nowrap">
           <button class="btn btn-info btn-sm" onclick="detaljiKorisnika(${k.id})"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-warning btn-sm" onclick="resetujLozinku(${k.id},'${esc(k.ime)}')" title="Resetuj lozinku"><i class="fas fa-key"></i></button>
           <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}')"><i class="fas fa-trash"></i></button>
         </td>
       </tr>`).join('')}
@@ -1011,6 +1014,7 @@ function renderKupciTable(lista, tip) {
         <td style="white-space:nowrap">${fmt(k.created_at)}</td>
         <td style="white-space:nowrap">
           <button class="btn btn-info btn-sm" onclick="detaljiKorisnika(${k.id})"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-warning btn-sm" onclick="resetujLozinku(${k.id},'${esc(k.ime)}')" title="Resetuj lozinku"><i class="fas fa-key"></i></button>
           <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}')"><i class="fas fa-trash"></i></button>
         </td>
       </tr>`).join('')}
@@ -1211,6 +1215,23 @@ async function postaviUsername(id) {
     else toast('❌ ' + (d.error||'Greška'), 'error');
   } catch { toast('Greška pri povezivanju', 'error'); }
 }
+
+// ── RESET LOZINKE ──
+async function resetujLozinku(id, ime) {
+  const novaLozinka = prompt(`Unesite novu privremenu lozinku za korisnika "${ime}" (najmanje 6 karaktera):`);
+  if (!novaLozinka) return;
+  if (novaLozinka.length < 6) { toast('Lozinka mora imati najmanje 6 karaktera!', 'warn'); return; }
+  try {
+    const res = await fetch(`${backendUrl}/admin/reset-lozinka/${id}`, {
+      method:'POST', headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
+      body: JSON.stringify({ novaLozinka })
+    });
+    const d = await res.json();
+    if (res.ok) toast(`✅ ${d.message}`);
+    else toast('❌ ' + (d.error||'Greška'), 'error');
+  } catch { toast('Greška pri povezivanju', 'error'); }
+}
+
 
 // ── MODALS ──
 function otvoriModal(id)  { document.getElementById(id).classList.add('open'); }
