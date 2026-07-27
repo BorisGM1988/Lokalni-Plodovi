@@ -1050,6 +1050,10 @@
 </div>
 <!-- ===================================== -->
 
+<!-- BRZA PROMENA SLIKE (klik direktno na avatar/naslovnu) -->
+<input type="file" id="brza-slika-avatar" accept="image/*" style="display:none;">
+<input type="file" id="brza-slika-cover" accept="image/*" style="display:none;">
+
 <!-- ===== SKRIPTA ===== -->
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
@@ -1147,10 +1151,10 @@
       if (isOwnProfile) {
         avatarEl.style.cursor = 'pointer';
         avatarEl.title = 'Klikni da promeniš profilnu sliku';
-        avatarEl.onclick = izmeniProfil;
+        avatarEl.onclick = () => document.getElementById('brza-slika-avatar').click();
         coverEl.style.cursor = 'pointer';
         coverEl.title = 'Klikni da promeniš naslovnu fotografiju';
-        coverEl.onclick = izmeniProfil;
+        coverEl.onclick = () => document.getElementById('brza-slika-cover').click();
       } else {
         avatarEl.style.cursor = 'default';
         avatarEl.title = '';
@@ -1975,6 +1979,54 @@ function podeliBlogFacebook(blogId) {
   }
 
   function zatvoriIzmeniModal() { document.getElementById('izmeni-profil-modal').style.display = 'none'; }
+
+  // ══════════════════════════════════════════
+  // BRZA PROMENA SLIKE (klik direktno na avatar/naslovnu)
+  // ══════════════════════════════════════════
+  document.getElementById('brza-slika-avatar').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) brzaPromenaSlike(file, 'avatar');
+    e.target.value = '';
+  });
+
+  document.getElementById('brza-slika-cover').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) brzaPromenaSlike(file, 'cover');
+    e.target.value = '';
+  });
+
+  async function brzaPromenaSlike(file, tip) {
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti ulogovani'); return; }
+
+    const el = tip === 'avatar' ? document.getElementById('profile-avatar') : document.getElementById('cover-image');
+    const originalOpacity = el.style.opacity;
+    el.style.opacity = '0.4';
+
+    try {
+      const url = await uploadDoCloudinary(file);
+      const podaci = tip === 'avatar' ? { slikaBase64: url } : { coverSlikaBase64: url };
+      const response = await fetch(`${backendUrl}/profile/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(podaci)
+      });
+      const result = await response.json();
+      if (response.ok) {
+        el.src = url;
+        if (tip === 'cover') {
+          el.style.display = 'block';
+          document.getElementById('placeholder-text').style.display = 'none';
+        }
+      } else {
+        alert('Greška: ' + (result.error || 'Nešto nije u redu'));
+      }
+    } catch (err) {
+      alert('Greška pri otpremanju slike: ' + err.message);
+    } finally {
+      el.style.opacity = originalOpacity || '1';
+    }
+  }
 
   async function promeniLozinku() {
     const trenutnaLozinka = document.getElementById('edit-trenutna-lozinka').value;
