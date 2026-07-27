@@ -641,6 +641,9 @@
           <button class="btn-inbox" id="btn-podeli" onclick="otvoriPodeliModal()" style="background:#0ea5e9; box-shadow:0 4px 12px rgba(14,165,233,0.3);">
             <i class="fas fa-share-alt"></i> Podeli profil
           </button>
+          <button class="btn-inbox" id="btn-notifikacije" onclick="ukljuciPushNotifikacije()" style="background:#7c3aed; box-shadow:0 4px 12px rgba(124,58,237,0.3);">
+            <i class="fas fa-bell"></i> Uključi obaveštenja
+          </button>
         </div>
       </div>
 
@@ -1169,6 +1172,9 @@
 
       const btnPodeli = document.getElementById('btn-podeli');
       if (btnPodeli) btnPodeli.style.display = 'inline-block';
+
+      const btnNotif = document.getElementById('btn-notifikacije');
+      if (btnNotif) { btnNotif.style.display = isOwnProfile ? 'inline-block' : 'none'; if (isOwnProfile) azurirajDugmeNotifikacija(); }
 
       const btnPoruka = document.getElementById('btn-poruka');
       if (btnPoruka) {
@@ -1798,6 +1804,79 @@ function podeliBlogFacebook(blogId) {
   }
 
   function zatvoriPodeliModal() { document.getElementById('podeli-modal').style.display = 'none'; }
+
+  // ══════════════════════════════════════════
+  // PUSH NOTIFIKACIJE
+  // ══════════════════════════════════════════
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+    return outputArray;
+  }
+
+  async function azurirajDugmeNotifikacija() {
+    const btn = document.getElementById('btn-notifikacije');
+    if (!btn) return;
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) { btn.style.display = 'none'; return; }
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      const sub = reg ? await reg.pushManager.getSubscription() : null;
+      if (sub) {
+        btn.innerHTML = '<i class="fas fa-bell"></i> Obaveštenja uključena ✓';
+        btn.style.background = '#16a34a';
+      } else {
+        btn.innerHTML = '<i class="fas fa-bell"></i> Uključi obaveštenja';
+        btn.style.background = '#7c3aed';
+      }
+    } catch (e) {}
+  }
+
+  async function ukljuciPushNotifikacije() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      alert('Vaš browser ne podržava push notifikacije.');
+      return;
+    }
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti ulogovani'); return; }
+
+    try {
+      const reg = await navigator.serviceWorker.register('/service-worker.js');
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') { alert('Niste dozvolili obaveštenja. Možete to promeniti u podešavanjima browsera.'); return; }
+
+      const keyRes = await fetch(`${backendUrl}/push/vapid-public-key`);
+      const { publicKey } = await keyRes.json();
+
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(publicKey)
+        });
+      }
+
+      await fetch(`${backendUrl}/push/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ subscription: sub })
+      });
+
+      alert('✅ Obaveštenja su uključena! Dobijaćete push notifikaciju čak i kad sajt nije otvoren.');
+      azurirajDugmeNotifikacija();
+    } catch (err) {
+      alert('Greška pri uključivanju obaveštenja: ' + err.message);
+    }
+  }
+
+  if ('serviceWorker' in navigator) {
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      if (token) azurirajDugmeNotifikacija();
+    });
+  }
 
   document.getElementById('podeli-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriPodeliModal(); });
 
