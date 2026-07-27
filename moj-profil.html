@@ -638,7 +638,7 @@
           <button class="btn-poruka" id="btn-poruka" onclick="otvoriPosaljiPoruku()">
             <i class="fas fa-envelope"></i> Pošalji poruku
           </button>
-          <button class="btn-inbox" id="btn-podeli" onclick="otvoriPodeliModal()" style="display:inline-block; background:#0ea5e9; box-shadow:0 4px 12px rgba(14,165,233,0.3);">
+          <button class="btn-inbox" id="btn-podeli" onclick="otvoriPodeliModal()" style="background:#0ea5e9; box-shadow:0 4px 12px rgba(14,165,233,0.3);">
             <i class="fas fa-share-alt"></i> Podeli profil
           </button>
         </div>
@@ -741,9 +741,9 @@
       <button onclick="zatvoriPodeliModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div style="padding:1.8rem 2rem; display:flex; flex-direction:column; gap:1rem;">
-      <button onclick="podeliProfilFacebook()" style="display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:14px; border-radius:14px; background:#1877f2; color:white; border:none; font-weight:600; font-size:1rem; cursor:pointer;">
+      <a id="link-podeli-fb" href="#" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:14px; border-radius:14px; background:#1877f2; color:white; text-decoration:none; font-weight:600; font-size:1rem;">
         <i class="fab fa-facebook"></i> Podeli na Fejsbuku
-      </button>
+      </a>
       <button onclick="preuzmiSlikuZaStory(event)" style="display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:14px; border-radius:14px; background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:white; border:none; font-weight:600; font-size:1rem; cursor:pointer;">
         <i class="fab fa-instagram"></i> Preuzmi sliku za Instagram Story
       </button>
@@ -1142,8 +1142,29 @@
       const editBtn = document.getElementById('btn-izmeni');
       if (editBtn) editBtn.style.display = isOwnProfile ? 'inline-block' : 'none';
 
+      const avatarEl = document.getElementById('profile-avatar');
+      const coverEl = document.getElementById('profile-cover');
+      if (isOwnProfile) {
+        avatarEl.style.cursor = 'pointer';
+        avatarEl.title = 'Klikni da promeniš profilnu sliku';
+        avatarEl.onclick = izmeniProfil;
+        coverEl.style.cursor = 'pointer';
+        coverEl.title = 'Klikni da promeniš naslovnu fotografiju';
+        coverEl.onclick = izmeniProfil;
+      } else {
+        avatarEl.style.cursor = 'default';
+        avatarEl.title = '';
+        avatarEl.onclick = null;
+        coverEl.style.cursor = 'default';
+        coverEl.title = '';
+        coverEl.onclick = null;
+      }
+
       const btnInbox = document.getElementById('btn-inbox');
       if (btnInbox) btnInbox.style.display = isOwnProfile ? 'inline-block' : 'none';
+
+      const btnPodeli = document.getElementById('btn-podeli');
+      if (btnPodeli) btnPodeli.style.display = 'inline-block';
 
       const btnPoruka = document.getElementById('btn-poruka');
       if (btnPoruka) {
@@ -1291,31 +1312,34 @@
     if (korak.target) {
       const el = document.getElementById(korak.target);
       if (el) {
-        const rect = el.getBoundingClientRect();
-        const padding = 8;
-
-        highlight.style.display = 'block';
-        highlight.style.top = (rect.top + window.scrollY - padding) + 'px';
-        highlight.style.left = (rect.left - padding) + 'px';
-        highlight.style.width = (rect.width + padding * 2) + 'px';
-        highlight.style.height = (rect.height + padding * 2) + 'px';
-
-        const boxWidth = 360;
-        const margin = 16;
-
-        if (korak.pozicija === 'ispod') {
-          box.style.top = (rect.bottom + window.scrollY + margin) + 'px';
-          box.style.left = Math.max(margin, Math.min(window.innerWidth - boxWidth - margin, rect.left)) + 'px';
-          box.style.bottom = 'auto';
-          box.style.transform = 'none';
-        } else {
-          box.style.bottom = (window.innerHeight - rect.top - window.scrollY + margin) + 'px';
-          box.style.top = 'auto';
-          box.style.left = Math.max(margin, Math.min(window.innerWidth - boxWidth - margin, rect.left)) + 'px';
-          box.style.transform = 'none';
-        }
-
+        highlight.style.display = 'none';
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        setTimeout(() => {
+          const rect = el.getBoundingClientRect();
+          const padding = 8;
+
+          highlight.style.display = 'block';
+          highlight.style.top = (rect.top - padding) + 'px';
+          highlight.style.left = (rect.left - padding) + 'px';
+          highlight.style.width = (rect.width + padding * 2) + 'px';
+          highlight.style.height = (rect.height + padding * 2) + 'px';
+
+          const boxWidth = 360;
+          const margin = 16;
+
+          if (korak.pozicija === 'ispod') {
+            box.style.top = (rect.bottom + margin) + 'px';
+            box.style.left = Math.max(margin, Math.min(window.innerWidth - boxWidth - margin, rect.left)) + 'px';
+            box.style.bottom = 'auto';
+            box.style.transform = 'none';
+          } else {
+            box.style.bottom = (window.innerHeight - rect.top + margin) + 'px';
+            box.style.top = 'auto';
+            box.style.left = Math.max(margin, Math.min(window.innerWidth - boxWidth - margin, rect.left)) + 'px';
+            box.style.transform = 'none';
+          }
+        }, 400);
       }
     } else {
       highlight.style.display = 'none';
@@ -1764,23 +1788,14 @@ function podeliBlogFacebook(blogId) {
   // ══════════════════════════════════════════
   function otvoriPodeliModal() {
     if (!trenutniUserId) { alert('Profil se još učitava, sačekajte trenutak.'); return; }
+    const shareUrl = encodeURIComponent(`${backendUrl}/prodavac-share/${trenutniUserId}`);
+    document.getElementById('link-podeli-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
     document.getElementById('podeli-modal').style.display = 'flex';
   }
 
   function zatvoriPodeliModal() { document.getElementById('podeli-modal').style.display = 'none'; }
 
   document.getElementById('podeli-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriPodeliModal(); });
-
-  function podeliProfilFacebook() {
-    const shareUrl = encodeURIComponent(`${backendUrl}/prodavac-share/${trenutniUserId}`);
-    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
-    if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
-      window.open(`fb://share?u=${shareUrl}`, '_blank');
-      setTimeout(() => { window.location.href = fbUrl; }, 1000);
-    } else {
-      window.open(fbUrl, '_blank', 'width=600,height=400');
-    }
-  }
 
   async function preuzmiSlikuZaStory(event) {
     const btn = event.target.closest('button');
