@@ -1076,6 +1076,11 @@
   function prihvatiDisclaimer() { localStorage.setItem('disclaimer_prihvacen', 'true'); document.getElementById('disclaimer-banner').style.display = 'none'; }
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
 
+  // Registruj Service Worker odmah pri učitavanju stranice (potrebno da Chrome ponudi instalaciju)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').catch(err => console.error('SW registracija greška:', err));
+  }
+
   // ══════════════════════════════════════════
   // INSTALACIJA APLIKACIJE (PWA) + AUTO-UKLJUČIVANJE NOTIFIKACIJA
   // ══════════════════════════════════════════
