@@ -676,13 +676,6 @@
 
     @media (min-width: 769px) { .hamburger { display: none; } }
   </style>
-
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#2e7d32">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Lokalni Plodovi">
-  <link rel="apple-touch-icon" href="/icons/icon-180.png">
 </head>
 <body>
 
@@ -743,6 +736,9 @@
     <div class="hero-btns">
       <a href="Prodavci.html" class="btn-primary">🛒 Pronađi prodavce</a>
       <a href="registracija-prodavca.html" id="btn-postani-prodavac" class="btn-secondary">🌿 Postani prodavac</a>
+      <button id="btn-preuzmi-app" onclick="preuzmiAplikaciju()" style="display:inline-flex; align-items:center; gap:0.5rem; padding:1.1rem 1.6rem; border-radius:50px; font-weight:600; font-size:0.95rem; cursor:pointer; border:none; background:linear-gradient(135deg,#f59e0b,#d97706); color:white; box-shadow:0 4px 12px rgba(217,119,6,0.35); font-family:'DM Sans', sans-serif;">
+        <i class="fas fa-download"></i> Preuzmi aplikaciju
+      </button>
     </div>
   </div>
 
@@ -762,11 +758,11 @@
 <div class="stats-bar">
   <div class="stats-inner">
     <div class="stat-item">
-      <div class="stat-num">58+</div>
+      <div class="stat-num">50+</div>
       <div class="stat-label">Aktivnih prodavaca</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num">110+</div>
+      <div class="stat-num">108+</div>
       <div class="stat-label">Proizvoda na platformi</div>
     </div>
     <div class="stat-item">
@@ -938,6 +934,32 @@
   </div>
 </section>
 
+<!-- MODAL UPUTSTVO ZA IPHONE INSTALACIJU -->
+<div id="ios-install-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3500; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:420px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#f59e0b,#d97706); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="margin:0; font-size:1.3rem;">📲 Instaliraj aplikaciju</h2>
+      <button onclick="document.getElementById('ios-install-modal').style.display='none'" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:1.8rem 2rem; font-family:'DM Sans', sans-serif;">
+      <p style="color:#666; margin-bottom:1.2rem;">Na iPhone-u instalacija ide u 3 kratka koraka (Apple to zahteva ovako, ne može automatski):</p>
+      <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1rem;">
+        <div style="background:#fef3c7; color:#d97706; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">1</div>
+        <p style="margin:0;">Tapni ikonicu <strong>Podeli</strong> <i class="fas fa-arrow-up-from-bracket"></i> na dnu Safari ekrana</p>
+      </div>
+      <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1rem;">
+        <div style="background:#fef3c7; color:#d97706; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">2</div>
+        <p style="margin:0;">Skroluj naniže i tapni <strong>"Dodaj na Home Screen"</strong></p>
+      </div>
+      <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.2rem;">
+        <div style="background:#fef3c7; color:#d97706; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">3</div>
+        <p style="margin:0;">Otvori aplikaciju sa <strong>nove ikonice</strong> na početnom ekranu, uloguj se, i uključi obaveštenja na svom profilu</p>
+      </div>
+      <button onclick="document.getElementById('ios-install-modal').style.display='none'" style="width:100%; padding:12px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer;">Razumem</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== FOOTER ===== -->
 <footer>
   <div class="footer-inner">
@@ -1053,6 +1075,94 @@
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
   function prihvatiDisclaimer() { localStorage.setItem('disclaimer_prihvacen', 'true'); document.getElementById('disclaimer-banner').style.display = 'none'; }
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
+
+  // ══════════════════════════════════════════
+  // INSTALACIJA APLIKACIJE (PWA) + AUTO-UKLJUČIVANJE NOTIFIKACIJA
+  // ══════════════════════════════════════════
+  let deferredInstallPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    const token = localStorage.getItem('token');
+    if (token) setTimeout(() => ukljuciPushNotifikacijeIndex(), 1500);
+  });
+
+  function jeVecInstalirano() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  function jeIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  }
+
+  async function preuzmiAplikaciju() {
+    if (jeVecInstalirano()) {
+      const token = localStorage.getItem('token');
+      if (token) ukljuciPushNotifikacijeIndex();
+      else alert('Aplikacija je već instalirana! Uloguj se da uključiš obaveštenja.');
+      return;
+    }
+
+    if (jeIOS()) {
+      document.getElementById('ios-install-modal').style.display = 'flex';
+      return;
+    }
+
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+    } else {
+      alert('Vaš browser trenutno ne podržava instalaciju aplikacije jednim klikom. Probajte preko menija browsera → "Dodaj na početni ekran" ili "Instaliraj aplikaciju".');
+    }
+  }
+
+  function urlBase64ToUint8ArrayIndex(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+    return outputArray;
+  }
+
+  async function ukljuciPushNotifikacijeIndex() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const reg = await navigator.serviceWorker.register('/service-worker.js');
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') return;
+
+      const keyRes = await fetch(`${backendUrl}/push/vapid-public-key`);
+      const { publicKey } = await keyRes.json();
+
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8ArrayIndex(publicKey)
+        });
+      }
+
+      await fetch(`${backendUrl}/push/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ subscription: sub })
+      });
+
+      alert('✅ Aplikacija instalirana i obaveštenja su uključena!');
+    } catch (err) {
+      console.error('Greška pri uključivanju obaveštenja:', err);
+    }
+  }
+
 
   async function izvrsiPretragu() {
     const q = document.getElementById('pretraga-input').value.trim();
