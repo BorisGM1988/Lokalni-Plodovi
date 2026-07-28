@@ -1212,6 +1212,8 @@
 
       const btnNotif = document.getElementById('btn-notifikacije');
       if (btnNotif) { btnNotif.style.display = isOwnProfile ? 'inline-block' : 'none'; if (isOwnProfile) azurirajDugmeNotifikacija(); }
+      const btnPreuzmi = document.getElementById('btn-preuzmi-app');
+      if (btnPreuzmi) btnPreuzmi.style.display = isOwnProfile ? 'inline-flex' : 'none';
 
       const btnPoruka = document.getElementById('btn-poruka');
       if (btnPoruka) {
