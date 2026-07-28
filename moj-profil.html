@@ -1123,6 +1123,11 @@
 
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
 
+  // Registruj Service Worker odmah pri učitavanju stranice (potrebno da Chrome ponudi instalaciju)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').catch(err => console.error('SW registracija greška:', err));
+  }
+
   // ── Profil ──
   async function ucitajProfil() {
     const urlParams = new URLSearchParams(window.location.search);
