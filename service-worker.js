@@ -10,7 +10,9 @@ self.addEventListener('activate', function (event) {
 
 // Prazan fetch handler - potreban da Chrome prepozna sajt kao instalabilnu aplikaciju
 self.addEventListener('fetch', function (event) {
-  event.respondWith(fetch(event.request));
+  event.respondWith(
+    fetch(event.request).catch(() => new Response('', { status: 504, statusText: 'Offline ili blokirano' }))
+  );
 });
 
 self.addEventListener('push', function (event) {
