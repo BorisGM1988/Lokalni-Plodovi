@@ -1,5 +1,18 @@
 // Service Worker za LokalniPlodovi push notifikacije
 
+self.addEventListener('install', function (event) {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', function (event) {
+  event.waitUntil(self.clients.claim());
+});
+
+// Prazan fetch handler - potreban da Chrome prepozna sajt kao instalabilnu aplikaciju
+self.addEventListener('fetch', function (event) {
+  event.respondWith(fetch(event.request));
+});
+
 self.addEventListener('push', function (event) {
   let data = { title: 'LokalniPlodovi', body: 'Imate novo obaveštenje', url: '/' };
   try {
