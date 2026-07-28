@@ -577,13 +577,6 @@
       .profil-sekcija { margin-left: 2rem; margin-right: 2rem; }
     }
   </style>
-
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#2e7d32">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Lokalni Plodovi">
-  <link rel="apple-touch-icon" href="/icons/icon-180.png">
 </head>
 <body>
 
@@ -650,6 +643,9 @@
           </button>
           <button class="btn-inbox" id="btn-notifikacije" onclick="ukljuciPushNotifikacije()" style="background:#7c3aed; box-shadow:0 4px 12px rgba(124,58,237,0.3);">
             <i class="fas fa-bell"></i> Uključi obaveštenja
+          </button>
+          <button id="btn-preuzmi-app" onclick="preuzmiAplikaciju()" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.6rem; border-radius:50px; font-weight:600; font-size:0.92rem; cursor:pointer; border:none; background:linear-gradient(135deg,#f59e0b,#d97706); color:white; box-shadow:0 4px 12px rgba(217,119,6,0.35); font-family:'DM Sans', sans-serif;">
+            <i class="fas fa-download"></i> Preuzmi aplikaciju
           </button>
         </div>
       </div>
@@ -738,6 +734,32 @@
   <div class="tour-btns">
     <button class="tour-btn-skip" onclick="zatvoriTour()">Preskoči</button>
     <button class="tour-btn-next" id="tour-btn-next" onclick="sledecaTourStep()">Dalje →</button>
+  </div>
+</div>
+
+<!-- MODAL UPUTSTVO ZA IPHONE INSTALACIJU -->
+<div id="ios-install-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3500; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:420px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#f59e0b,#d97706); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="margin:0; font-size:1.3rem;">📲 Instaliraj aplikaciju</h2>
+      <button onclick="document.getElementById('ios-install-modal').style.display='none'" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:1.8rem 2rem;">
+      <p style="color:#666; margin-bottom:1.2rem;">Na iPhone-u instalacija ide u 3 kratka koraka (Apple to zahteva ovako, ne može automatski):</p>
+      <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1rem;">
+        <div style="background:#fef3c7; color:#d97706; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">1</div>
+        <p style="margin:0;">Tapni ikonicu <strong>Podeli</strong> <i class="fas fa-arrow-up-from-bracket"></i> na dnu Safari ekrana</p>
+      </div>
+      <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1rem;">
+        <div style="background:#fef3c7; color:#d97706; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">2</div>
+        <p style="margin:0;">Skroluj naniže i tapni <strong>"Dodaj na Home Screen"</strong></p>
+      </div>
+      <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.2rem;">
+        <div style="background:#fef3c7; color:#d97706; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">3</div>
+        <p style="margin:0;">Otvori aplikaciju sa <strong>nove ikonice</strong> na početnom ekranu, uloguj se, i tapni "Uključi obaveštenja"</p>
+      </div>
+      <button onclick="document.getElementById('ios-install-modal').style.display='none'" style="width:100%; padding:12px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer;">Razumem</button>
+    </div>
   </div>
 </div>
 
@@ -1883,6 +1905,54 @@ function podeliBlogFacebook(blogId) {
       const token = localStorage.getItem('token');
       if (token) azurirajDugmeNotifikacija();
     });
+  }
+
+  // ══════════════════════════════════════════
+  // INSTALACIJA APLIKACIJE (PWA) + AUTO-UKLJUČIVANJE NOTIFIKACIJA
+  // ══════════════════════════════════════════
+  let deferredInstallPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    const token = localStorage.getItem('token');
+    if (token) {
+      setTimeout(() => ukljuciPushNotifikacije(), 1500);
+    }
+  });
+
+  function jeVecInstalirano() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  function jeIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  }
+
+  async function preuzmiAplikaciju() {
+    if (jeVecInstalirano()) {
+      const token = localStorage.getItem('token');
+      if (token) ukljuciPushNotifikacije();
+      else alert('Aplikacija je već instalirana! Uloguj se da uključiš obaveštenja.');
+      return;
+    }
+
+    if (jeIOS()) {
+      document.getElementById('ios-install-modal').style.display = 'flex';
+      return;
+    }
+
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+    } else {
+      alert('Vaš browser trenutno ne podržava instalaciju aplikacije jednim klikom. Probajte preko menija browsera → "Dodaj na početni ekran" ili "Instaliraj aplikaciju".');
+    }
   }
 
   document.getElementById('podeli-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriPodeliModal(); });
