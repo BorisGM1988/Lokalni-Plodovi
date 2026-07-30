@@ -3,7 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>O nama • LokalniPlodovi.rs</title>
+
+  <!-- Primarni SEO tagovi -->
+  <title>O nama | LokalniPlodovi.rs Kupovina domaćih proizvoda direktno sa imanja</title>
+  <meta name="description" content="LokalniPlodovi.rs povezuje male domaće proizvođače širom Srbije sa kupcima koji traže sveže voće, povrće, med, mlečne i mesne proizvode direktno sa imanja, bez posrednika."/>
+  <meta name="keywords" content="domaći proizvodi, lokalni proizvođači, kupovina direktno sa imanja, domaće voće i povrće, domaći med, domaći mlečni proizvodi, OPG Srbija, seoska ekonomija"/>
+  <meta name="author" content="LokalniPlodovi.rs"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://lokalniplodovi.rs/o-nama.html"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="LokalniPlodovi.rs"/>
+  <meta property="og:title" content="O nama | LokalniPlodovi.rs"/>
+  <meta property="og:description" content="Upoznajte priču iza LokalniPlodovi.rs — platforme koja spaja domaće proizvođače hrane sa kupcima širom Srbije, direktno i bez posrednika."/>
+  <meta property="og:url" content="https://lokalniplodovi.rs/o-nama.html"/>
+  <meta property="og:locale" content="sr_RS"/>
+  <meta property="og:image" content="https://lokalniplodovi.rs/images.jpg"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="O nama | LokalniPlodovi.rs"/>
+  <meta name="twitter:description" content="Platforma koja spaja domaće proizvođače hrane sa kupcima širom Srbije, direktno sa imanja."/>
+  <meta name="twitter:image" content="https://lokalniplodovi.rs/images.jpg"/>
+
+  <!-- Structured data za pretraživače -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "O nama LokalniPlodovi.rs",
+    "url": "https://lokalniplodovi.rs/o-nama.html",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "LokalniPlodovi.rs",
+      "url": "https://lokalniplodovi.rs/",
+      "description": "Platforma koja povezuje male domaće proizvođače hrane sa kupcima širom Srbije, omogućavajući kupovinu direktno sa imanja bez posrednika.",
+      "areaServed": "RS",
+      "slogan": "Prirodno • Zdravo • Direktno sa imanja"
+    }
+  }
+  </script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="mobile.css">
@@ -68,26 +109,78 @@
       padding: 2rem 1.5rem 5rem;
     }
 
+    /* Breadcrumbs za SEO i navigaciju */
+    .breadcrumbs {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      padding: 0 1.5rem;
+      font-size: 0.95rem;
+      color: #666;
+    }
+    .breadcrumbs a { color: var(--zelena); text-decoration: none; }
+    .breadcrumbs a:hover { text-decoration: underline; }
+
     h1 {
       color: var(--zemlja);
       text-align: center;
       font-size: 2.8rem;
-      margin: 2.5rem 0 1.5rem;
+      margin: 2rem 0 1.5rem;
+    }
+
+    h2 {
+      color: var(--zelena);
+      font-size: 1.9rem;
     }
 
     .mission {
       font-size: 1.35rem;
       text-align: center;
       max-width: 800px;
-      margin: 0 auto 4rem;
+      margin: 0 auto 3rem;
       color: #444;
+    }
+
+    section { margin-bottom: 4rem; }
+
+    /* Naša priča */
+    .story {
+      max-width: 800px;
+      margin: 0 auto 4rem;
+      font-size: 1.15rem;
+    }
+    .story h2 { text-align: center; margin-bottom: 1.5rem; }
+    .story p { margin-bottom: 1.2rem; }
+
+    /* Brojke */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 14px;
+      padding: 1.8rem 1rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    .stat-card .num {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--zelena);
+      display: block;
+    }
+    .stat-card .label {
+      font-size: 1rem;
+      color: #555;
     }
 
     .values-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
-      margin-top: 3rem;
+      margin-top: 2rem;
     }
 
     .value-card {
@@ -103,6 +196,54 @@
       color: var(--zelena);
       margin-bottom: 1.5rem;
     }
+
+    /* Interni linkovi ka kategorijama */
+    .kategorije {
+      text-align: center;
+    }
+    .kategorije h2 { text-align: center; margin-bottom: 0.5rem; }
+    .kategorije p { text-align: center; max-width: 700px; margin: 0 auto 2rem; color: #555; }
+    .kategorije-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.2rem;
+    }
+    .kategorija-link {
+      display: block;
+      background: white;
+      border-radius: 14px;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      text-decoration: none;
+      color: var(--zemlja);
+      font-weight: 600;
+      transition: transform 0.15s ease;
+    }
+    .kategorija-link:hover { transform: translateY(-4px); }
+    .kategorija-link i { display: block; font-size: 2rem; color: var(--zelena-svetla); margin-bottom: 0.6rem; }
+
+    /* FAQ za SEO (dugorepe pretrage) */
+    .faq { max-width: 800px; margin: 0 auto; }
+    .faq h2 { text-align: center; margin-bottom: 2rem; }
+    .faq-item {
+      background: white;
+      border-radius: 14px;
+      padding: 1.5rem 1.8rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+    .faq-item h3 { color: var(--zemlja); margin-bottom: 0.5rem; font-size: 1.15rem; }
+    .faq-item p { color: #555; }
+
+    .cta-box {
+      margin-top: 2rem;
+      text-align: center;
+      background: white;
+      padding: 3rem;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .cta-box h2 { margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -151,52 +292,113 @@
   }
 </script>
 
-<div class="container">
-  <h1>O nama</h1>
+<p class="breadcrumbs"><a href="index.html">Početna</a> / O nama</p>
+
+<main class="container">
+  <h1>O nama  priča iza LokalniPlodovi.rs</h1>
   <p class="mission">
-    LokalniPlodovi.rs je pokrenut iz želje da se spoje mali proizvođači hrane sa kupcima koji žele sveže, domaće i kvalitetne proizvode direktno sa imanja.
+    LokalniPlodovi.rs je pokrenut iz želje da se spoje mali proizvođači hrane sa kupcima koji žele sveže, domaće i kvalitetne proizvode <strong>direktno sa imanja</strong>, bez posrednika i bez nepotrebnih marži.
   </p>
 
-  <div style="text-align:center; max-width:800px; margin:0 auto 4rem; font-size:1.2rem;">
+  <section class="story">
+    <h2>Naša priča</h2>
     <p>
-      Verujemo da hrana ima priču. Iza svakog paradajza, tegla meda ili krompira stoji nečiji rad, znoj i ljubav prema zemlji. 
-      Naš cilj je da tu priču približimo ljudima i omogućimo da se kupuje <strong>direktno od onoga ko proizvodi</strong>.
+      Sve je počelo od jednostavnog zapažanja: domaćinstva širom Srbije proizvode izuzetnu hranu  sveže povrće, domaći med, mlečne i mesne proizvode  ali retko imaju gde da je predstave kupcima van svog sela ili pijace. S druge strane, sve više ljudi u gradovima traži poreklo hrane koju jedu i spremno je da plati za kvalitet i autentičnost.
     </p>
-  </div>
+    <p>
+      LokalniPlodovi.rs je nastao kao odgovor na taj jaz. Napravili smo mesto na kojem svaki proizvođač bilo da je reč o povrtaru, pčelaru, mlekari ili domaćoj mesari  može da napravi svoj profil, predstavi svoje proizvode i poveže se sa kupcima iz svog kraja i šire.
+    </p>
+    <p>
+      Verujemo da hrana ima priču. Iza svakog paradajza, tegle meda ili kilograma krompira stoji nečiji rad, znoj i ljubav prema zemlji. Naš cilj je da tu priču približimo ljudima i omogućimo da se kupuje <strong>direktno od onoga ko proizvodi</strong>.
+    </p>
+  </section>
 
-  <h2 style="text-align:center; color:var(--zelena); margin:3rem 0 2rem;">Naše vrednosti</h2>
+  <section class="stats-grid" aria-label="LokalniPlodovi.rs u brojkama">
+    <div class="stat-card">
+      <span class="num">100%</span>
+      <span class="label">domaći proizvođači</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">0</span>
+      <span class="label">posrednika u lancu</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">5+</span>
+      <span class="label">kategorija proizvoda</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">24/7</span>
+      <span class="label">dostupna platforma</span>
+    </div>
+  </section>
 
-  <div class="values-grid">
-    <div class="value-card">
-      <i class="fas fa-leaf"></i>
-      <h3>Pravo sa imanja</h3>
-      <p>Samo lokalni proizvođači. Bez posrednika. Bez velikih lanaca.</p>
+  <section>
+    <h2 style="text-align:center; margin-bottom:2rem;">Naše vrednosti</h2>
+    <div class="values-grid">
+      <div class="value-card">
+        <i class="fas fa-leaf"></i>
+        <h3>Pravo sa imanja</h3>
+        <p>Samo lokalni proizvođači. Bez posrednika. Bez velikih lanaca.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-users"></i>
+        <h3>Poverenje i transparentnost</h3>
+        <p>Svaki prodavac ima profil, slike sa imanja i mogućnost direktne komunikacije.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-heart"></i>
+        <h3>Podrška malima</h3>
+        <p>Pomažemo malim domaćinstvima i porodičnim gazdinstvima da dopru do kupaca.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-seedling"></i>
+        <h3>Zdravo i prirodno</h3>
+        <p>Podržavamo tradicionalan način gajenja i očuvanje starih sorti.</p>
+      </div>
     </div>
-    <div class="value-card">
-      <i class="fas fa-users"></i>
-      <h3>Poverenje i transparentnost</h3>
-      <p>Svaki prodavac ima profil, slike sa imanja i mogućnost direktne komunikacije.</p>
-    </div>
-    <div class="value-card">
-      <i class="fas fa-heart"></i>
-      <h3>Podrška malima</h3>
-      <p>Pomažemo malim domaćinstvima i porodičnim gazdinstvima da dopru do kupaca.</p>
-    </div>
-    <div class="value-card">
-      <i class="fas fa-seedling"></i>
-      <h3>Zdravo i prirodno</h3>
-      <p>Podržavamo tradicionalan način gajenja i očuvanje starih sorti.</p>
-    </div>
-  </div>
+  </section>
 
-  <div style="margin-top:5rem; text-align:center; background:white; padding:3rem; border-radius:18px; box-shadow:0 8px 25px rgba(0,0,0,0.1);">
-    <h3 style="color:var(--zelena);">Želiš da budeš deo priče?</h3>
-    <p style="margin:1.5rem 0; font-size:1.2rem;">Bilo da si proizvođač ili kupac koji voli domaće — dobrodošao si!</p>
+  <section class="kategorije">
+    <h2>Šta možeš da nađeš na LokalniPlodovi.rs</h2>
+    <p>Istraži ponudu domaćih proizvoda po kategorijama, direktno od proizvođača iz tvog kraja.</p>
+    <div class="kategorije-grid">
+      <a class="kategorija-link" href="voce.html"><i class="fas fa-apple-whole"></i>Domaće voće</a>
+      <a class="kategorija-link" href="povrce.html"><i class="fas fa-carrot"></i>Domaće povrće</a>
+      <a class="kategorija-link" href="med.html"><i class="fas fa-jar"></i>Domaći med</a>
+      <a class="kategorija-link" href="mlecni.html"><i class="fas fa-cheese"></i>Mlečni proizvodi</a>
+      <a class="kategorija-link" href="meso.html"><i class="fas fa-drumstick-bite"></i>Domaće meso</a>
+      <a class="kategorija-link" href="jaja.html"><i class="fas fa-egg"></i>Domaća jaja</a>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2>Često postavljana pitanja</h2>
+    <div class="faq-item">
+      <h3>Kako da kupim domaće proizvode preko LokalniPlodovi.rs?</h3>
+      <p>Pretraži ponudu po kategorijama ili preko mape, pronađi proizvođača iz svog kraja i stupi u kontakt direktno preko profila ili chat opcije.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Da li mogu da postanem prodavac ako imam manje domaćinstvo?</h3>
+      <p>Da. Platforma je napravljena upravo za mala i porodična gazdinstva  registracija je besplatna i traje svega nekoliko minuta.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Da li LokalniPlodovi.rs naplaćuje proviziju na prodaju?</h3>
+      <p>Ne mešamo se u dogovor između kupca i prodavca  kupovina i plaćanje se dogovaraju direktno, bez posrednika.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Da li se proizvodi dostavljaju ili se preuzimaju lično?</h3>
+      <p>Zavisi od proizvođača  svaki prodavac na svom profilu navodi da li nudi dostavu, preuzimanje sa imanja ili obe opcije.</p>
+    </div>
+  </section>
+
+  <div class="cta-box">
+    <h2>Želiš da budeš deo priče?</h2>
+    <p style="margin:1.5rem 0; font-size:1.2rem;">Bilo da si proizvođač ili kupac koji voli domaće  dobrodošao si!</p>
     <a href="registracija.html" class="btn" style="background:#4caf50; color:white; padding:1rem 3rem; font-size:1.3rem; border-radius:50px; text-decoration:none;">
       Postani prodavac
     </a>
   </div>
-</div>
+</main>
 
 <!-- Footer -->
 <footer style="background: #5d4037; color: white; padding: 3rem 1rem 2rem; text-align:center;">
