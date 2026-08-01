@@ -48,10 +48,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="mobile.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --zelena: #2e7d32;
       --zelena-svetla: #4caf50;
+      --zelena-tamna: #1b5e20;
+      --zlatna: #f5a623;
+      --zlatna-svetla: #ffd166;
       --zemlja: #5d4037;
     }
 
@@ -74,9 +80,9 @@
       z-index: -1;
     }
 
-    /* Header - isti kao na svim stranicama */
+    /* ===== Header — usklađen sa index.html ===== */
     header {
-      background: rgba(46, 125, 50, 0.94);
+      background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
       color: white;
       padding: 1rem 2rem;
       position: sticky;
@@ -84,8 +90,6 @@
       z-index: 100;
       box-shadow: 0 2px 12px rgba(0,0,0,0.15);
     }
-
-    .logo { font-size: 1.8rem; font-weight: 700; }
 
     nav {
       display: flex;
@@ -95,13 +99,82 @@
       margin: 0 auto;
     }
 
-    nav ul {
+    .logo {
       display: flex;
-      list-style: none;
-      gap: 2rem;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
     }
 
-    nav a { color: white; text-decoration: none; font-weight: 500; }
+    .logo-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, #4caf50, #1b5e20);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 12px rgba(76,175,80,0.4);
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700;
+      color: white; letter-spacing: -0.3px;
+    }
+
+    .logo-text span { color: var(--zlatna-svetla); }
+
+    nav ul {
+      display: flex; list-style: none;
+      gap: 0.3rem; align-items: center;
+    }
+
+    nav ul li a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      padding: 0.5rem 0.9rem;
+      border-radius: 50px;
+      transition: all 0.2s;
+      letter-spacing: 0.2px;
+    }
+
+    nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+    .nav-cta a {
+      background: var(--zlatna) !important;
+      color: #1b1b1b !important;
+      font-weight: 700 !important;
+      padding: 0.5rem 1.2rem !important;
+    }
+
+    .nav-cta a:hover { background: var(--zlatna-svetla) !important; }
+
+    .hamburger {
+      display: none; flex-direction: column;
+      gap: 5px; cursor: pointer; background: none; border: none;
+    }
+
+    .hamburger span { width: 26px; height: 2.5px; background: white; border-radius: 3px; display: block; transition: all 0.3s; }
+
+    @media (max-width: 768px) {
+      header { padding: 1rem 1.2rem; }
+      .hamburger { display: flex; }
+
+      nav ul {
+        display: none;
+        position: absolute; top: 70px; left: 0; right: 0;
+        background: rgba(27,94,32,0.97);
+        backdrop-filter: blur(12px);
+        padding: 1.2rem 1.5rem 1.8rem;
+        flex-direction: column; gap: 0.4rem; z-index: 999;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      nav ul.open { display: flex; }
+      nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
+    }
+
+    @media (min-width: 769px) { .hamburger { display: none; } }
 
     .container {
       max-width: 1100px;
@@ -250,45 +323,86 @@
 
 <header>
   <nav>
-    <div class="logo">LokalniPlodovi</div>
-   <button class="hamburger" style="display:none;" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🌿</div>
+      <span class="logo-text">Lokalni<span>Plodovi</span></span>
+    </a>
+
+    <button class="hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Meni">
       <span></span><span></span><span></span>
     </button>
-    <ul>
+
+    <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-    <li id="moj-profil-li" style="display:none;">
-  <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
-</li>
-      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
-      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li id="moj-profil-li" style="display:none;">
+        <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
+      </li>
+      <li id="odjavi-se-li" style="display:none;">
+        <a href="#" onclick="odjaviSe()">Odjavi se</a>
+      </li>
+      <li id="prijavi-se-li">
+        <a href="login.html">Prijavi se</a>
+      </li>
+      <li id="postani-prodavac-li" class="nav-cta">
+        <a href="registracija.html">Registruj se</a>
+      </li>
     </ul>
   </nav>
 </header>
 
 <script>
-  const token = localStorage.getItem('token');
-  if (token) {
-    document.getElementById('moj-profil-li').style.display = 'list-item';
-    document.getElementById('odjavi-se-li').style.display = 'list-item';
-    document.getElementById('prijavi-se-li').style.display = 'none';
-    document.getElementById('postani-prodavac-li').style.display = 'none';
-  } else {
-    document.getElementById('moj-profil-li').style.display = 'none';
-    document.getElementById('odjavi-se-li').style.display = 'none';
-    document.getElementById('prijavi-se-li').style.display = 'list-item';
-    document.getElementById('postani-prodavac-li').style.display = 'list-item';
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
+
+    const mojProfilLi = document.getElementById('moj-profil-li');
+    const odjaviSeLi = document.getElementById('odjavi-se-li');
+    const prijaviSeLi = document.getElementById('prijavi-se-li');
+    const postaniProdavacLi = document.getElementById('postani-prodavac-li');
+    const profilLink = document.getElementById('moj-profil-link');
+
+    if (token) {
+      if (mojProfilLi) mojProfilLi.style.display = 'list-item';
+      if (odjaviSeLi) odjaviSeLi.style.display = 'list-item';
+      if (prijaviSeLi) prijaviSeLi.style.display = 'none';
+      if (profilLink) profilLink.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+
+      if (postaniProdavacLi) {
+        if (tip === 'prodavac') {
+          postaniProdavacLi.style.display = 'list-item';
+          postaniProdavacLi.classList.add('nav-cta');
+          postaniProdavacLi.innerHTML = '<a href="moj-profil.html">➕ Dodaj proizvod</a>';
+        } else if (tip === 'kupac') {
+          postaniProdavacLi.style.display = 'list-item';
+          postaniProdavacLi.classList.remove('nav-cta');
+          postaniProdavacLi.innerHTML = '<a href="registracija-prodavca.html">🌿 Postani prodavac</a>';
+        } else {
+          postaniProdavacLi.style.display = 'none';
+        }
+      }
+    } else {
+      if (mojProfilLi) mojProfilLi.style.display = 'none';
+      if (odjaviSeLi) odjaviSeLi.style.display = 'none';
+      if (prijaviSeLi) prijaviSeLi.style.display = 'list-item';
+      if (postaniProdavacLi) {
+        postaniProdavacLi.style.display = 'list-item';
+        postaniProdavacLi.classList.add('nav-cta');
+        postaniProdavacLi.innerHTML = '<a href="registracija.html">Registruj se</a>';
+      }
+    }
+  });
 
   function odjaviSe() {
-    localStorage.removeItem('token');
+    localStorage.clear();
     window.location.href = 'index.html';
   }
+
   function toggleMenu() {
-    document.querySelector('nav ul').classList.toggle('open');
+    document.getElementById('nav-menu').classList.toggle('open');
   }
 </script>
 
@@ -412,30 +526,6 @@
     </p>
   </div>
 </footer>
-<script>
-  // Dinamički Moj profil za kupca i prodavca
-  document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const tip = localStorage.getItem('tip');
 
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-
-      // Promeni link u zavisnosti od tipa korisnika
-      const link = document.getElementById('moj-profil-link');
-      if (link) {
-        link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
-      }
-    }
-  });
-
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
-</script>
 </body>
 </html>
