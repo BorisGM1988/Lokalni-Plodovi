@@ -635,17 +635,19 @@
       <div class="form-grid2">
         <div class="form-row">
           <label>Glavna niša *</label>
-          <select id="edit-nisa">
+          <select id="edit-nisa" onchange="popuniPodnisuAdmin()">
             <option value="">— Izaberi —</option>
             <option>Povrće</option><option>Voće</option>
             <option>Mlečni proizvodi</option><option>Meso</option>
             <option>Med</option><option>Jaja</option>
             <option>Bilje i Zdravlje</option>
+            <option>Domaća radinost</option>
           </select>
         </div>
         <div class="form-row">
           <label>Podniša</label>
-          <input type="text" id="edit-podnisa" placeholder="npr. Jagoda, Sir...">
+          <input type="text" id="edit-podnisa" list="edit-podnisa-list" placeholder="npr. Jagoda, Sir...">
+          <datalist id="edit-podnisa-list"></datalist>
         </div>
       </div>
       <div class="form-row">
@@ -703,6 +705,23 @@ const state = {
   objave:    { data:[], filtered:[], page:1, sort:null, dir:1 },
   ocene:     { data:[], filtered:[], page:1, sort:null, dir:1 },
 };
+
+// ── PODNIŠE po niši (za autocomplete u admin edit formi) ──
+const podniseAdminMapa = {
+  'Med': ['Bagremov med', 'Livadski med', 'Šumski med', 'Lipov med', 'Kestenov med', 'Borov med', 'Med sa saćem', 'Propolis'],
+  'Domaća radinost': ['Rakija', 'Likeri', 'Zimnica', 'Džemovi', 'Kolači', 'Testenine'],
+};
+
+function popuniPodnisuAdmin() {
+  const nisa = document.getElementById('edit-nisa').value;
+  const list = document.getElementById('edit-podnisa-list');
+  list.innerHTML = '';
+  (podniseAdminMapa[nisa] || []).forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p;
+    list.appendChild(opt);
+  });
+}
 
 // ── TOAST ──
 function toast(msg, type='ok', duration=3000) {
@@ -1299,6 +1318,7 @@ function otvoriEditProizvoda(id) {
     opt.selected = true;
     nisaSel.appendChild(opt);
   }
+  popuniPodnisuAdmin();
   otvoriModal('modal-edit-proizvod');
 }
 
