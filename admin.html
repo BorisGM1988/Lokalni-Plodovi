@@ -458,6 +458,15 @@
         <div class="stat-icon stat-icon-gray"><i class="fas fa-sync-alt"></i></div>
       </div>
     </div>
+    <div class="stat-card stat-refresh" onclick="migrirajSlike()" title="Prebaci stare base64 slike na Cloudinary">
+      <div class="stat-top">
+        <div>
+          <div class="stat-number" style="font-size:1.4rem;color:var(--muted)">☁️</div>
+          <div class="stat-label">Migriraj slike</div>
+        </div>
+        <div class="stat-icon stat-icon-gray"><i class="fas fa-cloud-upload-alt"></i></div>
+      </div>
+    </div>
   </div>
 
   <!-- TABS -->
@@ -817,6 +826,31 @@ function odjaviSe() {
 }
 
 async function osvezi() { await ucitajSve(); toast('Podaci osveženi'); }
+
+async function migrirajSlike() {
+  confirm2(
+    'Migriraj stare slike',
+    'Prebacuje sve stare (base64) slike na Cloudinary automatski, bez izmena za prodavce. Može potrajati par minuta ako ima puno slika. Pokrenuti?',
+    async () => {
+      toast('Migracija pokrenuta, sačekajte...', 'warn', 6000);
+      try {
+        const res = await fetch(`${backendUrl}/admin/migriraj-slike`, {
+          method: 'POST',
+          headers: { 'x-admin-password': adminLozinka }
+        });
+        const d = await res.json();
+        if (res.ok) {
+          toast(`✅ Migrirano: ${d.users_slika} profila, ${d.users_cover} cover slika, ${d.proizvodi_slika} proizvoda${d.greske?.length ? ` (${d.greske.length} grešaka)` : ''}`, 'ok', 8000);
+          if (d.greske && d.greske.length) console.warn('Greške pri migraciji:', d.greske);
+          await ucitajSve();
+        } else {
+          toast('❌ ' + (d.error || 'Greška pri migraciji'), 'error');
+        }
+      } catch { toast('Greška pri povezivanju sa serverom', 'error'); }
+    },
+    '☁️'
+  );
+}
 
 // ── SKELETON ──
 function showSkeleton(id, cols=6) {
