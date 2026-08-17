@@ -830,23 +830,42 @@ async function osvezi() { await ucitajSve(); toast('Podaci osveženi'); }
 async function migrirajSlike() {
   confirm2(
     'Migriraj stare slike',
-    'Prebacuje sve stare (base64) slike na Cloudinary automatski, bez izmena za prodavce. Može potrajati par minuta ako ima puno slika. Pokrenuti?',
+    'Prebacuje sve stare (base64) slike na Cloudinary automatski, u malim grupama, bez izmena za prodavce. Može potrajati par minuta. Pokrenuti?',
     async () => {
-      toast('Migracija pokrenuta, sačekajte...', 'warn', 6000);
-      try {
-        const res = await fetch(`${backendUrl}/admin/migriraj-slike`, {
-          method: 'POST',
-          headers: { 'x-admin-password': adminLozinka }
-        });
-        const d = await res.json();
-        if (res.ok) {
-          toast(`✅ Migrirano: ${d.users_slika} profila, ${d.users_cover} cover slika, ${d.proizvodi_slika} proizvoda${d.greske?.length ? ` (${d.greske.length} grešaka)` : ''}`, 'ok', 8000);
-          if (d.greske && d.greske.length) console.warn('Greške pri migraciji:', d.greske);
-          await ucitajSve();
-        } else {
-          toast('❌ ' + (d.error || 'Greška pri migraciji'), 'error');
+      let ukupno = { users_slika: 0, users_cover: 0, proizvodi_slika: 0, greske: 0 };
+      let krug = 0;
+      const maxKrugova = 200; // sigurnosna kočnica
+
+      while (krug < maxKrugova) {
+        krug++;
+        toast(`Migracija u toku... (grupa ${krug})`, 'warn', 4000);
+        try {
+          const res = await fetch(`${backendUrl}/admin/migriraj-slike?limit=3`, {
+            method: 'POST',
+            headers: { 'x-admin-password': adminLozinka }
+          });
+          const d = await res.json();
+          if (!res.ok) {
+            toast('❌ ' + (d.error || 'Greška pri migraciji, pokušajte ponovo'), 'error', 5000);
+            break;
+          }
+          ukupno.users_slika     += d.users_slika || 0;
+          ukupno.users_cover     += d.users_cover || 0;
+          ukupno.proizvodi_slika += d.proizvodi_slika || 0;
+          ukupno.greske          += (d.greske ? d.greske.length : 0);
+
+          if (!d.preostalo || d.preostalo <= 0) {
+            toast(`✅ Migracija završena: ${ukupno.users_slika} profila, ${ukupno.users_cover} cover slika, ${ukupno.proizvodi_slika} proizvoda${ukupno.greske ? ` (${ukupno.greske} grešaka)` : ''}`, 'ok', 9000);
+            await ucitajSve();
+            break;
+          }
+          // kratka pauza između grupa da server odmori
+          await new Promise(r => setTimeout(r, 800));
+        } catch {
+          toast('Greška pri povezivanju — pokušajte ponovo klikom na dugme', 'error', 6000);
+          break;
         }
-      } catch { toast('Greška pri povezivanju sa serverom', 'error'); }
+      }
     },
     '☁️'
   );
