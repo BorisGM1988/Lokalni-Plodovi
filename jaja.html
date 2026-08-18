@@ -302,14 +302,14 @@
     proizvodi.forEach((p, i) => {
       const isOwner = currentUserId && String(p.userId) === String(currentUserId);
       const isKupac = tip === 'kupac';
-      const slika = p.slika && p.slika.trim() !== '' ? p.slika : 'https://via.placeholder.com/400x200?text=Nema+slike';
+      const slika = p.slika && p.slika.trim() !== '' ? p.slika : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect width=%22400%22 height=%22200%22 fill=%22%23f0ece0%22/%3E%3Ctext x=%2250%25%25%22 y=%2250%25%25%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENema slike%3C/text%3E%3C/svg%3E';
       const datum = p.created_at ? new Date(p.created_at).toLocaleDateString('sr-RS') : '';
       const card = document.createElement('div');
       card.className = 'proizvod-card';
       card.style.animationDelay = `${i * 0.05}s`;
       card.innerHTML = `
         <div class="card-img-wrap">
-          <img src="${slika}" alt="${p.naziv} – domaća jaja ${p.prodavacLokacija || 'Srbija'}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x200?text=Nema+slike'">
+          <img src="${slika}" alt="${p.naziv} – domaća jaja ${p.prodavacLokacija || 'Srbija'}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect width=%22400%22 height=%22200%22 fill=%22%23f0ece0%22/%3E%3Ctext x=%2250%25%25%22 y=%2250%25%25%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENema slike%3C/text%3E%3C/svg%3E'">
           <span class="card-fresh-badge">🥚 Sveže</span>
         </div>
         <div class="card-body">
