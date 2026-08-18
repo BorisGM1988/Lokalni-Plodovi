@@ -664,12 +664,15 @@
         <textarea id="edit-opis" placeholder="Kratak opis proizvoda..."></textarea>
       </div>
       <div class="form-row">
-        <label>Slika (URL)</label>
+        <label>Slika</label>
         <div id="edit-slika-preview-wrap" style="margin-bottom:.5rem;"></div>
-        <input type="text" id="edit-slika" placeholder="https://res.cloudinary.com/... (nalepi link ovde)" oninput="osveziPregledSlike()">
-        <div style="display:flex; gap:.5rem; margin-top:.5rem;">
+        <input type="file" id="edit-slika-fajl" accept="image/*" onchange="izaberiNovuSliku(event)" style="width:100%; padding:.6rem; border:2px dashed var(--border); border-radius:9px; font-size:.85rem; cursor:pointer;">
+        <div style="display:flex; align-items:center; gap:.6rem; margin-top:.6rem;">
           <button type="button" class="btn btn-ghost btn-sm" onclick="obrisiSlikuUFormi()"><i class="fas fa-times"></i> Obriši sliku</button>
+          <span id="edit-slika-status" style="font-size:.78rem; color:var(--muted);"></span>
         </div>
+        <input type="hidden" id="edit-slika">
+        <input type="hidden" id="edit-slika-base64">
       </div>
       <div class="modal-actions">
         <button class="btn btn-ghost" onclick="zatvoriModal('modal-edit-proizvod')">Odustani</button>
@@ -1371,7 +1374,49 @@ function osveziPregledSlike() {
 
 function obrisiSlikuUFormi() {
   document.getElementById('edit-slika').value = '';
+  document.getElementById('edit-slika-base64').value = '';
+  document.getElementById('edit-slika-fajl').value = '';
+  document.getElementById('edit-slika-status').textContent = '';
   osveziPregledSlike();
+}
+
+// Smanjuje sliku pre slanja (max 1200px širina, JPEG kvalitet 0.82) da ne bude prevelika
+function komprimujSliku(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxSirina = 1200;
+        let w = img.width, h = img.height;
+        if (w > maxSirina) { h = Math.round(h * (maxSirina / w)); w = maxSirina; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.82));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function izaberiNovuSliku(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  document.getElementById('edit-slika-status').textContent = 'Obrađujem sliku...';
+  try {
+    const base64 = await komprimujSliku(file);
+    document.getElementById('edit-slika-base64').value = base64;
+    document.getElementById('edit-slika').value = base64; // za preview
+    document.getElementById('edit-slika-status').textContent = 'Nova slika spremna za čuvanje ✓';
+    osveziPregledSlike();
+  } catch {
+    document.getElementById('edit-slika-status').textContent = '';
+    toast('Greška pri obradi slike', 'error');
+  }
 }
 
 function otvoriEditProizvoda(id) {
@@ -1383,6 +1428,9 @@ function otvoriEditProizvoda(id) {
   document.getElementById('edit-opis').value    = p.opis||'';
   document.getElementById('edit-podnisa').value = p.podnisa||'';
   document.getElementById('edit-slika').value   = p.slika||'';
+  document.getElementById('edit-slika-base64').value = '';
+  document.getElementById('edit-slika-fajl').value = '';
+  document.getElementById('edit-slika-status').textContent = '';
   osveziPregledSlike();
   const nisaSel = document.getElementById('edit-nisa');
   // try to match existing option, else add
@@ -1406,7 +1454,8 @@ async function sacuvajProizvod() {
   const glavnaNisa = document.getElementById('edit-nisa').value;
   const podnisa = document.getElementById('edit-podnisa').value.trim();
   const opis    = document.getElementById('edit-opis').value.trim();
-  const slika   = document.getElementById('edit-slika').value.trim();
+  const slikaBase64 = document.getElementById('edit-slika-base64').value;
+  const slika   = slikaBase64 ? undefined : document.getElementById('edit-slika').value.trim();
 
   if (!naziv || isNaN(cena) || isNaN(kolicina) || !glavnaNisa) {
     toast('Popunite sva obavezna polja!', 'warn'); return;
@@ -1415,7 +1464,7 @@ async function sacuvajProizvod() {
     const res = await fetch(`${backendUrl}/admin/proizvod/${id}`, {
       method:'PUT',
       headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
-      body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa, opis, slika })
+      body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa, opis, slika, slikaBase64: slikaBase64 || undefined })
     });
     const d = await res.json();
     if (res.ok) {
