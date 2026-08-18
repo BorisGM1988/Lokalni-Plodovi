@@ -663,6 +663,14 @@
         <label>Opis</label>
         <textarea id="edit-opis" placeholder="Kratak opis proizvoda..."></textarea>
       </div>
+      <div class="form-row">
+        <label>Slika (URL)</label>
+        <div id="edit-slika-preview-wrap" style="margin-bottom:.5rem;"></div>
+        <input type="text" id="edit-slika" placeholder="https://res.cloudinary.com/... (nalepi link ovde)" oninput="osveziPregledSlike()">
+        <div style="display:flex; gap:.5rem; margin-top:.5rem;">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="obrisiSlikuUFormi()"><i class="fas fa-times"></i> Obriši sliku</button>
+        </div>
+      </div>
       <div class="modal-actions">
         <button class="btn btn-ghost" onclick="zatvoriModal('modal-edit-proizvod')">Odustani</button>
         <button class="btn btn-primary" onclick="sacuvajProizvod()"><i class="fas fa-save"></i> Sačuvaj izmene</button>
@@ -1353,6 +1361,19 @@ function detaljiProizvoda(id) {
   otvoriModal('modal-proizvod');
 }
 
+function osveziPregledSlike() {
+  const url = document.getElementById('edit-slika').value.trim();
+  const wrap = document.getElementById('edit-slika-preview-wrap');
+  wrap.innerHTML = url
+    ? `<img src="${url}" style="max-width:100%; max-height:140px; border-radius:8px; display:block;" onerror="this.style.display='none'">`
+    : `<div style="color:var(--muted); font-size:.82rem; padding:.5rem 0;">Nema slike</div>`;
+}
+
+function obrisiSlikuUFormi() {
+  document.getElementById('edit-slika').value = '';
+  osveziPregledSlike();
+}
+
 function otvoriEditProizvoda(id) {
   const p = state.proizvodi.data.find(x=>x.id===id); if (!p) return;
   document.getElementById('edit-id').value      = p.id;
@@ -1361,6 +1382,8 @@ function otvoriEditProizvoda(id) {
   document.getElementById('edit-kolicina').value= p.kolicina||'';
   document.getElementById('edit-opis').value    = p.opis||'';
   document.getElementById('edit-podnisa').value = p.podnisa||'';
+  document.getElementById('edit-slika').value   = p.slika||'';
+  osveziPregledSlike();
   const nisaSel = document.getElementById('edit-nisa');
   // try to match existing option, else add
   let found = false;
@@ -1383,6 +1406,7 @@ async function sacuvajProizvod() {
   const glavnaNisa = document.getElementById('edit-nisa').value;
   const podnisa = document.getElementById('edit-podnisa').value.trim();
   const opis    = document.getElementById('edit-opis').value.trim();
+  const slika   = document.getElementById('edit-slika').value.trim();
 
   if (!naziv || isNaN(cena) || isNaN(kolicina) || !glavnaNisa) {
     toast('Popunite sva obavezna polja!', 'warn'); return;
@@ -1391,7 +1415,7 @@ async function sacuvajProizvod() {
     const res = await fetch(`${backendUrl}/admin/proizvod/${id}`, {
       method:'PUT',
       headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
-      body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa, opis })
+      body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa, opis, slika })
     });
     const d = await res.json();
     if (res.ok) {
