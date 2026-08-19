@@ -400,6 +400,8 @@
     .btn-edit-proizvod:hover { background: #1d4ed8; }
     .btn-obrisi-proizvod { background: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
     .btn-obrisi-proizvod:hover { background: #b71c1c; }
+    .btn-podeli-proizvod { background: #0ea5e9; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+    .btn-podeli-proizvod:hover { background: #0284c7; }
 
     /* ===== PORUKE ===== */
     .msg-bubble {
@@ -789,6 +791,29 @@
   </div>
 </div>
 
+<!-- MODAL PODELI PROIZVOD -->
+<div id="podeli-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:440px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#0ea5e9,#0284c7); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2 id="podeli-proizvod-naslov" style="margin:0; font-size:1.3rem;">📤 Podeli proizvod</h2>
+      </div>
+      <button onclick="zatvoriPodeliProizvodModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:1.8rem 2rem; display:flex; flex-direction:column; gap:1rem;">
+      <a id="link-podeli-proizvod-fb" href="#" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:14px; border-radius:14px; background:#1877f2; color:white; text-decoration:none; font-weight:600; font-size:1rem;">
+        <i class="fab fa-facebook"></i> Podeli na Fejsbuku
+      </a>
+      <button onclick="preuzmiSlikuZaProizvodStory(event)" style="display:flex; align-items:center; justify-content:center; gap:0.6rem; padding:14px; border-radius:14px; background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:white; border:none; font-weight:600; font-size:1rem; cursor:pointer;">
+        <i class="fab fa-instagram"></i> Preuzmi sliku za Instagram Story
+      </button>
+      <p style="font-size:0.85rem; color:#888; margin:0; text-align:center;">
+        Instagram ne dozvoljava automatsko objavljivanje — preuzmi sliku, pa je ručno dodaj u svoju Story.
+      </p>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL POŠALJI PORUKU -->
 <div id="poruka-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
   <div style="background:white; width:90%; max-width:500px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
@@ -1095,6 +1120,8 @@
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   let trenutniUserId = null;
   let profilIme = '';
+  let profilLokacija = '';
+  let tezgaProizvodiCache = [];
   let aktivnaKonverzacijaUserId = null;
   let trenutniProdavacAktivan = true;
 
@@ -1151,6 +1178,7 @@
 
       const data = await response.json();
       profilIme = data.ime || 'Prodavac';
+      profilLokacija = data.lokacija || '';
 
       document.getElementById('profileName').textContent = data.ime || 'Korisnik';
       document.getElementById('profileBio').textContent = data.opis || 'Nema opisa';
@@ -1591,6 +1619,7 @@
       const response = await fetch(`${backendUrl}/proizvodi?userId=${trenutniUserId}`);
       if (!response.ok) throw new Error('Greška');
       const proizvodi = await response.json();
+      tezgaProizvodiCache = proizvodi;
       const token = localStorage.getItem('token');
       let mojId = null;
       if (token) { try { const payload = JSON.parse(atob(token.split('.')[1])); mojId = String(payload.userId); } catch(e) {} }
@@ -1614,7 +1643,7 @@
         lista.forEach(p => {
           const item = document.createElement('div');
           item.className = 'tezga-proizvod';
-          item.innerHTML = `${p.slika ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">` : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`}<div class="tezga-info"><div class="tezga-naziv">${p.naziv}</div><div class="tezga-detalji">${p.podnisa ? `${p.podnisa} • ` : ''}Dostupno: ${p.kolicina} kg/kom${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}</div></div><div class="tezga-cena">${p.cena} RSD</div>${isOwnProfile ? `<div class="tezga-akcije"><button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena}, ${p.kolicina}, '${(p.opis||'').replace(/'/g, "\\'")}')">✏️ Izmeni</button><button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button></div>` : ''}`;
+          item.innerHTML = `${p.slika ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">` : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`}<div class="tezga-info"><div class="tezga-naziv">${p.naziv}</div><div class="tezga-detalji">${p.podnisa ? `${p.podnisa} • ` : ''}Dostupno: ${p.kolicina} kg/kom${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}</div></div><div class="tezga-cena">${p.cena} RSD</div><div class="tezga-akcije"><button class="btn-podeli-proizvod" onclick="podeliProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena})">📤 Podeli</button>${isOwnProfile ? `<button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena}, ${p.kolicina}, '${(p.opis||'').replace(/'/g, "\\'")}')">✏️ Izmeni</button><button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>` : ''}</div>`;
           grupa.appendChild(item);
         });
         sadrzaj.appendChild(grupa);
@@ -1844,6 +1873,135 @@ function podeliBlogFacebook(blogId) {
   }
 
   function zatvoriPodeliModal() { document.getElementById('podeli-modal').style.display = 'none'; }
+
+  // ══════════════════════════════════════════
+  // PODELI PROIZVOD (Fejsbuk + Instagram Story)
+  // ══════════════════════════════════════════
+  let aktivniProizvodZaDeljenje = null;
+
+  function podeliProizvod(id, naziv, cena) {
+    const p = tezgaProizvodiCache.find(x => String(x.id) === String(id));
+    aktivniProizvodZaDeljenje = p || { id, naziv, cena };
+    document.getElementById('podeli-proizvod-naslov').textContent = `📤 Podeli: ${naziv}`;
+    const shareUrl = encodeURIComponent(`${backendUrl}/proizvod-share/${id}`);
+    document.getElementById('link-podeli-proizvod-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+    document.getElementById('podeli-proizvod-modal').style.display = 'flex';
+  }
+
+  function zatvoriPodeliProizvodModal() { document.getElementById('podeli-proizvod-modal').style.display = 'none'; }
+
+  async function preuzmiSlikuZaProizvodStory(event) {
+    const btn = event.target.closest('button');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '⏳ Pravim sliku...';
+    btn.disabled = true;
+
+    const p = aktivniProizvodZaDeljenje || {};
+
+    try {
+      await document.fonts.ready;
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const ctx = canvas.getContext('2d');
+
+      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      grad.addColorStop(0, '#1b5e20');
+      grad.addColorStop(1, '#2e7d32');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '600 44px "DM Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🌿 LokalniPlodovi', canvas.width / 2, 140);
+
+      // Slika proizvoda (kvadrat sa zaobljenim uglovima)
+      const boxSize = 760;
+      const boxX = (canvas.width - boxSize) / 2;
+      const boxY = 260;
+      const radius = 32;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(boxX + radius, boxY);
+      ctx.arcTo(boxX + boxSize, boxY, boxX + boxSize, boxY + boxSize, radius);
+      ctx.arcTo(boxX + boxSize, boxY + boxSize, boxX, boxY + boxSize, radius);
+      ctx.arcTo(boxX, boxY + boxSize, boxX, boxY, radius);
+      ctx.arcTo(boxX, boxY, boxX + boxSize, boxY, radius);
+      ctx.closePath();
+      ctx.clip();
+
+      if (p.slika) {
+        try {
+          const img = await new Promise((resolve, reject) => {
+            const image = new Image();
+            image.crossOrigin = 'anonymous';
+            image.onload = () => resolve(image);
+            image.onerror = reject;
+            image.src = p.slika;
+          });
+          const imgRatio = img.width / img.height;
+          let drawW = boxSize, drawH = boxSize, offX = 0, offY = 0;
+          if (imgRatio > 1) { drawW = boxSize * imgRatio; offX = -(drawW - boxSize) / 2; }
+          else { drawH = boxSize / imgRatio; offY = -(drawH - boxSize) / 2; }
+          ctx.drawImage(img, boxX + offX, boxY + offY, drawW, drawH);
+        } catch (e) {
+          ctx.fillStyle = '#e8f5e9';
+          ctx.fillRect(boxX, boxY, boxSize, boxSize);
+          ctx.fillStyle = '#2e7d32';
+          ctx.font = '220px sans-serif';
+          ctx.fillText('🌾', canvas.width / 2, boxY + boxSize / 2 + 70);
+        }
+      } else {
+        ctx.fillStyle = '#e8f5e9';
+        ctx.fillRect(boxX, boxY, boxSize, boxSize);
+        ctx.fillStyle = '#2e7d32';
+        ctx.font = '220px sans-serif';
+        ctx.fillText('🌾', canvas.width / 2, boxY + boxSize / 2 + 70);
+      }
+      ctx.restore();
+
+      // Naziv proizvoda
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 60px "Playfair Display", serif';
+      ctx.fillText(p.naziv || 'Proizvod', canvas.width / 2, boxY + boxSize + 100, canvas.width - 100);
+
+      // Cena
+      ctx.font = '700 56px "DM Sans", sans-serif';
+      ctx.fillStyle = '#ffd166';
+      ctx.fillText(`${p.cena} RSD`, canvas.width / 2, boxY + boxSize + 175);
+
+      // Prodavac / lokacija
+      const imeZaText = profilIme || 'Lokalni proizvođač';
+      ctx.font = '400 38px "DM Sans", sans-serif';
+      ctx.fillStyle = '#e8f5e9';
+      const lokacijaTekst = profilLokacija ? `${imeZaText} 📍 ${profilLokacija}` : imeZaText;
+      ctx.fillText(lokacijaTekst, canvas.width / 2, boxY + boxSize + 235, canvas.width - 100);
+
+      // Poziv na akciju na dnu
+      ctx.font = '600 46px "DM Sans", sans-serif';
+      ctx.fillStyle = '#ffd166';
+      ctx.fillText('Pronađite na', canvas.width / 2, canvas.height - 220);
+      ctx.font = '700 52px "DM Sans", sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('lokalniplodovi.rs', canvas.width / 2, canvas.height - 150);
+
+      const link = document.createElement('a');
+      link.download = `${(p.naziv || 'proizvod').replace(/\s+/g, '-')}-story.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+      btn.innerHTML = '✅ Slika preuzeta!';
+      setTimeout(() => { btn.innerHTML = originalHTML; btn.disabled = false; }, 2000);
+    } catch (err) {
+      alert('Greška pri pravljenju slike: ' + err.message);
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+    }
+  }
+
+  document.getElementById('podeli-proizvod-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriPodeliProizvodModal(); });
 
   // ══════════════════════════════════════════
   // PUSH NOTIFIKACIJE
