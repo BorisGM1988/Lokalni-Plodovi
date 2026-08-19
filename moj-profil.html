@@ -1879,6 +1879,31 @@ function podeliBlogFacebook(blogId) {
   // ══════════════════════════════════════════
   let aktivniProizvodZaDeljenje = null;
 
+  // Na telefonu: šalje sliku direktno u sistemski meni za deljenje (Instagram, Photos, itd.)
+  // jer <a download> trik ne radi pouzdano na mobilnim browserima, pogotovo iPhone-u.
+  // Na računaru: klasično preuzimanje fajla.
+  async function podeliIliPreuzmiSliku(canvas, imeFajla) {
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    const file = new File([blob], imeFajla, { type: 'image/png' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file] });
+        return 'podeljeno';
+      } catch (err) {
+        if (err && err.name === 'AbortError') return 'otkazano';
+        // ako deljenje ne uspe iz nekog drugog razloga, nastavi na preuzimanje ispod
+      }
+    }
+
+    // Rezerva za desktop ili browsere bez podrške za deljenje fajlova
+    const link = document.createElement('a');
+    link.download = imeFajla;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    return 'preuzeto';
+  }
+
   function podeliProizvod(id, naziv, cena) {
     const p = tezgaProizvodiCache.find(x => String(x.id) === String(id));
     aktivniProizvodZaDeljenje = p || { id, naziv, cena };
@@ -1987,12 +2012,12 @@ function podeliBlogFacebook(blogId) {
       ctx.fillStyle = '#ffffff';
       ctx.fillText('lokalniplodovi.rs', canvas.width / 2, canvas.height - 150);
 
-      const link = document.createElement('a');
-      link.download = `${(p.naziv || 'proizvod').replace(/\s+/g, '-')}-story.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      const imeFajla = `${(p.naziv || 'proizvod').replace(/\s+/g, '-')}-story.png`;
+      const rezultat = await podeliIliPreuzmiSliku(canvas, imeFajla);
 
-      btn.innerHTML = '✅ Slika preuzeta!';
+      if (rezultat === 'podeljeno') btn.innerHTML = '✅ Poslato!';
+      else if (rezultat === 'otkazano') { btn.innerHTML = originalHTML; btn.disabled = false; return; }
+      else btn.innerHTML = '✅ Slika preuzeta!';
       setTimeout(() => { btn.innerHTML = originalHTML; btn.disabled = false; }, 2000);
     } catch (err) {
       alert('Greška pri pravljenju slike: ' + err.message);
@@ -2208,13 +2233,13 @@ function podeliBlogFacebook(blogId) {
       ctx.fillStyle = '#ffffff';
       ctx.fillText('lokalniplodovi.rs', canvas.width / 2, canvas.height - 150);
 
-      // Preuzimanje
-      const link = document.createElement('a');
-      link.download = `${ime.replace(/\s+/g, '-')}-story.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      // Podeli (mobilni) ili preuzmi (desktop)
+      const imeFajla = `${ime.replace(/\s+/g, '-')}-story.png`;
+      const rezultat = await podeliIliPreuzmiSliku(canvas, imeFajla);
 
-      btn.innerHTML = '✅ Slika preuzeta!';
+      if (rezultat === 'podeljeno') btn.innerHTML = '✅ Poslato!';
+      else if (rezultat === 'otkazano') { btn.innerHTML = originalHTML; btn.disabled = false; return; }
+      else btn.innerHTML = '✅ Slika preuzeta!';
       setTimeout(() => { btn.innerHTML = originalHTML; btn.disabled = false; }, 2000);
     } catch (err) {
       alert('Greška pri pravljenju slike: ' + err.message);
