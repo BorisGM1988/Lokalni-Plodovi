@@ -1065,6 +1065,7 @@ function renderProdavaciTable(lista, tip) {
         <td style="white-space:nowrap">
           <button class="btn btn-info btn-sm" onclick="detaljiKorisnika(${k.id})"><i class="fas fa-eye"></i></button>
           <button class="btn btn-warning btn-sm" onclick="resetujLozinku(${k.id},'${esc(k.ime)}')" title="Resetuj lozinku"><i class="fas fa-key"></i></button>
+          <button class="btn btn-info btn-sm" onclick="izmeniEmail(${k.id},'${esc(k.ime)}','${esc(k.email)}')" title="Izmeni email"><i class="fas fa-at"></i></button>
           <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}')"><i class="fas fa-trash"></i></button>
         </td>
       </tr>`).join('')}
@@ -1098,6 +1099,7 @@ function renderKupciTable(lista, tip) {
         <td style="white-space:nowrap">
           <button class="btn btn-info btn-sm" onclick="detaljiKorisnika(${k.id})"><i class="fas fa-eye"></i></button>
           <button class="btn btn-warning btn-sm" onclick="resetujLozinku(${k.id},'${esc(k.ime)}')" title="Resetuj lozinku"><i class="fas fa-key"></i></button>
+          <button class="btn btn-info btn-sm" onclick="izmeniEmail(${k.id},'${esc(k.ime)}','${esc(k.email)}')" title="Izmeni email"><i class="fas fa-at"></i></button>
           <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}')"><i class="fas fa-trash"></i></button>
         </td>
       </tr>`).join('')}
@@ -1311,6 +1313,21 @@ async function resetujLozinku(id, ime) {
     });
     const d = await res.json();
     if (res.ok) toast(`✅ ${d.message}`);
+    else toast('❌ ' + (d.error||'Greška'), 'error');
+  } catch { toast('Greška pri povezivanju', 'error'); }
+}
+
+// ── IZMENA EMAIL-A ──
+async function izmeniEmail(id, ime, trenutniEmail) {
+  const noviEmail = prompt(`Unesite ispravnu email adresu za korisnika "${ime}":`, trenutniEmail);
+  if (!noviEmail || noviEmail.trim() === trenutniEmail) return;
+  try {
+    const res = await fetch(`${backendUrl}/admin/korisnik/${id}`, {
+      method:'PUT', headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
+      body: JSON.stringify({ email: noviEmail.trim() })
+    });
+    const d = await res.json();
+    if (res.ok) { toast(`✅ Email izmenjen na ${noviEmail.trim()}`); ucitajKorisnike(); }
     else toast('❌ ' + (d.error||'Greška'), 'error');
   } catch { toast('Greška pri povezivanju', 'error'); }
 }
