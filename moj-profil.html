@@ -330,6 +330,10 @@
     .btn-blog { background: #0ea5e9; color: white; border: none; }
     .btn-blog:hover { background: #0284c7; transform: scale(1.02); }
 
+    /* ===== UVOZ PROIZVODA DUGME ===== */
+    .btn-uvoz { background: #7c3aed; color: white; border: none; }
+    .btn-uvoz:hover { background: #6d28d9; transform: scale(1.02); }
+
     /* ===== SEKCIJE ===== */
     .profil-sekcija {
       max-width: 1400px;
@@ -582,6 +586,7 @@
       .profil-sekcija { margin-left: 2rem; margin-right: 2rem; }
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -689,6 +694,9 @@
         <!-- ===== NOVO: BLOG DUGME ===== -->
         <button class="btn btn-blog" id="btn-blog" onclick="otvoriNapišiBlog()"><i class="fas fa-pen-nib"></i> Napiši blog</button>
         <!-- ============================= -->
+        <!-- ===== NOVO: UVOZ PROIZVODA ===== -->
+        <button class="btn btn-uvoz" id="btn-uvoz" onclick="otvoriUvozModal()"><i class="fas fa-file-import"></i> Uvezi proizvode</button>
+        <!-- ================================= -->
       </div>
     </div>
   </div>
@@ -1111,9 +1119,64 @@
 </div>
 <!-- ===================================== -->
 
-<!-- BRZA PROMENA SLIKE (klik direktno na avatar/naslovnu) -->
-<input type="file" id="brza-slika-avatar" accept="image/*" style="display:none;">
-<input type="file" id="brza-slika-cover" accept="image/*" style="display:none;">
+<!-- ===== NOVO: MODAL UVOZ PROIZVODA ===== -->
+<div id="uvoz-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:680px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:92vh; display:flex; flex-direction:column;">
+    <div style="background:linear-gradient(135deg,#7c3aed,#6d28d9); padding:1.5rem 2rem; color:white; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+      <div>
+        <h2 style="margin:0; font-size:1.4rem;">📦 Uvezi više proizvoda odjednom</h2>
+        <p style="margin:0.3rem 0 0; opacity:0.85; font-size:0.9rem;">Iz Excel (.xlsx) ili CSV fajla</p>
+      </div>
+      <button onclick="zatvoriUvozModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+
+    <div style="padding:1.6rem 2rem; overflow-y:auto; flex:1;">
+      <div style="background:#f5f3ff; border:1px solid #ddd6fe; border-radius:12px; padding:1rem 1.2rem; margin-bottom:1.2rem; font-size:0.88rem; color:#5b21b6; line-height:1.6;">
+        <strong>Kako izgleda fajl:</strong> prva red mora imati nazive kolona. Potrebne kolone: <strong>Naziv</strong>, <strong>Cena</strong>, <strong>Kolicina</strong>. Opciono: <strong>Opis</strong>, <strong>Podnisa</strong>. Slike se dodaju posle, ručno, po proizvodu (u "Moja tezga").
+      </div>
+
+      <label style="font-weight:600; color:#333; display:block; margin-bottom:6px;">Glavna niša za sve proizvode u fajlu *</label>
+      <select id="uvoz-nisa" style="width:100%; padding:10px; margin-bottom:1.2rem; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+        <option value="">-- Izaberi nišu --</option>
+        <option value="Voće">🍎 Voće</option>
+        <option value="Povrće">🥦 Povrće</option>
+        <option value="Mlečni proizvodi">🥛 Mlečni proizvodi</option>
+        <option value="Meso">🥩 Meso i mesne prerađevine</option>
+        <option value="Med">🍯 Med i pčelinji proizvodi</option>
+        <option value="Jaja">🥚 Jaja</option>
+        <option value="Bilje i Zdravlje">🌿 Bilje i zdravlje</option>
+        <option value="Domaća radinost">🍶 Domaća radinost</option>
+      </select>
+      <p style="margin:-0.8rem 0 1.2rem; font-size:0.8rem; color:#888;">Ako fajl ima i kolonu "Podnisa", ona se koristi po redu; u suprotnom ostaje prazna.</p>
+
+      <label style="font-weight:600; color:#333; display:block; margin-bottom:6px;">Fajl (.xlsx, .xls ili .csv)</label>
+      <input type="file" id="uvoz-fajl" accept=".xlsx,.xls,.csv" style="width:100%; padding:10px; margin-bottom:1rem; border:2px dashed #7c3aed; border-radius:10px; cursor:pointer;">
+
+      <div id="uvoz-status" style="font-size:0.9rem; color:#666; margin-bottom:1rem;"></div>
+
+      <div id="uvoz-pregled-wrap" style="display:none;">
+        <div id="uvoz-bulk-podnisa-wrap" style="display:none; align-items:center; gap:0.6rem; margin-bottom:0.8rem; flex-wrap:wrap;">
+          <span style="font-size:0.85rem; color:#555; font-weight:600;">Brzo dodeli podnišu svima:</span>
+          <select id="uvoz-bulk-podnisa" style="padding:6px 10px; border-radius:8px; border:1px solid #ccc; font-size:0.85rem;"></select>
+          <button type="button" onclick="primeniPodnisuNaSve()" style="padding:6px 14px; border-radius:8px; background:#7c3aed; color:white; border:none; font-size:0.85rem; font-weight:600; cursor:pointer;">Primeni na sve</button>
+        </div>
+        <label style="font-weight:600; color:#333; display:block; margin-bottom:6px;">Pregled i podniše (po potrebi izmeni pojedinačno)</label>
+        <div style="max-height:320px; overflow:auto; border:1px solid #e0e0e0; border-radius:10px;">
+          <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+            <thead id="uvoz-pregled-head" style="background:#f5f3ff; position:sticky; top:0;"></thead>
+            <tbody id="uvoz-pregled-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:1.2rem 2rem; border-top:1px solid #f0f0f0; flex-shrink:0; display:flex; gap:1rem;">
+      <button onclick="zatvoriUvozModal()" style="flex:1; padding:14px; border-radius:50px; background:#f5f5f5; color:#555; border:none; font-weight:600; cursor:pointer; font-family:inherit;">Otkaži</button>
+      <button id="btn-potvrdi-uvoz" onclick="potvrdiUvoz()" disabled style="flex:2; padding:14px; border-radius:50px; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:white; border:none; font-weight:700; cursor:pointer; font-family:inherit; font-size:1rem; opacity:0.5;">📦 Uvezi proizvode</button>
+    </div>
+  </div>
+</div>
+<!-- ======================================= -->
 
 <!-- ===== SKRIPTA ===== -->
 <script>
@@ -2257,6 +2320,195 @@ function podeliBlogFacebook(blogId) {
       if (res.ok) { alert('✅ Blog obrisan!'); ucitajBlogove(); }
       else alert('Greška pri brisanju');
     } catch { alert('Greška'); }
+  }
+
+  // ══════════════════════════════════════════
+  // UVOZ VIŠE PROIZVODA ODJEDNOM (Excel/CSV)
+  // ══════════════════════════════════════════
+  let uvozParsiraniRedovi = [];
+
+  function otvoriUvozModal() {
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti prijavljeni da biste uvozili proizvode!'); return; }
+    document.getElementById('uvoz-nisa').value = '';
+    document.getElementById('uvoz-fajl').value = '';
+    document.getElementById('uvoz-status').textContent = '';
+    document.getElementById('uvoz-pregled-wrap').style.display = 'none';
+    document.getElementById('uvoz-pregled-head').innerHTML = '';
+    document.getElementById('uvoz-pregled-body').innerHTML = '';
+    uvozParsiraniRedovi = [];
+    azurirajDugmeUvoz();
+    document.getElementById('uvoz-modal').style.display = 'flex';
+  }
+
+  function zatvoriUvozModal() { document.getElementById('uvoz-modal').style.display = 'none'; }
+
+  document.getElementById('uvoz-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriUvozModal(); });
+
+  function azurirajDugmeUvoz() {
+    const btn = document.getElementById('btn-potvrdi-uvoz');
+    const nisa = document.getElementById('uvoz-nisa').value;
+    const spreman = nisa && uvozParsiraniRedovi.length > 0;
+    btn.disabled = !spreman;
+    btn.style.opacity = spreman ? '1' : '0.5';
+  }
+
+  document.getElementById('uvoz-nisa').addEventListener('change', function() {
+    azurirajDugmeUvoz();
+    if (uvozParsiraniRedovi.length > 0) renderUvozPregled();
+  });
+
+  // Pronalazi vrednost kolone bez obzira na velika/mala slova i razlike u pisanju (npr. "Količina" / "Kolicina")
+  function nadjiVrednost(red, moguciNazivi) {
+    const kljucevi = Object.keys(red);
+    for (const naziv of moguciNazivi) {
+      const found = kljucevi.find(k => k.toString().trim().toLowerCase() === naziv);
+      if (found !== undefined) return red[found];
+    }
+    return undefined;
+  }
+
+  document.getElementById('uvoz-fajl').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const status = document.getElementById('uvoz-status');
+    const pregledWrap = document.getElementById('uvoz-pregled-wrap');
+    if (!file) return;
+
+    status.textContent = 'Učitavam fajl...';
+    pregledWrap.style.display = 'none';
+    uvozParsiraniRedovi = [];
+    azurirajDugmeUvoz();
+
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        const data = new Uint8Array(ev.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const prviList = workbook.SheetNames[0];
+        const sirovi = XLSX.utils.sheet_to_json(workbook.Sheets[prviList], { defval: '' });
+
+        if (sirovi.length === 0) {
+          status.textContent = '⚠️ Fajl je prazan ili nije prepoznat format.';
+          return;
+        }
+
+        const redovi = [];
+        const greske = [];
+        sirovi.forEach((red, idx) => {
+          const naziv = nadjiVrednost(red, ['naziv', 'ime', 'proizvod']);
+          const cena = nadjiVrednost(red, ['cena', 'price']);
+          const kolicina = nadjiVrednost(red, ['kolicina', 'količina', 'kolicina/tezina', 'tezina', 'težina']);
+          const opis = nadjiVrednost(red, ['opis', 'description']);
+          const podnisa = nadjiVrednost(red, ['podnisa', 'podniša']);
+
+          if (!naziv || cena === undefined || kolicina === undefined || cena === '' || kolicina === '') {
+            greske.push(idx + 2);
+            return;
+          }
+          redovi.push({
+            naziv: naziv.toString().trim(),
+            cena: parseFloat(cena),
+            kolicina: parseFloat(kolicina),
+            opis: opis ? opis.toString().trim() : '',
+            podnisa: podnisa ? podnisa.toString().trim() : ''
+          });
+        });
+
+        uvozParsiraniRedovi = redovi;
+
+        if (redovi.length === 0) {
+          status.textContent = '⚠️ Nijedan red nije prepoznat. Proverite da li fajl ima kolone Naziv, Cena i Kolicina u prvom redu.';
+          azurirajDugmeUvoz();
+          return;
+        }
+
+        let statusTekst = `✅ Prepoznato ${redovi.length} proizvoda spremnih za uvoz.`;
+        if (greske.length > 0) statusTekst += ` (${greske.length} red(ova) preskočeno zbog nepotpunih podataka: red ${greske.slice(0,5).join(', ')}${greske.length > 5 ? '...' : ''})`;
+        status.textContent = statusTekst;
+
+        renderUvozPregled();
+        document.getElementById('uvoz-pregled-wrap').style.display = 'block';
+
+        azurirajDugmeUvoz();
+      } catch (err) {
+        status.textContent = '❌ Greška pri čitanju fajla: ' + err.message;
+        uvozParsiraniRedovi = [];
+        azurirajDugmeUvoz();
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  function renderUvozPregled() {
+    const nisa = document.getElementById('uvoz-nisa').value;
+    const opcijePodnisa = podnisePoNisi[nisa] || [];
+    const imaPodnise = opcijePodnisa.length > 0;
+
+    const bulkWrap = document.getElementById('uvoz-bulk-podnisa-wrap');
+    const bulkSelect = document.getElementById('uvoz-bulk-podnisa');
+    if (imaPodnise) {
+      bulkWrap.style.display = 'flex';
+      bulkSelect.innerHTML = '<option value="">-- ne menjaj --</option>' + opcijePodnisa.map(p => `<option value="${p}">${p}</option>`).join('');
+    } else {
+      bulkWrap.style.display = 'none';
+    }
+
+    const head = document.getElementById('uvoz-pregled-head');
+    const body = document.getElementById('uvoz-pregled-body');
+    head.innerHTML = `<tr><th style="padding:8px; text-align:left;">Naziv</th><th style="padding:8px; text-align:right;">Cena</th><th style="padding:8px; text-align:right;">Kol.</th><th style="padding:8px; text-align:left;">Podniša</th></tr>`;
+
+    body.innerHTML = uvozParsiraniRedovi.map((r, i) => {
+      let podnisaCelija;
+      if (imaPodnise) {
+        const opcije = opcijePodnisa.map(p => `<option value="${p}" ${r.podnisa === p ? 'selected' : ''}>${p}</option>`).join('');
+        podnisaCelija = `<select id="uvoz-red-podnisa-${i}" onchange="uvozParsiraniRedovi[${i}].podnisa=this.value" style="padding:4px 6px; border-radius:6px; border:1px solid #ccc; font-size:0.82rem; width:100%;"><option value="">-- izaberi --</option>${opcije}</select>`;
+      } else {
+        podnisaCelija = '<span style="color:#aaa;">—</span>';
+      }
+      return `<tr style="border-top:1px solid #eee;"><td style="padding:8px;">${r.naziv}</td><td style="padding:8px; text-align:right;">${r.cena}</td><td style="padding:8px; text-align:right;">${r.kolicina}</td><td style="padding:8px;">${podnisaCelija}</td></tr>`;
+    }).join('');
+  }
+
+  function primeniPodnisuNaSve() {
+    const vrednost = document.getElementById('uvoz-bulk-podnisa').value;
+    if (!vrednost) return;
+    uvozParsiraniRedovi.forEach(r => { r.podnisa = vrednost; });
+    renderUvozPregled();
+  }
+
+  async function potvrdiUvoz() {
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Morate biti ulogovani!'); return; }
+    const glavnaNisa = document.getElementById('uvoz-nisa').value;
+    if (!glavnaNisa) { alert('Izaberite glavnu nišu!'); return; }
+    if (uvozParsiraniRedovi.length === 0) { alert('Nema proizvoda za uvoz!'); return; }
+
+    const btn = document.getElementById('btn-potvrdi-uvoz');
+    btn.disabled = true;
+    btn.textContent = '⏳ Uvozim...';
+
+    try {
+      const res = await fetch(`${backendUrl}/uvoz-proizvoda`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ proizvodi: uvozParsiraniRedovi, glavnaNisa })
+      });
+      const d = await res.json();
+      if (res.ok) {
+        let poruka = `✅ ${d.message}`;
+        if (d.greske && d.greske.length) poruka += `\n\nNapomene:\n${d.greske.slice(0,10).join('\n')}`;
+        alert(poruka);
+        zatvoriUvozModal();
+      } else {
+        alert('❌ ' + (d.error || 'Greška pri uvozu'));
+        btn.disabled = false;
+        btn.textContent = '📦 Uvezi proizvode';
+      }
+    } catch (err) {
+      alert('Greška pri povezivanju: ' + err.message);
+      btn.disabled = false;
+      btn.textContent = '📦 Uvezi proizvode';
+    }
   }
 
   // ── Ostale funkcije ──
