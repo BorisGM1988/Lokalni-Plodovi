@@ -1680,6 +1680,17 @@
   document.getElementById('konverzacija-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriKonverzacijuPotpuno(); });
 
   // ── Tezga ──
+  // Bezbedno ubacivanje teksta u onclick="..." atribute (unutar jednostrukih navodnika).
+  // Osim apostrofa, mora se pobrinuti i za znak " (dupli navodnik), jer bi inače prevremeno
+  // zatvorio onclick="" atribut i pokvario ceo HTML tog dugmeta (dugme prestaje da radi bez greške u konzoli).
+  function escAtr(s) {
+    return String(s == null ? '' : s)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/"/g, '&quot;')
+      .replace(/\n/g, ' ');
+  }
+
   async function pogledajTezgu() {
     document.getElementById('tezga-modal').style.display = 'flex';
     const sadrzaj = document.getElementById('tezga-sadrzaj');
@@ -1713,7 +1724,7 @@
         lista.forEach(p => {
           const item = document.createElement('div');
           item.className = 'tezga-proizvod';
-          item.innerHTML = `${p.slika ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">` : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`}<div class="tezga-info"><div class="tezga-naziv">${p.naziv}</div><div class="tezga-detalji">${p.podnisa ? `${p.podnisa} • ` : ''}Dostupno: ${p.kolicina} kg/kom${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}</div></div><div class="tezga-cena">${p.cena} RSD</div><div class="tezga-akcije"><button class="btn-podeli-proizvod" onclick="podeliProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena})">📤 Podeli</button>${isOwnProfile ? `<button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${p.naziv.replace(/'/g, "\\'")}', ${p.cena}, ${p.kolicina}, '${(p.opis||'').replace(/'/g, "\\'")}')">✏️ Izmeni</button><button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>` : ''}</div>`;
+          item.innerHTML = `${p.slika ? `<img src="${p.slika}" class="tezga-slika" alt="${p.naziv}">` : `<div class="tezga-slika-placeholder">${nisaIkone[p.glavnaNisa] || '📦'}</div>`}<div class="tezga-info"><div class="tezga-naziv">${p.naziv}</div><div class="tezga-detalji">${p.podnisa ? `${p.podnisa} • ` : ''}Dostupno: ${p.kolicina} kg/kom${p.opis ? `<br><span style="color:#888;">${p.opis}</span>` : ''}</div></div><div class="tezga-cena">${p.cena} RSD</div><div class="tezga-akcije"><button class="btn-podeli-proizvod" onclick="podeliProizvod(${p.id}, '${escAtr(p.naziv)}', ${p.cena})">📤 Podeli</button>${isOwnProfile ? `<button class="btn-edit-proizvod" onclick="otvoriEditProizvod(${p.id}, '${escAtr(p.naziv)}', ${p.cena}, ${p.kolicina}, '${escAtr(p.opis)}', '${escAtr(p.slika)}')">✏️ Izmeni</button><button class="btn-obrisi-proizvod" onclick="obrisiProizvodTezga(${p.id})">🗑 Obriši</button>` : ''}</div>`;
           grupa.appendChild(item);
         });
         sadrzaj.appendChild(grupa);
