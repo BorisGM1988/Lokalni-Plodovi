@@ -1015,6 +1015,13 @@
       <input type="number" id="edit-kolicina" style="width:100%; padding:10px; margin:6px 0 14px; border-radius:8px; border:1px solid #ddd; box-sizing:border-box; font-size:1rem;">
       <label style="font-weight:600; color:#333;">Opis</label>
       <textarea id="edit-opis-proizvoda" rows="3" style="width:100%; padding:10px; margin:6px 0 14px; border-radius:8px; border:1px solid #ddd; box-sizing:border-box; font-size:1rem; resize:vertical;"></textarea>
+      <label style="font-weight:600; color:#333;">Slika proizvoda</label>
+      <div id="edit-slika-preview-wrap" style="margin:8px 0;"></div>
+      <input type="file" id="edit-slika-proizvoda" accept="image/*" style="width:100%; padding:8px; margin:6px 0 8px; border:2px dashed #2563eb; border-radius:10px; cursor:pointer; box-sizing:border-box;">
+      <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:14px;">
+        <button type="button" onclick="obrisiSlikuUEditu()" style="padding:6px 14px; border-radius:8px; background:#fff0f0; color:#c62828; border:1px solid #ffcdd2; font-size:0.82rem; font-weight:600; cursor:pointer;">🗑 Obriši sliku</button>
+        <span id="edit-slika-status" style="font-size:0.78rem; color:#888;"></span>
+      </div>
       <div style="display:flex; gap:1rem; margin-top:0.5rem;">
         <button onclick="zatvoriEditProizvodModal()" style="flex:1; padding:12px; border-radius:50px; background:#f0f0f0; color:#555; border:none; font-weight:600; cursor:pointer;">Otkaži</button>
         <button onclick="sacuvajIzmeneProizvoda()" style="flex:2; padding:12px; border-radius:50px; background:#2563eb; color:white; border:none; font-weight:600; cursor:pointer;">💾 Sačuvaj izmene</button>
@@ -2789,14 +2796,45 @@ function podeliBlogFacebook(blogId) {
     }
   });
 
-  function otvoriEditProizvod(id, naziv, cena, kolicina, opis) {
+  let editSlikaObrisana = false;
+  let editSlikaNovaBase64 = null;
+
+  function otvoriEditProizvod(id, naziv, cena, kolicina, opis, slika) {
     document.getElementById('edit-proizvod-id').value = id;
     document.getElementById('edit-naziv').value = naziv;
     document.getElementById('edit-cena').value = cena;
     document.getElementById('edit-kolicina').value = kolicina;
     document.getElementById('edit-opis-proizvoda').value = opis || '';
+    document.getElementById('edit-slika-proizvoda').value = '';
+    document.getElementById('edit-slika-status').textContent = '';
+    editSlikaObrisana = false;
+    editSlikaNovaBase64 = null;
+    const wrap = document.getElementById('edit-slika-preview-wrap');
+    wrap.innerHTML = slika
+      ? `<img src="${slika}" style="max-width:100%; max-height:150px; border-radius:8px; display:block;">`
+      : `<div style="color:#999; font-size:0.85rem;">Nema slike</div>`;
     document.getElementById('edit-proizvod-modal').style.display = 'flex';
   }
+
+  function obrisiSlikuUEditu() {
+    editSlikaObrisana = true;
+    editSlikaNovaBase64 = null;
+    document.getElementById('edit-slika-proizvoda').value = '';
+    document.getElementById('edit-slika-preview-wrap').innerHTML = '<div style="color:#999; font-size:0.85rem;">Nema slike</div>';
+    document.getElementById('edit-slika-status').textContent = 'Slika će biti obrisana kad sačuvate.';
+  }
+
+  document.getElementById('edit-slika-proizvoda').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    editSlikaObrisana = false;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('edit-slika-preview-wrap').innerHTML = `<img src="${ev.target.result}" style="max-width:100%; max-height:150px; border-radius:8px; display:block;">`;
+      document.getElementById('edit-slika-status').textContent = 'Nova slika spremna za čuvanje ✓';
+    };
+    reader.readAsDataURL(file);
+  });
 
   function zatvoriEditProizvodModal() { document.getElementById('edit-proizvod-modal').style.display = 'none'; }
 
@@ -2809,8 +2847,19 @@ function podeliBlogFacebook(blogId) {
     const kolicina = parseInt(document.getElementById('edit-kolicina').value);
     const opis = document.getElementById('edit-opis-proizvoda').value.trim();
     if (!naziv || !cena || !kolicina) { alert('Popunite sva obavezna polja!'); return; }
+
+    const telo = { naziv, cena, kolicina, opis };
+
+    const slikaFile = document.getElementById('edit-slika-proizvoda').files[0];
+    if (slikaFile) {
+      try { telo.slikaBase64 = await fileToBase64(slikaFile); }
+      catch (err) { alert('Greška pri obradi slike: ' + err.message); return; }
+    } else if (editSlikaObrisana) {
+      telo.slikaBase64 = '';
+    }
+
     try {
-      const res = await fetch(`${backendUrl}/proizvod/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ naziv, cena, kolicina, opis }) });
+      const res = await fetch(`${backendUrl}/proizvod/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(telo) });
       const result = await res.json();
       if (res.ok) { alert('✅ Proizvod izmenjen!'); zatvoriEditProizvodModal(); pogledajTezgu(); }
       else alert('Greška: ' + (result.error || 'Nešto nije u redu'));
