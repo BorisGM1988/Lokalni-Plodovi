@@ -2866,15 +2866,17 @@ function podeliBlogFacebook(blogId) {
 
     const slikaFile = document.getElementById('edit-slika-proizvoda').files[0];
     if (slikaFile) {
-      try { telo.slikaBase64 = await fileToBase64(slikaFile); }
-      catch (err) { alert('Greška pri obradi slike: ' + err.message); return; }
+      try { telo.slikaBase64 = await uploadDoCloudinary(slikaFile); }
+      catch (err) { alert('Greška pri otpremanju slike: ' + err.message); return; }
     } else if (editSlikaObrisana) {
       telo.slikaBase64 = '';
     }
 
     try {
       const res = await fetch(`${backendUrl}/proizvod/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(telo) });
-      const result = await res.json();
+      let result;
+      try { result = await res.json(); }
+      catch { alert('Greška: server nije vratio ispravan odgovor. Proverite internet konekciju i probajte ponovo.'); return; }
       if (res.ok) { alert('✅ Proizvod izmenjen!'); zatvoriEditProizvodModal(); pogledajTezgu(); }
       else alert('Greška: ' + (result.error || 'Nešto nije u redu'));
     } catch (err) { alert('Greška: ' + err.message); }
