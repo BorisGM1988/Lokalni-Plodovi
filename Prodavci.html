@@ -742,6 +742,15 @@
 
       grid.appendChild(card);
 
+      // Smanji Cloudinary sliku za brže učitavanje kartice; ako slika nije sa Cloudinary-ja, ostavi je netaknutu
+      function optimizujSlikuZaKarticu(url) {
+        if (!url) return url;
+        if (url.indexOf('res.cloudinary.com') === -1) return url;
+        if (url.indexOf('/upload/') === -1) return url;
+        if (url.indexOf('/upload/w_') !== -1) return url; // već ima transformaciju
+        return url.replace('/upload/', '/upload/w_400,c_fill,q_auto,f_auto/');
+      }
+
       // Slika se učita u pozadini — kad je spremna, pojavi se
       if (p.slika && p.slika.trim() !== '') {
         const img = new Image();
@@ -767,7 +776,7 @@
         };
 
         // Počni učitavanje slike
-        img.src = p.slika;
+        img.src = optimizujSlikuZaKarticu(p.slika);
       } else {
         // Nema slike — skloni shimmer
         const wrap = document.getElementById(`img-wrap-${p.id}`);
