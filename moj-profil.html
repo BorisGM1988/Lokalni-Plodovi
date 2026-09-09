@@ -2702,6 +2702,29 @@ function podeliBlogFacebook(blogId) {
     });
   }
 
+  // Smanjuje sliku pre slanja (max 1200px širina, JPEG kvalitet 0.82) da ne bude prevelika za server
+  function komprimujSliku(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxSirina = 1200;
+          let w = img.width, h = img.height;
+          if (w > maxSirina) { h = Math.round(h * (maxSirina / w)); w = maxSirina; }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.82));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
   async function sacuvajIzmene() {
     const token = localStorage.getItem('token');
     if (!token) { alert('Morate biti ulogovani'); return; }
@@ -2866,7 +2889,7 @@ function podeliBlogFacebook(blogId) {
 
     const slikaFile = document.getElementById('edit-slika-proizvoda').files[0];
     if (slikaFile) {
-      try { telo.slikaBase64 = await fileToBase64(slikaFile); }
+      try { telo.slikaBase64 = await komprimujSliku(slikaFile); }
       catch (err) { alert('Greška pri obradi slike: ' + err.message); return; }
     } else if (editSlikaObrisana) {
       telo.slikaBase64 = '';
