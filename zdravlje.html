@@ -37,6 +37,7 @@
     ]
   }
   </script>
+  <script type="application/ld+json" id="dynamic-products-schema"></script>
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -301,15 +302,15 @@
     proizvodi.forEach((p, i) => {
       const isOwner = currentUserId && String(p.userId) === String(currentUserId);
       const isKupac = tip === 'kupac';
-      const slika = p.slika && p.slika.trim() !== '' ? p.slika : 'https://via.placeholder.com/400x200?text=Nema+slike';
+      const slika = p.slika && p.slika.trim() !== '' ? p.slika : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect width=%22400%22 height=%22200%22 fill=%22%23f0ece0%22/%3E%3Ctext x=%2250%25%25%22 y=%2250%25%25%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENema slike%3C/text%3E%3C/svg%3E';
       const datum = p.created_at ? new Date(p.created_at).toLocaleDateString('sr-RS') : '';
       const card = document.createElement('div');
       card.className = 'proizvod-card';
       card.style.animationDelay = `${i * 0.05}s`;
       card.innerHTML = `
         <div class="card-img-wrap">
-          <img src="${slika}" alt="${p.naziv} – lekovito bilje ${p.prodavacLokacija || 'Srbija'}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x200?text=Nema+slike'">
-          <span class="card-fresh-badge">🥚 Sveže</span>
+          <img src="${slika}" alt="${p.naziv} – lekovito bilje ${p.prodavacLokacija || 'Srbija'}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect width=%22400%22 height=%22200%22 fill=%22%23f0ece0%22/%3E%3Ctext x=%2250%25%25%22 y=%2250%25%25%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENema slike%3C/text%3E%3C/svg%3E'">
+          <span class="card-fresh-badge">🌿 Prirodno</span>
         </div>
         <div class="card-body">
           <h2 class="card-naziv">${p.naziv}</h2>
@@ -329,8 +330,43 @@
         </div>`;
       grid.appendChild(card);
     });
+    azurirajStrukturiranePodatke(proizvodi);
     container.innerHTML = '';
     container.appendChild(grid);
+  }
+
+  // Popunjava JSON-LD strukturirane podatke sa trenutnim, stvarnim proizvodima (max 30) — pomaže Google-u da razume šta se trenutno nudi
+  function azurirajStrukturiranePodatke(proizvodi) {
+    try {
+      const skripta = document.getElementById('dynamic-products-schema');
+      if (!skripta || !proizvodi || proizvodi.length === 0) return;
+      const stavke = proizvodi.slice(0, 30).map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Product',
+          name: p.naziv,
+          image: (p.slika && p.slika.trim() !== '') ? p.slika : undefined,
+          description: p.opis || undefined,
+          url: p.userId ? `https://lokalniplodovi.rs/moj-profil.html?userId=${p.userId}` : undefined,
+          offers: {
+            '@type': 'Offer',
+            price: parseFloat(p.cena || 0),
+            priceCurrency: 'RSD',
+            availability: 'https://schema.org/InStock'
+          },
+          brand: p.prodavacIme ? { '@type': 'Organization', name: p.prodavacIme } : undefined
+        }
+      }));
+      const shema = {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Bilje i zdravlje – trenutna ponuda na LokalniPlodovi',
+        numberOfItems: proizvodi.length,
+        itemListElement: stavke
+      };
+      skripta.textContent = JSON.stringify(shema);
+    } catch (e) {}
   }
 
   async function dodajUZelje(proizvodId) {
