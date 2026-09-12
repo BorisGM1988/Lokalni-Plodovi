@@ -1256,7 +1256,16 @@
       document.getElementById('profileName').textContent = data.ime || 'Korisnik';
       document.getElementById('profileBio').textContent = data.opis || 'Nema opisa';
       document.getElementById('email').textContent = data.email || 'N/A';
-      document.getElementById('telefon').textContent = data.telefon || 'Nije navedeno';
+      const telefonEl = document.getElementById('telefon');
+      if (data.telefon) {
+        if (isOwnProfile) {
+          telefonEl.innerHTML = `<a href="tel:${data.telefon}" style="color:inherit; text-decoration:none;">${data.telefon}</a>`;
+        } else {
+          telefonEl.innerHTML = `<button onclick="prikaziTelefon(this, '${data.telefon}', '${userIdParam || ''}')" style="background:#16a34a;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;">📞 Prikaži broj telefona</button>`;
+        }
+      } else {
+        telefonEl.textContent = 'Nije navedeno';
+      }
       document.getElementById('lokacija').textContent = data.lokacija || 'Nije navedeno';
       document.getElementById('opis').textContent = data.opis || 'Nema opisa';
       document.getElementById('registeredAt').textContent = data.registeredAt ? new Date(data.registeredAt).toLocaleString('sr-RS') : 'N/A';
@@ -2544,6 +2553,22 @@ function podeliBlogFacebook(blogId) {
 
   // ── Ostale funkcije ──
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
+
+  // Otkriva broj telefona na klik (i beleži klik kao signal namere kupovine)
+  function prikaziTelefon(btn, telefon, prodavacId) {
+    btn.outerHTML = `<a href="tel:${telefon}" style="color:inherit; text-decoration:none;">${telefon}</a>`;
+    prijaviKlikNaTelefon(prodavacId);
+  }
+
+  // Beleži klik na broj telefona — samo kad je tuđi profil (sopstveni klik se ne broji kao interesovanje kupca)
+  function prijaviKlikNaTelefon(prodavacId) {
+    if (!prodavacId) return;
+    fetch(`${backendUrl}/prijavi-klik-telefon`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prodavac_id: prodavacId })
+    }).catch(() => {});
+  }
 
   function objaviNovost() { document.getElementById('objavi-novost-modal').style.display = 'flex'; }
 
