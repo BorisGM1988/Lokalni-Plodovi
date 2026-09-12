@@ -449,6 +449,15 @@
       </div>
       <div class="stat-chart"><canvas id="chart-objave"></canvas></div>
     </div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <div>
+          <div class="stat-number" id="stat-pozivi" style="color:#0ea5e9">-</div>
+          <div class="stat-label">Klikova na telefon</div>
+        </div>
+        <div class="stat-icon" style="background:#e0f2fe;color:#0ea5e9;"><i class="fas fa-phone"></i></div>
+      </div>
+    </div>
     <div class="stat-card stat-refresh" onclick="osvezi()" title="Osveži podatke">
       <div class="stat-top">
         <div>
@@ -903,6 +912,7 @@ async function ucitajSve() {
   const [k, p, o] = await Promise.all([ucitajKorisnike(), ucitajProizvode(), ucitajObjave()]);
   await ucitajStats();
   buildSparklines(k||[], p||[], o||[]);
+  await ucitajKlikoveTelefon();
 }
 
 async function ucitajStats() {
@@ -913,6 +923,18 @@ async function ucitajStats() {
     document.getElementById('stat-kupci').textContent = s.kupci;
     document.getElementById('stat-proizvodi').textContent = s.proizvodi;
     document.getElementById('stat-objave').textContent = s.objave;
+  } catch {}
+}
+
+async function ucitajKlikoveTelefon() {
+  try {
+    const res = await fetch(`${backendUrl}/admin/klikovi-telefon`, { headers:{ 'x-admin-password':adminLozinka } });
+    const d = await res.json();
+    document.getElementById('stat-pozivi').textContent = d.ukupno;
+    const mapa = {};
+    (d.poProdavcu || []).forEach(r => { mapa[r.prodavac_id] = parseInt(r.broj); });
+    state.prodavaci.data.forEach(k => { k.pozivi = mapa[k.id] || 0; });
+    applyFilter('prodavaci');
   } catch {}
 }
 
@@ -1039,6 +1061,7 @@ function renderProdavaciTable(lista, tip) {
       ${sortHeader(tip,'lokacija','Lokacija')}
       <th>Niše</th>
       <th>Username</th>
+      <th>Pozivi</th>
       ${sortHeader(tip,'created_at','Registrovan')}
       <th>Akcije</th>
     </tr></thead>
@@ -1061,6 +1084,7 @@ function renderProdavaciTable(lista, tip) {
                <button class="btn btn-primary btn-sm" onclick="postaviUsername(${k.id})">Postavi</button>`
           }
         </td>
+        <td style="text-align:center;font-weight:700;color:#0ea5e9">${k.pozivi || 0}</td>
         <td style="white-space:nowrap">${fmt(k.created_at)}</td>
         <td style="white-space:nowrap">
           <button class="btn btn-info btn-sm" onclick="detaljiKorisnika(${k.id})"><i class="fas fa-eye"></i></button>
