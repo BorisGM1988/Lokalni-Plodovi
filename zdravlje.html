@@ -91,6 +91,8 @@
     .card-row { display: flex; align-items: baseline; gap: 0.4rem; font-size: 0.9rem; color: #555; }
     .card-row .lbl { font-weight: 600; color: #333; min-width: 76px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.3px; }
     .card-row .val { color: #444; }
+    .opis-toggle { background: none; border: none; padding: 0; margin-left: 4px; color: var(--zelena); font-weight: 600; font-size: 0.85rem; cursor: pointer; font-family: inherit; text-decoration: underline; }
+    .opis-toggle:hover { color: var(--zelena-tamna); }
     .cena-val { font-size: 1.05rem !important; font-weight: 700 !important; color: var(--zelena) !important; }
     .card-datum { font-size: 0.76rem; color: #bbb; margin-top: 0.5rem; margin-bottom: 1.1rem; display: flex; align-items: center; gap: 0.3rem; }
     .card-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
@@ -285,6 +287,31 @@
     renderProizvodi(sorted);
   }
 
+  // Skraćuje dugačke opise i dodaje "Pročitaj više" koji proširuje ostatak
+  const OPIS_LIMIT = 160;
+  function opisHtml(opis, id) {
+    const tekst = String(opis).trim();
+    if (tekst.length <= OPIS_LIMIT) return tekst;
+    const kratak = tekst.slice(0, OPIS_LIMIT).replace(/\s+\S*$/, '');
+    return `<span id="opis-${id}">
+      <span class="opis-kratak">${kratak}…</span>
+      <span class="opis-pun" style="display:none;">${tekst}</span>
+      <button type="button" class="opis-toggle" onclick="prikaziCeoOpis(${id})">Pročitaj više</button>
+    </span>`;
+  }
+
+  function prikaziCeoOpis(id) {
+    const wrap = document.getElementById(`opis-${id}`);
+    if (!wrap) return;
+    const kratak = wrap.querySelector('.opis-kratak');
+    const pun = wrap.querySelector('.opis-pun');
+    const btn = wrap.querySelector('.opis-toggle');
+    const prosireno = pun.style.display !== 'none';
+    kratak.style.display = prosireno ? '' : 'none';
+    pun.style.display = prosireno ? 'none' : '';
+    btn.textContent = prosireno ? 'Pročitaj više' : 'Prikaži manje';
+  }
+
   function renderProizvodi(proizvodi) {
     const container = document.getElementById('proizvodi-container');
     const countLabel = document.getElementById('count-label');
@@ -319,7 +346,7 @@
             <div class="card-row"><span class="lbl">Dostupno</span><span class="val">${p.kolicina || '—'} ${p.jedinica || 'g'}</span></div>
             ${p.prodavacIme ? `<div class="card-row"><span class="lbl">Prodavac</span><span class="val">${p.prodavacIme}</span></div>` : ''}
             ${p.prodavacLokacija ? `<div class="card-row"><span class="lbl">Lokacija</span><span class="val">📍 ${p.prodavacLokacija}</span></div>` : ''}
-            ${p.opis ? `<div class="card-row"><span class="lbl">Opis</span><span class="val">${p.opis}</span></div>` : ''}
+            ${p.opis ? `<div class="card-row"><span class="lbl">Opis</span><span class="val">${opisHtml(p.opis, p.id)}</span></div>` : ''}
           </div>
           ${datum ? `<div class="card-datum"><i class="far fa-clock"></i> Dodato: ${datum}</div>` : ''}
           <div class="card-actions">
