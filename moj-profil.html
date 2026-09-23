@@ -2950,6 +2950,47 @@ function podeliBlogFacebook(blogId) {
   }
 
   document.getElementById('edit-proizvod-modal').addEventListener('click', function(e) { if (e.target === this) zatvoriEditProizvodModal(); });
+  
+  // ══════════════════════════════════════════
+  // AUTOMATSKO SMANJIVANJE SLIKA PRE UPLOADA
+  // Sve slike (profil, naslovna, proizvod, novost, blog) se smanje
+  // na najviše 1600px i JPEG kvalitet 0.85 pre slanja na Cloudinary.
+  // Ako smanjivanje ne uspe, šalje se originalna slika. Video se ne dira.
+  // ══════════════════════════════════════════
+  (function () {
+    const originalUpload = uploadDoCloudinary;
+
+    function smanjiSliku(file, maxSirina = 1600, kvalitet = 0.85) {
+      return new Promise((resolve) => {
+        if (!file.type || !file.type.startsWith('image/') || file.type === 'image/gif') return resolve(file);
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          let w = img.width, h = img.height;
+          if (w > maxSirina) { h = Math.round(h * (maxSirina / w)); w = maxSirina; }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          canvas.toBlob((blob) => {
+            if (!blob) return resolve(file);
+            const novoIme = (file.name || 'slika').replace(/\.[^.]+$/, '') + '.jpg';
+            resolve(new File([blob], novoIme, { type: 'image/jpeg' }));
+          }, 'image/jpeg', kvalitet);
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+        img.src = url;
+      });
+    }
+
+    uploadDoCloudinary = async function (file, jeVideo = false) {
+      if (!jeVideo) file = await smanjiSliku(file);
+      return originalUpload(file, jeVideo);
+    };
+  })();
 </script>
 </body>
 </html>
