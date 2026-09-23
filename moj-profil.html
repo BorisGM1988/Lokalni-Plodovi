@@ -1389,7 +1389,18 @@
       `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`,
       { method: 'POST', body: formData }
     );
-    if (!response.ok) throw new Error('Upload na Cloudinary nije uspeo');
+    if (!response.ok) {
+      // Izvuci pravu poruku greške koju vraća Cloudinary (npr. "Invalid upload preset",
+      // "File size too large") umesto samo generičke poruke, da bismo znali tačan uzrok.
+      let poruka = 'Upload na Cloudinary nije uspeo';
+      try {
+        const greskaPodaci = await response.json();
+        if (greskaPodaci && greskaPodaci.error && greskaPodaci.error.message) {
+          poruka += ': ' + greskaPodaci.error.message;
+        }
+      } catch (e) {}
+      throw new Error(poruka);
+    }
     const data = await response.json();
     return data.secure_url;
   }
