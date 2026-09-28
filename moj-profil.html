@@ -587,6 +587,7 @@
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -639,6 +640,10 @@
         <p class="profile-bio" id="profileBio">Opis domaćinstva...</p>
         <div id="neaktivan-baner" style="display:none; background:#fff3cd; border:1px solid #ffe69c; color:#664d03; padding:0.7rem 1.2rem; border-radius:12px; margin:0.8rem auto 0; max-width:600px; font-size:0.92rem; font-weight:600;">
           ⏸️ Vaš profil je trenutno neaktivan i nije vidljiv kupcima. Uključite ga ponovo klikom na "Izmeni profil".
+        </div>
+        <div id="qr-stalno-wrap" style="display:none; flex-direction:column; align-items:center; gap:0.5rem; margin:0 auto 1.6rem;">
+          <div id="qr-stalno" style="padding:10px; background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border:1px solid #eee;"></div>
+          <p style="font-size:0.8rem; color:#888; margin:0;">📱 Skenirajte za direktan pristup profilu</p>
         </div>
         <div class="profile-header-btns">
           <button class="profile-edit-btn" id="btn-izmeni" onclick="izmeniProfil()">
@@ -798,6 +803,13 @@
       <p style="font-size:0.85rem; color:#888; margin:0; text-align:center;">
         Instagram ne dozvoljava automatsko objavljivanje — preuzmi sliku, pa je ručno dodaj u svoju Story.
       </p>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0.6rem; padding-top:0.8rem; margin-top:0.4rem; border-top:1px solid #eee;">
+        <div id="qr-profil-slika" style="padding:10px; background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"></div>
+        <p style="font-size:0.8rem; color:#888; margin:0; text-align:center;">QR kod za direktan pristup profilu — pokaži ga kupcu ili odštampaj za tezgu</p>
+        <button onclick="preuzmiQrKod()" style="background:none; border:1px solid #0ea5e9; color:#0ea5e9; padding:8px 18px; border-radius:10px; cursor:pointer; font-size:0.85rem; font-weight:600;">
+          <i class="fas fa-download"></i> Preuzmi QR kod
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -1356,6 +1368,24 @@
           const payload = JSON.parse(atob(token.split('.')[1]));
           trenutniUserId = payload.userId;
         } catch(e) {}
+      }
+
+      // QR kod stalno vidljiv na profilu (ne samo u modalu za deljenje)
+      if (trenutniUserId) {
+        const qrStalnoWrap = document.getElementById('qr-stalno-wrap');
+        const qrStalnoKontejner = document.getElementById('qr-stalno');
+        if (qrStalnoWrap && qrStalnoKontejner) {
+          qrStalnoKontejner.innerHTML = '';
+          new QRCode(qrStalnoKontejner, {
+            text: `https://lokalniplodovi.rs/moj-profil.html?userId=${trenutniUserId}`,
+            width: 130,
+            height: 130,
+            colorDark: '#1b5e20',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M
+          });
+          qrStalnoWrap.style.display = 'flex';
+        }
       }
 
       if (isOwnProfile && token) {
@@ -1973,10 +2003,36 @@ function podeliBlogFacebook(blogId) {
     if (!trenutniUserId) { alert('Profil se još učitava, sačekajte trenutak.'); return; }
     const shareUrl = encodeURIComponent(`${backendUrl}/prodavac-share/${trenutniUserId}`);
     document.getElementById('link-podeli-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+
+    // QR kod koji vodi direktno na profil (bez OG-redirekta, za brzo skeniranje)
+    const profilLinkZaQr = `https://lokalniplodovi.rs/moj-profil.html?userId=${trenutniUserId}`;
+    const qrKontejner = document.getElementById('qr-profil-slika');
+    qrKontejner.innerHTML = '';
+    new QRCode(qrKontejner, {
+      text: profilLinkZaQr,
+      width: 170,
+      height: 170,
+      colorDark: '#1b5e20',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+
     document.getElementById('podeli-modal').style.display = 'flex';
   }
 
   function zatvoriPodeliModal() { document.getElementById('podeli-modal').style.display = 'none'; }
+
+  function preuzmiQrKod() {
+    const kontejner = document.getElementById('qr-profil-slika');
+    const qrCanvas = kontejner.querySelector('canvas');
+    const qrImg = kontejner.querySelector('img');
+    if (!qrCanvas && !qrImg) return;
+    const ime = (document.getElementById('profileName').textContent || 'profil').trim().replace(/\s+/g, '-');
+    const link = document.createElement('a');
+    link.download = `QR-kod-${ime}.png`;
+    link.href = qrCanvas ? qrCanvas.toDataURL('image/png') : qrImg.src;
+    link.click();
+  }
 
   // ══════════════════════════════════════════
   // PODELI PROIZVOD (Fejsbuk + Instagram Story)
@@ -2328,6 +2384,33 @@ function podeliBlogFacebook(blogId) {
         ctx.fillStyle = '#e8f5e9';
         ctx.fillText('📍 ' + lokacija, canvas.width / 2, avatarY + avatarSize + 175, canvas.width - 100);
       }
+
+      // QR kod za direktan pristup profilu
+      const profilLinkZaQr = `https://lokalniplodovi.rs/moj-profil.html?userId=${trenutniUserId}`;
+      const qrPrivremeni = document.createElement('div');
+      qrPrivremeni.style.cssText = 'position:absolute; left:-9999px;';
+      document.body.appendChild(qrPrivremeni);
+      new QRCode(qrPrivremeni, {
+        text: profilLinkZaQr,
+        width: 260,
+        height: 260,
+        colorDark: '#1b5e20',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      const qrCanvasZaStory = qrPrivremeni.querySelector('canvas');
+      const qrBoxSize = 300;
+      const qrBoxX = (canvas.width - qrBoxSize) / 2;
+      const qrBoxY = canvas.height - 660;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize);
+      if (qrCanvasZaStory) {
+        ctx.drawImage(qrCanvasZaStory, qrBoxX + 20, qrBoxY + 20, qrBoxSize - 40, qrBoxSize - 40);
+      }
+      document.body.removeChild(qrPrivremeni);
+      ctx.font = '500 34px "DM Sans", sans-serif';
+      ctx.fillStyle = '#e8f5e9';
+      ctx.fillText('Skenirajte za profil', canvas.width / 2, qrBoxY - 30);
 
       // Poziv na akciju na dnu
       ctx.font = '600 46px "DM Sans", sans-serif';
