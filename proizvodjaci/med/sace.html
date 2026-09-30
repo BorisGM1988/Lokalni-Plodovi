@@ -417,8 +417,9 @@
       </div>`;
 
     try {
-      // ISPRAVKA: podnisa u bazi je "Saće" (sa kvačicom, kao na formi za dodavanje)
-      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Med&podnisa=Saće`);
+      // ISPRAVKA: podnisa u bazi je tačno "Med sa saćem" (kao u formi za dodavanje proizvoda),
+      // ne "Saće" — enkodujemo je preko encodeURIComponent da izbegnemo buduće greške u pisanju.
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Med&podnisa=${encodeURIComponent('Med sa saćem')}`);
       if (!response.ok) throw new Error();
       sviProizvodi = await response.json();
       try {
@@ -437,7 +438,7 @@
 
   async function osvežiUPozadini() {
     try {
-      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Med&podnisa=Saće`);
+      const response = await fetch(`${backendUrl}/proizvodi?glavnaNisa=Med&podnisa=${encodeURIComponent('Med sa saćem')}`);
       if (!response.ok) return;
       const novi = await response.json();
       const stari = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}').podaci || [];
