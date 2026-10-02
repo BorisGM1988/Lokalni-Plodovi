@@ -537,6 +537,12 @@
     <div class="toolbar">
       <div class="toolbar-left">
         <input class="search-input" id="srch-prodavaci" placeholder="🔍 Pretraži prodavače..." oninput="filteruj('prodavaci')">
+        <select id="filter-kompletnost" onchange="filteruj('prodavaci')" style="padding:0.5rem 0.8rem; border-radius:8px; border:1px solid #ddd; font-size:0.85rem; font-family:inherit; cursor:pointer;">
+          <option value="svi">Svi prodavci</option>
+          <option value="bez-slike">⚠️ Bez profilne slike</option>
+          <option value="bez-proizvoda">⚠️ Bez ijednog proizvoda</option>
+          <option value="bez-oba">🚫 Bez slike i bez proizvoda</option>
+        </select>
         <span class="count-badge" id="cnt-prodavaci">0 prodavača</span>
       </div>
       <div class="toolbar-right">
@@ -972,9 +978,24 @@ async function ucitajSve() {
   showSkeleton('tbl-prodavaci'); showSkeleton('tbl-kupci');
   showSkeleton('tbl-proizvodi'); showSkeleton('tbl-objave');
   const [k, p, o] = await Promise.all([ucitajKorisnike(), ucitajProizvode(), ucitajObjave()]);
+  azurirajKompletnostProfila();
   await ucitajStats();
   buildSparklines(k||[], p||[], o||[]);
   await ucitajKlikoveTelefon();
+}
+
+// Računa broj proizvoda po prodavcu i da li ima profilnu sliku — koristi podatke
+// koji su već preuzeti (bez dodatnog poziva serveru), pa osvežava prikaz tabele.
+function azurirajKompletnostProfila() {
+  const mapaProizvoda = {};
+  (state.proizvodi.data || []).forEach(p => {
+    mapaProizvoda[p.userId] = (mapaProizvoda[p.userId] || 0) + 1;
+  });
+  (state.prodavaci.data || []).forEach(k => {
+    k.brojProizvoda = mapaProizvoda[k.id] || 0;
+    k.imaSliku = k.slika ? 'DA' : 'NE';
+  });
+  applyFilter('prodavaci');
 }
 
 async function ucitajStats() {
@@ -1059,6 +1080,12 @@ function applyFilter(tip) {
   s.filtered = q
     ? s.data.filter(x => searchFields[tip](x).toLowerCase().includes(q))
     : [...s.data];
+  if (tip === 'prodavaci') {
+    const kompletnost = document.getElementById('filter-kompletnost')?.value || 'svi';
+    if (kompletnost === 'bez-slike') s.filtered = s.filtered.filter(k => !k.slika);
+    else if (kompletnost === 'bez-proizvoda') s.filtered = s.filtered.filter(k => !k.brojProizvoda);
+    else if (kompletnost === 'bez-oba') s.filtered = s.filtered.filter(k => !k.slika && !k.brojProizvoda);
+  }
   if (s.sort) applySort(tip, false);
   renderTable(tip);
 }
@@ -1123,6 +1150,8 @@ function renderProdavaciTable(lista, tip) {
       ${sortHeader(tip,'lokacija','Lokacija')}
       <th>Niše</th>
       <th>Username</th>
+      <th style="text-align:center">Slika</th>
+      ${sortHeader(tip,'brojProizvoda','Proizvodi')}
       <th>Pozivi</th>
       ${sortHeader(tip,'created_at','Registrovan')}
       <th>Akcije</th>
@@ -1146,6 +1175,8 @@ function renderProdavaciTable(lista, tip) {
                <button class="btn btn-primary btn-sm" onclick="postaviUsername(${k.id})">Postavi</button>`
           }
         </td>
+        <td style="text-align:center">${k.slika ? '<span style="color:#16a34a" title="Ima profilnu sliku">✅</span>' : '<span style="color:#d32f2f" title="Nema profilnu sliku">❌</span>'}</td>
+        <td style="text-align:center; font-weight:700; color:${k.brojProizvoda ? '#2e7d32' : '#d32f2f'}">${k.brojProizvoda ?? 0}</td>
         <td style="text-align:center;font-weight:700;color:#0ea5e9">${k.pozivi || 0}</td>
         <td style="white-space:nowrap">${fmt(k.created_at)}</td>
         <td style="white-space:nowrap">
@@ -1657,7 +1688,7 @@ async function posaljiGrupniEmail() {
 // ── CSV EXPORT ──
 function exportCSV(tip) {
   const datasets = {
-    prodavaci: { data: state.prodavaci.filtered, cols: ['id','ime','email','telefon','lokacija','tip','username','created_at'] },
+    prodavaci: { data: state.prodavaci.filtered, cols: ['id','ime','email','telefon','lokacija','tip','username','imaSliku','brojProizvoda','created_at'] },
     kupci:     { data: state.kupci.filtered,     cols: ['id','ime','email','telefon','lokacija','tip','created_at'] },
     proizvodi: { data: state.proizvodi.filtered, cols: ['id','naziv','glavnaNisa','podnisa','cena','kolicina','prodavacIme','created_at'] },
     objave:    { data: state.objave.filtered,    cols: ['id','tekst','korisnikIme','korisnikEmail','created_at'] },
