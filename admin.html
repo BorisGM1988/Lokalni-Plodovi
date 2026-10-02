@@ -529,7 +529,7 @@
     <button class="tab" onclick="prikaziSekciju('proizvodi',this)"><i class="fas fa-box"></i> Proizvodi</button>
     <button class="tab" onclick="prikaziSekciju('objave',this)"><i class="fas fa-newspaper"></i> Objave</button>
     <button class="tab" onclick="prikaziSekciju('ocene',this);ucitajOcene()"><i class="fas fa-star"></i> Ocene</button>
-    <button class="tab" onclick="prikaziSekciju('grupni-email',this)"><i class="fas fa-envelope"></i> Grupni Email</button>
+    <button class="tab" id="tab-btn-grupni-email" onclick="prikaziSekciju('grupni-email',this)"><i class="fas fa-envelope"></i> Grupni Email</button>
   </div>
 
   <!-- PRODAVAČI -->
@@ -546,6 +546,7 @@
         <span class="count-badge" id="cnt-prodavaci">0 prodavača</span>
       </div>
       <div class="toolbar-right">
+        <button class="btn btn-primary btn-sm" onclick="pripremiEmailZaFiltrirane()"><i class="fas fa-envelope"></i> Email ovoj listi</button>
         <button class="btn btn-csv" onclick="exportCSV('prodavaci')"><i class="fas fa-download"></i> CSV</button>
       </div>
     </div>
@@ -632,9 +633,14 @@
   <div id="sec-grupni-email" class="section">
     <div class="email-card">
       <h3><i class="fas fa-envelope" style="color:var(--green-700);margin-right:.5rem;"></i>Pošalji grupni email</h3>
+      <div id="custom-email-info" style="display:none; align-items:center; gap:0.6rem; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:10px; padding:0.7rem 1rem; margin-bottom:1rem; font-size:0.9rem;">
+        <i class="fas fa-filter"></i>
+        <span>Email ide konkretnoj listi iz filtera: <strong id="custom-email-count">0</strong> primalaca</span>
+        <button type="button" onclick="ponistiCustomListu()" style="margin-left:auto; background:none; border:1px solid #166534; color:#166534; border-radius:6px; padding:3px 10px; font-size:0.8rem; cursor:pointer;">Poništi</button>
+      </div>
       <div class="form-group">
         <label>Ciljna grupa</label>
-        <select id="email-grupa">
+        <select id="email-grupa" onchange="ponistiCustomListu()">
           <option value="svi">Svi korisnici (prodavači + kupci)</option>
           <option value="prodavci">Samo prodavači</option>
           <option value="kupci">Samo kupci</option>
@@ -1663,22 +1669,46 @@ function potvrdiBrisanjeOcene(id) {
 }
 
 // ── GRUPNI EMAIL ──
+// Lista email adresa preuzeta iz trenutnog filtera u tabu Prodavači (null = nije aktivna,
+// koristi se obična grupa iz padajućeg menija umesto nje).
+let customEmailLista = null;
+
+function pripremiEmailZaFiltrirane() {
+  const lista = [...new Set(state.prodavaci.filtered.map(k => k.email).filter(Boolean))];
+  if (lista.length === 0) { toast('Nema prodavaca u trenutnom filteru (ili nemaju email)', 'warn'); return; }
+  customEmailLista = lista;
+  document.getElementById('custom-email-info').style.display = 'flex';
+  document.getElementById('custom-email-count').textContent = lista.length;
+  prikaziSekciju('grupni-email', document.getElementById('tab-btn-grupni-email'));
+  toast(`Spremno za slanje — ${lista.length} primalaca iz filtera`);
+}
+
+function ponistiCustomListu() {
+  customEmailLista = null;
+  document.getElementById('custom-email-info').style.display = 'none';
+}
+
 async function posaljiGrupniEmail() {
   const naslov = document.getElementById('email-naslov').value.trim();
   const poruka = document.getElementById('email-poruka').value.trim();
   const grupa  = document.getElementById('email-grupa').value;
   if (!naslov||!poruka) { toast('Naslov i poruka su obavezni!', 'warn'); return; }
-  confirm2('Pošalji email', `Slanje svim korisnicima (${grupa})?\n\nNaslov: "${naslov}"`, async () => {
+  const koristiCustomListu = Array.isArray(customEmailLista) && customEmailLista.length > 0;
+  const opisPrimalaca = koristiCustomListu ? `${customEmailLista.length} prodavaca iz filtera` : `svim korisnicima (${grupa})`;
+  confirm2('Pošalji email', `Slanje ${opisPrimalaca}?\n\nNaslov: "${naslov}"`, async () => {
     const btn = document.getElementById('btn-posalji-email');
     btn.disabled=true; btn.textContent='Slanje...';
     try {
+      const telo = { naslov, poruka, ciljnaGrupa: grupa };
+      if (koristiCustomListu) telo.emailovi = customEmailLista;
       const res = await fetch(`${backendUrl}/admin/grupni-email`,{
         method:'POST', headers:{'Content-Type':'application/json','x-admin-password':adminLozinka},
-        body: JSON.stringify({naslov, poruka, ciljnaGrupa:grupa})
+        body: JSON.stringify(telo)
       });
       const d = await res.json();
       if (res.ok) {
         toast(d.message); document.getElementById('email-naslov').value=''; document.getElementById('email-poruka').value='';
+        ponistiCustomListu();
       } else toast(d.error||'Greška pri slanju', 'error');
     } catch { toast('Greška pri povezivanju', 'error'); }
     btn.disabled=false; btn.innerHTML='<i class="fas fa-paper-plane"></i> Pošalji email';
