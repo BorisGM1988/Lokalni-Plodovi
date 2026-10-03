@@ -253,6 +253,8 @@
     }
 
     .btn-citaj {
+      display: inline-block;
+      text-decoration: none;
       background: var(--plava);
       color: white;
       padding: 0.6rem 1.3rem;
@@ -665,10 +667,17 @@
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
 
-  // Pomoćna funkcija — pravi Facebook sharer link za dati blog ID
-  function fbSharerUrl(blogId) {
-    const shareUrl = `${backendUrl}/blog-share/${blogId}`;
+  // Pomoćna funkcija — pravi Facebook sharer link za dati blog post.
+  // Ako post ima slug (prava statička stranica /blog/slug/, već ima svoje OG tagove),
+  // koristi nju direktno; u suprotnom se oslanja na staru rutu koja ubacuje OG tagove.
+  function fbSharerUrl(b) {
+    const shareUrl = b.slug ? `https://lokalniplodovi.rs/blog/${b.slug}/` : `${backendUrl}/blog-share/${b.id}`;
     return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+  }
+
+  // Link ka pojedinačnom postu — prava statička stranica ako slug postoji, inače stara SPA ruta
+  function postUrl(b) {
+    return b.slug ? `/blog/${b.slug}/` : `blog.html?id=${b.id}`;
   }
 
   // ── Učitaj sve blogove ──
@@ -719,16 +728,16 @@
             <div class="blog-naslov">${b.naslov}</div>
             <div class="blog-tekst-preview">${skraceni}</div>
             <div class="blog-card-footer">
-              <button class="btn-citaj" onclick="event.stopPropagation(); otvoriPost(${b.id})">
+              <a class="btn-citaj" href="${postUrl(b)}" onclick="event.stopPropagation()">
                 👁 Čitaj više
-              </button>
-              <a class="btn-fb" href="${fbSharerUrl(b.id)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
+              </a>
+              <a class="btn-fb" href="${fbSharerUrl(b)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
                 📘 Podeli
               </a>
             </div>
           </div>`;
 
-        card.addEventListener('click', () => otvoriPost(b.id));
+        card.addEventListener('click', () => { window.location.href = postUrl(b); });
         grid.appendChild(card);
       });
     } catch (err) {
@@ -805,7 +814,7 @@
         <div class="post-share">
           <h3>📘 Podelite ovaj post</h3>
           <p>Pomozite da priča dospe do više ljudi — podelite na Facebook!</p>
-          <a class="btn-share-fb" href="${fbSharerUrl(b.id)}" target="_blank" rel="noopener noreferrer">
+          <a class="btn-share-fb" href="${fbSharerUrl(b)}" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-facebook"></i> Podeli na Facebook
           </a>
         </div>
