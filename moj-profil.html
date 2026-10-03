@@ -1963,7 +1963,7 @@
         div.onmouseleave = () => div.style.boxShadow = 'none';
 
         const skraceniTekst = b.tekst.length > 180 ? b.tekst.substring(0, 180) + '...' : b.tekst;
-        const blogUrl = `https://lokalniplodovi.rs/blog.html?id=${b.id}`;
+        const blogUrl = b.slug ? `https://lokalniplodovi.rs/blog/${b.slug}/` : `https://lokalniplodovi.rs/blog.html?id=${b.id}`;
 
         div.innerHTML = `
           ${b.slika ? `<img src="${b.slika}" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; margin-bottom:0.8rem;">` : ''}
@@ -1973,7 +1973,7 @@
             <small style="color:#888;">${new Date(b.created_at).toLocaleDateString('sr-RS')}</small>
             <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
               <a href="${blogUrl}" style="background:#0ea5e9; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem; font-weight:600; text-decoration:none;">👁 Čitaj više</a>
-              <button onclick="podeliBlogFacebook(${b.id})" style="background:#1877f2; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem; font-weight:600;">📘 Podeli</button>
+              <button onclick="podeliBlogFacebook(${b.id}, '${escAtr(b.slug)}')" style="background:#1877f2; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem; font-weight:600;">📘 Podeli</button>
               ${isOwnProfile ? `<button onclick="obrisiBlog(${b.id})" style="background:#d32f2f; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem; font-weight:600;">🗑 Obriši</button>` : ''}
             </div>
           </div>`;
@@ -1984,8 +1984,9 @@
     }
   }
 
-function podeliBlogFacebook(blogId) {
-  const shareUrl = encodeURIComponent(`${backendUrl}/blog-share/${blogId}`);
+function podeliBlogFacebook(blogId, slug) {
+  const stvarniLink = slug ? `https://lokalniplodovi.rs/blog/${slug}/` : `${backendUrl}/blog-share/${blogId}`;
+  const shareUrl = encodeURIComponent(stvarniLink);
   const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
   
   if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
