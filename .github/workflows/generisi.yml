@@ -1,4 +1,4 @@
-name: Generisi stranice prodavaca
+name: Generisi statičke stranice (prodavci i blog)
 
 # Kada se ovo pokreće:
 on:
@@ -21,13 +21,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Pokreni skriptu za generisanje stranica
+      - name: Pokreni skriptu za generisanje stranica prodavaca
         run: node generisi-prodavce.js
+
+      - name: Pokreni skriptu za generisanje blog stranica
+        run: node generisi-blogove.js
 
       - name: Sačuvaj promene (ako ih ima)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add prodavac/ sitemap.xml
-          git diff --staged --quiet || git commit -m "Automatsko azuriranje stranica prodavaca i sitemap-a"
+          git add prodavac/ blog/ sitemap.xml
+          git diff --staged --quiet || git commit -m "Automatsko azuriranje stranica prodavaca, blogova i sitemap-a"
           git push
