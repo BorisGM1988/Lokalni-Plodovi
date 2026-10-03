@@ -202,6 +202,7 @@ function napraviHtml(b) {
         ${tekstUParagrafe(b.tekst)}
       </div>
       <div class="cta-row">
+        <a class="btn btn-primary" href="/blog.html?id=${escapeHtml(String(b.id))}"><i class="fas fa-book-open"></i> Pročitaj ceo blog</a>
         <a class="btn btn-primary" href="/moj-profil.html?userId=${escapeHtml(String(b.autorId || b.userId || ''))}"><i class="fas fa-store"></i> Poseti tezgu autora</a>
         <a class="btn btn-fb" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> Podeli na Fejsbuku</a>
       </div>
