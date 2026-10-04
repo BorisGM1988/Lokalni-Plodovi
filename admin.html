@@ -413,11 +413,28 @@
     .btn-csv { background:#0f766e; color:white; }
     .btn-csv:hover { background:#0d6160; }
 
+    /* ── STATISTIKA POSETA ── */
+    .stat-two-col { display:grid; grid-template-columns: 2fr 1fr; gap:1rem; margin-bottom:1rem; }
+    .stat-panel { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding:1.1rem 1.3rem; }
+    .stat-panel h4 { font-size:.9rem; color: var(--green-700); margin-bottom:.8rem; }
+    .stat-chart-big { position:relative; height:240px; }
+    .src-row { display:flex; align-items:center; gap:.6rem; margin-bottom:.55rem; font-size:.82rem; }
+    .src-name { width:92px; color: var(--muted); font-weight:600; text-transform:capitalize; }
+    .src-bar-wrap { flex:1; background: var(--chip-bg); border-radius:50px; height:10px; overflow:hidden; }
+    .src-bar { height:100%; background: var(--green-500); border-radius:50px; }
+    .src-num { width:36px; text-align:right; font-weight:700; }
+    .stat-note { font-size:.78rem; color: var(--muted); margin:.2rem 0 1rem; line-height:1.5; }
+    .stat-prag-label { font-size:.82rem; color: var(--muted); display:inline-flex; align-items:center; gap:.4rem; font-weight:600; }
+    .stat-prag-input { width:64px; padding:.45rem .6rem; border:2px solid var(--border); border-radius:8px; font-family:inherit; background: var(--card-bg); color: var(--text); }
+    .btn-cestitka { background: linear-gradient(135deg,#f59e0b,#d97706); color:white; }
+    .btn-cestitka:hover { opacity:.9; }
+
     @media (max-width:640px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid2 { grid-template-columns:1fr; }
       .toolbar { flex-direction:column; align-items:stretch; }
       .search-input { min-width:100%; }
+      .stat-two-col { grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -529,6 +546,7 @@
     <button class="tab" onclick="prikaziSekciju('proizvodi',this)"><i class="fas fa-box"></i> Proizvodi</button>
     <button class="tab" onclick="prikaziSekciju('objave',this)"><i class="fas fa-newspaper"></i> Objave</button>
     <button class="tab" onclick="prikaziSekciju('ocene',this);ucitajOcene()"><i class="fas fa-star"></i> Ocene</button>
+    <button class="tab" onclick="prikaziSekciju('statistika',this);ucitajStatistiku()"><i class="fas fa-chart-line"></i> Statistika poseta</button>
     <button class="tab" id="tab-btn-grupni-email" onclick="prikaziSekciju('grupni-email',this)"><i class="fas fa-envelope"></i> Grupni Email</button>
   </div>
 
@@ -627,6 +645,68 @@
     </div>
     <div class="table-wrap"><div id="tbl-ocene" style="padding:2rem;text-align:center;color:var(--muted)">Klikni tab Ocene da učitaš...</div></div>
     <div class="pagination" id="pag-ocene"></div>
+  </div>
+
+  <!-- STATISTIKA POSETA -->
+  <div id="sec-statistika" class="section">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <select id="stat-period" class="search-input" style="min-width:auto;border-radius:8px;cursor:pointer;" onchange="ucitajStatistiku()">
+          <option value="7">Poslednjih 7 dana</option>
+          <option value="30">Poslednjih 30 dana</option>
+          <option value="90">Poslednjih 90 dana</option>
+        </select>
+        <input class="search-input" id="stat-srch" placeholder="🔍 Pretraži prodavce..." oninput="renderStatistikaTabela()">
+        <select id="stat-filter" class="search-input" style="min-width:auto;border-radius:8px;cursor:pointer;" onchange="renderStatistikaTabela()">
+          <option value="svi">Svi prodavci</option>
+          <option value="iznad">Iznad praga (može čestitka)</option>
+          <option value="nula">Bez ijedne posete (treba pomoć)</option>
+        </select>
+        <label class="stat-prag-label">Prag poseta:
+          <input type="number" id="stat-prag" class="stat-prag-input" value="5" min="1" onchange="renderStatistikaTabela()">
+        </label>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-primary btn-sm" onclick="ucitajStatistiku()"><i class="fas fa-sync-alt"></i> Osveži</button>
+      </div>
+    </div>
+
+    <p class="stat-note">
+      Ne računaju se: prodavci na svom profilu, ovaj uređaj (admin), botovi, i ista osoba koja ponovi isto u roku od 30 minuta.
+      Prikaz profila = otvorena stranica prodavca; Pregled tezge = otvoreni proizvodi; Kontakt = klik na telefon ili poruka.
+    </p>
+
+    <div class="stats-grid" style="padding:0 0 1rem;">
+      <div class="stat-card">
+        <div class="stat-top"><div><div class="stat-number" id="sp-profil" style="color:var(--green-700)">-</div><div class="stat-label">Pregleda profila</div></div>
+        <div class="stat-icon stat-icon-green"><i class="fas fa-eye"></i></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div><div class="stat-number" id="sp-proizvod" style="color:var(--amber)">-</div><div class="stat-label">Pregleda tezge</div></div>
+        <div class="stat-icon stat-icon-amber"><i class="fas fa-store"></i></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div><div class="stat-number" id="sp-kontakt" style="color:#0ea5e9">-</div><div class="stat-label">Kontakata</div></div>
+        <div class="stat-icon" style="background:#e0f2fe;color:#0ea5e9;"><i class="fas fa-phone"></i></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div><div class="stat-number" id="sp-posetilaca" style="color:var(--purple)">-</div><div class="stat-label">Jedinstvenih posetilaca</div></div>
+        <div class="stat-icon stat-icon-purple"><i class="fas fa-users"></i></div></div>
+      </div>
+    </div>
+
+    <div class="stat-two-col">
+      <div class="stat-panel">
+        <h4><i class="fas fa-chart-line"></i> Posete po danima</h4>
+        <div class="stat-chart-big"><canvas id="chart-statistika"></canvas></div>
+      </div>
+      <div class="stat-panel">
+        <h4><i class="fas fa-route"></i> Odakle dolaze (pregledi profila)</h4>
+        <div id="stat-izvori"></div>
+      </div>
+    </div>
+
+    <div class="table-wrap"><div id="stat-tbl" style="padding:2rem;text-align:center;color:var(--muted)">Klikni tab Statistika poseta da učitaš...</div></div>
   </div>
 
   <!-- GRUPNI EMAIL -->
@@ -758,6 +838,32 @@
   </div>
 </div>
 
+<!-- MODAL: ČESTITKA PRODAVCU -->
+<div class="modal-overlay" id="modal-cestitka">
+  <div class="modal-box">
+    <div class="modal-header" style="background:linear-gradient(135deg,#d97706,var(--amber))">
+      <h3 id="cestitka-naslov-modala">🎉 Pošalji čestitku</h3>
+      <button class="modal-close" onclick="zatvoriModal('modal-cestitka')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="cestitka-user-id">
+      <p id="cestitka-info" style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.5;"></p>
+      <div class="form-row">
+        <label>Naslov obaveštenja</label>
+        <input type="text" id="cestitka-naslov" value="🎉 Čestitamo!">
+      </div>
+      <div class="form-row">
+        <label>Poruka (možeš da je izmeniš pre slanja)</label>
+        <textarea id="cestitka-poruka" rows="5"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="zatvoriModal('modal-cestitka')">Odustani</button>
+        <button class="btn btn-cestitka" id="btn-posalji-cestitku" onclick="posaljiCestitku()"><i class="fas fa-paper-plane"></i> Pošalji</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: CONFIRM -->
 <div class="modal-overlay" id="modal-confirm">
   <div class="modal-box modal-sm">
@@ -885,6 +991,8 @@ async function prijavi() {
     const res = await fetch(`${backendUrl}/admin/stats`, { headers:{ 'x-admin-password':loz } });
     if (res.ok) {
       adminLozinka = loz;
+      // Oznaci ovaj uredjaj kao admin: poseta profila sa ovog uredjaja se ne broji u statistici
+      try { localStorage.setItem('lp_admin_uredjaj', '1'); } catch (e) {}
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('admin-panel').style.display = 'block';
       ucitajSve();
@@ -1713,6 +1821,179 @@ async function posaljiGrupniEmail() {
     } catch { toast('Greška pri povezivanju', 'error'); }
     btn.disabled=false; btn.innerHTML='<i class="fas fa-paper-plane"></i> Pošalji email';
   }, '📧');
+}
+
+// ── STATISTIKA POSETA + ČESTITKE ──
+const statState = { dana: 7, data: null, chart: null };
+
+function escH(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Pravilan oblik reči "poseta" (1 posetu, 2-4 posete, 5+ poseta)
+function posetaTekst(n) {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return `${n} posetu`;
+  if (m10 >= 2 && m10 <= 4 && !(m100 >= 12 && m100 <= 14)) return `${n} posete`;
+  return `${n} poseta`;
+}
+
+async function ucitajStatistiku() {
+  const dana = parseInt(document.getElementById('stat-period').value) || 7;
+  statState.dana = dana;
+  document.getElementById('stat-tbl').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Učitavam...</div>';
+  try {
+    const res = await fetch(`${backendUrl}/admin/statistika-poseta?dana=${dana}`, { headers:{ 'x-admin-password':adminLozinka } });
+    const d = await res.json();
+    if (!res.ok) {
+      document.getElementById('stat-tbl').innerHTML = `<p style="color:red;padding:2rem">${escH(d.error || 'Greška')}</p>`;
+      return;
+    }
+    // Postgres vraća brojeve kao tekst (bigint), pa ih pretvaramo u prave brojeve
+    d.prodavci = (d.prodavci || []).map(p => ({
+      ...p,
+      profil: +p.profil, posetilaca: +p.posetilaca, proizvod: +p.proizvod, kontakt: +p.kontakt, telefon: +p.telefon
+    }));
+    d.ukupno = d.ukupno || {};
+    statState.data = d;
+    renderStatistika();
+  } catch {
+    document.getElementById('stat-tbl').innerHTML = '<p style="color:red;padding:2rem">Greška pri povezivanju</p>';
+  }
+}
+
+function renderStatistika() {
+  const d = statState.data;
+  if (!d) return;
+  const u = d.ukupno || {};
+  document.getElementById('sp-profil').textContent = +u.profil || 0;
+  document.getElementById('sp-proizvod').textContent = +u.proizvod || 0;
+  document.getElementById('sp-kontakt').textContent = +u.kontakt || 0;
+  document.getElementById('sp-posetilaca').textContent = +u.posetilaca || 0;
+
+  // Izvori poseta
+  const izvEl = document.getElementById('stat-izvori');
+  const izvori = (d.izvori || []).map(x => ({ izvor: x.izvor, broj: +x.broj }));
+  const maxIzv = Math.max(1, ...izvori.map(x => x.broj));
+  const nazivi = { direktno:'direktno', google:'Google', facebook:'Facebook', instagram:'Instagram', podela:'link iz „Podeli“', sajt:'sa sajta', pretrazivac:'drugi pretraživač', poruke:'Viber/WhatsApp', ostalo:'ostalo' };
+  izvEl.innerHTML = izvori.length
+    ? izvori.map(x => `<div class="src-row"><span class="src-name">${escH(nazivi[x.izvor] || x.izvor)}</span><div class="src-bar-wrap"><div class="src-bar" style="width:${Math.round(x.broj / maxIzv * 100)}%"></div></div><span class="src-num">${x.broj}</span></div>`).join('')
+    : '<p style="color:var(--muted);font-size:.85rem;">Još nema podataka.</p>';
+
+  // Grafikon po danima (popuni dane bez poseta nulom)
+  const mapaDana = {};
+  (d.poDanima || []).forEach(r => { mapaDana[String(r.dan).slice(0,10)] = { profil:+r.profil, proizvod:+r.proizvod, kontakt:+r.kontakt }; });
+  const dani = [];
+  const sada = new Date();
+  for (let i = d.dana - 1; i >= 0; i--) {
+    const dt = new Date(sada); dt.setDate(dt.getDate() - i);
+    dani.push(dt.toISOString().slice(0,10));
+  }
+  const serija = k => dani.map(x => (mapaDana[x] ? mapaDana[x][k] : 0));
+  const ctx = document.getElementById('chart-statistika');
+  if (statState.chart) statState.chart.destroy();
+  if (ctx) {
+    statState.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: dani.map(x => x.slice(5).split('-').reverse().join('.')),
+        datasets: [
+          { label: 'Profil', data: serija('profil'), borderColor:'#2e7d32', backgroundColor:'#2e7d3222', fill:true, tension:.3, borderWidth:2, pointRadius:2 },
+          { label: 'Tezga', data: serija('proizvod'), borderColor:'#f59e0b', tension:.3, borderWidth:2, pointRadius:2 },
+          { label: 'Kontakt', data: serija('kontakt'), borderColor:'#0ea5e9', tension:.3, borderWidth:2, pointRadius:2 }
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ position:'bottom' } },
+        scales:{ y:{ beginAtZero:true, ticks:{ precision:0 } } }
+      }
+    });
+  }
+
+  renderStatistikaTabela();
+}
+
+function renderStatistikaTabela() {
+  const d = statState.data;
+  const div = document.getElementById('stat-tbl');
+  if (!d) return;
+  const q = (document.getElementById('stat-srch').value || '').toLowerCase();
+  const filter = document.getElementById('stat-filter').value;
+  const prag = Math.max(1, parseInt(document.getElementById('stat-prag').value) || 5);
+
+  let lista = d.prodavci.filter(p => `${p.ime||''} ${p.lokacija||''}`.toLowerCase().includes(q));
+  if (filter === 'iznad') lista = lista.filter(p => p.profil >= prag);
+  else if (filter === 'nula') lista = lista.filter(p => p.profil === 0);
+
+  if (!lista.length) {
+    div.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)"><i class="fas fa-chart-line" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Nema prodavača za ovaj filter (ili statistika još nije počela da se puni)</div>';
+    return;
+  }
+
+  div.innerHTML = `<table>
+    <thead><tr>
+      <th>Prodavac</th><th>Lokacija</th>
+      <th style="text-align:center">Pregleda profila</th>
+      <th style="text-align:center">Posetilaca</th>
+      <th style="text-align:center">Pregleda tezge</th>
+      <th style="text-align:center">Kontakata</th>
+      <th>Akcija</th>
+    </tr></thead>
+    <tbody>${lista.map(p => `
+      <tr>
+        <td class="cell-truncate">${escH(p.ime || '-')}${p.aktivan === false ? ' <span class="badge badge-orange">neaktivan</span>' : ''}</td>
+        <td class="cell-truncate">${escH(p.lokacija || '-')}</td>
+        <td style="text-align:center;font-weight:700;color:var(--green-700)">${p.profil}</td>
+        <td style="text-align:center">${p.posetilaca}</td>
+        <td style="text-align:center">${p.proizvod}</td>
+        <td style="text-align:center;font-weight:700;color:#0ea5e9">${p.kontakt}</td>
+        <td style="white-space:nowrap">${
+          p.profil >= prag
+            ? `<button class="btn btn-cestitka btn-sm" onclick="otvoriCestitku(${p.id})"><i class="fas fa-gift"></i> Čestitka</button>`
+            : `<span style="color:var(--muted);font-size:.76rem;">ispod praga (${prag})</span>`
+        }</td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function otvoriCestitku(id) {
+  const d = statState.data;
+  if (!d) return;
+  const p = d.prodavci.find(x => x.id === id);
+  if (!p) return;
+  const period = d.dana === 7 ? 'Ove nedelje' : `U poslednjih ${d.dana} dana`;
+  let poruka = `Čestitamo! ${period} ste imali ${posetaTekst(p.profil)} na svom profilu`;
+  if (p.kontakt > 0) poruka += `, a kupci su vas kontaktirali ${p.kontakt} ${p.kontakt === 1 ? 'put' : 'puta'}`;
+  poruka += '. Samo tako nastavite! 🌿';
+  document.getElementById('cestitka-user-id').value = p.id;
+  document.getElementById('cestitka-naslov').value = '🎉 Čestitamo!';
+  document.getElementById('cestitka-poruka').value = poruka;
+  document.getElementById('cestitka-naslov-modala').textContent = `🎉 Čestitka: ${p.ime || 'prodavac'}`;
+  document.getElementById('cestitka-info').textContent = 'Ako prodavac ima uključena obaveštenja, dobija push na telefonu; ako nema, poruka mu stiže mejlom.';
+  otvoriModal('modal-cestitka');
+}
+
+async function posaljiCestitku() {
+  const userId = document.getElementById('cestitka-user-id').value;
+  const naslov = document.getElementById('cestitka-naslov').value.trim();
+  const poruka = document.getElementById('cestitka-poruka').value.trim();
+  if (!userId || !poruka) { toast('Poruka ne može biti prazna!', 'warn'); return; }
+  const btn = document.getElementById('btn-posalji-cestitku');
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${backendUrl}/admin/posalji-cestitku`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'x-admin-password': adminLozinka },
+      body: JSON.stringify({ userId: parseInt(userId), naslov, poruka })
+    });
+    const d = await res.json();
+    if (res.ok) {
+      toast(d.message || 'Čestitka poslata');
+      zatvoriModal('modal-cestitka');
+    } else {
+      toast(d.error || 'Greška pri slanju', 'error');
+    }
+  } catch { toast('Greška pri povezivanju', 'error'); }
+  btn.disabled = false;
 }
 
 // ── CSV EXPORT ──
