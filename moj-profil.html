@@ -1215,12 +1215,63 @@
     'Meso': '🥩', 'Med': '🍯', 'Jaja': '🥚', 'Bilje i Zdravlje': '🌿', 'Domaća radinost': '🍶'
   };
 
+  // ══════════════════════════════════════════
+  // STATISTIKA POSETA (profil / tezga / kontakt)
+  // Šalje anonimne događaje na backend (/dogadjaj).
+  // NE broji se: vlasnik profila (prepoznaje se i kad je odjavljen na istom uređaju),
+  // admin uređaj, i ponovljeni događaji istog uređaja (server filtrira 30 min).
+  // ══════════════════════════════════════════
+  function dohvatiVisitorId() {
+    try {
+      let v = localStorage.getItem('lp_visitor_id');
+      if (!v) {
+        v = 'v' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        localStorage.setItem('lp_visitor_id', v);
+      }
+      return v;
+    } catch (e) { return null; }
+  }
+
+  function jeMojProfilIliAdmin(prodavacId) {
+    try {
+      if (localStorage.getItem('lp_admin_uredjaj') === '1') return true;
+      const mojId = localStorage.getItem('lp_moj_user_id');
+      return !!mojId && String(mojId) === String(prodavacId);
+    } catch (e) { return false; }
+  }
+
+  function prijaviDogadjaj(tip, prodavacId, proizvodId) {
+    try {
+      if (!prodavacId || jeMojProfilIliAdmin(prodavacId)) return;
+      const headers = { 'Content-Type': 'application/json' };
+      const token = localStorage.getItem('token');
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      fetch(`${backendUrl}/dogadjaj`, {
+        method: 'POST',
+        headers,
+        keepalive: true,
+        body: JSON.stringify({
+          tip,
+          prodavac_id: parseInt(prodavacId),
+          proizvod_id: proizvodId ? parseInt(proizvodId) : null,
+          referrer: document.referrer || '',
+          visitor_id: dohvatiVisitorId()
+        })
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
   // ── Nav ──
   document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
 
     if (token) {
+      // Zapamti ID prijavljenog korisnika na ovom uređaju (da se vlasnik ne broji ni kad je odjavljen)
+      try {
+        const p = JSON.parse(atob(token.split('.')[1]));
+        if (p && p.userId) localStorage.setItem('lp_moj_user_id', String(p.userId));
+      } catch (e) {}
       document.getElementById('moj-profil-li').style.display = 'list-item';
       document.getElementById('odjavi-se-li').style.display = 'list-item';
       document.getElementById('prijavi-se-li').style.display = 'none';
@@ -1369,6 +1420,9 @@
           trenutniUserId = payload.userId;
         } catch(e) {}
       }
+
+      // Statistika: pregled profila (ne broji se vlasnik profila ni admin uređaj)
+      prijaviDogadjaj('profil', trenutniUserId);
 
       // QR kod stalno vidljiv na profilu (ne samo u modalu za deljenje)
       if (trenutniUserId) {
@@ -1620,7 +1674,7 @@
     try {
       const res = await fetch(`${backendUrl}/poruka`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ ka_user_id: trenutniUserId, tekst }) });
       const result = await res.json();
-      if (res.ok) { alert('✅ Poruka uspešno poslata!'); zatvoriPorukuModal(); }
+      if (res.ok) { prijaviDogadjaj('poruka', trenutniUserId); alert('✅ Poruka uspešno poslata!'); zatvoriPorukuModal(); }
       else alert('Greška: ' + (result.error || 'Nešto nije u redu'));
     } catch (err) { alert('Greška pri slanju poruke'); }
   }
@@ -1758,6 +1812,8 @@
       let mojId = null;
       if (token) { try { const payload = JSON.parse(atob(token.split('.')[1])); mojId = String(payload.userId); } catch(e) {} }
       const isOwnProfile = mojId && String(trenutniUserId) === mojId;
+      // Statistika: pregled tezge/proizvoda (ne broji se vlasnik)
+      if (!isOwnProfile) prijaviDogadjaj('proizvod', trenutniUserId);
       if (proizvodi.length === 0) {
         sadrzaj.innerHTML = isOwnProfile
           ? `<div style="text-align:center; padding:3rem 1rem; color:#666;"><div style="font-size:3rem; margin-bottom:1rem;">🛒</div><p style="font-size:1.1rem;">Još nema proizvoda na tezgi.</p><p>Klikni "Dodaj novi proizvod" da počneš!</p></div>`
@@ -2647,17 +2703,30 @@ function podeliBlogFacebook(blogId, slug) {
   }
 
   // ── Ostale funkcije ──
-  function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
+  // Odjava briše sve iz localStorage, ali čuva oznake za statistiku poseta
+  // (id uređaja, id vlasnika profila i oznaku admin uređaja) da se vlasnik ne broji ni posle odjave.
+  function odjaviSe() {
+    const sacuvaj = {};
+    ['lp_visitor_id', 'lp_moj_user_id', 'lp_admin_uredjaj'].forEach(k => {
+      const v = localStorage.getItem(k);
+      if (v !== null) sacuvaj[k] = v;
+    });
+    localStorage.clear();
+    Object.keys(sacuvaj).forEach(k => localStorage.setItem(k, sacuvaj[k]));
+    window.location.href = 'index.html';
+  }
 
   // Otkriva broj telefona na klik (i beleži klik kao signal namere kupovine)
   function prikaziTelefon(btn, telefon, prodavacId) {
     btn.outerHTML = `<a href="tel:${telefon}" style="color:inherit; text-decoration:none;">${telefon}</a>`;
     prijaviKlikNaTelefon(prodavacId);
+    prijaviDogadjaj('telefon', prodavacId);
   }
 
   // Beleži klik na broj telefona — samo kad je tuđi profil (sopstveni klik se ne broji kao interesovanje kupca)
   function prijaviKlikNaTelefon(prodavacId) {
     if (!prodavacId) return;
+    if (jeMojProfilIliAdmin(prodavacId)) return;
     fetch(`${backendUrl}/prijavi-klik-telefon`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
