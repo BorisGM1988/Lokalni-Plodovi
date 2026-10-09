@@ -419,6 +419,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
       gap: 1rem;
+      align-items: start;
     }
     .tz-card {
       background: #fff; border: 1px solid #eee; border-radius: 16px;
@@ -449,6 +450,13 @@
       font-size: 0.82rem; color: #777; line-height: 1.4;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
+    .tz-opis.otvoren { display: block; -webkit-line-clamp: unset; overflow: visible; }
+    .tz-vise {
+      background: none; border: none; padding: 0; align-self: flex-start;
+      color: var(--zelena); font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+    }
+    .tz-vise:hover { text-decoration: underline; }
     .tz-stanje {
       align-self: flex-start; font-size: 0.75rem; font-weight: 600;
       padding: 3px 10px; border-radius: 50px; margin-top: auto;
@@ -2036,6 +2044,24 @@
 
     const vidljivi = tezgaFilter === 'Sve' ? proizvodi : proizvodi.filter(p => tezgaKljuc(p) === tezgaFilter);
     sadrzaj.innerHTML = '<div class="tz-grid">' + vidljivi.map((p, i) => tezgaKartica(p, i, vidljivi.length)).join('') + '</div>';
+    tezgaDodajPrikaziVise();
+  }
+
+  // Ako je opis duži od 2 reda, ispod njega se pojavi "Prikaži više" / "Prikaži manje"
+  function tezgaDodajPrikaziVise() {
+    document.querySelectorAll('#tezga-sadrzaj .tz-opis').forEach(el => {
+      if (el.scrollHeight > el.clientHeight + 1) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tz-vise';
+        btn.textContent = 'Prikaži više';
+        btn.addEventListener('click', () => {
+          const otvoren = el.classList.toggle('otvoren');
+          btn.textContent = otvoren ? 'Prikaži manje' : 'Prikaži više';
+        });
+        el.insertAdjacentElement('afterend', btn);
+      }
+    });
   }
 
   function tezgaUredi(id) {
