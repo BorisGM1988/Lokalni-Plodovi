@@ -304,6 +304,15 @@ s0.parentNode.insertBefore(s1,s0);
       if (response.ok) {
         if (!result.token) throw new Error('Nema tokena');
 
+        // Nalog oglašivača važi samo za Oglasnik: ne upisuje se u LP sesiju (nema "Moj profil" na LP)
+        if (result.user?.tip === 'oglasivac') {
+          localStorage.setItem('og_token', result.token);
+          porukaEl.style.color = 'green';
+          porukaEl.textContent = 'Ovo je nalog za Oglasnik. Preusmeravam...';
+          setTimeout(() => { window.location.href = 'oglasnik.html'; }, 1000);
+          return;
+        }
+
         localStorage.setItem('token', result.token);
         localStorage.setItem('tip', result.user?.tip || 'prodavac');
         localStorage.setItem('ime', result.user?.ime || '');
