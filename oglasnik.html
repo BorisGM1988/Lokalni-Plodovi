@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oglasnik – Poljoprivredni oglasi iz cele Srbije</title>
+<meta name="description" content="Oglasnik za poljoprivredu: mašine i oprema, zemljište, životinje, seme i sadnice, usluge. Besplatni oglasi iz cele Srbije.">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#2e7d32">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--z:#2e7d32;--zt:#1b5e20;--zs:#4caf50;--zlato:#c9962b;--zlato-s:#f1d27a;--krem:#f4f1e8;--siva:#6b7280}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--krem);color:#2c2c2c;min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit}
+button{font-family:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+
+/* header */
+header{background:linear-gradient(135deg,var(--zt),var(--z));color:#fff;position:sticky;top:0;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.18)}
+nav{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-i{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center}
+.logo-t{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700}
+.logo-t span{color:var(--zlato-s)}
+.logo-s{font-size:.78rem;color:#cfe8d0;font-weight:500;display:block;line-height:1;margin-top:2px}
+nav ul{display:flex;list-style:none;gap:4px;align-items:center}
+nav ul a{color:rgba(255,255,255,.9);text-decoration:none;font-size:.9rem;font-weight:500;padding:7px 14px;border-radius:50px}
+nav ul a:hover,nav ul a.akt{background:rgba(255,255,255,.18);color:#fff}
+.hamb{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+
+/* hero */
+.hero{background:linear-gradient(135deg,#123d16,var(--z) 75%);color:#fff;padding:34px 0 64px;border-bottom:5px solid var(--zlato)}
+.nazad{display:inline-flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-weight:600;font-size:.9rem;padding:8px 16px;border:1.5px solid rgba(255,255,255,.45);border-radius:50px;margin-bottom:18px}
+.nazad:hover{background:rgba(255,255,255,.14)}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15}
+.hero h1 span{color:var(--zlato-s)}
+.hero p{margin:10px 0 22px;max-width:620px;color:#d8ecd9;line-height:1.6}
+.trazi{display:flex;gap:10px;flex-wrap:wrap}
+.trazi input{flex:1 1 240px;min-height:48px;padding:0 18px;border:none;border-radius:50px;font-size:1rem;font-family:inherit}
+.trazi input.m{flex:0 1 200px}
+.trazi button{min-height:48px;padding:0 30px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--zlato-s),var(--zlato));color:#3b2a05;font-weight:700;font-size:1rem;cursor:pointer}
+
+/* chips + traka */
+main{flex:1;padding-bottom:50px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:18px 0 6px;margin-top:-30px;position:relative}
+.chip{white-space:nowrap;border:1.5px solid #e1dccb;background:#fff;color:#444;padding:9px 18px;border-radius:50px;font-weight:600;font-size:.9rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.chip.akt{background:var(--z);border-color:var(--z);color:#fff}
+.traka{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 16px}
+#broj{color:var(--siva);font-size:.92rem}
+.dugme{min-height:44px;padding:0 22px;border-radius:50px;border:2px solid var(--z);background:#fff;color:var(--zt);font-weight:700;cursor:pointer;font-size:.95rem}
+.dugme.glavno{background:var(--z);color:#fff}
+.dugme.zlato{background:linear-gradient(135deg,var(--zlato-s),var(--zlato));border-color:transparent;color:#3b2a05}
+.dugme:disabled{opacity:.6;cursor:default}
+
+/* kartice */
+.mreza{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.kartica{background:#fff;border:1px solid #e8e3d3;border-radius:18px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.kartica:focus-visible,.dugme:focus-visible,.chip:focus-visible{outline:3px solid var(--zlato);outline-offset:2px}
+.kartica.ist{border:2px solid var(--zlato)}
+.sl{position:relative;aspect-ratio:4/3;background:#e8f5e9;display:flex;align-items:center;justify-content:center;font-size:3rem}
+.sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bedz-ist{position:absolute;top:10px;left:10px;padding:4px 12px;border-radius:50px;background:linear-gradient(135deg,var(--zlato-s),var(--zlato));color:#3b2a05;font-weight:700;font-size:.78rem}
+.kb{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.kk{font-size:.8rem;color:var(--siva);font-weight:600}
+.kn{font-weight:700;font-size:1.02rem;line-height:1.3}
+.kc{font-weight:700;font-size:1.15rem;color:var(--zt)}
+.km{margin-top:auto;font-size:.82rem;color:var(--siva);display:flex;justify-content:space-between;gap:8px}
+.prazno{text-align:center;color:#666;padding:48px 16px;grid-column:1/-1}
+.jos{display:block;margin:24px auto 0}
+.baner-lp{grid-column:1/-1;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:18px 22px;border-radius:18px;text-decoration:none;color:#fff;background:linear-gradient(135deg,#123d16,#2e7d32);border:2px solid var(--zlato);box-shadow:0 6px 20px rgba(18,61,22,.25)}
+.baner-lp:hover{filter:brightness(1.08)}
+.baner-i{font-size:2.2rem}
+.baner-t{flex:1;min-width:220px}
+.baner-t b{display:block;font-size:1.1rem;margin-bottom:3px}
+.baner-t small{color:#d8ecd9;font-size:.9rem;line-height:1.5}
+.baner-d{padding:11px 22px;border-radius:50px;background:linear-gradient(135deg,var(--zlato-s),var(--zlato));color:#3b2a05;font-weight:700;white-space:nowrap}
+
+/* modali */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:3000;justify-content:center;align-items:center;backdrop-filter:blur(4px)}
+.ov.otv{display:flex}
+.pn{background:#fff;width:92%;max-width:760px;max-height:92vh;border-radius:24px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.ph{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;background:linear-gradient(135deg,var(--zt),var(--z));color:#fff;flex-shrink:0}
+.ph h2{font-size:1.2rem}
+.x{width:38px;height:38px;border:none;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:1.1rem;cursor:pointer}
+.ps{padding:20px 22px 24px;overflow-y:auto}
+.gl{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:#e8f5e9}
+.mini{display:flex;gap:8px;margin-top:8px}
+.mini img{width:70px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent}
+.mini img.akt{border-color:var(--zlato)}
+.dn{font-family:'Playfair Display',serif;font-size:1.6rem;margin:16px 0 6px;color:var(--zt)}
+.dc{font-size:1.5rem;font-weight:700;color:var(--zt)}
+.tg{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tg span{padding:5px 12px;border-radius:50px;background:#eef6ee;color:#1b5e20;font-size:.85rem;font-weight:600}
+.opis{white-space:pre-wrap;line-height:1.7;color:#333;margin:12px 0 18px}
+.ak{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.ak a.dugme{display:inline-flex;align-items:center;text-decoration:none}
+.fl{display:block;font-weight:600;margin:14px 0 6px}
+.fi{width:100%;padding:11px 14px;border:1.5px solid #d6d2c4;border-radius:12px;font-size:1rem;font-family:inherit}
+.fi:focus{outline:none;border-color:var(--z)}
+.red2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pv{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.pv img{width:84px;height:66px;object-fit:cover;border-radius:8px}
+.mo{border:1px solid #e8e3d3;border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.mo b{display:block}
+.mo small{color:var(--siva)}
+.mo .ak .dugme{min-height:38px;padding:0 14px;font-size:.85rem}
+.kutija{background:#faf5e4;border:1px solid #ecd9a0;border-radius:12px;padding:12px 14px;margin-top:10px;font-size:.9rem;line-height:1.6;color:#4a3a12}
+.tabs{display:flex;gap:6px;margin-bottom:6px}.tabs button{flex:1;padding:10px;border:none;border-radius:50px;background:#eef0e8;font-weight:700;cursor:pointer;font-size:.95rem}.tabs button.akt{background:var(--z);color:#fff}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#1f2937;color:#fff;padding:11px 20px;border-radius:50px;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5000}
+.toast.vid{opacity:1}
+footer{background:#5d4037;color:#fff;text-align:center;padding:26px 16px;font-size:.92rem}
+footer a{color:#c8e6c9;text-decoration:none}
+
+@media(max-width:768px){
+ .ov{align-items:flex-end}
+ .pn{width:100%;max-width:100%;border-radius:24px 24px 0 0}
+ .red2{grid-template-columns:1fr}
+ .logo-t{font-size:1.15rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+ <a href="oglasnik.html" class="logo" aria-label="Oglasnik – početna">
+  <span class="logo-i">📣</span><span class="logo-t">Oglasnik<span class="logo-s">poljoprivredni oglasi</span></span>
+ </a>
+ <ul id="meni">
+  <li id="n-odjava" style="display:none"><a href="#" id="odjava">Odjavi se</a></li>
+  <li id="n-prijava"><a href="#" id="b-prijava">Prijavi se</a></li>
+ </ul>
+</nav>
+</header>
+
+<section class="hero">
+ <div class="wrap">
+  <h1>Oglasnik za <span>poljoprivredu</span></h1>
+  <p>Mašine, zemljište, životinje, seme i usluge. Oglasi iz cele Srbije, direktno od ljudi sa sela.</p>
+  <form class="trazi" id="trazi">
+   <input type="search" id="q" placeholder="Šta tražite? (npr. traktor, prasići, kosilica)" aria-label="Pretraga">
+   <input type="text" id="mesto" class="m" placeholder="Mesto" aria-label="Mesto">
+   <button type="submit">Traži</button>
+  </form>
+ </div>
+</section>
+
+<main class="wrap">
+ <div class="chips" id="chips" role="tablist" aria-label="Kategorije"></div>
+ <div class="traka">
+  <span id="broj"></span>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+   <button class="dugme" id="btn-moji"><i class="fas fa-list"></i> Moji oglasi</button>
+   <button class="dugme glavno" id="btn-postavi"><i class="fas fa-plus"></i> Postavi oglas</button>
+  </div>
+ </div>
+ <div class="mreza" id="mreza" aria-live="polite"></div>
+ <button class="dugme jos" id="jos" hidden>Prikaži još oglasa</button>
+</main>
+
+<footer>
+ <div style="margin-bottom:6px;font-family:'Playfair Display',serif;font-size:1.2rem">Oglasnik</div>
+ <div>© 2026 • <a href="politika-privatnosti.html">Politika privatnosti</a> • <a href="uslovi-koriscenja.html">Uslovi korišćenja</a></div>
+</footer>
+
+<!-- Detalj oglasa -->
+<div class="ov" id="m-detalj" role="dialog" aria-modal="true" aria-label="Oglas">
+ <div class="pn">
+  <div class="ph"><h2>Oglas</h2><button class="x" data-zatvori="m-detalj" aria-label="Zatvori">✕</button></div>
+  <div class="ps" id="detalj"></div>
+ </div>
+</div>
+
+<!-- Forma -->
+<div class="ov" id="m-forma" role="dialog" aria-modal="true" aria-label="Postavi oglas">
+ <div class="pn">
+  <div class="ph"><h2>Postavi oglas</h2><button class="x" data-zatvori="m-forma" aria-label="Zatvori">✕</button></div>
+  <form class="ps" id="forma">
+   <p style="color:#555;font-size:.92rem">Oglas važi 30 dana. Možete ga obnoviti, a kad prodate, skinite ga jednim klikom.</p>
+   <label class="fl" for="f-naslov">Naslov *</label>
+   <input class="fi" id="f-naslov" maxlength="100" required placeholder="npr. Prodajem traktor IMT 539">
+   <div class="red2">
+    <div><label class="fl" for="f-kat">Kategorija *</label><select class="fi" id="f-kat" required></select></div>
+    <div><label class="fl" for="f-cena">Cena (RSD)</label><input class="fi" id="f-cena" type="number" min="0" placeholder="Prazno = po dogovoru"></div>
+   </div>
+   <div class="red2">
+    <div><label class="fl" for="f-mesto">Mesto *</label><input class="fi" id="f-mesto" maxlength="80" required placeholder="npr. Čačak"></div>
+    <div><label class="fl" for="f-tel">Telefon *</label><input class="fi" id="f-tel" type="tel" maxlength="30" required placeholder="06x xxx xxxx"></div>
+   </div>
+   <label class="fl" for="f-opis">Opis * <small style="font-weight:400;color:#777">(najmanje 20 karaktera)</small></label>
+   <textarea class="fi" id="f-opis" rows="5" maxlength="3000" required placeholder="Stanje, godina, količina, uslovi preuzimanja..."></textarea>
+   <label class="fl" for="f-slike">Slike (do 3)</label>
+   <input id="f-slike" type="file" accept="image/*" multiple>
+   <div class="pv" id="pv"></div>
+   <div class="ak" style="margin-top:20px">
+    <button type="button" class="dugme" data-zatvori="m-forma">Otkaži</button>
+    <button type="submit" class="dugme glavno" id="f-posalji">Objavi oglas</button>
+   </div>
+  </form>
+ </div>
+</div>
+
+<!-- Moji oglasi -->
+<div class="ov" id="m-moji" role="dialog" aria-modal="true" aria-label="Moji oglasi">
+ <div class="pn">
+  <div class="ph"><h2>Moji oglasi</h2><button class="x" data-zatvori="m-moji" aria-label="Zatvori">✕</button></div>
+  <div class="ps" id="moji"></div>
+ </div>
+</div>
+
+<!-- Prijava / registracija oglašivača -->
+<div class="ov" id="m-auth" role="dialog" aria-modal="true" aria-label="Prijava i registracija">
+ <div class="pn" style="max-width:460px">
+  <div class="ph"><h2>Nalog za oglašavanje</h2><button class="x" data-zatvori="m-auth" aria-label="Zatvori">✕</button></div>
+  <div class="ps">
+   <div class="tabs"><button type="button" id="tab-prijava" class="akt">Prijava</button><button type="button" id="tab-reg">Registracija</button></div>
+   <p id="auth-greska" role="alert" style="color:#b91c1c;min-height:22px;margin-top:10px;font-size:.92rem"></p>
+   <form id="t-prijava">
+    <label class="fl" for="a-email">Email</label><input class="fi" id="a-email" type="email" required autocomplete="email">
+    <label class="fl" for="a-loz">Lozinka</label><input class="fi" id="a-loz" type="password" required autocomplete="current-password">
+    <button type="submit" class="dugme glavno" id="a-btn-prijava" style="width:100%;margin-top:18px">Prijavi se</button>
+   </form>
+   <form id="t-reg" hidden>
+    <p style="color:#555;font-size:.9rem;margin-top:4px">Besplatno je. Nalog vam treba samo da biste mogli da upravljate svojim oglasima.</p>
+    <label class="fl" for="r-ime">Ime i prezime *</label><input class="fi" id="r-ime" maxlength="60" required autocomplete="name">
+    <label class="fl" for="r-email">Email *</label><input class="fi" id="r-email" type="email" required autocomplete="email">
+    <label class="fl" for="r-tel">Telefon *</label><input class="fi" id="r-tel" type="tel" maxlength="30" required autocomplete="tel">
+    <label class="fl" for="r-loz">Lozinka * <small style="font-weight:400;color:#777">(najmanje 6 karaktera)</small></label><input class="fi" id="r-loz" type="password" minlength="6" required autocomplete="new-password">
+    <input id="r-web" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0">
+    <label style="display:flex;gap:8px;align-items:flex-start;margin-top:14px;font-size:.9rem"><input type="checkbox" id="r-uslovi" required style="margin-top:3px"> <span>Prihvatam <a href="uslovi-koriscenja.html" target="_blank" rel="noopener">uslove korišćenja</a> i <a href="politika-privatnosti.html" target="_blank" rel="noopener">politiku privatnosti</a>.</span></label>
+    <button type="submit" class="dugme glavno" id="a-btn-reg" style="width:100%;margin-top:16px">Napravi nalog</button>
+   </form>
+  </div>
+ </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const API = 'https://lokalni-backend-production.up.railway.app';
+const CLD = { cloud: 'dlpavplfl', preset: 'LokalniPlodovi' };
+// Isticanje oglasa (ručna uplata). Upiši svoje podatke:
+const PLACANJE = { racun: '[UPIŠI BROJ RAČUNA]', primalac: '[UPIŠI PRIMAOCA]', kontakt: '[UPIŠI VIBER ILI EMAIL]', cena: 200, dana: 15 };
+const KAT = [['Mašine i oprema','🚜'],['Zemljište i objekti','🌾'],['Životinje','🐄'],['Seme, sadnice i đubrivo','🌱'],['Usluge','🛠️'],['Ostalo','📦']];
+const IKONA = Object.fromEntries(KAT);
+
+const $ = id => document.getElementById(id);
+const e = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const tok = () => localStorage.getItem('og_token'); // poseban ključ: LP stranice ne vide oglašivača kao prijavljenog
+const cena = c => (c == null ? 'Po dogovoru' : Number(c).toLocaleString('sr-RS') + ' RSD');
+const dat = d => new Date(d).toLocaleDateString('sr-RS');
+const dana = d => Math.max(0, Math.ceil((new Date(d) - new Date()) / 864e5));
+function cld(u, w) {
+  if (!u || u.indexOf('res.cloudinary.com') < 0 || u.indexOf('/upload/') < 0) return u || '';
+  if (/\/upload\/[a-z]{1,3}_[^\/]*\//.test(u)) return u;
+  return u.replace('/upload/', '/upload/w_' + w + ',c_limit,q_auto,f_auto/');
+}
+function toast(t) { const el = $('toast'); el.textContent = t; el.classList.add('vid'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('vid'), 3000); }
+async function api(path, opt = {}) {
+  const h = { 'Content-Type': 'application/json' };
+  if (tok()) h.Authorization = 'Bearer ' + tok();
+  const r = await fetch(API + path, { ...opt, headers: h });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) { const er = new Error(d.error || 'Greška'); er.status = r.status; throw er; }
+  return d;
+}
+const otvori = id => $(id).classList.add('otv');
+function zatvori(id) {
+  $(id).classList.remove('otv');
+  if (id === 'm-detalj' && /^#oglas-/.test(location.hash)) history.replaceState(null, '', location.pathname + location.search);
+}
+document.querySelectorAll('[data-zatvori]').forEach(b => b.addEventListener('click', () => zatvori(b.dataset.zatvori)));
+document.querySelectorAll('.ov').forEach(o => o.addEventListener('click', ev => { if (ev.target === o) zatvori(o.id); }));
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') document.querySelectorAll('.ov.otv').forEach(o => zatvori(o.id)); });
+
+/* ---------- baner ka Lokalnim Plodovima + brojač klikova ---------- */
+const BANER_LP = `<a class="baner-lp" href="index.html" data-baner="oglasnik-u-lp"><span class="baner-i">🌿</span><span class="baner-t"><b>Tražite domaće proizvode direktno od proizvođača?</b><small>Voće, povrće, med, sir, meso i zimnica na Lokalnim Plodovima, bez posrednika.</small></span><span class="baner-d">Pogledaj tezge →</span></a>`;
+function prijaviBaner(id) {
+  try {
+    if (localStorage.getItem('lp_admin_uredjaj') === '1') return;
+    let v = localStorage.getItem('lp_visitor_id');
+    if (!v) { v = 'v' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('lp_visitor_id', v); }
+    fetch(API + '/baner-klik', { method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true, body: JSON.stringify({ baner: id, visitor_id: v }) }).catch(() => {});
+  } catch (er) {}
+}
+['click', 'auxclick'].forEach(t => document.addEventListener(t, ev => { const a = ev.target.closest && ev.target.closest('a[data-baner]'); if (a) prijaviBaner(a.dataset.baner); }));
+function uMrezu(lista) { const k = lista.map(kartica); if (k.length >= 6) k.splice(6, 0, BANER_LP); else k.push(BANER_LP); return k.join(''); }
+
+/* ---------- navigacija ---------- */
+if (tok()) { $('n-odjava').style.display = 'list-item'; $('n-prijava').style.display = 'none'; }
+$('odjava').addEventListener('click', ev => { ev.preventDefault(); localStorage.removeItem('og_token'); location.reload(); });
+
+/* ---------- lista ---------- */
+const S = { kat: '', q: '', mesto: '', offset: 0, lista: [] };
+
+function napraviChips() {
+  $('chips').innerHTML = [['', '🌿']].concat(KAT.map(k => k)).map((k, i) => {
+    const ime = i === 0 ? 'Sve' : k[0];
+    return `<button class="chip ${S.kat === (i === 0 ? '' : k[0]) ? 'akt' : ''}" data-k="${i === 0 ? '' : e(k[0])}">${k[1]} ${e(ime)}</button>`;
+  }).join('');
+  $('chips').querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { S.kat = b.dataset.k; napraviChips(); ucitaj(true); }));
+}
+
+function kartica(o) {
+  const sl = o.slike && o.slike[0] ? `<img src="${e(cld(o.slike[0], 500))}" alt="" loading="lazy" onerror="this.remove()">` : '';
+  return `<a class="kartica ${o.istaknut ? 'ist' : ''}" href="#oglas-${o.id}">
+    <div class="sl">${IKONA[o.kategorija] || '📦'}${sl}${o.istaknut ? '<span class="bedz-ist">Istaknuto</span>' : ''}</div>
+    <div class="kb"><div class="kk">${e(o.kategorija)}</div><div class="kn">${e(o.naslov)}</div><div class="kc">${cena(o.cena)}</div>
+    <div class="km"><span><i class="fas fa-location-dot"></i> ${e(o.mesto)}</span><span>${dat(o.created_at)}</span></div></div></a>`;
+}
+
+async function ucitaj(reset) {
+  if (reset) { S.offset = 0; S.lista = []; $('mreza').innerHTML = '<p class="prazno">Učitavam oglase...</p>'; }
+  const p = new URLSearchParams({ limit: 24, offset: S.offset });
+  if (S.kat) p.set('kategorija', S.kat);
+  if (S.q) p.set('q', S.q);
+  if (S.mesto) p.set('mesto', S.mesto);
+  try {
+    const d = await api('/oglasi?' + p);
+    S.lista = S.lista.concat(d.oglasi); S.offset += d.oglasi.length;
+    $('mreza').innerHTML = S.lista.length ? uMrezu(S.lista)
+      : '<p class="prazno"><span style="font-size:2.4rem">📭</span><br>Nema oglasa za ovu pretragu.<br>Budite prvi koji će postaviti oglas!</p>' + BANER_LP;
+    $('jos').hidden = !d.imaJos;
+    $('broj').textContent = S.lista.length ? 'Prikazano oglasa: ' + S.lista.length + (d.imaJos ? '+' : '') : '';
+  } catch (er) { $('mreza').innerHTML = '<p class="prazno">Greška pri učitavanju oglasa. Pokušajte ponovo.</p>'; }
+}
+$('jos').addEventListener('click', () => ucitaj(false));
+$('trazi').addEventListener('submit', ev => { ev.preventDefault(); S.q = $('q').value.trim(); S.mesto = $('mesto').value.trim(); ucitaj(true); });
+
+/* ---------- detalj ---------- */
+async function detalj(id) {
+  otvori('m-detalj'); $('detalj').innerHTML = '<p class="prazno">Učitavam...</p>';
+  try {
+    const o = await api('/oglasi/' + id);
+    const sl = o.slike || [];
+    $('detalj').innerHTML = `
+      ${sl.length ? `<img class="gl" id="gl" src="${e(cld(sl[0], 900))}" alt="${e(o.naslov)}">` : `<div class="gl" style="display:flex;align-items:center;justify-content:center;font-size:4rem">${IKONA[o.kategorija] || '📦'}</div>`}
+      ${sl.length > 1 ? `<div class="mini">${sl.map((u, i) => `<img src="${e(cld(u, 160))}" data-u="${e(cld(u, 900))}" class="${i === 0 ? 'akt' : ''}" alt="Slika ${i + 1}">`).join('')}</div>` : ''}
+      <h3 class="dn">${e(o.naslov)}</h3>
+      <div class="dc">${cena(o.cena)}</div>
+      <div class="tg"><span>${e(o.kategorija)}</span><span><i class="fas fa-location-dot"></i> ${e(o.mesto)}</span><span>Objavio: ${e(o.autorIme || 'Korisnik')}</span><span>Postavljeno ${dat(o.created_at)}</span>${o.istaknut ? '<span style="background:#faf5e4;color:#7a5410">Istaknuto</span>' : ''}</div>
+      <div class="opis">${e(o.opis)}</div>
+      <div class="ak">
+       <button class="dugme zlato" id="b-tel"><i class="fas fa-phone"></i> Prikaži broj telefona</button>
+       <button class="dugme" id="b-link"><i class="fas fa-link"></i> Kopiraj link</button>
+       <button class="dugme" id="b-prijavi"><i class="fas fa-flag"></i> Prijavi oglas</button>
+      </div>`;
+    document.querySelectorAll('.mini img').forEach(im => im.addEventListener('click', () => {
+      $('gl').src = im.dataset.u; document.querySelectorAll('.mini img').forEach(x => x.classList.remove('akt')); im.classList.add('akt');
+    }));
+    $('b-tel').addEventListener('click', async () => {
+      try { const d = await api('/oglasi/' + id + '/telefon'); $('b-tel').outerHTML = `<a class="dugme zlato" href="tel:${e(d.telefon)}"><i class="fas fa-phone"></i> ${e(d.telefon)}</a>`; }
+      catch (er) { toast('Broj trenutno nije dostupan'); }
+    });
+    $('b-link').addEventListener('click', () => { (navigator.clipboard ? navigator.clipboard.writeText(location.origin + location.pathname + '#oglas-' + id) : Promise.reject()).then(() => toast('Link je kopiran'), () => toast('Kopirajte link iz adrese')); });
+    $('b-prijavi').addEventListener('click', async () => {
+      if (!confirm('Prijaviti ovaj oglas kao neprikladan ili lažan?')) return;
+      try { const d = await api('/oglasi/' + id + '/prijavi', { method: 'POST' }); toast(d.message); } catch (er) { toast('Greška, pokušajte ponovo'); }
+    });
+  } catch (er) { $('detalj').innerHTML = '<p class="prazno">Oglas nije pronađen ili je istekao.</p>'; }
+}
+function proveriHash() { const m = location.hash.match(/^#oglas-(\d+)$/); if (m) detalj(m[1]); else $('m-detalj').classList.remove('otv'); }
+window.addEventListener('hashchange', proveriHash);
+
+/* ---------- postavljanje oglasa ---------- */
+$('f-kat').innerHTML = '<option value="">Izaberite...</option>' + KAT.map(k => `<option>${e(k[0])}</option>`).join('');
+let posleAuth = null;
+function trebaPrijava(nastavi) { if (tok()) return false; posleAuth = nastavi || null; otvori('m-auth'); return true; }
+
+$('btn-postavi').addEventListener('click', async () => {
+  if (trebaPrijava(() => $('btn-postavi').click())) return;
+  otvori('m-forma');
+  if (!$('f-tel').value) { try { const p = await api('/profile'); if (p.telefon) $('f-tel').value = p.telefon; if (p.lokacija && !$('f-mesto').value) $('f-mesto').value = p.lokacija; } catch (er) {} }
+});
+$('f-slike').addEventListener('change', () => {
+  const f = [...$('f-slike').files].slice(0, 3);
+  $('pv').innerHTML = ''; f.forEach(x => { const im = document.createElement('img'); im.src = URL.createObjectURL(x); im.alt = ''; $('pv').appendChild(im); });
+  if ($('f-slike').files.length > 3) toast('Biće korišćene prve 3 slike');
+});
+
+function smanji(file) {
+  return new Promise(res => {
+    const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => {
+      URL.revokeObjectURL(u); let w = im.width, h = im.height; const m = 1400;
+      if (w > m) { h = Math.round(h * m / w); w = m; }
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); x.drawImage(im, 0, 0, w, h);
+      c.toBlob(b => res(b ? new File([b], 'oglas.jpg', { type: 'image/jpeg' }) : file), 'image/jpeg', 0.8);
+    };
+    im.onerror = () => { URL.revokeObjectURL(u); res(file); };
+    im.src = u;
+  });
+}
+async function otpremi(file) {
+  const fd = new FormData(); fd.append('file', await smanji(file)); fd.append('upload_preset', CLD.preset);
+  const r = await fetch(`https://api.cloudinary.com/v1_1/${CLD.cloud}/image/upload`, { method: 'POST', body: fd });
+  if (!r.ok) throw new Error('Slika nije otpremljena');
+  return (await r.json()).secure_url;
+}
+
+$('forma').addEventListener('submit', async ev => {
+  ev.preventDefault(); if (trebaPrijava()) return;
+  const b = $('f-posalji'); b.disabled = true; b.textContent = 'Objavljujem...';
+  try {
+    const slike = [];
+    for (const f of [...$('f-slike').files].slice(0, 3)) slike.push(await otpremi(f));
+    await api('/oglasi', { method: 'POST', body: JSON.stringify({
+      naslov: $('f-naslov').value, kategorija: $('f-kat').value, cena: $('f-cena').value,
+      mesto: $('f-mesto').value, telefon: $('f-tel').value, opis: $('f-opis').value, slike }) });
+    $('forma').reset(); $('pv').innerHTML = ''; zatvori('m-forma'); toast('Oglas je objavljen!'); ucitaj(true);
+  } catch (er) {
+    if (er.status === 401) { localStorage.removeItem('og_token'); $('n-odjava').style.display = 'none'; $('n-prijava').style.display = 'list-item'; zatvori('m-forma'); otvori('m-auth'); }
+    else alert(er.message);
+  } finally { b.disabled = false; b.textContent = 'Objavi oglas'; }
+});
+
+/* ---------- moji oglasi ---------- */
+async function moji() {
+  if (trebaPrijava(moji)) return;
+  otvori('m-moji'); $('moji').innerHTML = '<p class="prazno">Učitavam...</p>';
+  try {
+    const l = await api('/moji-oglasi');
+    $('moji').innerHTML = l.length ? l.map(o => {
+      const st = o.skinut ? 'Skinut (administrator)' : o.istekao ? 'Istekao ' + dat(o.istice) : 'Aktivan još ' + dana(o.istice) + ' d' + (o.istaknut ? ' · Istaknut' : '');
+      return `<div class="mo"><b>${e(o.naslov)}</b><small>${e(o.kategorija)} · ${cena(o.cena)} · ${st}</small>
+        <div class="ak"><button class="dugme" data-a="obnovi" data-id="${o.id}">Obnovi 30 dana</button>
+        <button class="dugme zlato" data-a="istakni" data-id="${o.id}">Istakni</button>
+        <button class="dugme" data-a="prodato" data-id="${o.id}">Prodato / skini</button></div>
+        <div class="kutija" id="ist-${o.id}" hidden><b>Istaknuti oglas: ${PLACANJE.cena} RSD za ${PLACANJE.dana} dana</b><br>
+        Uplatite na račun <b>${e(PLACANJE.racun)}</b>, primalac <b>${e(PLACANJE.primalac)}</b>, svrha: <b>Oglas ID ${o.id}</b>.<br>
+        Javite uplatu na <b>${e(PLACANJE.kontakt)}</b>. Oglas dobija zlatni okvir i prikazuje se na vrhu liste.</div></div>`;
+    }).join('') : '<p class="prazno">Još nemate oglasa.</p>';
+    $('moji').querySelectorAll('[data-a]').forEach(b => b.addEventListener('click', async () => {
+      const id = b.dataset.id, a = b.dataset.a;
+      if (a === 'istakni') { $('ist-' + id).hidden = !$('ist-' + id).hidden; return; }
+      if (a === 'prodato' && !confirm('Skinuti oglas?')) return;
+      try {
+        const d = a === 'obnovi' ? await api('/oglasi/' + id + '/obnovi', { method: 'POST' }) : await api('/oglasi/' + id, { method: 'DELETE' });
+        toast(d.message); moji(); ucitaj(true);
+      } catch (er) { toast(er.message); }
+    }));
+  } catch (er) { $('moji').innerHTML = '<p class="prazno">Greška pri učitavanju.</p>'; }
+}
+$('btn-moji').addEventListener('click', moji);
+
+/* ---------- prijava i registracija ---------- */
+function authTab(t) {
+  const p = t === 'prijava';
+  $('t-prijava').hidden = !p; $('t-reg').hidden = p;
+  $('tab-prijava').classList.toggle('akt', p); $('tab-reg').classList.toggle('akt', !p);
+  $('auth-greska').textContent = '';
+}
+$('tab-prijava').addEventListener('click', () => authTab('prijava'));
+$('tab-reg').addEventListener('click', () => authTab('reg'));
+$('b-prijava').addEventListener('click', ev => { ev.preventDefault(); posleAuth = null; authTab('prijava'); otvori('m-auth'); });
+
+function authUspeh(d) {
+  localStorage.setItem('og_token', d.token);
+  $('n-odjava').style.display = 'list-item'; $('n-prijava').style.display = 'none';
+  zatvori('m-auth'); toast('Dobrodošli' + (d.user && d.user.ime ? ', ' + d.user.ime : '') + '!');
+  const f = posleAuth; posleAuth = null; if (f) setTimeout(f, 250);
+}
+async function authPosalji(ev, putanja, telo, btnId, tekst) {
+  ev.preventDefault();
+  const b = $(btnId); b.disabled = true; b.textContent = 'Sačekajte...'; $('auth-greska').textContent = '';
+  try {
+    const d = await api(putanja, { method: 'POST', body: JSON.stringify(telo) });
+    if (!d.token) throw new Error('Pokušajte ponovo');
+    authUspeh(d);
+  } catch (er) { $('auth-greska').textContent = er.message; }
+  finally { b.disabled = false; b.textContent = tekst; }
+}
+$('t-prijava').addEventListener('submit', ev => authPosalji(ev, '/login', { email: $('a-email').value.trim().toLowerCase(), lozinka: $('a-loz').value }, 'a-btn-prijava', 'Prijavi se'));
+$('t-reg').addEventListener('submit', ev => authPosalji(ev, '/register-oglasivac', { ime: $('r-ime').value, email: $('r-email').value, telefon: $('r-tel').value, lozinka: $('r-loz').value, website: $('r-web').value }, 'a-btn-reg', 'Napravi nalog'));
+
+/* ---------- start ---------- */
+napraviChips(); ucitaj(true); proveriHash();
+</script>
+</body>
+</html>
