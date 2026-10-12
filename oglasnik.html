@@ -109,7 +109,7 @@ main{flex:1;padding-bottom:50px}
 .mo small{color:var(--siva)}
 .mo .ak .dugme{min-height:38px;padding:0 14px;font-size:.85rem}
 .kutija{background:#faf5e4;border:1px solid #ecd9a0;border-radius:12px;padding:12px 14px;margin-top:10px;font-size:.9rem;line-height:1.6;color:#4a3a12}
- .kutija b{display:inline}
+.kutija b{display:inline}
 .tabs{display:flex;gap:6px;margin-bottom:6px}.tabs button{flex:1;padding:10px;border:none;border-radius:50px;background:#eef0e8;font-weight:700;cursor:pointer;font-size:.95rem}.tabs button.akt{background:var(--z);color:#fff}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#1f2937;color:#fff;padding:11px 20px;border-radius:50px;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5000}
 .toast.vid{opacity:1}
@@ -432,8 +432,8 @@ async function moji() {
         <div class="ak"><button class="dugme" data-a="obnovi" data-id="${o.id}">Obnovi 30 dana</button>
         <button class="dugme zlato" data-a="istakni" data-id="${o.id}">Istakni</button>
         <button class="dugme" data-a="prodato" data-id="${o.id}">Prodato / skini</button></div>
-        <div class="kutija" id="ist-${o.id}" hidden><b>Istaknuti oglas: ${PLACANJE.cena} RSD za ${PLACANJE.dana} dana</b><br> svrha: <b>Podrška sajtu Lokalni Plodovi</b>.<br>
-        Uplatite na račun <b>${e(PLACANJE.racun)}</b>, primalac <b>${e(PLACANJE.primalac)}</b>, 
+        <div class="kutija" id="ist-${o.id}" hidden><b>Istaknuti oglas: ${PLACANJE.cena} RSD za ${PLACANJE.dana} dana</b><br>
+        Uplatite na račun <b>${e(PLACANJE.racun)}</b>, primalac <b>${e(PLACANJE.primalac)}</b>, svrha: <b>Podrška sajtu Lokalni Plodovi</b>.<br>
         Posle uplate javite se na <b>${e(PLACANJE.kontakt)}</b> i napišite broj oglasa: <b>${o.id}</b>. Oglas dobija zlatni okvir i prikazuje se na vrhu liste.</div></div>`;
     }).join('') : '<p class="prazno">Još nemate oglasa.</p>';
     $('moji').querySelectorAll('[data-a]').forEach(b => b.addEventListener('click', async () => {
@@ -473,7 +473,10 @@ async function authPosalji(ev, putanja, telo, btnId, tekst) {
     const d = await api(putanja, { method: 'POST', body: JSON.stringify(telo) });
     if (!d.token) throw new Error('Pokušajte ponovo');
     authUspeh(d);
-  } catch (er) { $('auth-greska').textContent = er.message; }
+  } catch (er) {
+    if (er.status === 409) { authTab('prijava'); $('a-email').value = $('r-email').value; $('auth-greska').textContent = 'Nalog sa ovim emailom već postoji (npr. na Lokalnim Plodovima). Prijavite se istom lozinkom.'; }
+    else { $('auth-greska').textContent = er.message; }
+  }
   finally { b.disabled = false; b.textContent = tekst; }
 }
 $('t-prijava').addEventListener('submit', ev => authPosalji(ev, '/login', { email: $('a-email').value.trim().toLowerCase(), lozinka: $('a-loz').value }, 'a-btn-prijava', 'Prijavi se'));
