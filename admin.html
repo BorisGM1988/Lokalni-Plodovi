@@ -548,6 +548,8 @@
     <button class="tab" onclick="prikaziSekciju('ocene',this);ucitajOcene()"><i class="fas fa-star"></i> Ocene</button>
     <button class="tab" onclick="prikaziSekciju('statistika',this);ucitajStatistiku()"><i class="fas fa-chart-line"></i> Statistika poseta</button>
     <button class="tab" id="tab-btn-grupni-email" onclick="prikaziSekciju('grupni-email',this)"><i class="fas fa-envelope"></i> Grupni Email</button>
+    <button class="tab" onclick="prikaziSekciju('oglasnik',this);ucitajOglase()"><i class="fas fa-bullhorn"></i> Oglasnik</button>
+    <button class="tab" onclick="prikaziSekciju('baneri',this);ucitajBanere()"><i class="fas fa-ad"></i> Baneri</button>
   </div>
 
   <!-- PRODAVAČI -->
@@ -707,6 +709,53 @@
     </div>
 
     <div class="table-wrap"><div id="stat-tbl" style="padding:2rem;text-align:center;color:var(--muted)">Klikni tab Statistika poseta da učitaš...</div></div>
+  </div>
+
+  <!-- OGLASNIK -->
+  <div id="sec-oglasnik" class="section">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <input class="search-input" id="srch-oglasi" placeholder="🔍 Pretraži oglase..." oninput="renderOglasi()">
+        <select id="filter-oglasi" class="search-input" style="min-width:auto;border-radius:8px;cursor:pointer;" onchange="renderOglasi()">
+          <option value="svi">Svi oglasi</option>
+          <option value="prijavljeni">🚩 Prijavljeni</option>
+          <option value="istaknuti">⭐ Istaknuti</option>
+          <option value="istekli">Istekli</option>
+          <option value="skinuti">Skinuti (sakriveni)</option>
+        </select>
+        <span class="count-badge" id="cnt-oglasi">0 oglasa</span>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-primary btn-sm" onclick="ucitajOglase()"><i class="fas fa-sync-alt"></i> Osveži</button>
+      </div>
+    </div>
+    <div class="table-wrap"><div id="tbl-oglasi" style="padding:2rem;text-align:center;color:var(--muted)">Klikni tab Oglasnik da učitaš...</div></div>
+
+    <div class="toolbar" style="margin-top:1.5rem;">
+      <div class="toolbar-left">
+        <h4 style="color:var(--green-700);">Nalozi oglašivača</h4>
+        <span class="count-badge" id="cnt-oglasivaci">0 oglašivača</span>
+      </div>
+    </div>
+    <div class="table-wrap"><div id="tbl-oglasivaci"></div></div>
+  </div>
+
+  <!-- BANERI -->
+  <div id="sec-baneri" class="section">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <select id="baneri-dana" class="search-input" style="min-width:auto;border-radius:8px;cursor:pointer;" onchange="ucitajBanere()">
+          <option value="7">Poslednjih 7 dana</option>
+          <option value="30" selected>Poslednjih 30 dana</option>
+          <option value="90">Poslednjih 90 dana</option>
+        </select>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-primary btn-sm" onclick="ucitajBanere()"><i class="fas fa-sync-alt"></i> Osveži</button>
+      </div>
+    </div>
+    <div class="stats-grid" id="baneri-kartice" style="padding:0 0 1rem;"></div>
+    <div class="table-wrap"><div id="baneri-dani"></div></div>
   </div>
 
   <!-- GRUPNI EMAIL -->
@@ -970,7 +1019,7 @@ function buildSparklines(korisnici, proizvodi, objave) {
     arr.forEach(x => { const d=(x[field]||'').slice(0,10); m[d]=(m[d]||0)+1; });
     return days7.map(d => m[d]||0);
   };
-  const prodavaci = korisnici.filter(k => k.tip !== 'kupac');
+  const prodavaci = korisnici.filter(k => k.tip !== 'kupac' && k.tip !== 'oglasivac');
   const kupci     = korisnici.filter(k => k.tip === 'kupac');
   renderSparkline('chart-prodavaci', countByDay(prodavaci,'created_at'), '#2e7d32');
   renderSparkline('chart-kupci',     countByDay(kupci,    'created_at'), '#2563eb');
@@ -1116,7 +1165,7 @@ async function ucitajStats() {
   try {
     const res = await fetch(`${backendUrl}/admin/stats`, { headers:{ 'x-admin-password':adminLozinka } });
     const s = await res.json();
-    document.getElementById('stat-prodavaci').textContent = s.korisnici - s.kupci;
+    document.getElementById('stat-prodavaci').textContent = s.korisnici - s.kupci - (window.oglasivaciData ? window.oglasivaciData.length : 0);
     document.getElementById('stat-kupci').textContent = s.kupci;
     document.getElementById('stat-proizvodi').textContent = s.proizvodi;
     document.getElementById('stat-objave').textContent = s.objave;
@@ -1139,7 +1188,9 @@ async function ucitajKorisnike() {
   try {
     const res = await fetch(`${backendUrl}/admin/korisnici`, { headers:{ 'x-admin-password':adminLozinka } });
     const svi = await res.json();
-    state.prodavaci.data = svi.filter(k => k.tip !== 'kupac');
+    state.prodavaci.data = svi.filter(k => k.tip !== 'kupac' && k.tip !== 'oglasivac');
+    window.oglasivaciData = svi.filter(k => k.tip === 'oglasivac');
+    if (typeof renderOglasivaci === 'function') renderOglasivaci();
     state.kupci.data     = svi.filter(k => k.tip === 'kupac');
     applyFilter('prodavaci'); applyFilter('kupci');
     return svi;
@@ -1994,6 +2045,134 @@ async function posaljiCestitku() {
     }
   } catch { toast('Greška pri povezivanju', 'error'); }
   btn.disabled = false;
+}
+
+// ── OGLASNIK + BANERI (admin) ──
+let oglasiData = [];
+
+async function ucitajOglase() {
+  const div = document.getElementById('tbl-oglasi');
+  div.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Učitavam...</div>';
+  try {
+    const res = await fetch(`${backendUrl}/admin/oglasi`, { headers:{ 'x-admin-password':adminLozinka } });
+    if (!res.ok) throw new Error('Greška');
+    oglasiData = await res.json();
+    renderOglasi();
+    renderOglasivaci();
+  } catch { div.innerHTML = '<p style="color:red;padding:2rem">Greška pri učitavanju oglasa</p>'; }
+}
+
+function renderOglasi() {
+  const div = document.getElementById('tbl-oglasi');
+  const q = (document.getElementById('srch-oglasi').value || '').toLowerCase();
+  const f = document.getElementById('filter-oglasi').value;
+  let lista = oglasiData.filter(o => `${o.naslov||''} ${o.autorIme||''} ${o.autorEmail||''} ${o.mesto||''} ${o.kategorija||''}`.toLowerCase().includes(q));
+  if (f === 'prijavljeni') lista = lista.filter(o => o.prijave > 0);
+  else if (f === 'istaknuti') lista = lista.filter(o => o.istaknut);
+  else if (f === 'istekli') lista = lista.filter(o => o.istekao);
+  else if (f === 'skinuti') lista = lista.filter(o => o.skinut);
+  document.getElementById('cnt-oglasi').textContent = `${lista.length} oglasa`;
+  if (!lista.length) {
+    div.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)"><i class="fas fa-bullhorn" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Nema oglasa</div>';
+    return;
+  }
+  div.innerHTML = `<table>
+    <thead><tr><th>#ID</th><th>Oglas</th><th>Oglašivač</th><th>Cena</th><th>Mesto</th><th style="text-align:center">Prijave</th><th>Status</th><th>Ističe</th><th>Akcije</th></tr></thead>
+    <tbody>${lista.slice(0, 200).map(o => {
+      let status;
+      if (o.skinut) status = '<span class="badge badge-red">Skinut</span>';
+      else if (o.istekao) status = '<span class="badge badge-orange">Istekao</span>';
+      else status = '<span class="badge badge-green">Aktivan</span>';
+      if (o.istaknut && !o.skinut && !o.istekao) status += ` <span class="badge badge-yellow">Istaknut do ${fmt(o.istaknutDo)}</span>`;
+      return `<tr>
+        <td style="color:var(--muted);font-size:.78rem">#${o.id}</td>
+        <td class="cell-truncate" style="max-width:220px"><b>${escH(o.naslov)}</b><br><small style="color:var(--muted)">${escH(o.kategorija)}</small></td>
+        <td class="cell-truncate">${escH(o.autorIme || '-')}<br><small style="color:var(--muted)">${escH(o.autorEmail || '')} · ${escH(o.telefon || '')}</small></td>
+        <td style="white-space:nowrap">${o.cena == null ? 'Po dogovoru' : Number(o.cena).toLocaleString('sr-RS') + ' RSD'}</td>
+        <td>${escH(o.mesto)}</td>
+        <td style="text-align:center;font-weight:700;color:${o.prijave > 0 ? 'var(--red)' : 'var(--muted)'}">${o.prijave || 0}</td>
+        <td>${status}</td>
+        <td style="white-space:nowrap">${fmt(o.istice)}</td>
+        <td style="white-space:nowrap">
+          <a class="btn btn-info btn-sm" style="text-decoration:none" href="oglasnik.html#oglas-${o.id}" target="_blank" title="Otvori oglas"><i class="fas fa-eye"></i></a>
+          <button class="btn btn-edit btn-sm" onclick="oglasIstakni(${o.id})" title="Istakni 15 dana"><i class="fas fa-star"></i></button>
+          <button class="btn btn-warning btn-sm" onclick="oglasSakrij(${o.id}, ${!o.skinut})" title="${o.skinut ? 'Vrati oglas' : 'Sakrij oglas'}"><i class="fas fa-${o.skinut ? 'eye' : 'eye-slash'}"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="oglasObrisi(${o.id}, '${esc(o.naslov)}')" title="Obriši"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+}
+
+function renderOglasivaci() {
+  const div = document.getElementById('tbl-oglasivaci');
+  if (!div) return;
+  const lista = window.oglasivaciData || [];
+  document.getElementById('cnt-oglasivaci').textContent = `${lista.length} oglašivača`;
+  if (!lista.length) { div.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)">Još nema registrovanih oglašivača</div>'; return; }
+  div.innerHTML = `<table>
+    <thead><tr><th>#ID</th><th>Ime</th><th>Email</th><th>Telefon</th><th style="text-align:center">Oglasa</th><th>Registrovan</th><th>Akcije</th></tr></thead>
+    <tbody>${lista.map(k => `<tr>
+      <td style="color:var(--muted);font-size:.78rem">#${k.id}</td>
+      <td class="cell-truncate">${escH(k.ime || '-')}</td>
+      <td class="cell-truncate" style="font-size:.8rem">${escH(k.email)}</td>
+      <td>${escH(k.telefon || '-')}</td>
+      <td style="text-align:center;font-weight:700">${oglasiData.filter(o => o.korisnikId === k.id).length}</td>
+      <td style="white-space:nowrap">${fmt(k.created_at)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-warning btn-sm" onclick="resetujLozinku(${k.id},'${esc(k.ime)}')" title="Resetuj lozinku"><i class="fas fa-key"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}')" title="Obriši nalog i njegove oglase"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function oglasIstakni(id) {
+  confirm2('Istakni oglas', 'Oglas dobija zlatni okvir i prvo mesto u listi na 15 dana. Potvrdite tek posle uplate.', async () => {
+    try {
+      const res = await fetch(`${backendUrl}/admin/oglas/${id}/istakni`, { method:'POST', headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka }, body: JSON.stringify({ dana: 15 }) });
+      const d = await res.json();
+      if (res.ok) { toast(d.message); ucitajOglase(); } else toast(d.error || 'Greška', 'error');
+    } catch { toast('Greška pri povezivanju', 'error'); }
+  }, '⭐');
+}
+
+async function oglasSakrij(id, sakrij) {
+  try {
+    const res = await fetch(`${backendUrl}/admin/oglas/${id}/sakrij`, { method:'POST', headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka }, body: JSON.stringify({ sakrij }) });
+    const d = await res.json();
+    if (res.ok) { toast(sakrij ? 'Oglas je sakriven' : 'Oglas je vraćen'); ucitajOglase(); } else toast(d.error || 'Greška', 'error');
+  } catch { toast('Greška pri povezivanju', 'error'); }
+}
+
+function oglasObrisi(id, naslov) {
+  confirm2('Obriši oglas', `"${naslov}" će biti trajno obrisan.`, async () => {
+    const res = await fetch(`${backendUrl}/admin/oglas/${id}`, { method:'DELETE', headers:{ 'x-admin-password':adminLozinka } });
+    if (res.ok) { toast('Oglas obrisan'); ucitajOglase(); } else toast('Greška pri brisanju', 'error');
+  }, '🗑️');
+}
+
+const BANER_IMENA = { 'lp-u-oglasnik': 'Lokalni Plodovi → Oglasnik', 'oglasnik-u-lp': 'Oglasnik → Lokalni Plodovi' };
+
+async function ucitajBanere() {
+  const dana = parseInt(document.getElementById('baneri-dana').value) || 30;
+  const kar = document.getElementById('baneri-kartice');
+  const tb = document.getElementById('baneri-dani');
+  tb.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Učitavam...</div>';
+  try {
+    const res = await fetch(`${backendUrl}/admin/baner-klikovi?dana=${dana}`, { headers:{ 'x-admin-password':adminLozinka } });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error || 'Greška');
+    const naj = k => d.period.find(x => x.baner === k) || { klikova: 0, posetilaca: 0 };
+    const uk = k => (d.svega.find(x => x.baner === k) || { klikova: 0 }).klikova;
+    kar.innerHTML = Object.keys(BANER_IMENA).map(k => `
+      <div class="stat-card">
+        <div class="stat-top"><div><div class="stat-number" style="color:var(--green-700)">${naj(k).klikova}</div><div class="stat-label">${BANER_IMENA[k]}</div></div>
+        <div class="stat-icon stat-icon-green"><i class="fas fa-mouse-pointer"></i></div></div>
+        <div class="stat-trend trend-flat">${naj(k).posetilaca} različitih uređaja · ukupno od početka: ${uk(k)}</div>
+      </div>`).join('');
+    tb.innerHTML = d.poDanima.length
+      ? `<table><thead><tr><th>Dan</th><th>Baner</th><th>Klikova</th></tr></thead><tbody>${d.poDanima.map(x => `<tr><td>${fmt(x.dan)}</td><td>${BANER_IMENA[x.baner] || escH(x.baner)}</td><td style="font-weight:700">${x.klikova}</td></tr>`).join('')}</tbody></table>`
+      : '<div style="padding:2rem;text-align:center;color:var(--muted)">Još nema klikova na baner.</div>';
+  } catch (er) { tb.innerHTML = `<p style="color:red;padding:2rem">${escH(er.message)}</p>`; }
 }
 
 // ── CSV EXPORT ──
