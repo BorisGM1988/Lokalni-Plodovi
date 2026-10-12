@@ -431,9 +431,9 @@ async function moji() {
         <div class="ak"><button class="dugme" data-a="obnovi" data-id="${o.id}">Obnovi 30 dana</button>
         <button class="dugme zlato" data-a="istakni" data-id="${o.id}">Istakni</button>
         <button class="dugme" data-a="prodato" data-id="${o.id}">Prodato / skini</button></div>
-        <div class="kutija" id="ist-${o.id}" hidden><b>Istaknuti oglas: ${PLACANJE.cena} RSD za ${PLACANJE.dana} dana</b><br>
-        Uplatite na račun <b>${e(PLACANJE.racun)}</b>, primalac <b>${e(PLACANJE.primalac)}</b>, svrha: <b>Oglas ID ${o.id}</b>.<br>
-        Javite uplatu na <b>${e(PLACANJE.kontakt)}</b>. Oglas dobija zlatni okvir i prikazuje se na vrhu liste.</div></div>`;
+        <div class="kutija" id="ist-${o.id}" hidden><b>Istaknuti oglas: ${PLACANJE.cena} RSD za ${PLACANJE.dana} dana</b><br> svrha: <b>Podrška sajtu Lokalni Plodovi</b>.<br>
+        Uplatite na račun <b>${e(PLACANJE.racun)}</b>, primalac <b>${e(PLACANJE.primalac)}</b>, 
+        Posle uplate javite se na <b>${e(PLACANJE.kontakt)}</b> i napišite broj oglasa: <b>${o.id}</b>. Oglas dobija zlatni okvir i prikazuje se na vrhu liste.</div></div>`;
     }).join('') : '<p class="prazno">Još nemate oglasa.</p>';
     $('moji').querySelectorAll('[data-a]').forEach(b => b.addEventListener('click', async () => {
       const id = b.dataset.id, a = b.dataset.a;
