@@ -105,6 +105,18 @@
       border-color: var(--zelena-svetla);
     }
 
+    .zab-red {
+      text-align: right;
+      margin: -0.6rem 0 0.4rem;
+    }
+    .zab-red a {
+      color: var(--zelena);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .zab-red a:hover { text-decoration: underline; }
+
     .login-btn {
       width: 100%;
       padding: 1rem;
@@ -122,6 +134,7 @@
       opacity: 0.9;
       transform: translateY(-1px);
     }
+    .login-btn:disabled { opacity: 0.6; cursor: default; transform: none; }
 
     .poruka { 
       text-align: center; 
@@ -180,6 +193,68 @@
     }
     .reg-btn.prodavac:hover { background: var(--zelena); color: white; }
 
+    /* ===== Iskačući prozor "Zaboravljena lozinka" ===== */
+    .zab-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .zab-overlay.otvoren { display: flex; }
+    .zab-prozor {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 2.2rem 2rem;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .zab-zatvori {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: #f1f1ec;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .zab-zatvori:hover { background: #e4e4dc; }
+    .zab-prozor h2 { color: var(--zelena); font-size: 1.4rem; text-align: center; margin-bottom: 0.4rem; }
+    .zab-prozor .zab-pod { color: #777; text-align: center; font-size: 0.93rem; line-height: 1.5; margin-bottom: 1.3rem; }
+    .zab-ikona { font-size: 2.8rem; text-align: center; margin-bottom: 0.4rem; }
+    .zab-spam {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 14px;
+      padding: 0.9rem 1rem;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #5d4a10;
+      margin: 1rem 0;
+    }
+    .zab-spam b { color: #3e2f05; }
+    .zab-nazad {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      color: var(--zelena);
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .zab-nazad:hover { text-decoration: underline; }
+
     footer {
       background: var(--zemlja);
       color: white;
@@ -233,6 +308,8 @@
         </div>
       </div>
 
+      <div class="zab-red"><a href="#" id="zab-link">Zaboravili ste lozinku?</a></div>
+
       <p id="poruka" class="poruka" style="color:red;"></p>
 
       <button type="submit" class="login-btn">
@@ -254,6 +331,45 @@
       <a href="politika-privatnosti.html" style="color:#aaa; font-size:0.85rem; text-decoration:none;">Politika privatnosti</a>
       &nbsp;•&nbsp;
       <a href="uslovi-koriscenja.html" style="color:#aaa; font-size:0.85rem; text-decoration:none;">Uslovi korišćenja</a>
+    </div>
+  </div>
+</div>
+
+<!-- Iskačući prozor: zaboravljena lozinka -->
+<div class="zab-overlay" id="zab-overlay" role="dialog" aria-modal="true" aria-labelledby="zab-naslov">
+  <div class="zab-prozor">
+    <button type="button" class="zab-zatvori" id="zab-zatvori" aria-label="Zatvori">✕</button>
+
+    <!-- Korak 1: unos emaila -->
+    <div id="zab-korak1">
+      <div class="zab-ikona">🔑</div>
+      <h2 id="zab-naslov">Zaboravili ste lozinku?</h2>
+      <p class="zab-pod">Upišite email adresu naloga. Poslaćemo vam link preko kog možete da izaberete novu lozinku.</p>
+      <form id="zab-forma">
+        <div class="form-group">
+          <label for="zab-email">Email adresa</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="zab-email" required placeholder="vas@email.com" autocomplete="email">
+          </div>
+        </div>
+        <p id="zab-greska" class="poruka" style="color:#c62828;" role="alert"></p>
+        <button type="submit" class="login-btn" id="zab-btn">Pošalji link</button>
+      </form>
+      <a class="zab-nazad" id="zab-nazad1">← Nazad na prijavu</a>
+    </div>
+
+    <!-- Korak 2: poslato + upozorenje za spam -->
+    <div id="zab-korak2" hidden>
+      <div class="zab-ikona">📬</div>
+      <h2>Proverite svoj email</h2>
+      <p class="zab-pod">Ako nalog sa adresom <b id="zab-adresa"></b> postoji, poslali smo mu mejl sa linkom za novu lozinku. Link važi 60 minuta.</p>
+      <div class="zab-spam">
+        <b>⚠️ Mejl ne stiže?</b><br>
+        Sačekajte nekoliko minuta, pa proverite folder <b>Spam</b> (Neželjena pošta). Na Gmail-u pogledajte i <b>Promotions</b> (Promocije). Ako ga nađete tamo, kliknite na <b>„Nije spam“</b> da vam sledeći mejlovi stižu normalno.
+      </div>
+      <button type="button" class="login-btn" id="zab-ok">U redu</button>
+      <a class="zab-nazad" id="zab-ponovo">Nema mejla? Pošalji ponovo</a>
     </div>
   </div>
 </div>
@@ -338,6 +454,64 @@ s0.parentNode.insertBefore(s1,s0);
       console.error(err);
     }
   });
+</script>
+
+<!-- Zaboravljena lozinka -->
+<script>
+  (function () {
+    const API = 'https://lokalni-backend-production.up.railway.app';
+    const $ = id => document.getElementById(id);
+    const overlay = $('zab-overlay');
+
+    function prikaziKorak(n) {
+      $('zab-korak1').hidden = n !== 1;
+      $('zab-korak2').hidden = n !== 2;
+    }
+    function otvori() {
+      $('zab-greska').textContent = '';
+      $('zab-email').value = $('email').value.trim();
+      prikaziKorak(1);
+      overlay.classList.add('otvoren');
+      setTimeout(() => $('zab-email').focus(), 50);
+    }
+    function zatvori() { overlay.classList.remove('otvoren'); }
+
+    $('zab-link').addEventListener('click', e => { e.preventDefault(); otvori(); });
+    $('zab-zatvori').addEventListener('click', zatvori);
+    $('zab-nazad1').addEventListener('click', zatvori);
+    $('zab-ok').addEventListener('click', zatvori);
+    $('zab-ponovo').addEventListener('click', () => { $('zab-greska').textContent = ''; prikaziKorak(1); });
+    overlay.addEventListener('click', e => { if (e.target === overlay) zatvori(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') zatvori(); });
+
+    $('zab-forma').addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = $('zab-email').value.trim().toLowerCase();
+      const greska = $('zab-greska');
+      greska.textContent = '';
+      if (!email) { greska.textContent = 'Unesite email adresu.'; return; }
+      const btn = $('zab-btn');
+      btn.disabled = true; btn.textContent = 'Šaljem...';
+      try {
+        const r = await fetch(API + '/zaboravljena-lozinka', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok) {
+          $('zab-adresa').textContent = email;
+          prikaziKorak(2);
+        } else {
+          greska.textContent = d.error || 'Greška, pokušajte ponovo.';
+        }
+      } catch (err) {
+        greska.textContent = 'Greška pri povezivanju sa serverom.';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Pošalji link';
+      }
+    });
+  })();
 </script>
 </body>
 </html>
