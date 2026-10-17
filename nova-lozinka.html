@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex">
+  <title>Nova lozinka – LokalniPlodovi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    :root { --zelena:#2e7d32; --zelena-svetla:#4caf50; --zemlja:#5d4037; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:#f8f9f5; min-height:100vh; display:flex; flex-direction:column; }
+    header { background:rgba(46,125,50,0.94); color:white; padding:1rem 2rem; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+    .logo { font-size:1.8rem; font-weight:700; }
+    .wrapper { flex:1; display:flex; align-items:center; justify-content:center; padding:3rem 1rem; }
+    .box { background:white; border-radius:24px; box-shadow:0 15px 40px rgba(0,0,0,0.12); padding:3rem 2.5rem; width:100%; max-width:460px; }
+    .box h1 { color:var(--zelena); font-size:1.6rem; text-align:center; margin-bottom:.4rem; }
+    .box .pod { color:#888; text-align:center; font-size:.95rem; margin-bottom:1.8rem; }
+    .ikona { font-size:3rem; text-align:center; margin-bottom:.5rem; }
+    .form-group { margin-bottom:1.2rem; }
+    label { display:block; margin-bottom:.4rem; font-weight:600; color:var(--zemlja); font-size:.95rem; }
+    .input-wrapper { position:relative; }
+    .input-wrapper i { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#aaa; }
+    input[type="password"] { width:100%; padding:.9rem .9rem .9rem 2.8rem; border:2px solid #e0e0e0; border-radius:10px; font-size:1rem; font-family:inherit; transition:border-color .2s; }
+    input:focus { outline:none; border-color:var(--zelena-svetla); }
+    .btn { display:block; width:100%; padding:1rem; background:linear-gradient(135deg,var(--zelena),var(--zelena-svetla)); color:white; border:none; border-radius:50px; font-size:1.1rem; font-weight:700; cursor:pointer; text-align:center; text-decoration:none; margin-top:.5rem; }
+    .btn:disabled { opacity:.6; cursor:default; }
+    .poruka { text-align:center; min-height:22px; font-size:.95rem; margin:.8rem 0; color:#c62828; }
+    .uspeh, .greska { text-align:center; line-height:1.6; }
+    .uspeh p, .greska p { margin-bottom:1.2rem; color:#444; }
+    .mali { color:#777; font-size:.88rem; margin-top:1rem; text-align:center; line-height:1.5; }
+    .mali a { color:var(--zelena); font-weight:600; }
+    footer { background:var(--zemlja); color:white; text-align:center; padding:2rem 1rem; font-size:.9rem; }
+  </style>
+</head>
+<body>
+<header><div class="logo">LokalniPlodovi</div></header>
+
+<div class="wrapper">
+  <div class="box">
+
+    <!-- Forma za novu lozinku -->
+    <div id="forma-deo" hidden>
+      <div class="ikona">🔑</div>
+      <h1>Nova lozinka</h1>
+      <p class="pod">Izaberite novu lozinku za svoj nalog</p>
+      <form id="forma">
+        <div class="form-group">
+          <label for="loz1">Nova lozinka</label>
+          <div class="input-wrapper"><i class="fas fa-lock"></i>
+            <input type="password" id="loz1" required minlength="6" autocomplete="new-password" placeholder="Najmanje 6 karaktera"></div>
+        </div>
+        <div class="form-group">
+          <label for="loz2">Ponovite lozinku</label>
+          <div class="input-wrapper"><i class="fas fa-lock"></i>
+            <input type="password" id="loz2" required minlength="6" autocomplete="new-password" placeholder="Unesite istu lozinku"></div>
+        </div>
+        <p id="poruka" class="poruka" role="alert"></p>
+        <button type="submit" class="btn" id="btn">Sačuvaj novu lozinku</button>
+      </form>
+    </div>
+
+    <!-- Uspeh -->
+    <div id="uspeh-deo" class="uspeh" hidden>
+      <div class="ikona">✅</div>
+      <h1>Lozinka je promenjena</h1>
+      <p class="pod" style="margin-bottom:1.2rem">Sada se možete prijaviti novom lozinkom.</p>
+      <a href="login.html" class="btn">Prijavi se</a>
+      <p class="mali">Ako ste nalog pravili u Oglasniku, prijava na gornjoj stranici će vas automatski odvesti u Oglasnik.</p>
+    </div>
+
+    <!-- Link nije ispravan -->
+    <div id="greska-deo" class="greska" hidden>
+      <div class="ikona">⚠️</div>
+      <h1>Link nije ispravan</h1>
+      <p class="pod" id="greska-tekst" style="margin-bottom:1.2rem">Link je istekao ili je već iskorišćen. Linkovi za promenu lozinke važe 60 minuta i mogu se iskoristiti samo jednom.</p>
+      <a href="login.html" class="btn">Zatraži novi link</a>
+      <p class="mali">Na stranici za prijavu kliknite na „Zaboravili ste lozinku?".</p>
+    </div>
+
+  </div>
+</div>
+
+<footer><p>© 2026 LokalniPlodovi • Prirodno • Direktno sa imanja</p></footer>
+
+<script>
+  const API = 'https://lokalni-backend-production.up.railway.app';
+  const token = new URLSearchParams(location.search).get('token') || '';
+  const $ = id => document.getElementById(id);
+
+  if (/^[a-f0-9]{64}$/.test(token)) {
+    $('forma-deo').hidden = false;
+  } else {
+    $('greska-deo').hidden = false;
+  }
+
+  $('forma').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const poruka = $('poruka'); poruka.textContent = '';
+    const l1 = $('loz1').value, l2 = $('loz2').value;
+    if (l1.length < 6) { poruka.textContent = 'Lozinka mora imati najmanje 6 karaktera.'; return; }
+    if (l1 !== l2) { poruka.textContent = 'Lozinke se ne poklapaju.'; return; }
+    const btn = $('btn'); btn.disabled = true; btn.textContent = 'Čuvam...';
+    try {
+      const r = await fetch(API + '/nova-lozinka', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, novaLozinka: l1 })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok) {
+        $('forma-deo').hidden = true; $('uspeh-deo').hidden = false;
+      } else if (r.status === 400 && /link/i.test(d.error || '')) {
+        $('forma-deo').hidden = true; $('greska-deo').hidden = false;
+      } else {
+        poruka.textContent = d.error || 'Greška, pokušajte ponovo.';
+      }
+    } catch (er) {
+      poruka.textContent = 'Greška pri povezivanju sa serverom.';
+    } finally { btn.disabled = false; btn.textContent = 'Sačuvaj novu lozinku'; }
+  });
+</script>
+</body>
+</html>
