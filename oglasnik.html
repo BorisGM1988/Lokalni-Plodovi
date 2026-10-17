@@ -281,6 +281,20 @@ footer a:hover{text-decoration:underline}
     <label class="fl" for="a-email">Email</label><input class="fi" id="a-email" type="email" required autocomplete="email">
     <label class="fl" for="a-loz">Lozinka</label><input class="fi" id="a-loz" type="password" required autocomplete="current-password">
     <button type="submit" class="dugme glavno" id="a-btn-prijava" style="width:100%;margin-top:18px">Prijavi se</button>
+    <p style="text-align:center;margin-top:14px;font-size:.92rem"><a href="#" id="a-zab" style="color:var(--z);font-weight:700">Zaboravili ste lozinku?</a></p>
+   </form>
+   <form id="t-zab" hidden>
+    <div id="zab-forma">
+     <p style="color:#555;font-size:.9rem;margin-top:4px">Upišite email naloga. Poslaćemo vam link za izbor nove lozinke.</p>
+     <label class="fl" for="z-email">Email</label><input class="fi" id="z-email" type="email" required autocomplete="email">
+     <button type="submit" class="dugme glavno" id="z-btn" style="width:100%;margin-top:18px">Pošalji link</button>
+     <p style="text-align:center;margin-top:14px"><a href="#" class="z-nazad" style="color:var(--z);font-weight:700">← Nazad na prijavu</a></p>
+    </div>
+    <div id="zab-ok" hidden>
+     <p style="font-size:1.05rem;line-height:1.6;margin-top:6px">📬 Ako nalog sa adresom <b id="z-adresa"></b> postoji, poslali smo mejl sa linkom za novu lozinku. Link važi 60 minuta.</p>
+     <div class="kutija"><b>⚠️ Mejl ne stiže?</b><br>Sačekajte nekoliko minuta, pa proverite folder <b>Spam</b> (Neželjena pošta). Na Gmail-u pogledajte i <b>Promotions</b>. Ako ga nađete tamo, kliknite na <b>„Nije spam“</b>.</div>
+     <button type="button" class="dugme glavno z-nazad" style="width:100%;margin-top:18px">U redu</button>
+    </div>
    </form>
    <form id="t-reg" hidden>
     <p style="color:#555;font-size:.9rem;margin-top:4px">Besplatno je. Nalog vam treba samo da biste mogli da upravljate svojim oglasima.</p>
@@ -512,8 +526,9 @@ $('fab-postavi').addEventListener('click', () => $('btn-postavi').click());
 /* ---------- prijava i registracija ---------- */
 function authTab(t) {
   const p = t === 'prijava';
-  $('t-prijava').hidden = !p; $('t-reg').hidden = p;
-  $('tab-prijava').classList.toggle('akt', p); $('tab-reg').classList.toggle('akt', !p);
+  $('t-prijava').hidden = !p; $('t-reg').hidden = (t !== 'reg'); $('t-zab').hidden = (t !== 'zab');
+  $('tab-prijava').classList.toggle('akt', t !== 'reg'); $('tab-reg').classList.toggle('akt', t === 'reg');
+  if (t === 'zab') { $('zab-forma').hidden = false; $('zab-ok').hidden = true; }
   $('auth-greska').textContent = '';
 }
 $('tab-prijava').addEventListener('click', () => authTab('prijava'));
@@ -541,6 +556,20 @@ async function authPosalji(ev, putanja, telo, btnId, tekst) {
 }
 $('t-prijava').addEventListener('submit', ev => authPosalji(ev, '/login', { email: $('a-email').value.trim().toLowerCase(), lozinka: $('a-loz').value }, 'a-btn-prijava', 'Prijavi se'));
 $('t-reg').addEventListener('submit', ev => authPosalji(ev, '/register-oglasivac', { ime: $('r-ime').value, email: $('r-email').value, telefon: $('r-tel').value, lozinka: $('r-loz').value, website: $('r-web').value }, 'a-btn-reg', 'Napravi nalog'));
+
+/* ---------- zaboravljena lozinka ---------- */
+$('a-zab').addEventListener('click', ev => { ev.preventDefault(); $('z-email').value = $('a-email').value.trim(); authTab('zab'); });
+document.querySelectorAll('.z-nazad').forEach(a => a.addEventListener('click', ev => { ev.preventDefault(); authTab('prijava'); }));
+$('t-zab').addEventListener('submit', async ev => {
+  ev.preventDefault();
+  const b = $('z-btn'); b.disabled = true; b.textContent = 'Šaljem...'; $('auth-greska').textContent = '';
+  try {
+    const em = $('z-email').value.trim().toLowerCase();
+    await api('/zaboravljena-lozinka', { method: 'POST', body: JSON.stringify({ email: em }) });
+    $('z-adresa').textContent = em; $('zab-forma').hidden = true; $('zab-ok').hidden = false;
+  } catch (er) { $('auth-greska').textContent = er.message; }
+  finally { b.disabled = false; b.textContent = 'Pošalji link'; }
+});
 
 /* ---------- start ---------- */
 napraviChips(); ucitaj(true); proveriHash();
