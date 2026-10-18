@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oglasnik – Poljoprivredni oglasi iz cele Srbije</title>
 <meta name="description" content="Oglasnik za poljoprivredu: mašine i oprema, zemljište, životinje, seme i sadnice, usluge. Besplatni oglasi iz cele Srbije.">
+<link rel="canonical" href="https://lokalniplodovi.rs/oglasnik.html">
+<meta property="og:title" content="Oglasnik – Poljoprivredni oglasi iz cele Srbije">
+<meta property="og:description" content="Mašine i oprema, zemljište, životinje, seme i usluge. Besplatni oglasi direktno od ljudi sa sela.">
+<meta property="og:url" content="https://lokalniplodovi.rs/oglasnik.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="sr_RS">
+<meta property="og:site_name" content="LokalniPlodovi">
+<meta property="og:image" content="https://lokalniplodovi.rs/Oglasnik-hero.jpg">
+<meta property="og:image:width" content="2736">
+<meta property="og:image:height" content="912">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#2e7d32">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -21,7 +32,7 @@ button{font-family:inherit}
 .wrap{max-width:1240px;margin:0 auto;padding:0 24px}
 
 /* zaglavlje (staklo) */
-header{position:sticky;top:0;z-index:1000;color:#fff;background:rgba(12,45,17,.78);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid rgba(255,255,255,.08)}
+header{position:sticky;top:0;z-index:1000;color:#fff;background:rgba(26,20,14,.72);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid rgba(255,255,255,.08)}
 nav{max-width:1240px;margin:0 auto;padding:12px 24px;display:flex;justify-content:space-between;align-items:center}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
 .logo-i{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,var(--zlato-s),var(--zlato));display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 4px 14px rgba(201,150,43,.4)}
@@ -32,7 +43,11 @@ nav ul a{display:inline-block;color:#fff;text-decoration:none;font-size:.9rem;fo
 nav ul a:hover{background:rgba(255,255,255,.22)}
 
 /* hero */
-.hero{position:relative;overflow:hidden;color:#fff;padding:64px 0 100px;background:radial-gradient(900px 420px at 88% -15%,rgba(241,210,122,.30),transparent 62%),radial-gradient(700px 520px at -5% 115%,rgba(76,175,80,.38),transparent 60%),linear-gradient(140deg,#0c2d11,#1c5a26 70%,#24702f)}
+.hero{position:relative;overflow:hidden;color:#fff;padding:64px 0 20vw;background:#2b251f}
+.hero-bg{position:absolute;left:0;bottom:0;width:100%;height:auto;aspect-ratio:3/1;object-fit:cover;object-position:center bottom;display:block;z-index:0;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 45%);mask-image:linear-gradient(to bottom,transparent 0,#000 45%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(24,18,12,.55),rgba(24,18,12,.32) 40%,rgba(24,18,12,0) 62%)}
+.hero .wrap{position:relative;z-index:2}
+.hero h1,.hero p{text-shadow:0 2px 18px rgba(0,0,0,.45)}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);font-size:.82rem;font-weight:600;margin-bottom:20px}
 .eyebrow::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--zlato-s);box-shadow:0 0 0 4px rgba(241,210,122,.25)}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.3rem,5.4vw,4rem);line-height:1.04;letter-spacing:-.02em;max-width:18ch}
@@ -158,7 +173,8 @@ footer a:hover{text-decoration:underline}
  .wrap{padding:0 16px}
  nav{padding:10px 16px}
  .logo-t{font-size:1.2rem}
- .hero{padding:40px 0 92px}
+ .hero{padding:40px 0 190px}
+ .hero-bg{aspect-ratio:auto;height:300px;object-position:12% 100%}
  .trazi{flex-direction:column;align-items:stretch;border-radius:26px;padding:8px}
  .trazi input.m{flex:1 1 auto;border-left:none;border-top:1px solid var(--line)}
  .trazi button{width:100%}
@@ -175,7 +191,6 @@ footer a:hover{text-decoration:underline}
  .fab{display:flex}
  .dn{font-size:1.5rem}
 }
-
 /* telefon: bez hover efekata koji "pomeraju" slike posle dodira */
 @media(hover:none){
  .kartica:hover{transform:none;box-shadow:var(--sh)}
@@ -211,6 +226,7 @@ footer a:hover{text-decoration:underline}
 </header>
 
 <section class="hero">
+ <img class="hero-bg" src="Oglasnik-hero.jpg" width="2736" height="912" fetchpriority="high" alt="Drvena tabla sa oglasima: prodaja traktora, njiva, prasići, usluge oranja, seme kukuruza i slama u balama">
  <div class="wrap">
   <div class="eyebrow">Besplatan oglasnik za selo</div>
   <h1>Oglasnik za <span>poljoprivredu</span></h1>
