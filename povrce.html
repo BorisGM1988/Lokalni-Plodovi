@@ -39,7 +39,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="stylesheet" href="mobile.css">
   <style>
@@ -47,14 +47,17 @@
       --zelena: #2e7d32;
       --zelena-svetla: #4caf50;
       --zelena-tamna: #1b5e20;
+      --zlatna: #f5a623;
       --zlatna-svetla: #ffd166;
       --zemlja: #5d4037;
       --krem: #faf7f0;
       --krem-tamna: #f0ece0;
-      --tekst: #2c2c2c;
-      --siva: #6b7280;
+      --tekst: #25302a;
+      --siva: #6f7a72;
+      --ease: cubic-bezier(.2,.8,.2,1);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--krem);
@@ -62,47 +65,56 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
-    /* HEADER */
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--zlatna); outline-offset: 3px; }
+
+    /* HEADER (isti kao na početnoj) */
     header {
-      background: linear-gradient(135deg, var(--zelena-tamna) 0%, var(--zelena) 100%);
-      color: white;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(15,47,20,0.92);
+      -webkit-backdrop-filter: saturate(1.4) blur(14px);
+      backdrop-filter: saturate(1.4) blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     nav {
-      max-width: 1400px; margin: 0 auto;
-      padding: 1.1rem 2rem;
+      max-width: 1240px; margin: 0 auto;
+      padding: 0 28px; height: 76px;
       display: flex; justify-content: space-between; align-items: center;
     }
-    .logo { display:flex; align-items:center; gap:0.5rem; text-decoration:none; }
+    .logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
     .logo-icon {
-      width:38px; height:38px;
-      background:rgba(255,255,255,0.15);
+      width:40px; height:40px;
+      background: linear-gradient(135deg, #4caf50, #1b5e20);
       border-radius:50%;
       display:flex; align-items:center; justify-content:center;
-      font-size:1.1rem;
-      border:1.5px solid rgba(255,255,255,0.3);
+      font-size:1.2rem;
+      box-shadow: 0 2px 12px rgba(76,175,80,0.4);
     }
     .logo-text {
       font-family:'Playfair Display',serif;
-      font-size:1.5rem; font-weight:700; color:white;
+      font-size:1.5rem; font-weight:700; color:white; letter-spacing:-0.3px;
     }
     .logo-text span { color:var(--zlatna-svetla); }
-    nav ul {
-      display:flex; list-style:none; gap:0.2rem; align-items:center;
-    }
+    nav ul { display:flex; list-style:none; gap:4px; align-items:center; }
     nav ul li a {
       color:rgba(255,255,255,0.88);
       text-decoration:none;
-      font-size:0.88rem; font-weight:500;
-      padding:0.45rem 0.85rem;
+      font-size:0.9rem; font-weight:500;
+      padding:0.55rem 0.95rem;
       border-radius:50px;
       transition:all 0.2s;
     }
-    nav ul li a:hover { background:rgba(255,255,255,0.15); color:white; }
+    nav ul li a:hover { background:rgba(255,255,255,0.14); color:white; }
+    .nav-cta a {
+      background: var(--zlatna) !important;
+      color: #1b1b1b !important;
+      font-weight: 700 !important;
+      padding: 0.55rem 1.2rem !important;
+      margin-left: 6px;
+    }
+    .nav-cta a:hover { background: var(--zlatna-svetla) !important; }
     .hamburger {
       display:none; flex-direction:column; gap:5px;
       cursor:pointer; background:none; border:none;
@@ -111,95 +123,108 @@
       width:26px; height:2.5px;
       background:white; border-radius:3px; display:block;
     }
-    /* HERO */
+
+    /* HERO (slika pejzaža, mek prelaz u krem) */
     .cat-hero {
-      background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e9 60%, #dcedc8 100%);
-      border-bottom:1px solid rgba(0,0,0,0.06);
-      padding:3rem 1.5rem 2.5rem;
-      text-align:center;
-      position:relative;
-      overflow:hidden;
+      position: relative;
+      color: white;
+      padding: 56px 1.5rem 130px;
+      text-align: center;
+      background-color: #1d5a27;
+      background:
+        radial-gradient(900px 480px at 85% 0%, rgba(245,166,35,0.18), transparent 60%),
+        linear-gradient(160deg, rgba(15,47,20,0.74), rgba(29,90,39,0.5) 80%),
+        url('hero-pozadina.jpg') no-repeat center center / cover;
     }
-    .cat-hero::before {
-      content:'🥕';
-      position:absolute;
-      font-size:12rem; opacity:0.06;
-      right:-2rem; top:-2rem;
-      line-height:1; pointer-events:none;
+    .cat-hero::after {
+      content: "";
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 130px;
+      background: linear-gradient(to bottom, rgba(250,247,240,0), var(--krem));
+      pointer-events: none; z-index: 1;
     }
+    .cat-hero > * { position: relative; z-index: 2; }
     .breadcrumb {
       display:flex; align-items:center; gap:0.5rem;
       justify-content:center;
-      margin-bottom:1rem;
-      font-size:0.82rem; color:var(--siva);
+      margin-bottom:1.2rem;
+      font-size:0.85rem; color:rgba(255,255,255,0.8);
     }
-    .breadcrumb a { color:var(--zelena); text-decoration:none; }
+    .breadcrumb a { color:var(--zlatna-svetla); text-decoration:none; }
     .breadcrumb a:hover { text-decoration:underline; }
-    .breadcrumb span { opacity:0.5; }
+    .breadcrumb span { opacity:0.6; }
     .cat-badge {
       display:inline-flex; align-items:center; gap:0.4rem;
-      background:rgba(76,175,80,0.12);
-      border:1px solid rgba(76,175,80,0.3);
-      color:#2e7d32;
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.28);
+      color:#fff;
       font-size:0.78rem; font-weight:600;
       letter-spacing:1px; text-transform:uppercase;
-      padding:0.35rem 1rem; border-radius:50px;
+      padding:0.4rem 1.1rem; border-radius:50px;
       margin-bottom:1rem;
     }
     .cat-title {
       font-family:'Playfair Display',serif;
-      font-size:clamp(2rem,4vw,3rem);
-      font-weight:700; color:var(--zemlja);
-      margin-bottom:0.8rem; line-height:1.2;
+      font-size:clamp(2.4rem,5vw,3.6rem);
+      font-weight:700; color:#fff;
+      margin-bottom:0.8rem; line-height:1.1; letter-spacing:-0.02em;
+      text-shadow: 0 2px 18px rgba(0,0,0,0.35);
     }
     .cat-desc {
-      color:var(--siva); font-size:1rem;
-      max-width:580px; margin:0 auto 1.8rem; line-height:1.7;
+      color:#e3f0e4; font-size:1.05rem;
+      max-width:600px; margin:0 auto 1.8rem; line-height:1.7;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.35);
     }
     .cat-tags { display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; }
     .cat-tag {
-      background:white; border:1px solid rgba(0,0,0,0.1);
-      color:#444; font-size:0.8rem;
-      padding:0.3rem 0.8rem; border-radius:50px; font-weight:500;
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.25);
+      color:#fff; font-size:0.82rem;
+      padding:0.35rem 0.9rem; border-radius:50px; font-weight:500;
     }
+
     /* GRID */
     .container {
-      max-width:1400px; margin:0 auto;
-      padding:2.5rem 1.5rem 5rem; flex:1;
+      width:100%; max-width:1240px; margin:-30px auto 0;
+      padding:0 28px 5rem; flex:1;
+      position:relative; z-index:3;
     }
     .products-grid {
       display:grid;
       grid-template-columns:repeat(4, 1fr);
-      gap:1.6rem;
+      gap:20px;
     }
+    .products-grid > * { min-width:0; }
+
     /* KARTICA */
     .product-card {
       background:white;
-      border-radius:20px;
+      border-radius:24px;
       overflow:hidden;
-      box-shadow:0 2px 14px rgba(0,0,0,0.07);
-      border:1px solid rgba(0,0,0,0.05);
-      transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
+      box-shadow:0 2px 14px rgba(20,50,20,0.07);
+      border:1px solid #e9e3d3;
+      transition:transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
       display:flex; flex-direction:column;
-      animation:fadeUp 0.4s ease both;
+      animation:fadeUp 0.5s var(--ease) both;
     }
     @keyframes fadeUp {
       from { opacity:0; transform:translateY(16px); }
       to { opacity:1; transform:translateY(0); }
     }
     .product-card:hover {
-      transform:translateY(-10px) scale(1.01);
-      box-shadow:0 20px 48px rgba(0,0,0,0.12);
+      transform:translateY(-6px);
+      box-shadow:0 22px 44px rgba(20,50,20,0.16);
     }
     .product-img {
-      height:200px; overflow:hidden;
+      aspect-ratio: 4/3;
+      overflow:hidden;
       background:var(--krem-tamna);
     }
     .product-img img {
-      width:100%; height:100%; object-fit:cover;
-      transition:transform 0.5s ease;
+      width:100%; height:100%; object-fit:cover; display:block;
+      transition:transform 0.7s var(--ease);
     }
-    .product-card:hover .product-img img { transform:scale(1.07); }
+    .product-card:hover .product-img img { transform:scale(1.06); }
     .product-info {
       padding:1.2rem 1.3rem 1.4rem;
       display:flex; flex-direction:column; flex:1;
@@ -207,7 +232,7 @@
     }
     .product-title {
       font-family:'Playfair Display',serif;
-      font-size:1.15rem; font-weight:700;
+      font-size:1.2rem; font-weight:700;
       color:var(--zemlja); margin-bottom:1rem; line-height:1.3;
     }
     .btn {
@@ -215,23 +240,24 @@
       gap:0.4rem;
       background:var(--zelena);
       color:white;
-      padding:0.7rem 1.4rem;
+      padding:0.75rem 1.4rem;
       border-radius:50px;
       text-decoration:none;
-      font-weight:600; font-size:0.88rem;
+      font-weight:700; font-size:0.9rem;
       transition:all 0.22s;
       margin-top:auto;
     }
-    .btn:hover { background:var(--zelena-tamna); transform:scale(1.03); }
+    .btn:hover { background:var(--zelena-tamna); transform:translateY(-2px); }
+
     /* SEO */
     .seo-info {
-      background:white; border-top:1px solid #e8e8e8;
-      padding:3rem 1.5rem;
+      background:white; border-top:1px solid #e9e3d3;
+      padding:3.5rem 1.5rem;
     }
     .seo-info-inner { max-width:900px; margin:0 auto; }
     .seo-info h2 {
       font-family:'Playfair Display',serif;
-      font-size:1.6rem; color:var(--zemlja); margin-bottom:1rem;
+      font-size:1.7rem; color:var(--zemlja); margin-bottom:1rem;
     }
     .seo-info p {
       color:var(--siva); line-height:1.8;
@@ -243,17 +269,19 @@
       font-size:0.8rem; padding:0.3rem 0.75rem;
       border-radius:50px; font-weight:500;
     }
+
     /* FOOTER */
     footer {
-      background:var(--zemlja); color:white;
+      background:#4a3128; color:#e9dccf;
       text-align:center; padding:3rem 1.5rem 2rem;
     }
     footer a { color:#c8e6c9; text-decoration:none; }
     footer a:hover { text-decoration:underline; }
     .footer-logo {
       font-family:'Playfair Display',serif;
-      font-size:1.5rem; margin-bottom:0.5rem;
+      font-size:1.6rem; color:#fff; margin-bottom:0.5rem;
     }
+
     /* RESPONSIVE */
     @media (max-width:1100px) {
       .products-grid { grid-template-columns:repeat(3, 1fr); }
@@ -261,33 +289,48 @@
     @media (max-width:780px) {
       .products-grid { grid-template-columns:repeat(2, 1fr); }
     }
-    @media (max-width:480px) {
-      .products-grid { grid-template-columns:1fr; }
-    }
     @media (max-width:768px) {
+      nav { padding:0 16px; height:68px; }
       .hamburger { display:flex; }
       nav ul {
         display:none;
-        position:absolute; top:62px; left:0; right:0;
-        background:rgba(27,94,32,0.97);
-        backdrop-filter:blur(12px);
-        flex-direction:column;
+        position:absolute; top:100%; left:0; right:0;
+        background:rgba(15,47,20,0.98);
+        flex-direction:column; align-items:stretch;
         padding:1.2rem 1.5rem 1.8rem;
         gap:0.4rem; z-index:999;
         border-bottom:1px solid rgba(255,255,255,0.1);
       }
       nav ul.open { display:flex; }
       nav ul li a { display:block; padding:0.7rem 1rem; font-size:1rem; }
-      .products-grid { grid-template-columns:1fr 1fr; gap:1rem; }
-      .product-img { height:150px; }
-      .product-title { font-size:0.95rem; }
+      .nav-cta a { margin-left:0; text-align:center; }
+
+      .cat-hero {
+        padding:40px 1rem 100px;
+        background-position: 0 0, 0 0, 60% center;
+        background-size: auto, auto, cover;
+      }
+      .cat-hero::after { height:100px; }
+      .cat-desc { font-size:1rem; }
+
+      .container { padding:0 16px 4rem; margin-top:-24px; }
+      .products-grid { grid-template-columns:1fr 1fr; gap:12px; }
+      .product-card { border-radius:20px; }
+      .product-title { font-size:1rem; margin-bottom:0.7rem; }
       .product-info { padding:0.9rem; }
-    }
-    @media (max-width:480px) {
-      .products-grid { grid-template-columns:1fr; }
+      .btn { padding:0.65rem 0.8rem; font-size:0.82rem; }
     }
     @media (min-width:769px) {
       .hamburger { display:none; }
+    }
+    /* telefon: bez hover efekata koji "pomeraju" kartice posle dodira */
+    @media (hover:none) {
+      .product-card:hover { transform:none; box-shadow:0 2px 14px rgba(20,50,20,0.07); }
+      .product-card:hover .product-img img { transform:none; }
+      .btn:hover { transform:none; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
     }
   </style>
 </head>
@@ -307,6 +350,8 @@
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="oglasnik.html">Oglasnik</a></li>
       <li id="moj-profil-li" style="display:none;">
         <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
       </li>
@@ -314,7 +359,7 @@
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
       <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
+      <li id="postani-prodavac-li" class="nav-cta"><a href="registracija.html">Registruj se</a></li>
     </ul>
   </nav>
 </header>
@@ -323,11 +368,11 @@
   <nav class="breadcrumb" aria-label="breadcrumb">
     <a href="index.html">Početna</a>
     <span>›</span>
-    <strong style="color:var(--tekst);">Povrće</strong>
+    <strong style="color:#fff;">Povrće</strong>
   </nav>
   <div class="cat-badge">🥕 Kategorija</div>
   <h1 class="cat-title">Povrće</h1>
-  <p class="cat-desc">Sveže, sezonsko povrće uzgojeno u Srbiji  direktno sa polja i plastenika do vaše kuhinje. Bez posrednika.</p>
+  <p class="cat-desc">Sveže, sezonsko povrće uzgojeno u Srbiji, direktno sa polja i plastenika do vaše kuhinje. Bez posrednika.</p>
   <div class="cat-tags"><span class="cat-tag">🌱 Sezonsko</span> <span class="cat-tag">🏡 Domaće imanje</span> <span class="cat-tag">🇷🇸 Srbija</span> <span class="cat-tag">✅ Bez pesticida</span> <span class="cat-tag">📍 Lokalni farmeri</span></div>
 </section>
 
@@ -484,7 +529,7 @@
   <div class="seo-info-inner">
     <h2>Zašto kupovati domaće povrće direktno od farmera?</h2>
     <p>Domaće povrće uzgojeno na srpskim njivama i u plastenicima bogatije je vitaminima i mineralima od uvoznog. Kratkim lancem snabdevanja od farme do vašeg stola smanjuje se i ugljenični otisak.</p>
-    <p>Na LokalniPlodovi platformi možete pronaći lokalne proizvođače paradajza, paprike, krompira, kupusa, šargarepe i ostalog povrća u vašem kraju  svaki farmer sa direktnim kontaktom.</p>
+    <p>Na LokalniPlodovi platformi možete pronaći lokalne proizvođače paradajza, paprike, krompira, kupusa, šargarepe i ostalog povrća u vašem kraju, svaki farmer sa direktnim kontaktom.</p>
     <div class="seo-pills"><span class="seo-pill">domaće povrće Srbija</span> <span class="seo-pill">sveže povrće farmer</span> <span class="seo-pill">paradajz direktno</span> <span class="seo-pill">organski krompir</span> <span class="seo-pill">kupus domaći</span> <span class="seo-pill">paprika farmer</span></div>
   </div>
 </section>
