@@ -141,12 +141,14 @@
     .hamburger span { width: 26px; height: 2.5px; background: white; border-radius: 3px; display: block; transition: all 0.3s; }
 
     /* ===== HERO ===== */
-    .hero {
+       .hero {
       color: white;
       padding: 72px 0 150px;
+      background-color: #1d5a27;
       background:
-        radial-gradient(900px 480px at 85% 0%, rgba(245,166,35,0.22), transparent 60%),
-        linear-gradient(160deg, #0f2f14, #1d5a27 80%);
+        radial-gradient(900px 480px at 85% 0%, rgba(245,166,35,0.18), transparent 60%),
+        linear-gradient(160deg, rgba(15,47,20,0.72), rgba(29,90,39,0.45) 80%),
+        url('hero-pozadina.jpg') no-repeat center center / cover;
     }
 
     .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
