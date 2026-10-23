@@ -682,6 +682,102 @@
       .profil-sekcija { margin-left: 2rem; margin-right: 2rem; }
     }
   </style>
+  <style id="tema-2026">
+    :root{--ink:#17211a;--line:#e7e2d3;--krem2:#f6f3ea;--zd:#14421a;--sh:0 1px 2px rgba(20,40,20,.06),0 12px 32px rgba(20,40,20,.08);--ease:cubic-bezier(.2,.8,.2,1)}
+    html{scroll-behavior:smooth}
+    body{background:var(--krem2);color:var(--ink);-webkit-font-smoothing:antialiased}
+
+    /* zaglavlje (staklo, isto kao u oglasniku) */
+    header{background:rgba(12,45,17,.8);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid rgba(255,255,255,.08);box-shadow:none}
+    nav{max-width:1240px;padding:12px 24px}
+    .logo-icon{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#f1d27a,#c9962b);border:none;box-shadow:0 4px 14px rgba(201,150,43,.4)}
+    nav ul li a{font-weight:600;padding:9px 16px}
+    nav ul li a:hover{background:rgba(255,255,255,.16)}
+    #postani-prodavac-li a{background:linear-gradient(135deg,#f5a623,#c9962b);color:#2a1d02;font-weight:700}
+
+    /* naslovna slika i profilna */
+    .profile-cover{height:300px;background:radial-gradient(700px 300px at 85% -20%,rgba(241,210,122,.28),transparent 60%),linear-gradient(135deg,#0f3314,#2e7d32)}
+    .profile-cover .overlay{background:linear-gradient(180deg,rgba(6,25,9,.10) 0%,rgba(6,25,9,.55) 100%)}
+    .profile-content{max-width:1240px;margin-top:-120px;padding:0 24px 4rem}
+    .profile-avatar{width:184px;height:184px;border:6px solid #fff;box-shadow:0 18px 44px rgba(10,40,15,.3);margin:0 auto -92px}
+    .profile-avatar:hover{transform:scale(1.04)}
+    .profile-main{border-radius:30px;border:1px solid var(--line);box-shadow:var(--sh);padding:116px 2.2rem 2.2rem;animation:up .6s var(--ease) both}
+    .profile-name{font-size:clamp(2rem,4.4vw,2.9rem);color:var(--zd);letter-spacing:-.02em;line-height:1.1}
+    .profile-bio{color:#56655a;font-size:1.06rem}
+
+    /* dugmad u zaglavlju profila */
+    .profile-header-btns{gap:10px}
+    .profile-header-btns>button{min-height:46px;padding:0 22px;border-radius:999px;font-weight:700;font-size:.92rem;font-family:'DM Sans',sans-serif;transition:transform .2s var(--ease),box-shadow .2s,background .2s}
+    .profile-header-btns>button:hover{transform:translateY(-2px)}
+    .profile-edit-btn,.btn-poruka{background:linear-gradient(135deg,#2e7d32,#1f6b2c);box-shadow:0 8px 22px rgba(46,125,50,.3)}
+    .profile-edit-btn:hover,.btn-poruka:hover{background:linear-gradient(135deg,#348a39,#256f2f)}
+    .btn-inbox{background:#fff;color:var(--zd);border:1.5px solid #cfd9cc;box-shadow:none}
+    .btn-inbox:hover{background:#f1f6ef}
+    #btn-notifikacije.aktivno{background:#e7f6ea;border-color:#9fd3a8;color:#166534}
+    .btn-app{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:none;background:linear-gradient(135deg,#f1d27a,#c9962b);color:#3b2a05;box-shadow:0 8px 22px rgba(201,150,43,.35)}
+
+    /* podaci o prodavcu */
+    .profile-info-grid{gap:14px;margin:2rem 0}
+    .detail-card{background:#fbfaf5;border:1px solid var(--line);border-radius:20px;padding:18px 20px;box-shadow:none;transition:transform .3s var(--ease),box-shadow .3s}
+    .detail-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,40,20,.09)}
+    .detail-label{text-transform:none;letter-spacing:0;font-size:.8rem;color:#6b7a6e;font-weight:700;gap:10px;margin-bottom:10px}
+    .detail-label i{width:30px;height:30px;border-radius:10px;background:#e4f1e2;color:#2e7d32;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem}
+    .detail-card>div:last-child{font-weight:600;color:var(--ink);word-break:break-word}
+    .nise-badge{background:#e4f1e2;color:#1b5e20;font-weight:700}
+
+    /* glavna dugmad */
+    .profile-actions{max-width:980px;gap:12px;margin-top:2.2rem}
+    .btn{min-height:54px;padding:0 1.2rem;border-radius:999px;font-weight:700;box-shadow:none;transition:transform .25s var(--ease),box-shadow .25s,background .25s}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(20,40,20,.14)}
+    .btn-primary{background:linear-gradient(135deg,#2e7d32,#1f6b2c);box-shadow:0 8px 22px rgba(46,125,50,.28)}
+    .btn-primary:hover{background:linear-gradient(135deg,#348a39,#256f2f)}
+    .btn-secondary{background:#fff;border:1.5px solid #bcd0b9;color:#1b5e20}
+    .btn-secondary:hover{background:#f1f6ef;color:var(--zd)}
+    .btn-tezga{background:linear-gradient(135deg,#f1d27a,#c9962b);color:#3b2a05;box-shadow:0 8px 22px rgba(201,150,43,.32)}
+    .btn-tezga:hover{background:linear-gradient(135deg,#f5d986,#d19e33)}
+    .btn-blog{background:#e8f4fb;color:#075985;border:1.5px solid #bfe0f1}
+    .btn-blog:hover{background:#d7ecf8}
+    .btn-uvoz{background:#f1ecfd;color:#5b21b6;border:1.5px solid #dcd0f6}
+    .btn-uvoz:hover{background:#e6ddfa}
+
+    /* sekcije (objave, blog, ocene) */
+    .profil-sekcija{width:calc(100% - 4rem);max-width:1240px;margin:2rem auto 0;border-radius:28px;border:1px solid var(--line);box-shadow:var(--sh);padding:2rem 2.2rem}
+    .profil-sekcija h2{font-size:1.65rem;color:var(--zd);letter-spacing:-.01em}
+    .profil-sekcija h2::after{content:'';display:block;width:44px;height:3px;border-radius:3px;background:linear-gradient(90deg,#f1d27a,#c9962b);margin:12px auto 0}
+    .prosek-wrap{border-radius:20px}
+    .ocena-card{border-radius:18px;background:#fbfaf5;border-color:var(--line)}
+    footer{background:#0f2a14;color:#b9d0bb}
+    footer a{color:#d9ecdb}
+
+    /* "Moja tezga" prozor */
+    .tz-overlay{background:rgba(8,24,11,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+    .tz-panel{border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+    .tz-head{background:#fff;color:var(--ink);border-bottom:1px solid var(--line)}
+    .tz-head h2{font-family:'Playfair Display',serif;font-size:1.4rem}
+    .tz-head p{color:#6b7a6e;opacity:1}
+    .tz-x{background:#f1efe6;color:#333}
+    .tz-card{border-radius:20px;border-color:var(--line);transition:transform .3s var(--ease),box-shadow .3s}
+    .tz-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(20,66,26,.14)}
+    .tz-chip.aktivan{background:linear-gradient(135deg,#2e7d32,#1f6b2c)}
+    .tz-cena{background:rgba(20,66,26,.94)}
+
+    /* ostali prozori (isti izgled, bez menjanja njihovog koda) */
+    body>div[id$="-modal"]:not(.tz-overlay){background:rgba(8,24,11,.62)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+    body>div[id$="-modal"]:not(.tz-overlay)>div{border-radius:28px!important;box-shadow:0 30px 80px rgba(0,0,0,.35)!important}
+    body>div[id$="-modal"]:not(.tz-overlay)>div>div:first-child{background:linear-gradient(135deg,#14421a,#2e7d32)!important}
+
+    @keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+    @media(max-width:768px){
+      nav{padding:10px 16px}
+      nav ul{top:62px}
+      .profile-cover{height:220px}
+      .profile-content{margin-top:-96px;padding:0 14px 3rem}
+      .profile-avatar{width:150px;height:150px;margin:0 auto -75px}
+      .profile-main{padding:100px 1.1rem 1.6rem;border-radius:26px}
+      .profil-sekcija{width:calc(100% - 2rem);margin:1.5rem auto 0;padding:1.4rem 1.2rem}
+    }
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
@@ -752,13 +848,13 @@
           <button class="btn-poruka" id="btn-poruka" onclick="otvoriPosaljiPoruku()">
             <i class="fas fa-envelope"></i> Pošalji poruku
           </button>
-          <button class="btn-inbox" id="btn-podeli" onclick="otvoriPodeliModal()" style="background:#0ea5e9; box-shadow:0 4px 12px rgba(14,165,233,0.3);">
+          <button class="btn-inbox" id="btn-podeli" onclick="otvoriPodeliModal()">
             <i class="fas fa-share-alt"></i> Podeli profil
           </button>
-          <button class="btn-inbox" id="btn-notifikacije" onclick="ukljuciPushNotifikacije()" style="background:#7c3aed; box-shadow:0 4px 12px rgba(124,58,237,0.3);">
+          <button class="btn-inbox" id="btn-notifikacije" onclick="ukljuciPushNotifikacije()">
             <i class="fas fa-bell"></i> Uključi obaveštenja
           </button>
-          <button id="btn-preuzmi-app" onclick="preuzmiAplikaciju()" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.6rem; border-radius:50px; font-weight:600; font-size:0.92rem; cursor:pointer; border:none; background:linear-gradient(135deg,#f59e0b,#d97706); color:white; box-shadow:0 4px 12px rgba(217,119,6,0.35); font-family:'DM Sans', sans-serif;">
+          <button id="btn-preuzmi-app" class="btn-app" onclick="preuzmiAplikaciju()">
             <i class="fas fa-download"></i> Preuzmi aplikaciju
           </button>
         </div>
@@ -2534,10 +2630,10 @@ function podeliBlogFacebook(blogId, slug) {
       const sub = reg ? await reg.pushManager.getSubscription() : null;
       if (sub) {
         btn.innerHTML = '<i class="fas fa-bell"></i> Obaveštenja uključena ✓';
-        btn.style.background = '#16a34a';
+        btn.classList.add('aktivno');
       } else {
         btn.innerHTML = '<i class="fas fa-bell"></i> Uključi obaveštenja';
-        btn.style.background = '#7c3aed';
+        btn.classList.remove('aktivno');
       }
     } catch (e) {}
   }
