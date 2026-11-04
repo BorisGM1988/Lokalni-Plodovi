@@ -1,52 +1,76 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-RS">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <!-- SEO -->
-  <title>Svi prodavci  Lokalni proizvođači u Srbiji | LokalniPlodovi</title>
-  <meta name="description" content="Pronađite lokalne proizvođače u vašem kraju. Sveže povrće, voće, med, sir, meso i jaja direktno od farmera u Srbiji. Bez posrednika."/>
-  <meta name="keywords" content="lokalni proizvođači Srbija, domaći farmeri, kupovina od seljaka, sveži proizvodi direktno, pijaca online Srbija"/>
+  <title>Svi prodavci: lokalni proizvođači i farmeri u Srbiji | LokalniPlodovi</title>
+  <meta name="description" content="Pronađite lokalne proizvođače u svom kraju: povrće, voće, med, mlečne proizvode, meso, jaja i domaću radinost direktno od farmera u Srbiji. Bez posrednika."/>
+  <meta name="keywords" content="lokalni proizvođači Srbija, domaći farmeri, kupovina direktno od proizvođača, domaća hrana Srbija, pijaca online Srbija"/>
   <link rel="canonical" href="https://lokalniplodovi.rs/Prodavci.html"/>
-  <meta name="robots" content="index, follow"/>
+  <link rel="alternate" hreflang="sr-RS" href="https://lokalniplodovi.rs/Prodavci.html"/>
+  <link rel="alternate" hreflang="x-default" href="https://lokalniplodovi.rs/Prodavci.html"/>
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"/>
   <meta name="language" content="Serbian"/>
   <meta name="author" content="LokalniPlodovi"/>
-  <meta property="og:title" content="Svi prodavci – Lokalni proizvođači u Srbiji | LokalniPlodovi"/>
-  <meta property="og:description" content="Pronađite lokalne proizvođače u vašem kraju. Direktno od farmera, bez posrednika."/>
+  <meta name="theme-color" content="#0f2f14"/>
+  <meta property="og:site_name" content="LokalniPlodovi"/>
+  <meta property="og:title" content="Svi prodavci: lokalni proizvođači u Srbiji | LokalniPlodovi"/>
+  <meta property="og:description" content="Pronađite lokalne proizvođače u svom kraju. Direktno od farmera, bez posrednika."/>
   <meta property="og:url" content="https://lokalniplodovi.rs/Prodavci.html"/>
   <meta property="og:type" content="website"/>
   <meta property="og:locale" content="sr_RS"/>
   <meta property="og:image" content="https://lokalniplodovi.rs/og-slika.jpg"/>
+  <meta property="og:image:alt" content="Lokalni proizvođači – LokalniPlodovi"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Svi prodavci: lokalni proizvođači u Srbiji | LokalniPlodovi"/>
+  <meta name="twitter:description" content="Pronađite lokalne proizvođače u svom kraju. Direktno od farmera, bez posrednika."/>
+  <meta name="twitter:image" content="https://lokalniplodovi.rs/og-slika.jpg"/>
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Svi lokalni proizvođači – LokalniPlodovi",
-    "description": "Lista lokalnih proizvođača i farmera u Srbiji",
-    "url": "https://lokalniplodovi.rs/Prodavci.html",
-    "inLanguage": "sr-RS"
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Početna", "item": "https://lokalniplodovi.rs/" },
-      { "@type": "ListItem", "position": 2, "name": "Svi prodavci", "item": "https://lokalniplodovi.rs/Prodavci.html" }
+    "@graph": [
+      { "@type": "WebSite", "@id": "https://lokalniplodovi.rs/#website", "url": "https://lokalniplodovi.rs/", "name": "LokalniPlodovi", "inLanguage": "sr-RS" },
+      {
+        "@type": "CollectionPage",
+        "@id": "https://lokalniplodovi.rs/Prodavci.html#stranica",
+        "url": "https://lokalniplodovi.rs/Prodavci.html",
+        "name": "Svi prodavci – LokalniPlodovi",
+        "description": "Lokalni proizvođači i farmeri u Srbiji, direktno i bez posrednika.",
+        "inLanguage": "sr-RS",
+        "isPartOf": { "@id": "https://lokalniplodovi.rs/#website" },
+        "breadcrumb": { "@id": "https://lokalniplodovi.rs/Prodavci.html#breadcrumb" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://lokalniplodovi.rs/Prodavci.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Početna", "item": "https://lokalniplodovi.rs/" },
+          { "@type": "ListItem", "position": 2, "name": "Svi prodavci", "item": "https://lokalniplodovi.rs/Prodavci.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Kako da kontaktiram prodavca?", "acceptedAnswer": { "@type": "Answer", "text": "Otvorite profil prodavca i kontaktirajte ga porukom ili telefonom. Cenu, količinu i način preuzimanja ili dostave dogovarate direktno sa prodavcem." } },
+          { "@type": "Question", "name": "Kako da pronađem proizvođača u mom kraju?", "acceptedAnswer": { "@type": "Answer", "text": "Pretražite listu po imenu ili mestu, ili izaberite nišu. Lokaciju prodavaca možete pogledati i na stranici Mapa." } },
+          { "@type": "Question", "name": "Koje proizvode nude prodavci?", "acceptedAnswer": { "@type": "Answer", "text": "Povrće, voće, med, mlečne proizvode, meso, jaja, bilje i domaću radinost. Ponuda zavisi od prodavaca koji su trenutno na platformi." } },
+          { "@type": "Question", "name": "Kako mogu da postanem prodavac?", "acceptedAnswer": { "@type": "Answer", "text": "Registrujte se kao prodavac, napravite profil i dodajte proizvode sa slikom, cenom i količinom." } }
+        ]
+      }
     ]
   }
   </script>
+  <script type="application/ld+json" id="ld-lista"></script>
 
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://lokalni-backend-production.up.railway.app" crossorigin>
+  <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="stylesheet" href="mobile.css">
-
   <style>
     :root {
       --zelena: #2e7d32;
@@ -57,13 +81,12 @@
       --zemlja: #5d4037;
       --krem: #faf7f0;
       --krem-tamna: #f0ece0;
-      --belo: #ffffff;
-      --tekst: #2c2c2c;
-      --siva: #6b7280;
+      --tekst: #25302a;
+      --siva: #6f7a72;
+      --ease: cubic-bezier(.2,.8,.2,1);
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--krem);
@@ -71,421 +94,411 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
+    a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--zlatna); outline-offset: 3px; }
 
-    /* ===== HEADER ===== */
+    /* HEADER (isti kao na početnoj) */
     header {
-      background: linear-gradient(135deg, var(--zelena-tamna) 0%, var(--zelena) 100%);
-      color: white;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(15,47,20,0.92);
+      -webkit-backdrop-filter: saturate(1.4) blur(14px);
+      backdrop-filter: saturate(1.4) blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-
-    nav {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1.1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    nav.glavni {
+      max-width: 1240px; margin: 0 auto;
+      padding: 0 28px; height: 76px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-
-    .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
-
+    .logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
     .logo-icon {
-      width: 38px; height: 38px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      border: 1.5px solid rgba(255,255,255,0.3);
+      width:40px; height:40px;
+      background: linear-gradient(135deg, #4caf50, #1b5e20);
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem;
+      box-shadow: 0 2px 12px rgba(76,175,80,0.4);
+    }
+    .logo-text {
+      font-family:'Playfair Display',serif;
+      font-size:1.5rem; font-weight:700; color:white; letter-spacing:-0.3px;
+    }
+    .logo-text span { color:var(--zlatna-svetla); }
+    nav.glavni ul { display:flex; list-style:none; gap:4px; align-items:center; }
+    nav.glavni ul li a {
+      color:rgba(255,255,255,0.88);
+      text-decoration:none;
+      font-size:0.9rem; font-weight:500;
+      padding:0.55rem 0.95rem;
+      border-radius:50px;
+      transition:all 0.2s;
+    }
+    nav.glavni ul li a:hover { background:rgba(255,255,255,0.14); color:white; }
+    .nav-cta a {
+      background: var(--zlatna) !important;
+      color: #1b1b1b !important;
+      font-weight: 700 !important;
+      padding: 0.55rem 1.2rem !important;
+      margin-left: 6px;
+    }
+    .nav-cta a:hover { background: var(--zlatna-svetla) !important; }
+    .hamburger {
+      display:none; flex-direction:column; gap:5px;
+      cursor:pointer; background:none; border:none;
+    }
+    .hamburger span {
+      width:26px; height:2.5px;
+      background:white; border-radius:3px; display:block;
     }
 
-    .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white; }
-    .logo-text span { color: var(--zlatna-svetla); }
-
-    nav ul { display: flex; list-style: none; gap: 0.2rem; align-items: center; }
-
-    nav ul li a {
-      color: rgba(255,255,255,0.88);
-      text-decoration: none;
-      font-size: 0.88rem; font-weight: 500;
-      padding: 0.45rem 0.85rem;
-      border-radius: 50px;
-      transition: all 0.2s;
-    }
-
-    nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
-
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
-    .hamburger span { width: 26px; height: 2.5px; background: white; border-radius: 3px; display: block; }
-
-    /* ===== HERO ===== */
-    .page-hero {
-      background: linear-gradient(135deg, #f0f7f0 0%, #e8f5e9 60%, #dcedc8 100%);
-      border-bottom: 1px solid rgba(76,175,80,0.15);
-      padding: 3rem 1.5rem 2.5rem;
-      text-align: center;
+    /* HERO */
+    .cat-hero {
       position: relative;
-      overflow: hidden;
+      color: white;
+      padding: 56px 1.5rem 130px;
+      text-align: center;
+      background-color: #1d5a27;
+      background:
+        radial-gradient(900px 480px at 85% 0%, rgba(245,166,35,0.18), transparent 60%),
+        linear-gradient(160deg, rgba(15,47,20,0.74), rgba(29,90,39,0.5) 80%),
+        url('hero-pozadina.jpg') no-repeat center center / cover;
     }
-
-    .page-hero::before {
-      content: '🌿';
-      position: absolute;
-      font-size: 14rem; opacity: 0.05;
-      right: -3rem; top: -3rem;
-      line-height: 1; pointer-events: none;
+    .cat-hero::after {
+      content: "";
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 130px;
+      background: linear-gradient(to bottom, rgba(250,247,240,0), var(--krem));
+      pointer-events: none; z-index: 1;
     }
-
+    .cat-hero > * { position: relative; z-index: 2; }
     .breadcrumb {
-      display: flex; align-items: center; gap: 0.5rem;
-      justify-content: center;
-      margin-bottom: 1rem;
-      font-size: 0.82rem; color: var(--siva);
+      display:flex; align-items:center; gap:0.5rem;
+      justify-content:center;
+      margin-bottom:1.2rem;
+      font-size:0.85rem; color:rgba(255,255,255,0.8);
+    }
+    .breadcrumb a { color:var(--zlatna-svetla); text-decoration:none; }
+    .breadcrumb a:hover { text-decoration:underline; }
+    .breadcrumb span { opacity:0.6; }
+    .cat-badge {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.28);
+      color:#fff;
+      font-size:0.78rem; font-weight:600;
+      letter-spacing:1px; text-transform:uppercase;
+      padding:0.4rem 1.1rem; border-radius:50px;
+      margin-bottom:1rem;
+    }
+    .cat-title {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2.4rem,5vw,3.6rem);
+      font-weight:700; color:#fff;
+      margin-bottom:0.8rem; line-height:1.1; letter-spacing:-0.02em;
+      text-shadow: 0 2px 18px rgba(0,0,0,0.35);
+    }
+    .cat-desc {
+      color:#e3f0e4; font-size:1.05rem;
+      max-width:600px; margin:0 auto 1.8rem; line-height:1.7;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.35);
+    }
+    .cat-tags { display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; }
+    .cat-tag {
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.25);
+      color:#fff; font-size:0.82rem;
+      padding:0.35rem 0.9rem; border-radius:50px; font-weight:500;
     }
 
-    .breadcrumb a { color: var(--zelena); text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
-    .breadcrumb span { opacity: 0.5; }
-
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: rgba(76,175,80,0.12);
-      border: 1px solid rgba(76,175,80,0.3);
-      color: var(--zelena);
-      font-size: 0.78rem; font-weight: 600;
-      letter-spacing: 1px; text-transform: uppercase;
-      padding: 0.35rem 1rem; border-radius: 50px;
-      margin-bottom: 1rem;
-    }
-
-    .page-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 700; color: var(--zemlja);
-      margin-bottom: 0.8rem; line-height: 1.2;
-    }
-
-    .page-desc {
-      color: var(--siva); font-size: 1rem;
-      max-width: 560px; margin: 0 auto 1.5rem; line-height: 1.7;
-    }
-
-    .hero-stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
-
-    .hero-stat {
-      display: flex; align-items: center; gap: 0.4rem;
-      font-size: 0.88rem; color: #555; font-weight: 500;
-    }
-
-    .hero-stat i { color: var(--zelena); }
-
-    /* ===== TOOLBAR ===== */
-    .toolbar {
-      background: white;
-      border-bottom: 1px solid #e8e8e8;
-      padding: 1rem 1.5rem;
-      position: sticky;
-      top: 62px;
-      z-index: 50;
-    }
-
-    .toolbar-inner {
-      max-width: 1400px; margin: 0 auto;
-      display: flex; align-items: center;
-      gap: 1rem; flex-wrap: wrap;
-    }
-
-    .search-wrap { flex: 1; min-width: 200px; position: relative; }
-
-    .search-wrap i {
-      position: absolute; left: 0.9rem; top: 50%;
-      transform: translateY(-50%);
-      color: #aaa; font-size: 0.9rem;
-    }
-
-    #search-input {
-      width: 100%;
-      padding: 0.6rem 1rem 0.6rem 2.4rem;
-      border: 1.5px solid #e0e0e0; border-radius: 10px;
-      font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
-      background: var(--krem); outline: none;
-      transition: border-color 0.2s;
-    }
-
-    #search-input:focus { border-color: var(--zelena-svetla); background: white; }
-
-    .filter-group { display: flex; align-items: center; gap: 0.6rem; }
-    .filter-label { font-size: 0.82rem; color: var(--siva); font-weight: 500; white-space: nowrap; }
-
-    select.filter-select {
-      padding: 0.55rem 0.9rem;
-      border: 1.5px solid #e0e0e0; border-radius: 10px;
-      font-size: 0.85rem; font-family: 'DM Sans', sans-serif;
-      background: white; color: var(--tekst);
-      cursor: pointer; outline: none; transition: border-color 0.2s;
-    }
-
-    select.filter-select:focus { border-color: var(--zelena-svetla); }
-
-    #count-label { font-size: 0.82rem; color: var(--siva); font-weight: 500; white-space: nowrap; margin-left: auto; }
-
-    /* ===== GRID — 4 kolone ===== */
+    /* SADRŽAJ */
     .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 5rem;
-      flex: 1;
+      width:100%; max-width:1240px; margin:-30px auto 0;
+      padding:0 28px 5rem; flex:1;
+      position:relative; z-index:3;
     }
-
-    .sellers-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.4rem;
+    .filter-bar {
+      background:white; border:1px solid #e9e3d3; border-radius:20px;
+      box-shadow:0 2px 14px rgba(20,50,20,0.07);
+      padding:0.9rem 1.3rem; margin-bottom:20px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; flex-wrap:wrap;
     }
-
-    /* ===== KARTICA ===== */
-    .seller-card {
-      background: white;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
-      border: 1px solid rgba(0,0,0,0.05);
-      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
-      display: flex;
-      flex-direction: column;
-      animation: fadeUp 0.3s ease both;
+    .filter-bar h2 {
+      font-family:'Playfair Display',serif;
+      font-size:1.25rem; color:var(--zemlja); font-weight:700;
     }
+    .filter-right { display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap; }
+    .filter-label { font-size:0.85rem; color:var(--siva); font-weight:500; }
+    #sort-select {
+      padding:0.5rem 0.9rem; border:1.5px solid #e0dccd; border-radius:50px;
+      font-size:0.85rem; font-family:'DM Sans',sans-serif;
+      background:white; color:var(--tekst); cursor:pointer; outline:none;
+    }
+    #sort-select:focus { border-color: var(--zelena-svetla); }
+    #count-label { font-size:0.85rem; color:var(--siva); font-weight:600; }
 
+    .products-grid {
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:20px;
+    }
+    .products-grid > * { min-width:0; }
+
+    .product-card {
+      background:white;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 2px 14px rgba(20,50,20,0.07);
+      border:1px solid #e9e3d3;
+      transition:transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+      display:flex; flex-direction:column;
+      animation:fadeUp 0.5s var(--ease) both;
+    }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(16px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+    .product-card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 22px 44px rgba(20,50,20,0.16);
+    }
+    .product-img {
+      position:relative;
+      aspect-ratio: 4/3;
+      overflow:hidden;
+      background:var(--krem-tamna);
+    }
+    .product-img img {
+      width:100%; height:100%; object-fit:cover; display:block;
+      transition:transform 0.7s var(--ease);
+    }
+    .product-card:hover .product-img img { transform:scale(1.06); }
+    .fresh-badge {
+      position:absolute; top:10px; left:10px;
+      background:rgba(255,255,255,0.93);
+      color:var(--zelena); font-size:0.72rem; font-weight:700;
+      padding:0.28rem 0.7rem; border-radius:50px;
+    }
+    .product-info {
+      padding:1.2rem 1.3rem 1.4rem;
+      display:flex; flex-direction:column; flex:1;
+    }
+    .product-title {
+      font-family:'Playfair Display',serif;
+      font-size:1.2rem; font-weight:700;
+      color:var(--zemlja); margin-bottom:0.6rem; line-height:1.3;
+    }
+    .product-cena {
+      font-size:1.15rem; font-weight:700; color:var(--zelena); margin-bottom:0.6rem;
+    }
+    .product-meta {
+      display:flex; flex-direction:column; gap:0.25rem;
+      font-size:0.87rem; color:#555; margin-bottom:0.7rem;
+    }
+    .product-opis {
+      font-size:0.85rem; color:var(--siva); line-height:1.5; margin-bottom:0.7rem;
+      display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .product-datum { font-size:0.75rem; color:#aaa; margin-bottom:1rem; }
+    .card-actions { display:flex; gap:0.5rem; margin-top:auto; }
+    .btn {
+      flex:1;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:0.4rem;
+      background:var(--zelena);
+      color:white;
+      padding:0.75rem 1.2rem;
+      border-radius:50px;
+      text-decoration:none;
+      font-weight:700; font-size:0.9rem;
+      border:none; cursor:pointer; font-family:'DM Sans',sans-serif;
+      transition:all 0.22s;
+    }
+    .btn:hover { background:var(--zelena-tamna); transform:translateY(-2px); }
+    .btn-mali {
+      flex:0 0 auto;
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:0.75rem 0.95rem; border-radius:50px;
+      font-weight:700; font-size:0.88rem; cursor:pointer;
+      font-family:'DM Sans',sans-serif; transition:all 0.22s;
+    }
+    .btn-zelja { background:#fff0f5; color:#c62870; border:1.5px solid #ffd6e7; }
+    .btn-zelja:hover { background:#c62870; color:white; border-color:#c62870; }
+    .btn-obrisi { background:#fff0f0; color:#c62828; border:1.5px solid #ffcdd2; }
+    .btn-obrisi:hover { background:#c62828; color:white; border-color:#c62828; }
+
+    .loading-wrap { display:flex; flex-direction:column; align-items:center; padding:4rem 0; gap:1rem; color:var(--siva); }
+    .spinner { width:44px; height:44px; border:4px solid #e0dccd; border-top-color:var(--zelena-svetla); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .empty-state { text-align:center; max-width:500px; margin:2rem auto; padding:3rem 2rem; background:white; border-radius:24px; border:1px solid #e9e3d3; box-shadow:0 2px 14px rgba(20,50,20,0.07); }
+    .empty-state .empty-icon { font-size:3rem; margin-bottom:1rem; }
+    .empty-state h3 { font-family:'Playfair Display',serif; color:var(--zemlja); margin-bottom:0.7rem; }
+    .empty-state p { color:var(--siva); line-height:1.6; margin-bottom:1.2rem; }
+    .empty-state .btn { display:inline-flex; flex:none; }
+
+    /* SEO TEKST + FAQ */
+    .seo-info {
+      background:white; border-top:1px solid #e9e3d3;
+      padding:3.5rem 1.5rem;
+    }
+    .seo-info-inner { max-width:900px; margin:0 auto; }
+    .seo-info h2 {
+      font-family:'Playfair Display',serif;
+      font-size:1.7rem; color:var(--zemlja); margin-bottom:1rem;
+    }
+    .seo-info h3 {
+      font-family:'Playfair Display',serif;
+      font-size:1.3rem; color:var(--zemlja); margin:2rem 0 0.8rem;
+    }
+    .seo-info p {
+      color:var(--siva); line-height:1.8;
+      font-size:0.95rem; margin-bottom:1rem;
+    }
+    .faq details {
+      border:1px solid #e9e3d3; border-radius:14px;
+      padding:0.9rem 1.1rem; margin-bottom:0.6rem; background:var(--krem);
+    }
+    .faq summary {
+      cursor:pointer; font-weight:600; color:var(--zemlja); font-size:0.98rem;
+    }
+    .faq details p { margin:0.7rem 0 0; }
+    .seo-pills { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.2rem; }
+    .seo-pill {
+      background:var(--krem-tamna); color:#555;
+      font-size:0.8rem; padding:0.3rem 0.75rem;
+      border-radius:50px; font-weight:500; text-decoration:none;
+    }
+    a.seo-pill:hover { background:var(--zelena); color:white; }
+
+    /* FOOTER */
+    footer {
+      background:#4a3128; color:#e9dccf;
+      text-align:center; padding:3rem 1.5rem 2rem;
+    }
+    footer a { color:#c8e6c9; text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+    .footer-logo {
+      font-family:'Playfair Display',serif;
+      font-size:1.6rem; color:#fff; margin-bottom:0.5rem;
     }
 
-    .seller-card:hover {
-      transform: translateY(-8px) scale(1.01);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+    /* RESPONSIVE */
+    @media (max-width:1100px) {
+      .products-grid { grid-template-columns:repeat(3, 1fr); }
     }
-
-    /* Slika kontejner — placeholder dok se slika učita */
-    .seller-img {
-      height: 190px;
-      overflow: hidden;
-      position: relative;
-      background: var(--krem-tamna);
-      /* Shimmer dok se slika učita */
-      background: linear-gradient(90deg, #ede9e0 25%, #f5f2ea 50%, #ede9e0 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
+    @media (max-width:780px) {
+      .products-grid { grid-template-columns:repeat(2, 1fr); }
     }
-
-    /* Kad se slika učita, skloni shimmer */
-    .seller-img.loaded {
-      background: var(--krem-tamna);
-      animation: none;
-    }
-
-    .seller-img img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease, opacity 0.4s ease;
-      opacity: 0; /* skrivena dok se ne učita */
-      display: block;
-    }
-
-    .seller-img img.img-loaded { opacity: 1; }
-
-    .seller-card:hover .seller-img img { transform: scale(1.06); }
-
-    .seller-nisa-badge {
-      position: absolute;
-      bottom: 10px; left: 10px;
-      background: rgba(255,255,255,0.93);
-      backdrop-filter: blur(6px);
-      color: var(--zelena);
-      font-size: 0.7rem; font-weight: 700;
-      padding: 0.25rem 0.6rem;
-      border-radius: 50px;
-      letter-spacing: 0.2px;
-    }
-
-    .seller-info {
-      padding: 1.2rem 1.3rem 1.4rem;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .seller-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem; font-weight: 700;
-      color: var(--zemlja);
-      margin-bottom: 0.35rem;
-      line-height: 1.3;
-    }
-
-    .seller-location {
-      color: var(--siva); font-size: 0.82rem;
-      margin-bottom: 0.8rem;
-      display: flex; align-items: center; gap: 0.3rem;
-    }
-
-    .seller-description {
-      font-size: 0.88rem; color: #555;
-      line-height: 1.6; flex: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .prikazi-vise-btn {
-      background: none; border: none;
-      color: var(--zelena); cursor: pointer; font-weight: 600;
-      font-size: 0.8rem; padding: 0; margin-bottom: 1rem;
-      font-family: 'DM Sans', sans-serif; text-align: left;
-    }
-
-    .prikazi-vise-btn:hover { color: var(--zelena-tamna); }
-
-    .seller-btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-      background: var(--zelena); color: white;
-      padding: 0.65rem 1.2rem; border-radius: 50px;
-      text-decoration: none; font-weight: 600; font-size: 0.88rem;
-      transition: all 0.22s; margin-top: auto;
-    }
-
-    .seller-btn:hover { background: var(--zelena-tamna); transform: scale(1.03); }
-
-    /* ===== SKELETON ===== */
-    .skeleton-card {
-      background: white; border-radius: 18px; overflow: hidden;
-      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .skeleton-img {
-      height: 190px;
-      background: linear-gradient(90deg, #ede9e0 25%, #f5f2ea 50%, #ede9e0 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-    }
-
-    .skeleton-info { padding: 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 0.7rem; }
-
-    .skeleton-line {
-      height: 13px; border-radius: 8px;
-      background: linear-gradient(90deg, #ede9e0 25%, #f5f2ea 50%, #ede9e0 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-    }
-
-    .skeleton-line.title { height: 18px; width: 65%; }
-    .skeleton-line.loc { width: 42%; }
-    .skeleton-line.d1 { width: 92%; }
-    .skeleton-line.d2 { width: 78%; }
-    .skeleton-line.d3 { width: 55%; }
-    .skeleton-line.btn { height: 38px; width: 55%; border-radius: 50px; margin-top: 0.3rem; }
-
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* ===== SLOW SERVER ===== */
-    .server-notice {
-      display: none;
-      background: #fff8e6;
-      border: 1px solid rgba(245,166,35,0.3);
-      border-radius: 12px;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      color: #92400e; font-size: 0.9rem;
-    }
-
-    /* ===== EMPTY / ERROR ===== */
-    .state-box {
-      grid-column: 1 / -1;
-      text-align: center; padding: 4rem 2rem;
-      background: white; border-radius: 20px;
-      box-shadow: 0 2px 14px rgba(0,0,0,0.06);
-    }
-
-    .state-box .icon { font-size: 3rem; margin-bottom: 1rem; }
-
-    .state-box h3 { font-family: 'Playfair Display', serif; color: var(--zemlja); margin-bottom: 0.7rem; }
-    .state-box p { color: var(--siva); line-height: 1.6; margin-bottom: 1.5rem; }
-
-    .btn-retry {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--zelena); color: white;
-      padding: 0.8rem 2rem; border-radius: 50px;
-      border: none; cursor: pointer;
-      font-size: 0.95rem; font-weight: 600;
-      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
-    }
-
-    .btn-retry:hover { background: var(--zelena-tamna); }
-
-    /* ===== SEO INFO ===== */
-    .seo-info { background: white; border-top: 1px solid #e8e8e8; padding: 3rem 1.5rem; }
-    .seo-info-inner { max-width: 900px; margin: 0 auto; }
-    .seo-info h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--zemlja); margin-bottom: 1rem; }
-    .seo-info p { color: var(--siva); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem; }
-    .seo-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
-    .seo-pill { background: var(--krem-tamna); color: #555; font-size: 0.8rem; padding: 0.3rem 0.75rem; border-radius: 50px; font-weight: 500; }
-
-    /* ===== FOOTER ===== */
-    footer { background: var(--zemlja); color: white; text-align: center; padding: 3rem 1.5rem 2rem; }
-    footer a { color: #c8e6c9; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1100px) {
-      .sellers-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    @media (max-width: 768px) {
-      .hamburger { display: flex; }
-      nav ul {
-        display: none;
-        position: absolute; top: 62px; left: 0; right: 0;
-        background: rgba(27,94,32,0.97);
-        backdrop-filter: blur(12px);
-        flex-direction: column;
-        padding: 1.2rem 1.5rem 1.8rem;
-        gap: 0.4rem; z-index: 999;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+    @media (max-width:768px) {
+      nav.glavni { padding:0 16px; height:68px; }
+      .hamburger { display:flex; }
+      nav.glavni ul {
+        display:none;
+        position:absolute; top:100%; left:0; right:0;
+        background:rgba(15,47,20,0.98);
+        flex-direction:column; align-items:stretch;
+        padding:1.2rem 1.5rem 1.8rem;
+        gap:0.4rem; z-index:999;
+        border-bottom:1px solid rgba(255,255,255,0.1);
       }
-      nav ul.open { display: flex; }
-      nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
-      .toolbar { top: 62px; }
-      .toolbar-inner { flex-wrap: wrap; }
-      .search-wrap { min-width: 100%; }
-      #count-label { margin-left: 0; }
-      .sellers-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-      .seller-img { height: 150px; }
-      .seller-name { font-size: 1rem; }
-      .seller-info { padding: 1rem; }
-      .page-title { font-size: 1.8rem; }
-      .hero-stats { gap: 1rem; }
-      nav { position: relative; }
-    }
+      nav.glavni ul.open { display:flex; }
+      nav.glavni ul li a { display:block; padding:0.7rem 1rem; font-size:1rem; }
+      .nav-cta a { margin-left:0; text-align:center; }
 
-    @media (max-width: 480px) {
-      .sellers-grid { grid-column: 1fr; }
-    }
+      .cat-hero {
+        padding:40px 1rem 100px;
+        background-position: 0 0, 0 0, 60% center;
+        background-size: auto, auto, cover;
+      }
+      .cat-hero::after { height:100px; }
+      .cat-desc { font-size:1rem; }
 
-    @media (min-width: 769px) { .hamburger { display: none; } }
+      .container { padding:0 16px 4rem; margin-top:-24px; }
+      .products-grid { gap:12px; }
+      .product-card { border-radius:20px; }
+      .product-title { font-size:1rem; }
+      .product-info { padding:0.9rem; }
+      .btn { padding:0.65rem 0.8rem; font-size:0.82rem; }
+      .filter-bar { border-radius:16px; padding:0.8rem 1rem; }
+    }
+    @media (max-width:460px) {
+      .products-grid { grid-template-columns:1fr; }
+    }
+    @media (min-width:769px) {
+      .hamburger { display:none; }
+    }
+    @media (hover:none) {
+      .product-card:hover { transform:none; box-shadow:0 2px 14px rgba(20,50,20,0.07); }
+      .product-card:hover .product-img img { transform:none; }
+      .btn:hover { transform:none; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+    }
+    .hero-stats { display:flex; gap:0.6rem; justify-content:center; flex-wrap:wrap; }
+    .hero-stat { background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.25); color:#fff; font-size:0.82rem; padding:0.35rem 0.9rem; border-radius:50px; font-weight:500; }
+    .toolbar { background:white; border:1px solid #e9e3d3; border-radius:20px; box-shadow:0 2px 14px rgba(20,50,20,0.07); padding:1rem 1.2rem; margin-bottom:20px; }
+    .toolbar-row { display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap; }
+    .search-wrap { flex:1; min-width:220px; position:relative; }
+    .search-wrap i { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#aaa; font-size:0.9rem; }
+    #search-input { width:100%; padding:0.65rem 1rem 0.65rem 2.5rem; border:1.5px solid #e0dccd; border-radius:50px; font-size:0.92rem; font-family:'DM Sans',sans-serif; background:var(--krem); outline:none; transition:border-color 0.2s; }
+    #search-input:focus { border-color:var(--zelena-svetla); background:white; }
+    #sort-select { padding:0.6rem 0.9rem; border:1.5px solid #e0dccd; border-radius:50px; font-size:0.85rem; font-family:'DM Sans',sans-serif; background:white; color:var(--tekst); cursor:pointer; outline:none; }
+    #sort-select:focus { border-color:var(--zelena-svetla); }
+    #count-label { font-size:0.85rem; color:var(--siva); font-weight:600; white-space:nowrap; }
+    .chips { display:flex; gap:0.5rem; margin-top:0.9rem; overflow-x:auto; padding-bottom:4px; scrollbar-width:thin; }
+    .chip { flex:0 0 auto; border:1.5px solid #e0dccd; background:white; color:#555; font-size:0.82rem; font-weight:600; padding:0.4rem 0.95rem; border-radius:50px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+    .chip:hover { border-color:var(--zelena-svetla); color:var(--zelena); }
+    .chip.aktivan { background:var(--zelena); border-color:var(--zelena); color:white; }
+    .sellers-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+    .sellers-grid > * { min-width:0; }
+    .seller-card { background:white; border-radius:24px; overflow:hidden; box-shadow:0 2px 14px rgba(20,50,20,0.07); border:1px solid #e9e3d3; transition:transform 0.35s var(--ease), box-shadow 0.35s var(--ease); display:flex; flex-direction:column; }
+    .seller-card:hover { transform:translateY(-6px); box-shadow:0 22px 44px rgba(20,50,20,0.16); }
+    .seller-img { position:relative; aspect-ratio:4/3; overflow:hidden; background:var(--krem-tamna); display:flex; align-items:center; justify-content:center; font-size:2.6rem; }
+    .seller-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.7s var(--ease); }
+    .seller-card:hover .seller-img img { transform:scale(1.06); }
+    .seller-nisa-badge { position:absolute; bottom:10px; left:10px; z-index:2; background:rgba(255,255,255,0.93); color:var(--zelena); font-size:0.72rem; font-weight:700; padding:0.28rem 0.7rem; border-radius:50px; }
+    .seller-info { padding:1.2rem 1.3rem 1.4rem; display:flex; flex-direction:column; flex:1; }
+    .seller-name { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; color:var(--zemlja); margin-bottom:0.3rem; line-height:1.3; }
+    .seller-location { color:var(--siva); font-size:0.84rem; margin-bottom:0.7rem; }
+    .seller-description { font-size:0.88rem; color:#555; line-height:1.6; margin-bottom:0.5rem; flex:1; }
+    .prikazi-vise-btn { background:none; border:none; color:var(--zelena); cursor:pointer; font-weight:600; font-size:0.8rem; padding:0; margin-bottom:0.9rem; font-family:'DM Sans',sans-serif; text-align:left; }
+    .prikazi-vise-btn:hover { color:var(--zelena-tamna); }
+    .seller-btn { display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; background:var(--zelena); color:white; padding:0.75rem 1.2rem; border-radius:50px; text-decoration:none; font-weight:700; font-size:0.9rem; transition:all 0.22s; margin-top:auto; }
+    .seller-btn:hover { background:var(--zelena-tamna); transform:translateY(-2px); }
+    .skeleton-card { background:white; border-radius:24px; overflow:hidden; border:1px solid #e9e3d3; }
+    .skeleton-img { aspect-ratio:4/3; background:#ede9e0; }
+    .skeleton-info { padding:1.2rem 1.3rem; display:flex; flex-direction:column; gap:0.7rem; }
+    .skeleton-line { height:13px; border-radius:8px; background:#ede9e0; }
+    .skeleton-line.t { height:18px; width:65%; } .skeleton-line.l { width:42%; } .skeleton-line.d { width:90%; }
+    .server-notice { display:none; background:#fff8e6; border:1px solid rgba(245,166,35,0.3); border-radius:14px; padding:0.9rem 1.3rem; margin-bottom:1rem; text-align:center; color:#92400e; font-size:0.9rem; }
+    .state-box { grid-column:1 / -1; text-align:center; padding:3.5rem 2rem; background:white; border-radius:24px; border:1px solid #e9e3d3; }
+    .state-box .icon { font-size:3rem; margin-bottom:1rem; }
+    .state-box h3 { font-family:'Playfair Display',serif; color:var(--zemlja); margin-bottom:0.7rem; }
+    .state-box p { color:var(--siva); line-height:1.6; margin-bottom:1.2rem; }
+    .btn-retry, .btn-vise { display:inline-flex; align-items:center; gap:0.5rem; background:var(--zelena); color:white; padding:0.8rem 2rem; border-radius:50px; border:none; cursor:pointer; font-size:0.95rem; font-weight:700; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+    .btn-retry:hover, .btn-vise:hover { background:var(--zelena-tamna); }
+    .vise-wrap { text-align:center; margin-top:2rem; }
+    @media (max-width:1100px) { .sellers-grid { grid-template-columns:repeat(3,1fr); } }
+    @media (max-width:780px) { .sellers-grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:768px) {
+      .sellers-grid { gap:12px; }
+      .seller-card { border-radius:20px; }
+      .seller-name { font-size:1rem; }
+      .seller-info { padding:0.9rem; }
+      .toolbar { border-radius:16px; padding:0.8rem 1rem; }
+      .search-wrap { min-width:100%; }
+    }
+    @media (max-width:460px) { .sellers-grid { grid-template-columns:1fr; } }
+    @media (hover:none) { .seller-card:hover { transform:none; box-shadow:0 2px 14px rgba(20,50,20,0.07); } .seller-card:hover .seller-img img { transform:none; } }
   </style>
 </head>
 <body>
 
 <header>
-  <nav>
+  <nav class="glavni" aria-label="Glavni meni">
     <a href="index.html" class="logo">
       <div class="logo-icon">🌿</div>
       <span class="logo-text">Lokalni<span>Plodovi</span></span>
@@ -499,6 +512,7 @@
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
       <li><a href="blog.html">Blog</a></li>
+      <li><a href="oglasnik.html">Oglasnik</a></li>
       <li id="moj-profil-li" style="display:none;">
         <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
       </li>
@@ -506,82 +520,83 @@
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
       <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
+      <li id="postani-prodavac-li" class="nav-cta"><a href="registracija.html">Registruj se</a></li>
     </ul>
   </nav>
 </header>
 
-<section class="page-hero">
+<section class="cat-hero">
   <nav class="breadcrumb" aria-label="breadcrumb">
     <a href="index.html">Početna</a>
     <span>›</span>
-    <strong style="color:var(--tekst);">Svi prodavci</strong>
+    <strong style="color:#fff;">Svi prodavci</strong>
   </nav>
-  <div class="hero-badge">🌿 Lokalni farmeri</div>
-  <h1 class="page-title">Svi prodavci</h1>
-  <p class="page-desc">
-    Pronađite proizvođače iz vaše okoline  sveže, domaće i provereno.
-    Kliknite na profil da vidite detalje, proizvode i kontakt.
-  </p>
-  <div class="hero-stats">
-    <div class="hero-stat"><i class="fas fa-store"></i> <span id="stat-broj">...</span> aktivnih prodavaca</div>
-    <div class="hero-stat"><i class="fas fa-map-marker-alt"></i> Cela Srbija</div>
-    <div class="hero-stat"><i class="fas fa-leaf"></i> Direktno sa imanja</div>
-  </div>
+  <div class="cat-badge">🌿 Lokalni farmeri</div>
+  <h1 class="cat-title">Svi prodavci</h1>
+  <p class="cat-desc">Pronađite proizvođače iz svoje okoline. Kliknite na profil da vidite detalje, proizvode i kontakt.</p>
+  <div class="hero-stats"><span class="hero-stat" id="stat-broj">🏪 Lokalni prodavci</span> <span class="hero-stat">📍 Cela Srbija</span> <span class="hero-stat">🏡 Direktno sa imanja</span></div>
 </section>
 
-<div class="toolbar">
-  <div class="toolbar-inner">
-    <div class="search-wrap">
-      <i class="fas fa-search"></i>
-      <input type="text" id="search-input" placeholder="Pretraži po imenu, lokaciji ili niši..."
-             oninput="filterProdavci()">
-    </div>
-    <div class="filter-group">
-      <span class="filter-label">Niša:</span>
-      <select class="filter-select" id="nisa-select" onchange="filterProdavci()">
-        <option value="">Sve niše</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <span class="filter-label">Sortiraj:</span>
-      <select class="filter-select" id="sort-select" onchange="filterProdavci()">
+<main class="container">
+  <div class="toolbar">
+    <div class="toolbar-row">
+      <div class="search-wrap">
+        <i class="fas fa-search" aria-hidden="true"></i>
+        <input type="search" id="search-input" placeholder="Pretraži po imenu, mestu ili niši..." aria-label="Pretraga prodavaca" autocomplete="off">
+      </div>
+      <label class="filter-label" for="sort-select" style="font-size:0.85rem;color:var(--siva);font-weight:500;">Sortiraj:</label>
+      <select id="sort-select">
         <option value="novo">Najnoviji</option>
         <option value="ime">Ime (A-Ž)</option>
         <option value="lokacija">Lokacija (A-Ž)</option>
         <option value="nisa">Niša (A-Ž)</option>
       </select>
+      <span id="count-label" aria-live="polite"></span>
     </div>
-    <span id="count-label"></span>
+    <div class="chips" id="chips" role="group" aria-label="Niše"></div>
   </div>
-</div>
 
-<main class="container">
-  <div id="server-notice" class="server-notice">
-    ⏳ Server se budi, još nekoliko sekundi...
-  </div>
+  <div id="server-notice" class="server-notice">⏳ Server se budi, još nekoliko sekundi...</div>
   <div class="sellers-grid" id="prodavci-grid"></div>
+  <div class="vise-wrap" id="vise-wrap" style="display:none;"></div>
 </main>
 
 <section class="seo-info">
   <div class="seo-info-inner">
-    <h2>Pronađite lokalnog proizvođača u vašem kraju</h2>
-    <p>
-      LokalniPlodovi je platforma koja direktno povezuje kupce sa lokalnim farmerima i proizvođačima širom Srbije.
-      Bez posrednika, bez supermarketa  pravo sa imanja do vašeg stola.
-    </p>
-    <p>
-      Svaki prodavac na platformi je proveren lokalni proizvođač koji nudi sveže povrće, voće, med, mlečne proizvode,
-      meso, jaja ili lekovito bilje. Kontaktirajte direktno i dogovorite preuzimanje ili dostavu.
-    </p>
+    <h2>Pronađite lokalnog proizvođača u svom kraju</h2>
+    <p>LokalniPlodovi je platforma koja povezuje kupce sa lokalnim farmerima i proizvođačima širom Srbije. Bez posrednika, direktno sa imanja do vašeg stola.</p>
+    <p>Prodavci nude povrće, voće, med, mlečne proizvode, meso, jaja, bilje i domaću radinost. Kontaktirajte ih direktno i dogovorite preuzimanje ili dostavu.</p>
+
+    <h3>Najčešća pitanja</h3>
+    <div class="faq">
+      <details>
+        <summary>Kako da kontaktiram prodavca?</summary>
+        <p>Otvorite profil prodavca i kontaktirajte ga porukom ili telefonom. Cenu, količinu i način preuzimanja ili dostave dogovarate direktno sa prodavcem.</p>
+      </details>
+      <details>
+        <summary>Kako da pronađem proizvođača u mom kraju?</summary>
+        <p>Pretražite listu po imenu ili mestu, ili izaberite nišu. Lokaciju prodavaca možete pogledati i na stranici <a href="mapa.html">Mapa</a>.</p>
+      </details>
+      <details>
+        <summary>Koje proizvode nude prodavci?</summary>
+        <p>Povrće, voće, med, mlečne proizvode, meso, jaja, bilje i domaću radinost. Ponuda zavisi od prodavaca koji su trenutno na platformi.</p>
+      </details>
+      <details>
+        <summary>Kako mogu da postanem prodavac?</summary>
+        <p><a href="registracija.html">Registrujte se kao prodavac</a>, napravite profil i dodajte proizvode sa slikom, cenom i količinom.</p>
+      </details>
+    </div>
+
+    <h3>Pogledajte ponudu po kategorijama</h3>
     <div class="seo-pills">
-      <span class="seo-pill">lokalni proizvođači Srbija</span>
-      <span class="seo-pill">domaći farmer kupovina</span>
-      <span class="seo-pill">sveži proizvodi direktno</span>
-      <span class="seo-pill">bez posrednika Srbija</span>
-      <span class="seo-pill">pijaca online</span>
-      <span class="seo-pill">domaće voće povrće</span>
-      <span class="seo-pill">lokalna hrana Srbija</span>
+      <a class="seo-pill" href="povrce.html">Domaće povrće</a>
+      <a class="seo-pill" href="voce.html">Domaće voće</a>
+      <a class="seo-pill" href="mlecni.html">Mlečni proizvodi</a>
+      <a class="seo-pill" href="meso.html">Meso i suhomesnato</a>
+      <a class="seo-pill" href="jaja.html">Domaća jaja</a>
+      <a class="seo-pill" href="med.html">Med i pčelinji proizvodi</a>
+      <a class="seo-pill" href="domaca-radinost.html">Domaća radinost</a>
+      <a class="seo-pill" href="zdravlje.html">Bilje i zdravlje</a>
     </div>
   </div>
 </section>
@@ -601,16 +616,22 @@
 <script>
   const backendUrl = 'https://lokalni-backend-production.up.railway.app';
   const MAX_OPIS = 130;
+  const PO_STRANI = 24;
   const CACHE_KEY = 'prodavci_cache';
   const CACHE_TTL = 5 * 60 * 1000;
 
   let sviProdavci = [];
+  let filtrirani = [];
+  let prikazano = PO_STRANI;
+  let aktivnaNisa = '';
 
-  // Keep-alive ping
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
   function pingBackend() { fetch(`${backendUrl}/test`).catch(() => {}); }
 
-  // Ista logika kao u generisi-prodavce.js — pravi isti naziv fajla
-  // za statičku stranicu prodavca (npr. "ПГ ПРОТИЋ" -> "pg-protic")
+  // Ista logika kao u generisi-prodavce.js: pravi isti naziv fajla za statičku stranicu prodavca
   function napraviSlug(ime) {
     const cirilicaLatinica = {
       а:'a', б:'b', в:'v', г:'g', д:'d', ђ:'dj', е:'e', ж:'z', з:'z', и:'i',
@@ -630,188 +651,158 @@
   }
 
   function linkKaProfilu(p) {
-    return `prodavac/${napraviSlug(p.ime)}-${p.id}.html`;
+    return `prodavac/${napraviSlug(p.ime)}-${encodeURIComponent(p.id)}.html`;
   }
+
+  // Cloudinary (besplatni paket): JEDNA veličina (w_400) svuda, ista kao ranije,
+  // pa se ne prave nove transformacije. Slike koje već imaju transformaciju ostaju netaknute.
+  function optimizujSliku(url) {
+    if (!url) return url;
+    url = String(url).trim();
+    if (url.indexOf('res.cloudinary.com') === -1) return url;
+    if (url.indexOf('/upload/') === -1) return url;
+    if (url.indexOf('/upload/w_') !== -1) return url;
+    return url.replace('/upload/', '/upload/w_400,c_fill,q_auto,f_auto/');
+  }
+
   pingBackend();
   setInterval(pingBackend, 10 * 60 * 1000);
 
-  // Nav
-  document.addEventListener('DOMContentLoaded', () => {
+  function initNav() {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
-    if (token) {
-      document.getElementById('moj-profil-li').style.display = 'list-item';
-      document.getElementById('odjavi-se-li').style.display = 'list-item';
-      document.getElementById('prijavi-se-li').style.display = 'none';
-      document.getElementById('postani-prodavac-li').style.display = 'none';
-      const link = document.getElementById('moj-profil-link');
-      if (link) link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
-    } else {
-      document.getElementById('moj-profil-li').style.display = 'none';
-      document.getElementById('odjavi-se-li').style.display = 'none';
-      document.getElementById('prijavi-se-li').style.display = 'list-item';
-      document.getElementById('postani-prodavac-li').style.display = 'list-item';
-    }
-
-    // Toolbar top dinamički
-    const headerH = document.querySelector('header').offsetHeight;
-    document.querySelector('.toolbar').style.top = headerH + 'px';
-  });
-
+    const loggedIn = !!token;
+    document.getElementById('moj-profil-li').style.display = loggedIn ? 'list-item' : 'none';
+    document.getElementById('odjavi-se-li').style.display = loggedIn ? 'list-item' : 'none';
+    document.getElementById('prijavi-se-li').style.display = loggedIn ? 'none' : 'list-item';
+    document.getElementById('postani-prodavac-li').style.display = loggedIn ? 'none' : 'list-item';
+    const link = document.getElementById('moj-profil-link');
+    if (link && token) link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+  }
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
 
-  // Popuni nisa filter dropdown
-  function popuniNiseFilter() {
-    const nise = [...new Set(sviProdavci.map(p => p.glavnaNisa).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'sr'));
-    const select = document.getElementById('nisa-select');
-    // Zadrži trenutnu vrednost ako postoji
-    const trenutna = select.value;
-    select.innerHTML = '<option value="">Sve niše</option>';
-    nise.forEach(n => {
-      const opt = document.createElement('option');
-      opt.value = n;
-      opt.textContent = n;
-      if (n === trenutna) opt.selected = true;
-      select.appendChild(opt);
-    });
+  // Niše kao čipovi (sa brojem prodavaca)
+  function popuniCipove() {
+    const brojac = {};
+    sviProdavci.forEach(p => { if (p.glavnaNisa) brojac[p.glavnaNisa] = (brojac[p.glavnaNisa] || 0) + 1; });
+    const nise = Object.keys(brojac).sort((a, b) => a.localeCompare(b, 'sr'));
+    const wrap = document.getElementById('chips');
+    wrap.innerHTML = '';
+    const napravi = (vrednost, tekst) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip' + (aktivnaNisa === vrednost ? ' aktivan' : '');
+      b.textContent = tekst;
+      b.setAttribute('aria-pressed', aktivnaNisa === vrednost ? 'true' : 'false');
+      b.onclick = () => { aktivnaNisa = vrednost; popuniCipove(); primeni(); };
+      wrap.appendChild(b);
+    };
+    napravi('', `Sve niše (${sviProdavci.length})`);
+    nise.forEach(n => napravi(n, `${n} (${brojac[n]})`));
   }
 
-  // Skeleton
   function prikaziSkeleton(n) {
     document.getElementById('prodavci-grid').innerHTML = Array(n).fill(`
       <div class="skeleton-card">
         <div class="skeleton-img"></div>
         <div class="skeleton-info">
-          <div class="skeleton-line title"></div>
-          <div class="skeleton-line loc"></div>
-          <div class="skeleton-line d1"></div>
-          <div class="skeleton-line d2"></div>
-          <div class="skeleton-line d3"></div>
-          <div class="skeleton-line btn"></div>
+          <div class="skeleton-line t"></div><div class="skeleton-line l"></div>
+          <div class="skeleton-line d"></div><div class="skeleton-line d"></div>
         </div>
       </div>`).join('');
+    document.getElementById('vise-wrap').style.display = 'none';
   }
 
-  // ── RENDER — kartice se pojave odmah, slike naknadno ──
-  function renderProdavci(lista) {
+  function kartica(p, i) {
+    const opis = p.opis || '';
+    const dugOpis = opis.length > MAX_OPIS;
+    const kratak = dugOpis ? opis.substring(0, MAX_OPIS) + '...' : opis;
+    const ime = p.ime || 'Bez imena';
+    const slika = (p.slika && String(p.slika).trim() !== '') ? optimizujSliku(p.slika) : '';
+    const prva = i < 4;
+    const id = encodeURIComponent(p.id);
+    const el = document.createElement('article');
+    el.className = 'seller-card';
+    el.innerHTML = `
+      <div class="seller-img">
+        ${slika ? `<img src="${esc(slika)}" alt="${esc(ime)} – lokalni proizvođač, ${esc(p.lokacija || 'Srbija')}" width="400" height="300" ${prva ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.remove()">` : '🌿'}
+        ${p.glavnaNisa ? `<span class="seller-nisa-badge">🌱 ${esc(p.glavnaNisa)}</span>` : ''}
+      </div>
+      <div class="seller-info">
+        <h3 class="seller-name">${esc(ime)}</h3>
+        <div class="seller-location">📍 ${esc(p.lokacija || 'Nepoznato')}</div>
+        <p class="seller-description" id="opis-${id}">${kratak ? esc(kratak) : '<em style="color:#bbb;">Nema opisa</em>'}</p>
+        ${dugOpis ? `<button type="button" class="prikazi-vise-btn" id="btn-${id}" onclick="prikaziVise('${id}')">Prikaži više ▼</button>` : ''}
+        <a href="${linkKaProfilu(p)}" class="seller-btn"><i class="fas fa-user"></i> Pogledaj profil</a>
+      </div>`;
+    return el;
+  }
+
+  function dodajKartice(od, do_) {
     const grid = document.getElementById('prodavci-grid');
-    const countLabel = document.getElementById('count-label');
-    countLabel.textContent = lista.length > 0 ? `${lista.length} prodavaca` : '';
+    const frag = document.createDocumentFragment();
+    for (let i = od; i < Math.min(do_, filtrirani.length); i++) frag.appendChild(kartica(filtrirani[i], i));
+    grid.appendChild(frag);
+  }
 
-    if (sviProdavci.length > 0) {
-      document.getElementById('stat-broj').textContent = sviProdavci.length + '+';
+  function osveziDugmeVise() {
+    const wrap = document.getElementById('vise-wrap');
+    const ostalo = filtrirani.length - prikazano;
+    if (ostalo > 0) {
+      wrap.style.display = 'block';
+      wrap.innerHTML = `<button type="button" class="btn-vise" onclick="prikaziJos()">Prikaži još (${ostalo})</button>`;
+    } else {
+      wrap.style.display = 'none';
+      wrap.innerHTML = '';
     }
+  }
 
-    if (lista.length === 0) {
-      grid.innerHTML = `
-        <div class="state-box">
-          <div class="icon">🔍</div>
-          <h3>Nema rezultata</h3>
-          <p>Pokušajte sa drugačijim pojmom pretrage.</p>
-        </div>`;
+  function prikaziJos() {
+    const staro = prikazano;
+    prikazano += PO_STRANI;
+    dodajKartice(staro, prikazano);
+    osveziDugmeVise();
+  }
+
+  function render() {
+    const grid = document.getElementById('prodavci-grid');
+    document.getElementById('count-label').textContent = filtrirani.length > 0 ? `${filtrirani.length} prodavaca` : '';
+    if (filtrirani.length === 0) {
+      grid.innerHTML = '<div class="state-box"><div class="icon">🔍</div><h3>Nema rezultata</h3><p>Pokušajte sa drugačijim pojmom pretrage.</p></div>';
+      document.getElementById('vise-wrap').style.display = 'none';
       return;
     }
-
     grid.innerHTML = '';
-
-    lista.forEach((p, i) => {
-      const opis = p.opis || '';
-      const dugOpis = opis.length > MAX_OPIS;
-      const kratakOpis = dugOpis ? opis.substring(0, MAX_OPIS) + '...' : opis;
-      const nisaBadge = p.glavnaNisa ? `<span class="seller-nisa-badge">🌱 ${p.glavnaNisa}</span>` : '';
-
-      const card = document.createElement('div');
-      card.className = 'seller-card';
-      card.style.animationDelay = `${i * 0.03}s`;
-
-      // Kartica se renderuje ODMAH sa imenom i opisom — bez slike
-      card.innerHTML = `
-        <div class="seller-img" id="img-wrap-${p.id}">
-          ${nisaBadge}
-        </div>
-        <div class="seller-info">
-          <h3 class="seller-name">${p.ime || 'Bez imena'}</h3>
-          <div class="seller-location"><i class="fas fa-map-marker-alt"></i> ${p.lokacija || 'Nepoznato'}</div>
-          <p class="seller-description" id="opis-${p.id}">${kratakOpis || '<em style="color:#bbb;">Nema opisa</em>'}</p>
-          ${dugOpis ? `<button class="prikazi-vise-btn" id="btn-${p.id}" onclick="prikaziVise('${p.id}')">Prikaži više ▼</button>` : ''}
-          <a href="${linkKaProfilu(p)}" class="seller-btn">
-            <i class="fas fa-user"></i> Pogledaj profil
-          </a>
-        </div>`;
-
-      grid.appendChild(card);
-
-      // Smanji Cloudinary sliku za brže učitavanje kartice; ako slika nije sa Cloudinary-ja, ostavi je netaknutu
-      function optimizujSlikuZaKarticu(url) {
-        if (!url) return url;
-        if (url.indexOf('res.cloudinary.com') === -1) return url;
-        if (url.indexOf('/upload/') === -1) return url;
-        if (url.indexOf('/upload/w_') !== -1) return url; // već ima transformaciju
-        return url.replace('/upload/', '/upload/w_400,c_fill,q_auto,f_auto/');
-      }
-
-      // Slika se učita u pozadini — kad je spremna, pojavi se
-      if (p.slika && p.slika.trim() !== '') {
-        const img = new Image();
-        img.alt = `${p.ime || 'Prodavac'} – lokalni farmer Srbija`;
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s ease;display:block;';
-
-        img.onload = () => {
-          const wrap = document.getElementById(`img-wrap-${p.id}`);
-          if (wrap) {
-            wrap.style.background = 'var(--krem-tamna)';
-            wrap.style.animation = 'none';
-            img.style.opacity = '1';
-            wrap.insertBefore(img, wrap.firstChild);
-          }
-        };
-
-        img.onerror = () => {
-          const wrap = document.getElementById(`img-wrap-${p.id}`);
-          if (wrap) {
-            wrap.style.background = 'var(--krem-tamna)';
-            wrap.style.animation = 'none';
-          }
-        };
-
-        // Počni učitavanje slike
-        img.src = optimizujSlikuZaKarticu(p.slika);
-      } else {
-        // Nema slike — skloni shimmer
-        const wrap = document.getElementById(`img-wrap-${p.id}`);
-        if (wrap) { wrap.style.background = 'var(--krem-tamna)'; wrap.style.animation = 'none'; }
-      }
-    });
+    dodajKartice(0, prikazano);
+    osveziDugmeVise();
   }
 
-  // Filter + sort
-  function filterProdavci() {
+  function primeni() {
     const q = document.getElementById('search-input').value.toLowerCase().trim();
     const sort = document.getElementById('sort-select').value;
-    const nisaFilter = document.getElementById('nisa-select').value;
-
     let lista = sviProdavci.filter(p => {
       const matchQ = !q || (p.ime || '').toLowerCase().includes(q)
         || (p.lokacija || '').toLowerCase().includes(q)
         || (p.glavnaNisa || '').toLowerCase().includes(q)
         || (p.opis || '').toLowerCase().includes(q);
-      const matchNisa = !nisaFilter || (p.glavnaNisa || '') === nisaFilter;
+      const matchNisa = !aktivnaNisa || (p.glavnaNisa || '') === aktivnaNisa;
       return matchQ && matchNisa;
     });
-
     if (sort === 'ime') lista.sort((a, b) => (a.ime || '').localeCompare(b.ime || '', 'sr'));
     if (sort === 'lokacija') lista.sort((a, b) => (a.lokacija || '').localeCompare(b.lokacija || '', 'sr'));
     if (sort === 'nisa') lista.sort((a, b) => (a.glavnaNisa || '').localeCompare(b.glavnaNisa || '', 'sr'));
-
-    renderProdavci(lista);
+    filtrirani = lista;
+    prikazano = PO_STRANI;
+    render();
   }
 
   function prikaziVise(id) {
-    const p = sviProdavci.find(x => String(x.id) === String(id));
+    const p = sviProdavci.find(x => encodeURIComponent(x.id) === id);
     if (!p) return;
     const opisEl = document.getElementById(`opis-${id}`);
     const btnEl = document.getElementById(`btn-${id}`);
+    if (!opisEl || !btnEl) return;
     if (btnEl.textContent.includes('više')) {
       opisEl.textContent = p.opis;
       btnEl.textContent = 'Prikaži manje ▲';
@@ -821,51 +812,61 @@
     }
   }
 
-  // Učitavanje
+  // Strukturirani podaci: lista prodavaca (ime + link), do 30 stavki
+  function upisiLd() {
+    const el = document.getElementById('ld-lista');
+    if (!el || !sviProdavci.length) return;
+    const data = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      'name': 'Lokalni proizvođači – LokalniPlodovi',
+      'numberOfItems': sviProdavci.length,
+      'itemListElement': sviProdavci.slice(0, 30).map((p, i) => ({
+        '@type': 'ListItem',
+        'position': i + 1,
+        'name': String(p.ime || 'Prodavac'),
+        'url': 'https://lokalniplodovi.rs/' + linkKaProfilu(p)
+      }))
+    };
+    el.textContent = JSON.stringify(data).replace(/</g, '\\u003c');
+  }
+
+  function postaviPodatke(podaci) {
+    sviProdavci = podaci;
+    document.getElementById('stat-broj').textContent = '🏪 ' + podaci.length + ' prodavaca';
+    popuniCipove();
+    primeni();
+    upisiLd();
+  }
+
   async function ucitajProdavce() {
     const grid = document.getElementById('prodavci-grid');
-
-    // Cache odmah
     try {
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
         const { vreme, podaci } = JSON.parse(cached);
         if (Date.now() - vreme < CACHE_TTL) {
-          sviProdavci = podaci;
-          popuniNiseFilter();
-          renderProdavci(podaci);
-          osvežiUPozadini();
+          postaviPodatke(podaci);
+          osveziUPozadini();
           return;
         }
       }
     } catch(e) {}
 
     prikaziSkeleton(8);
-
-    const sporTimer = setTimeout(() => {
-      document.getElementById('server-notice').style.display = 'block';
-    }, 3000);
+    const sporTimer = setTimeout(() => { document.getElementById('server-notice').style.display = 'block'; }, 3000);
 
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
-
       const response = await fetch(`${backendUrl}/svi-prodavci`, { signal: controller.signal });
       clearTimeout(timeoutId);
       clearTimeout(sporTimer);
       document.getElementById('server-notice').style.display = 'none';
-
       if (!response.ok) throw new Error(`${response.status}`);
-
-      sviProdavci = await response.json();
-
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: sviProdavci }));
-      } catch(e) {}
-
-      popuniNiseFilter();
-      renderProdavci(sviProdavci);
-
+      const podaci = await response.json();
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci })); } catch(e) {}
+      postaviPodatke(podaci);
     } catch(err) {
       clearTimeout(sporTimer);
       document.getElementById('server-notice').style.display = 'none';
@@ -874,29 +875,32 @@
         <div class="state-box">
           <div class="icon">${isTimeout ? '⏱️' : '⚠️'}</div>
           <h3>${isTimeout ? 'Server se budi...' : 'Greška pri učitavanju'}</h3>
-          <p>${isTimeout
-            ? 'Server je bio neaktivan. Pokušajte ponovo za nekoliko sekundi.'
-            : 'Proverite internet konekciju i pokušajte ponovo.'}</p>
-          <button class="btn-retry" onclick="ucitajProdavce()">
-            <i class="fas fa-redo"></i> Pokušaj ponovo
-          </button>
+          <p>${isTimeout ? 'Server je bio neaktivan. Pokušajte ponovo za nekoliko sekundi.' : 'Proverite internet konekciju i pokušajte ponovo.'}</p>
+          <button type="button" class="btn-retry" onclick="ucitajProdavce()"><i class="fas fa-redo"></i> Pokušaj ponovo</button>
         </div>`;
     }
   }
 
-  async function osvežiUPozadini() {
+  async function osveziUPozadini() {
     try {
       const response = await fetch(`${backendUrl}/svi-prodavci`);
       if (!response.ok) return;
       const novi = await response.json();
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: novi }));
-      if (JSON.stringify(novi) !== JSON.stringify(sviProdavci)) {
-        sviProdavci = novi;
-        popuniNiseFilter();
-        filterProdavci();
-      }
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ vreme: Date.now(), podaci: novi })); } catch(e) {}
+      if (JSON.stringify(novi) !== JSON.stringify(sviProdavci)) postaviPodatke(novi);
     } catch(e) {}
   }
+
+  // Pretraga sa kratkom pauzom: ne iscrtava listu na svako slovo
+  let pretragaTimer;
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    document.getElementById('search-input').addEventListener('input', () => {
+      clearTimeout(pretragaTimer);
+      pretragaTimer = setTimeout(primeni, 250);
+    });
+    document.getElementById('sort-select').addEventListener('change', primeni);
+  });
 
   window.addEventListener('load', ucitajProdavce);
 </script>
