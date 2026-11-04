@@ -1,29 +1,42 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-RS">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chat – LokalniPlodovi</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <title>Chat zajednice: proizvođači i kupci | LokalniPlodovi</title>
+  <meta name="description" content="Razgovarajte sa lokalnim proizvođačima i kupcima. Kanali po temama: povrće, voće, mlečni proizvodi, meso, med, jaja i bilje."/>
+  <link rel="canonical" href="https://lokalniplodovi.rs/chat.html"/>
+  <meta name="theme-color" content="#0f2f14"/>
+  <meta property="og:site_name" content="LokalniPlodovi"/>
+  <meta property="og:title" content="Chat zajednice: proizvođači i kupci | LokalniPlodovi"/>
+  <meta property="og:description" content="Razgovarajte sa lokalnim proizvođačima i kupcima po temama."/>
+  <meta property="og:url" content="https://lokalniplodovi.rs/chat.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:locale" content="sr_RS"/>
+  <meta property="og:image" content="https://lokalniplodovi.rs/og-slika.jpg"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="stylesheet" href="mobile.css">
   <style>
+
     :root {
       --zelena: #2e7d32;
       --zelena-svetla: #4caf50;
       --zelena-tamna: #1b5e20;
+      --zlatna: #f5a623;
       --zlatna-svetla: #ffd166;
       --zemlja: #5d4037;
       --krem: #faf7f0;
       --krem-tamna: #f0ece0;
-      --tekst: #2c2c2c;
-      --siva: #6b7280;
+      --tekst: #25302a;
+      --siva: #6f7a72;
+      --ease: cubic-bezier(.2,.8,.2,1);
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--krem);
@@ -31,333 +44,160 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
+    a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--zlatna); outline-offset: 3px; }
 
-    /* ===== HEADER ===== */
+    /* HEADER (isti kao na početnoj) */
     header {
-      background: linear-gradient(135deg, var(--zelena-tamna) 0%, var(--zelena) 100%);
-      color: white;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(15,47,20,0.92);
+      -webkit-backdrop-filter: saturate(1.4) blur(14px);
+      backdrop-filter: saturate(1.4) blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-
-    nav {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1.1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    nav.glavni {
+      max-width: 1240px; margin: 0 auto;
+      padding: 0 28px; height: 76px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-
-    .logo {
-      display: flex; align-items: center; gap: 0.5rem;
-      text-decoration: none;
-    }
-
+    .logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
     .logo-icon {
-      width: 38px; height: 38px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      border: 1.5px solid rgba(255,255,255,0.3);
+      width:40px; height:40px;
+      background: linear-gradient(135deg, #4caf50, #1b5e20);
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem;
+      box-shadow: 0 2px 12px rgba(76,175,80,0.4);
     }
-
     .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; font-weight: 700; color: white;
+      font-family:'Playfair Display',serif;
+      font-size:1.5rem; font-weight:700; color:white; letter-spacing:-0.3px;
     }
-
-    .logo-text span { color: var(--zlatna-svetla); }
-
-    nav ul {
-      display: flex; list-style: none; gap: 0.2rem; align-items: center;
+    .logo-text span { color:var(--zlatna-svetla); }
+    nav.glavni ul { display:flex; list-style:none; gap:4px; align-items:center; }
+    nav.glavni ul li a {
+      color:rgba(255,255,255,0.88);
+      text-decoration:none;
+      font-size:0.9rem; font-weight:500;
+      padding:0.55rem 0.95rem;
+      border-radius:50px;
+      transition:all 0.2s;
     }
-
-    nav ul li a {
-      color: rgba(255,255,255,0.88);
-      text-decoration: none;
-      font-size: 0.88rem; font-weight: 500;
-      padding: 0.45rem 0.85rem;
-      border-radius: 50px;
-      transition: all 0.2s;
+    nav.glavni ul li a:hover { background:rgba(255,255,255,0.14); color:white; }
+    .nav-cta a {
+      background: var(--zlatna) !important;
+      color: #1b1b1b !important;
+      font-weight: 700 !important;
+      padding: 0.55rem 1.2rem !important;
+      margin-left: 6px;
     }
-
-    nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
-
+    .nav-cta a:hover { background: var(--zlatna-svetla) !important; }
     .hamburger {
-      display: none; flex-direction: column; gap: 5px;
-      cursor: pointer; background: none; border: none;
+      display:none; flex-direction:column; gap:5px;
+      cursor:pointer; background:none; border:none;
     }
-
     .hamburger span {
-      width: 26px; height: 2.5px;
-      background: white; border-radius: 3px; display: block;
+      width:26px; height:2.5px;
+      background:white; border-radius:3px; display:block;
     }
 
-    /* ===== CHAT LAYOUT ===== */
-    .chat-page-wrapper {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-      height: calc(100vh - 64px);
+
+    /* ===== CHAT ===== */
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .chat-wrap { width:100%; max-width:1240px; margin:0 auto; padding:20px 28px; flex:1; }
+    .chat-shell { display:flex; background:white; border:1px solid #e9e3d3; border-radius:24px; box-shadow:0 2px 14px rgba(20,50,20,0.07); overflow:hidden; height:calc(100vh - 76px - 40px); height:calc(100dvh - 76px - 40px); min-height:480px; }
+    .channels { width:240px; flex-shrink:0; border-right:1px solid #eee7d6; background:#fcfaf4; padding:1.2rem 0.8rem; overflow-y:auto; }
+    .channels h2 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--zemlja); padding:0 0.5rem; margin-bottom:0.8rem; }
+    .channel { display:flex; align-items:center; gap:0.5rem; width:100%; text-align:left; background:none; border:none; padding:0.65rem 0.9rem; border-radius:12px; margin-bottom:0.2rem; font-size:0.9rem; font-weight:500; color:var(--siva); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.18s; }
+    .channel:hover { background:var(--krem-tamna); color:var(--tekst); }
+    .channel.active { background:var(--zelena); color:white; font-weight:600; }
+    .chat-area { flex:1; min-width:0; display:flex; flex-direction:column; background:var(--krem); }
+    .chat-header { padding:0.85rem 1.3rem; background:white; border-bottom:1px solid #eee7d6; display:flex; align-items:center; gap:0.6rem; }
+    .chat-header h2 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--zemlja); }
+    .dot { width:9px; height:9px; border-radius:50%; background:#c9c3b0; flex-shrink:0; }
+    .dot.on { background:var(--zelena-svetla); box-shadow:0 0 0 4px rgba(76,175,80,0.18); }
+    #status { margin-left:auto; font-size:0.78rem; color:var(--siva); }
+    .chat-note { padding:0.55rem 1.3rem; background:#fff8e6; border-bottom:1px solid rgba(245,166,35,0.25); font-size:0.8rem; color:#7a5a12; line-height:1.5; }
+    .chat-note a { color:var(--zelena-tamna); font-weight:600; }
+    .messages { flex:1; padding:1.1rem 1.3rem; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem; overscroll-behavior:contain; }
+    .messages::-webkit-scrollbar { width:6px; }
+    .messages::-webkit-scrollbar-thumb { background:#d8d2c0; border-radius:6px; }
+    .stanje { margin:auto; text-align:center; color:var(--siva); font-size:0.92rem; line-height:1.6; padding:1rem; }
+    .stanje .ikona { font-size:2.2rem; margin-bottom:0.4rem; }
+    .dan { align-self:center; font-size:0.75rem; color:var(--siva); background:rgba(0,0,0,0.05); padding:0.2rem 0.8rem; border-radius:50px; margin:0.4rem 0; }
+    .message { max-width:72%; padding:0.55rem 0.95rem 0.6rem; border-radius:18px; font-size:0.93rem; line-height:1.5; animation:msgIn 0.2s ease; }
+    @keyframes msgIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    .message .meta { display:flex; align-items:baseline; gap:0.6rem; margin-bottom:0.15rem; }
+    .message .ime { font-weight:700; font-size:0.8rem; }
+    .message .vreme { font-size:0.7rem; opacity:0.7; }
+    .message .tekst { white-space:pre-wrap; overflow-wrap:anywhere; }
+    .message.sent { align-self:flex-end; background:var(--zelena); color:white; border-bottom-right-radius:5px; }
+    .message.sent .ime { color:rgba(255,255,255,0.85); }
+    .message.received { align-self:flex-start; background:white; color:var(--tekst); border:1px solid #ece6d4; border-bottom-left-radius:5px; }
+    .message.received .ime { color:var(--zelena); }
+    #greska { display:none; margin:0 1.2rem 0.4rem; background:#fff0f0; color:#c62828; border:1px solid #ffcdd2; border-radius:12px; padding:0.45rem 0.9rem; font-size:0.82rem; }
+    .input-area { display:flex; align-items:center; gap:0.7rem; padding:0.8rem 1.1rem; background:white; border-top:1px solid #eee7d6; }
+    .input-area input { flex:1; min-width:0; padding:0.75rem 1.2rem; border:1.5px solid #e0dccd; border-radius:50px; font-size:1rem; font-family:'DM Sans',sans-serif; background:var(--krem); color:var(--tekst); outline:none; transition:border-color 0.2s; }
+    .input-area input:focus { border-color:var(--zelena-svetla); background:white; }
+    .input-area button { display:inline-flex; align-items:center; gap:0.45rem; background:var(--zelena); color:white; border:none; padding:0.75rem 1.4rem; border-radius:50px; cursor:pointer; font-weight:700; font-size:0.9rem; font-family:'DM Sans',sans-serif; transition:background 0.2s; white-space:nowrap; }
+    .input-area button:hover { background:var(--zelena-tamna); }
+    @media (max-width:768px) {
+      nav.glavni { padding:0 16px; height:68px; }
+      .hamburger { display:flex; }
+      nav.glavni ul { display:none; position:absolute; top:100%; left:0; right:0; background:rgba(15,47,20,0.98); flex-direction:column; align-items:stretch; padding:1.2rem 1.5rem 1.8rem; gap:0.4rem; z-index:999; border-bottom:1px solid rgba(255,255,255,0.1); }
+      nav.glavni ul.open { display:flex; }
+      nav.glavni ul li a { display:block; padding:0.7rem 1rem; font-size:1rem; }
+      .nav-cta a { margin-left:0; text-align:center; }
+      .chat-wrap { padding:8px; }
+      .chat-shell { flex-direction:column; border-radius:18px; height:calc(100vh - 68px - 16px); height:calc(100dvh - 68px - 16px); }
+      .channels { width:100%; border-right:none; border-bottom:1px solid #eee7d6; padding:0.6rem 0.6rem; display:flex; gap:0.4rem; overflow-x:auto; overflow-y:hidden; flex-shrink:0; }
+      .channels h2 { display:none; }
+      .channel { width:auto; flex:0 0 auto; margin:0; padding:0.45rem 0.9rem; border:1.5px solid #e0dccd; border-radius:50px; font-size:0.82rem; background:white; white-space:nowrap; }
+      .channel.active { border-color:var(--zelena); }
+      .chat-header { padding:0.7rem 1rem; }
+      .messages { padding:0.9rem; }
+      .message { max-width:88%; }
+      .input-area { padding:0.6rem 0.7rem; }
+      .input-area button span { display:none; }
+      .input-area button { padding:0.75rem 1rem; }
     }
-
-    /* ===== SIDEBAR / KANALI ===== */
-    .channels {
-      width: 220px;
-      background: white;
-      border-right: 1px solid #e8e8e8;
-      overflow-y: auto;
-      padding: 1.2rem 0.8rem;
-      flex-shrink: 0;
-    }
-
-    .channels h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--zemlja);
-      padding: 0 0.4rem;
-      margin-bottom: 0.8rem;
-      letter-spacing: 0.3px;
-    }
-
-    .channel {
-      padding: 0.65rem 0.9rem;
-      cursor: pointer;
-      border-radius: 10px;
-      margin-bottom: 0.25rem;
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: var(--siva);
-      transition: all 0.18s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .channel:hover {
-      background: var(--krem-tamna);
-      color: var(--tekst);
-    }
-
-    .channel.active {
-      background: var(--zelena);
-      color: white;
-      font-weight: 600;
-    }
-
-    /* ===== CHAT AREA ===== */
-    .chat-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: var(--krem);
-    }
-
-    .chat-header {
-      padding: 0.9rem 1.4rem;
-      background: white;
-      border-bottom: 1px solid #e8e8e8;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .chat-header h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--zemlja);
-    }
-
-    .chat-header-dot {
-      width: 8px; height: 8px;
-      background: var(--zelena-svetla);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.3); }
-    }
-
-    /* ===== PORUKE ===== */
-    .messages {
-      flex: 1;
-      padding: 1.2rem 1.4rem;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .messages::-webkit-scrollbar { width: 4px; }
-    .messages::-webkit-scrollbar-track { background: transparent; }
-    .messages::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
-
-    .message {
-      padding: 0.65rem 1rem;
-      border-radius: 14px;
-      max-width: 72%;
-      font-size: 0.92rem;
-      line-height: 1.5;
-      animation: msgIn 0.2s ease;
-    }
-
-    @keyframes msgIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .message.sent {
-      background: var(--zelena);
-      color: white;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-
-    .message.sent strong { color: rgba(255,255,255,0.75); }
-
-    .message.received {
-      background: white;
-      color: var(--tekst);
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
-    .message.received strong { color: var(--zelena); }
-
-    /* ===== INPUT ===== */
-    .input-area {
-      display: flex;
-      align-items: center;
-      padding: 0.9rem 1.2rem;
-      background: white;
-      border-top: 1px solid #e8e8e8;
-      gap: 0.7rem;
-    }
-
-    .input-area input {
-      flex: 1;
-      padding: 0.7rem 1.1rem;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 50px;
-      font-size: 0.92rem;
-      font-family: 'DM Sans', sans-serif;
-      background: var(--krem);
-      color: var(--tekst);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .input-area input:focus {
-      border-color: var(--zelena-svetla);
-      background: white;
-    }
-
-    .input-area input::placeholder { color: #bbb; }
-
-    .input-area button {
-      background: var(--zelena);
-      color: white;
-      border: none;
-      padding: 0.7rem 1.3rem;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.88rem;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      white-space: nowrap;
-    }
-
-    .input-area button:hover {
-      background: var(--zelena-tamna);
-      transform: scale(1.03);
-    }
-
-    /* ===== FOOTER ===== */
+    @media (min-width:769px) { .hamburger { display:none; } }
+    @media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } }
+    /* FOOTER */
     footer {
-      background: var(--zemlja);
-      color: white;
-      text-align: center;
-      padding: 1.5rem 1rem;
+      background:#4a3128; color:#e9dccf;
+      text-align:center; padding:3rem 1.5rem 2rem;
     }
-
+    footer a { color:#c8e6c9; text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
     .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      margin-bottom: 0.3rem;
+      font-family:'Playfair Display',serif;
+      font-size:1.6rem; color:#fff; margin-bottom:0.5rem;
     }
 
-    footer a { color: #c8e6c9; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .hamburger { display: flex; }
-
-      nav ul {
-        display: none;
-        position: absolute; top: 62px; left: 0; right: 0;
-        background: rgba(27,94,32,0.97);
-        backdrop-filter: blur(12px);
-        flex-direction: column;
-        padding: 1.2rem 1.5rem 1.8rem;
-        gap: 0.4rem; z-index: 999;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-      }
-
-      nav ul.open { display: flex; }
-      nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
-
-      .chat-page-wrapper { height: calc(100vh - 62px); }
-
-      .channels {
-        width: 140px;
-        padding: 0.8rem 0.5rem;
-      }
-
-      .channel { font-size: 0.78rem; padding: 0.55rem 0.6rem; }
-      .channels h3 { font-size: 0.88rem; }
-      .message { max-width: 88%; }
-    }
-
-    @media (min-width: 769px) {
-      .hamburger { display: none; }
-    }
   </style>
 </head>
 <body>
 
 <header>
-  <nav>
+  <nav class="glavni" aria-label="Glavni meni">
     <a href="index.html" class="logo">
       <div class="logo-icon">🌿</div>
       <span class="logo-text">Lokalni<span>Plodovi</span></span>
     </a>
-
     <button class="hamburger" onclick="toggleMenu()" aria-label="Meni">
       <span></span><span></span><span></span>
     </button>
-
     <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
       <li><a href="blog.html">Blog</a></li>
+      <li><a href="oglasnik.html">Oglasnik</a></li>
       <li id="moj-profil-li" style="display:none;">
         <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
       </li>
@@ -365,44 +205,48 @@
         <a href="#" onclick="odjaviSe()">Odjavi se</a>
       </li>
       <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
+      <li id="postani-prodavac-li" class="nav-cta"><a href="registracija.html">Registruj se</a></li>
     </ul>
   </nav>
 </header>
 
-<div class="chat-page-wrapper">
-  <div class="channels">
-    <h3>Kanali</h3>
-    <div class="channel active" data-channel="opsta">💬 Opšta diskusija</div>
-    <div class="channel" data-channel="povrce">🥕 Povrće</div>
-    <div class="channel" data-channel="voce">🍎 Voće</div>
-    <div class="channel" data-channel="mleko">🥛 Mlečni proizvodi</div>
-    <div class="channel" data-channel="meso">🥩 Meso</div>
-    <div class="channel" data-channel="med">🍯 Med</div>
-    <div class="channel" data-channel="jaja">🥚 Jaja</div>
-    <div class="channel" data-channel="zdravlje">🌿 Bilje i zdravlje</div>
-  </div>
+<main class="chat-wrap">
+  <h1 class="sr-only">Chat lokalnih proizvođača i kupaca</h1>
+  <div class="chat-shell">
+    <aside class="channels" aria-label="Kanali">
+      <h2>Kanali</h2>
+      <button type="button" class="channel active" data-channel="opsta" aria-pressed="true">💬 Opšta diskusija</button>
+      <button type="button" class="channel" data-channel="povrce" aria-pressed="false">🥕 Povrće</button>
+      <button type="button" class="channel" data-channel="voce" aria-pressed="false">🍎 Voće</button>
+      <button type="button" class="channel" data-channel="mleko" aria-pressed="false">🥛 Mlečni proizvodi</button>
+      <button type="button" class="channel" data-channel="meso" aria-pressed="false">🥩 Meso</button>
+      <button type="button" class="channel" data-channel="med" aria-pressed="false">🍯 Med</button>
+      <button type="button" class="channel" data-channel="jaja" aria-pressed="false">🥚 Jaja</button>
+      <button type="button" class="channel" data-channel="zdravlje" aria-pressed="false">🌿 Bilje i zdravlje</button>
+    </aside>
 
-  <div class="chat-area">
-    <div class="chat-header">
-      <div class="chat-header-dot"></div>
-      <h3 id="current-channel">Opšta diskusija</h3>
-    </div>
-    <div class="messages" id="messages"></div>
-    <div class="input-area">
-      <input type="text" id="message-input" placeholder="Napiši poruku...">
-      <button onclick="sendMessage()">
-        <i class="fas fa-paper-plane"></i> Pošalji
-      </button>
-    </div>
+    <section class="chat-area">
+      <div class="chat-header">
+        <span class="dot" id="dot"></span>
+        <h2 id="current-channel">💬 Opšta diskusija</h2>
+        <span id="status">Povezivanje...</span>
+      </div>
+      <div class="chat-note">Poruke su javne i vide ih svi posetioci. Ne objavljujte lične podatke (adresu, lične dokumente). <span id="ko-pise"></span></div>
+      <div class="messages" id="messages" aria-live="polite"></div>
+      <div id="greska" role="alert"></div>
+      <form class="input-area" id="forma" autocomplete="off">
+        <input type="text" id="message-input" placeholder="Napišite poruku..." maxlength="500" aria-label="Poruka" enterkeyhint="send">
+        <button type="submit"><i class="fas fa-paper-plane"></i> <span>Pošalji</span></button>
+      </form>
+    </section>
   </div>
-</div>
+</main>
 
 <footer>
   <div style="max-width:1400px; margin:0 auto;">
     <div class="footer-logo">LokalniPlodovi</div>
-    <p style="opacity:0.85; margin-bottom:0.5rem;">Prirodno • Sezonski • Direktno sa imanja Srbije</p>
-    <p style="opacity:0.75; margin-bottom:0.4rem;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
+    <p style="opacity:0.85; margin-bottom:1.5rem;">Prirodno • Sezonski • Direktno sa imanja Srbije</p>
+    <p style="opacity:0.75; margin-bottom:0.7rem;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
     <p>
       <a href="politika-privatnosti.html">Politika privatnosti</a> •
       <a href="uslovi-koriscenja.html">Uslovi korišćenja</a>
@@ -410,12 +254,10 @@
   </div>
 </footer>
 
-<!-- Firebase compat SDK — IDENTIČNO ORIGINALU -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-  // ── Firebase config — IDENTIČNO ORIGINALU ──
   const firebaseConfig = {
     apiKey: "AIzaSyDSgp20xhNEB2poyyxB1uEdsNsXGEzR9Vs",
     authDomain: "lokalni-plodovi.firebaseapp.com",
@@ -426,91 +268,214 @@
     appId: "1:302190046418:web:840ed24ca4307732f7110b",
     measurementId: "G-XDE6GFM8YY"
   };
-
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  let currentChannel = 'opsta';
+  const BROJ_PORUKA = 100;        // učitava se samo poslednjih 100 poruka po kanalu (štedi Firebase protok)
+  const MAX_DUZINA = 500;
+  const PAUZA_MS = 1500;
+  const KANALI = ['opsta','povrce','voce','mleko','meso','med','jaja','zdravlje'];
 
-  // ── Učitaj poruke — IDENTIČNO ──
-  function loadMessages(channel) {
-    const messagesDiv = document.getElementById('messages');
-    messagesDiv.innerHTML = '';
-    db.ref('channels/' + channel).on('value', snapshot => {
-      messagesDiv.innerHTML = '';
-      snapshot.forEach(child => {
-        const msg = child.val();
-        const div = document.createElement('div');
-        div.className = 'message ' + (msg.user === (korisnik ? korisnik.ime : 'Gost') ? 'sent' : 'received');
-        div.innerHTML = `<strong>${msg.user}:</strong> ${msg.text}`;
-        messagesDiv.appendChild(div);
-      });
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
-  }
+  const imeIzStorage = (localStorage.getItem('ime') || '').trim().slice(0, 40);
+  const prijavljen = !!localStorage.getItem('token');
+  const ime = imeIzStorage || 'Gost';
 
-  // ── Pošalji poruku — IDENTIČNO ──
-  function sendMessage() {
-    const input = document.getElementById('message-input');
-    const text = input.value.trim();
-    if (text === '') return;
-    const user = korisnik ? korisnik.ime : 'Gost';
-    db.ref('channels/' + currentChannel).push({
-      user: user,
-      text: text,
-      timestamp: Date.now()
-    });
-    input.value = '';
-    input.focus();
-  }
-
-  document.querySelector('button[onclick="sendMessage()"]').onclick = sendMessage;
-  document.getElementById('message-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      sendMessage();
+  // Nasumična oznaka uređaja: razlikuje "moje" poruke od tuđih čak i kad su svi "Gost"
+  function mojUid() {
+    let u = null;
+    try { u = localStorage.getItem('chat_uid'); } catch(e) {}
+    if (!u) {
+      u = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now() + '-' + Math.random().toString(36).slice(2));
+      try { localStorage.setItem('chat_uid', u); } catch(e) {}
     }
+    return String(u).slice(0, 60);
+  }
+  const MOJ_UID = mojUid();
+
+  const el = {
+    messages: document.getElementById('messages'),
+    input: document.getElementById('message-input'),
+    forma: document.getElementById('forma'),
+    naslov: document.getElementById('current-channel'),
+    status: document.getElementById('status'),
+    dot: document.getElementById('dot'),
+    greska: document.getElementById('greska')
+  };
+
+  let kanal = 'opsta';
+  let aktivniRef = null;
+  let poslednjiDan = '';
+  let prvoUcitavanje = true;
+  let poslednjeSlanje = 0;
+  let greskaTimer;
+
+  function prikaziGresku(t) {
+    el.greska.textContent = t;
+    el.greska.style.display = 'block';
+    clearTimeout(greskaTimer);
+    greskaTimer = setTimeout(() => { el.greska.style.display = 'none'; }, 3500);
+  }
+
+  function skrolDoDna(sila) {
+    const m = el.messages;
+    if (sila || m.scrollHeight - m.scrollTop - m.clientHeight < 140) m.scrollTop = m.scrollHeight;
+  }
+
+  function oznakaDana(ts) {
+    const d = new Date(ts);
+    const danas = new Date();
+    const juce = new Date(); juce.setDate(danas.getDate() - 1);
+    if (d.toDateString() === danas.toDateString()) return 'Danas';
+    if (d.toDateString() === juce.toDateString()) return 'Juče';
+    return d.toLocaleDateString('sr-RS');
+  }
+
+  function ukloniStanje() {
+    const s = el.messages.querySelector('.stanje');
+    if (s) s.remove();
+  }
+
+  function prikaziStanje(ikona, tekst) {
+    el.messages.innerHTML = '';
+    const d = document.createElement('div');
+    d.className = 'stanje';
+    const i = document.createElement('div'); i.className = 'ikona'; i.textContent = ikona;
+    const t = document.createElement('div'); t.textContent = tekst;
+    d.appendChild(i); d.appendChild(t);
+    el.messages.appendChild(d);
+  }
+
+  // Poruke se ubacuju kao običan tekst (textContent), nikad kao HTML
+  function dodajPoruku(msg) {
+    if (!msg || typeof msg.text !== 'string' || typeof msg.user !== 'string') return;
+    ukloniStanje();
+    const ts = Number(msg.timestamp) || Date.now();
+    const dan = new Date(ts).toDateString();
+    const blizu = el.messages.scrollHeight - el.messages.scrollTop - el.messages.clientHeight < 140;
+
+    if (dan !== poslednjiDan) {
+      const sep = document.createElement('div');
+      sep.className = 'dan';
+      sep.textContent = oznakaDana(ts);
+      el.messages.appendChild(sep);
+      poslednjiDan = dan;
+    }
+
+    const moja = msg.uid ? msg.uid === MOJ_UID : (ime !== 'Gost' && msg.user === ime);
+    const div = document.createElement('div');
+    div.className = 'message ' + (moja ? 'sent' : 'received');
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const imeEl = document.createElement('span');
+    imeEl.className = 'ime';
+    imeEl.textContent = msg.user.slice(0, 40);
+    const vremeEl = document.createElement('span');
+    vremeEl.className = 'vreme';
+    vremeEl.textContent = new Date(ts).toLocaleTimeString('sr-RS', { hour: '2-digit', minute: '2-digit' });
+    meta.appendChild(imeEl); meta.appendChild(vremeEl);
+
+    const tekst = document.createElement('div');
+    tekst.className = 'tekst';
+    tekst.textContent = msg.text.slice(0, MAX_DUZINA);
+
+    div.appendChild(meta); div.appendChild(tekst);
+    el.messages.appendChild(div);
+
+    if (!prvoUcitavanje) skrolDoDna(moja || blizu);
+  }
+
+  function otvoriKanal(k, naslov) {
+    if (aktivniRef) aktivniRef.off();   // prekini slušanje prethodnog kanala
+    kanal = k;
+    poslednjiDan = '';
+    prvoUcitavanje = true;
+    el.naslov.textContent = naslov;
+    prikaziStanje('⏳', 'Učitavam poruke...');
+
+    const ref = db.ref('channels/' + k).limitToLast(BROJ_PORUKA);
+    aktivniRef = ref;
+    ref.on('child_added', snap => { if (kanal === k) dodajPoruku(snap.val()); });
+    ref.once('value', snap => {
+      if (kanal !== k) return;
+      if (!snap.exists()) prikaziStanje('💬', 'Još nema poruka u ovom kanalu. Budite prvi koji će nešto napisati.');
+      prvoUcitavanje = false;
+      skrolDoDna(true);
+    }, () => { if (kanal === k) prikaziStanje('⚠️', 'Poruke trenutno nije moguće učitati. Pokušajte ponovo kasnije.'); });
+  }
+
+  // Slanje
+  el.forma.addEventListener('submit', e => {
+    e.preventDefault();
+    const text = el.input.value.trim();
+    if (!text) return;
+    const sad = Date.now();
+    if (sad - poslednjeSlanje < PAUZA_MS) { prikaziGresku('Sačekajte trenutak pre sledeće poruke.'); return; }
+    poslednjeSlanje = sad;
+    db.ref('channels/' + kanal).push({
+      user: ime,
+      uid: MOJ_UID,
+      text: text.slice(0, MAX_DUZINA),
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).catch(() => prikaziGresku('Poruka nije poslata. Pokušajte ponovo.'));
+    el.input.value = '';
+    el.input.focus();
   });
 
-  // ── Promena kanala — IDENTIČNO ──
-  document.querySelectorAll('.channel').forEach(channel => {
-    channel.addEventListener('click', () => {
-      document.querySelector('.channel.active').classList.remove('active');
-      channel.classList.add('active');
-      currentChannel = channel.dataset.channel;
-      document.getElementById('current-channel').textContent = channel.textContent;
-      loadMessages(currentChannel);
-    });
+  // Promena kanala
+  const dugmad = document.querySelectorAll('.channel');
+  function izaberiKanal(dugme) {
+    dugmad.forEach(d => { d.classList.remove('active'); d.setAttribute('aria-pressed', 'false'); });
+    dugme.classList.add('active');
+    dugme.setAttribute('aria-pressed', 'true');
+    try { history.replaceState(null, '', '#' + dugme.dataset.channel); } catch(e) {}
+    otvoriKanal(dugme.dataset.channel, dugme.textContent.trim());
+  }
+  dugmad.forEach(d => d.addEventListener('click', () => izaberiKanal(d)));
+
+  // Status veze
+  db.ref('.info/connected').on('value', s => {
+    const on = s.val() === true;
+    el.status.textContent = on ? 'Povezano' : 'Povezivanje...';
+    el.dot.classList.toggle('on', on);
   });
 
-  loadMessages(currentChannel);
+  // Ko piše
+  (function() {
+    const k = document.getElementById('ko-pise');
+    if (prijavljen && imeIzStorage) {
+      k.textContent = 'Pišete kao: ' + imeIzStorage + '.';
+    } else {
+      k.append('Pišete kao Gost. ');
+      const a = document.createElement('a');
+      a.href = 'login.html';
+      a.textContent = 'Prijavite se';
+      k.appendChild(a);
+      k.append(' da koristite svoje ime.');
+    }
+  })();
 
-  // ── Nav logika ──
-  const imeIzStorage = localStorage.getItem('ime');
-  const korisnik = imeIzStorage ? { ime: imeIzStorage } : null;
-
-  document.addEventListener('DOMContentLoaded', () => {
+  // Nav
+  function initNav() {
     const token = localStorage.getItem('token');
     const tip = localStorage.getItem('tip');
     const loggedIn = !!token;
-
     document.getElementById('moj-profil-li').style.display = loggedIn ? 'list-item' : 'none';
     document.getElementById('odjavi-se-li').style.display = loggedIn ? 'list-item' : 'none';
     document.getElementById('prijavi-se-li').style.display = loggedIn ? 'none' : 'list-item';
     document.getElementById('postani-prodavac-li').style.display = loggedIn ? 'none' : 'list-item';
-
     const link = document.getElementById('moj-profil-link');
     if (link && token) link.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+  }
+  function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
+  function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    const iz = location.hash.replace('#', '');
+    const pocetni = (KANALI.indexOf(iz) !== -1) ? document.querySelector('.channel[data-channel="' + iz + '"]') : document.querySelector('.channel[data-channel="opsta"]');
+    izaberiKanal(pocetni);
   });
-
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
-
-  function toggleMenu() {
-    document.getElementById('nav-menu').classList.toggle('open');
-  }
 </script>
 
 </body>
