@@ -231,12 +231,12 @@
     }
     .filter-right { display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap; }
     .filter-label { font-size:0.85rem; color:var(--siva); font-weight:500; }
-    #sort-select {
+    #sort-select, #nisa-select {
       padding:0.5rem 0.9rem; border:1.5px solid #e0dccd; border-radius:50px;
       font-size:0.85rem; font-family:'DM Sans',sans-serif;
       background:white; color:var(--tekst); cursor:pointer; outline:none;
     }
-    #sort-select:focus { border-color: var(--zelena-svetla); }
+    #sort-select:focus, #nisa-select:focus { border-color: var(--zelena-svetla); }
     #count-label { font-size:0.85rem; color:var(--siva); font-weight:600; }
 
     .products-grid {
@@ -544,7 +544,11 @@
         <i class="fas fa-search" aria-hidden="true"></i>
         <input type="search" id="search-input" placeholder="Pretraži po imenu, mestu ili niši..." aria-label="Pretraga prodavaca" autocomplete="off">
       </div>
-      <label class="filter-label" for="sort-select" style="font-size:0.85rem;color:var(--siva);font-weight:500;">Sortiraj:</label>
+      <label for="nisa-select" style="font-size:0.85rem;color:var(--siva);font-weight:500;">Niša:</label>
+      <select id="nisa-select" aria-label="Izaberite nišu">
+        <option value="">Sve niše</option>
+      </select>
+      <label for="sort-select" style="font-size:0.85rem;color:var(--siva);font-weight:500;">Sortiraj:</label>
       <select id="sort-select">
         <option value="novo">Najnoviji</option>
         <option value="ime">Ime (A-Ž)</option>
@@ -553,7 +557,6 @@
       </select>
       <span id="count-label" aria-live="polite"></span>
     </div>
-    <div class="chips" id="chips" role="group" aria-label="Niše"></div>
   </div>
 
   <div id="server-notice" class="server-notice">⏳ Server se budi, još nekoliko sekundi...</div>
@@ -682,24 +685,22 @@
   function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
   function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
 
-  // Niše kao čipovi (sa brojem prodavaca)
+  // Niše u padajućoj listi (sa brojem prodavaca)
   function popuniCipove() {
     const brojac = {};
     sviProdavci.forEach(p => { if (p.glavnaNisa) brojac[p.glavnaNisa] = (brojac[p.glavnaNisa] || 0) + 1; });
     const nise = Object.keys(brojac).sort((a, b) => a.localeCompare(b, 'sr'));
-    const wrap = document.getElementById('chips');
-    wrap.innerHTML = '';
-    const napravi = (vrednost, tekst) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'chip' + (aktivnaNisa === vrednost ? ' aktivan' : '');
-      b.textContent = tekst;
-      b.setAttribute('aria-pressed', aktivnaNisa === vrednost ? 'true' : 'false');
-      b.onclick = () => { aktivnaNisa = vrednost; popuniCipove(); primeni(); };
-      wrap.appendChild(b);
+    const select = document.getElementById('nisa-select');
+    select.innerHTML = '';
+    const dodaj = (vrednost, tekst) => {
+      const o = document.createElement('option');
+      o.value = vrednost;
+      o.textContent = tekst;
+      if (vrednost === aktivnaNisa) o.selected = true;
+      select.appendChild(o);
     };
-    napravi('', `Sve niše (${sviProdavci.length})`);
-    nise.forEach(n => napravi(n, `${n} (${brojac[n]})`));
+    dodaj('', `Sve niše (${sviProdavci.length})`);
+    nise.forEach(n => dodaj(n, `${n} (${brojac[n]})`));
   }
 
   function prikaziSkeleton(n) {
@@ -900,6 +901,7 @@
       pretragaTimer = setTimeout(primeni, 250);
     });
     document.getElementById('sort-select').addEventListener('change', primeni);
+    document.getElementById('nisa-select').addEventListener('change', e => { aktivnaNisa = e.target.value; primeni(); });
   });
 
   window.addEventListener('load', ucitajProdavce);
