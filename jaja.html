@@ -672,7 +672,7 @@
     proizvodi.forEach((p, i) => {
       const isOwner = currentUserId && String(p.userId) === String(currentUserId);
       const isKupac = tip === 'kupac';
-      const slika = slikaUrl(p.slika, 480);
+      const slika = slikaUrl(p.slika, 400);
       const datum = p.created_at ? new Date(p.created_at).toLocaleDateString('sr-RS') : '';
       const lok = p.prodavacLokacija ? esc(p.prodavacLokacija) : 'Srbija';
       const card = document.createElement('article');
@@ -680,7 +680,7 @@
       card.style.animationDelay = `${Math.min(i, 12) * 0.04}s`;
       card.innerHTML = `
         <div class="product-img">
-          <img src="${esc(slika)}" alt="${esc(p.naziv)} – domaća jaja, ${lok}" width="480" height="360" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${NEMA_SLIKE}'">
+          <img src="${esc(slika)}" alt="${esc(p.naziv)} – domaća jaja, ${lok}" width="400" height="300" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${NEMA_SLIKE}'">
           <span class="fresh-badge">🥚 Sveže</span>
         </div>
         <div class="product-info">
@@ -724,7 +724,7 @@
           'url': 'https://lokalniplodovi.rs/jaja.html'
         }
       };
-      const s = slikaUrl(p.slika, 800);
+      const s = slikaUrl(p.slika, 400);
       if (s.indexOf('https://') === 0) item.image = s;
       if (p.opis) item.description = String(p.opis).slice(0, 300);
       return { '@type': 'ListItem', 'position': i + 1, 'item': item };
