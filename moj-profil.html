@@ -950,6 +950,31 @@
   </div>
 </div>
 
+<!-- ===== NOVO: ONBOARDING PROZOR ZA PROFILNU SLIKU ===== -->
+<div id="onb-slika-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3000; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+  <div style="background:white; width:90%; max-width:440px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#2e7d32,#4caf50); padding:1.5rem 2rem; color:white;">
+      <div id="onb-slika-korak" style="font-size:0.75rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; opacity:0.85; margin-bottom:0.3rem;"></div>
+      <h2 style="margin:0; font-size:1.4rem;">📸 Dodajte profilnu sliku</h2>
+      <p style="margin:0.4rem 0 0; opacity:0.9; font-size:0.92rem;">Kupci mnogo više veruju prodavcima koji imaju fotografiju.</p>
+    </div>
+    <div style="padding:1.6rem 2rem; text-align:center;">
+      <input type="file" id="onb-slika-fajl" accept="image/*" style="display:none;">
+      <div onclick="document.getElementById('onb-slika-fajl').click()" style="cursor:pointer; margin:0 auto 1rem; width:160px; height:160px; border-radius:50%; border:3px dashed #4caf50; background:#f0fdf4; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <img id="onb-slika-preview" style="width:100%; height:100%; object-fit:cover; display:none;">
+        <div id="onb-slika-placeholder" style="color:#2e7d32; font-weight:600; font-size:0.9rem; padding:0 1rem;">
+          <div style="font-size:2.2rem;">📷</div>
+          Kliknite da izaberete sliku
+        </div>
+      </div>
+      <p id="onb-slika-status" style="min-height:20px; font-size:0.85rem; color:#888; margin:0 0 1rem;"></p>
+      <button id="onb-slika-sacuvaj" onclick="onbSacuvajSliku()" disabled style="width:100%; padding:14px; border-radius:50px; background:linear-gradient(135deg,#2e7d32,#4caf50); color:white; border:none; font-weight:700; font-size:1rem; cursor:pointer; opacity:0.5; font-family:inherit;">Sačuvaj i nastavi</button>
+      <button onclick="onbPreskociSliku()" style="width:100%; margin-top:0.7rem; padding:12px; border-radius:50px; background:#f5f5f5; color:#777; border:none; font-weight:600; cursor:pointer; font-family:inherit;">Preskoči za sada</button>
+    </div>
+  </div>
+</div>
+<!-- ==================================================== -->
+
 <!-- MODAL UPUTSTVO ZA IPHONE INSTALACIJU -->
 <div id="ios-install-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:3500; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
   <div style="background:white; width:90%; max-width:420px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
@@ -1120,6 +1145,9 @@
 <div id="dodaj-proizvod-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:3000; justify-content:center; align-items:center;">
   <div style="background:white; width:90%; max-width:520px; border-radius:20px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
     <h2 style="margin-top:0; color:#2e7d32; font-family:'Playfair Display',serif;">Dodaj novi proizvod</h2>
+    <div id="onb-proizvod-hint" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:12px; padding:0.8rem 1rem; margin-bottom:1rem; font-size:0.9rem; line-height:1.5;">
+      🎉 Još samo jedan korak: dodajte svoj prvi proizvod da vas kupci vide na sajtu.
+    </div>
     <label>Naziv proizvoda / sorte *</label>
     <input type="text" id="naziv" style="width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;" required>
     <label>Cena (RSD) *</label>
@@ -1638,7 +1666,8 @@
 
       if (isOwnProfile && token) {
         ucitajBrojNeprocitanih();
-        pokrniTourAkoTreba();
+        // Prvo onboarding (profilna slika pa prvi proizvod); stari vodič samo ako onboarding nije potreban
+        pokreniOnboarding(data).then(potreban => { if (!potreban) pokrniTourAkoTreba(); });
       }
 
       ucitajObjave();
@@ -1681,6 +1710,127 @@
     }
     const data = await response.json();
     return data.secure_url;
+  }
+
+  // ══════════════════════════════════════════
+  // ONBOARDING NOVIH PRODAVACA
+  // Ko nema profilnu sliku i/ili nijedan proizvod, odmah po otvaranju svog profila
+  // dobija prozor "Dodajte profilnu sliku", a zatim "Dodajte prvi proizvod".
+  // Ko ima sliku, dobija samo prozor za proizvod (i obrnuto).
+  // "Preskoči" odlaže prozore 3 dana (dok god ne reši oba zadatka).
+  // ══════════════════════════════════════════
+  const ONB_ODLAGANJE_MS = 3 * 24 * 60 * 60 * 1000;
+  let onbTreba = { slika: false, proizvod: false };
+  let onbPreskoceno = false;
+  let onbModProizvod = false;
+  let onbFajlSlike = null;
+
+  function onbJeOdlozeno() {
+    try {
+      const t = parseInt(localStorage.getItem('onb_odlozeno'));
+      return !!t && (Date.now() - t) < ONB_ODLAGANJE_MS;
+    } catch (e) { return false; }
+  }
+
+  // Vraća true ako je onboarding potreban (da se stari vodič ne pokazuje preko njega)
+  async function pokreniOnboarding(data) {
+    try {
+      const tip = localStorage.getItem('tip');
+      if (tip === 'kupac' || tip === 'oglasivac') return false;
+      if (!trenutniUserId) return false;
+
+      let imaProizvod = true;
+      try {
+        const r = await fetch(`${backendUrl}/proizvodi?userId=${trenutniUserId}`);
+        if (r.ok) { const lista = await r.json(); imaProizvod = Array.isArray(lista) && lista.length > 0; }
+      } catch (e) { return false; }
+
+      onbTreba = { slika: !data.slika, proizvod: !imaProizvod };
+      if (!onbTreba.slika && !onbTreba.proizvod) return false;
+      if (onbJeOdlozeno()) return true;
+
+      onbPreskoceno = false;
+      setTimeout(onbSledeciKorak, 700);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function onbSledeciKorak() {
+    if (onbTreba.slika) { onbOtvoriSliku(); return; }
+    if (onbTreba.proizvod) {
+      onbModProizvod = true;
+      document.getElementById('onb-proizvod-hint').style.display = 'block';
+      dodajProizvod();
+      return;
+    }
+    onbKraj();
+  }
+
+  function onbKraj() {
+    // Ako je korisnik nešto preskočio, ne dosađujemo mu 3 dana
+    if (onbPreskoceno) { try { localStorage.setItem('onb_odlozeno', String(Date.now())); } catch (e) {} }
+  }
+
+  function onbOtvoriSliku() {
+    onbFajlSlike = null;
+    document.getElementById('onb-slika-fajl').value = '';
+    document.getElementById('onb-slika-preview').style.display = 'none';
+    document.getElementById('onb-slika-placeholder').style.display = 'block';
+    document.getElementById('onb-slika-status').textContent = '';
+    const btn = document.getElementById('onb-slika-sacuvaj');
+    btn.disabled = true; btn.style.opacity = '0.5'; btn.textContent = 'Sačuvaj i nastavi';
+    document.getElementById('onb-slika-korak').textContent = onbTreba.proizvod ? 'Korak 1 od 2' : '';
+    document.getElementById('onb-slika-modal').style.display = 'flex';
+  }
+
+  function onbZatvoriSliku() { document.getElementById('onb-slika-modal').style.display = 'none'; }
+
+  function onbPreskociSliku() {
+    onbZatvoriSliku();
+    onbPreskoceno = true;
+    onbTreba.slika = false;
+    onbSledeciKorak();
+  }
+
+  document.getElementById('onb-slika-fajl').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    onbFajlSlike = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const prev = document.getElementById('onb-slika-preview');
+      prev.src = ev.target.result; prev.style.display = 'block';
+      document.getElementById('onb-slika-placeholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+    const btn = document.getElementById('onb-slika-sacuvaj');
+    btn.disabled = false; btn.style.opacity = '1';
+  });
+
+  async function onbSacuvajSliku() {
+    const token = localStorage.getItem('token');
+    if (!token || !onbFajlSlike) return;
+    const btn = document.getElementById('onb-slika-sacuvaj');
+    const status = document.getElementById('onb-slika-status');
+    btn.disabled = true; btn.style.opacity = '0.6'; btn.textContent = '⏳ Čuvam...';
+    try {
+      const url = await uploadDoCloudinary(onbFajlSlike);
+      const res = await fetch(`${backendUrl}/profile/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ slikaBase64: url })
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Greška pri čuvanju');
+      document.getElementById('profile-avatar').src = url;
+      onbTreba.slika = false;
+      onbZatvoriSliku();
+      onbSledeciKorak();
+    } catch (err) {
+      status.style.color = '#b91c1c';
+      status.textContent = 'Greška: ' + err.message;
+      btn.disabled = false; btn.style.opacity = '1'; btn.textContent = 'Pokušaj ponovo';
+    }
   }
 
   // ══════════════════════════════════════════
@@ -3338,6 +3488,9 @@ function podeliBlogFacebook(blogId, slug) {
     document.getElementById('slika-proizvoda').value = '';
     document.getElementById('podnisa-wrapper').style.display = 'none';
     document.getElementById('preview-slika').style.display = 'none';
+    // Onboarding: ako je prozor zatvoren bez dodatog proizvoda, odloži podsećanje
+    document.getElementById('onb-proizvod-hint').style.display = 'none';
+    if (onbModProizvod) { onbModProizvod = false; onbPreskoceno = true; onbKraj(); }
   }
 
   async function izloziNaPijac() {
@@ -3363,7 +3516,12 @@ function podeliBlogFacebook(blogId, slug) {
     try {
       const response = await fetch(`${backendUrl}/dodaj-proizvod`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ naziv, cena, kolicina, glavnaNisa, podnisa: podnisa || null, opis: opis || null, slikaBase64 }) });
       const result = await response.json();
-      if (response.ok) { alert('Proizvod je uspešno izložen na pijac!'); zatvoriModal(); }
+      if (response.ok) {
+        alert('Proizvod je uspešno izložen na pijac!');
+        // Onboarding: zadatak rešen, ne odlaži podsećanje
+        if (onbModProizvod) { onbTreba.proizvod = false; onbModProizvod = false; }
+        zatvoriModal();
+      }
       else alert('Greška: ' + (result.error || 'Nešto nije u redu'));
     } catch (err) { alert('Greška: ' + err.message); }
   }
