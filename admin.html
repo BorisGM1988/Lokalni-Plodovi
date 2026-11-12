@@ -548,6 +548,7 @@
     <button class="tab" onclick="prikaziSekciju('ocene',this);ucitajOcene()"><i class="fas fa-star"></i> Ocene</button>
     <button class="tab" onclick="prikaziSekciju('statistika',this);ucitajStatistiku()"><i class="fas fa-chart-line"></i> Statistika poseta</button>
     <button class="tab" id="tab-btn-grupni-email" onclick="prikaziSekciju('grupni-email',this)"><i class="fas fa-envelope"></i> Grupni Email</button>
+    <button class="tab" onclick="prikaziSekciju('poruke',this);ucitajPlatformu()"><i class="fas fa-comments"></i> Poruke</button>
     <button class="tab" onclick="prikaziSekciju('oglasnik',this);ucitajOglase()"><i class="fas fa-bullhorn"></i> Oglasnik</button>
     <button class="tab" onclick="prikaziSekciju('baneri',this);ucitajBanere()"><i class="fas fa-ad"></i> Baneri</button>
   </div>
@@ -756,6 +757,38 @@
     </div>
     <div class="stats-grid" id="baneri-kartice" style="padding:0 0 1rem;"></div>
     <div class="table-wrap"><div id="baneri-dani"></div></div>
+  </div>
+
+  <!-- PORUKE IZ SLUZBENOG NALOGA -->
+  <div id="sec-poruke" class="section">
+    <div class="email-card">
+      <h3><i class="fas fa-comments" style="color:var(--green-700);margin-right:.5rem;"></i>Poruka u chat (kao Lokalni Plodovi)</h3>
+      <p id="pk-nalog" class="stat-note">Proveravam službeni nalog...</p>
+      <div class="form-group">
+        <label>Kome</label>
+        <select id="pk-grupa" onchange="pkGrupaPromena()">
+          <option value="kupci">Svim kupcima</option>
+          <option value="prodavci">Svim prodavcima</option>
+          <option value="ids">Izabranim korisnicima (po ID-u)</option>
+        </select>
+      </div>
+      <div class="form-group" id="pk-mesto-wrap">
+        <label>Samo iz mesta (nije obavezno)</label>
+        <input type="text" id="pk-mesto" placeholder="npr. Kragujevac">
+      </div>
+      <div class="form-group" id="pk-ids-wrap" style="display:none">
+        <label>ID-jevi korisnika, odvojeni zarezom</label>
+        <input type="text" id="pk-ids" placeholder="npr. 12, 45, 78">
+      </div>
+      <div class="form-group">
+        <label>Poruka (najviše 1000 karaktera)</label>
+        <textarea id="pk-tekst" maxlength="1000" placeholder="Poruka stiže u inbox korisnika, uz push obaveštenje..."></textarea>
+      </div>
+      <label style="display:flex;gap:.5rem;align-items:center;margin-bottom:1rem;font-size:.88rem;">
+        <input type="checkbox" id="pk-mejl" checked> Pošalji i email obaveštenje (najviše 250 primalaca odjednom)
+      </label>
+      <button class="btn-send-email" id="pk-btn" onclick="posaljiPoruke()"><i class="fas fa-paper-plane"></i> Pošalji poruku</button>
+    </div>
   </div>
 
   <!-- GRUPNI EMAIL -->
@@ -2173,6 +2206,49 @@ async function ucitajBanere() {
       ? `<table><thead><tr><th>Dan</th><th>Baner</th><th>Klikova</th></tr></thead><tbody>${d.poDanima.map(x => `<tr><td>${fmt(x.dan)}</td><td>${BANER_IMENA[x.baner] || escH(x.baner)}</td><td style="font-weight:700">${x.klikova}</td></tr>`).join('')}</tbody></table>`
       : '<div style="padding:2rem;text-align:center;color:var(--muted)">Još nema klikova na baner.</div>';
   } catch (er) { tb.innerHTML = `<p style="color:red;padding:2rem">${escH(er.message)}</p>`; }
+}
+
+// ── PORUKE IZ SLUZBENOG NALOGA ──
+async function ucitajPlatformu() {
+  const el = document.getElementById('pk-nalog');
+  try {
+    const res = await fetch(`${backendUrl}/admin/platforma-nalog`, { headers:{ 'x-admin-password':adminLozinka } });
+    const d = await res.json();
+    el.textContent = res.ok
+      ? `Poruke se šalju sa naloga: ${d.ime} (#${d.id}). Odgovori stižu u inbox tog naloga na moj-profil.html.`
+      : '⚠️ ' + (d.error || 'Službeni nalog nije pronađen');
+  } catch { el.textContent = 'Greška pri povezivanju'; }
+}
+
+function pkGrupaPromena() {
+  const ids = document.getElementById('pk-grupa').value === 'ids';
+  document.getElementById('pk-ids-wrap').style.display = ids ? 'block' : 'none';
+  document.getElementById('pk-mesto-wrap').style.display = ids ? 'none' : 'block';
+}
+
+async function posaljiPoruke() {
+  const grupa = document.getElementById('pk-grupa').value;
+  const tekst = document.getElementById('pk-tekst').value.trim();
+  const mesto = document.getElementById('pk-mesto').value.trim();
+  const saljiMejl = document.getElementById('pk-mejl').checked;
+  const ids = document.getElementById('pk-ids').value.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+  if (!tekst) { toast('Upišite poruku!', 'warn'); return; }
+  if (grupa === 'ids' && !ids.length) { toast('Upišite bar jedan ID!', 'warn'); return; }
+  const kome = grupa === 'kupci' ? 'svim kupcima' : grupa === 'prodavci' ? 'svim prodavcima' : `korisnicima: ${ids.join(', ')}`;
+  confirm2('Pošalji poruku', `Slanje ${kome}${mesto && grupa !== 'ids' ? ' iz mesta "' + mesto + '"' : ''}?\n\n"${tekst.substring(0, 120)}"`, async () => {
+    const btn = document.getElementById('pk-btn');
+    btn.disabled = true;
+    try {
+      const res = await fetch(`${backendUrl}/admin/poruka-korisnicima`, {
+        method:'POST', headers:{ 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
+        body: JSON.stringify({ tekst, grupa, mesto, ids, saljiMejl })
+      });
+      const d = await res.json();
+      if (res.ok) { toast(d.message, 'ok', 6000); document.getElementById('pk-tekst').value = ''; }
+      else toast(d.error || 'Greška pri slanju', 'error', 6000);
+    } catch { toast('Greška pri povezivanju', 'error'); }
+    btn.disabled = false;
+  }, '📨');
 }
 
 // ── CSV EXPORT ──
