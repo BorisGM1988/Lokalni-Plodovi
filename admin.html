@@ -980,16 +980,16 @@ const state = {
 };
 
 // ── PODNIŠE po niši (za autocomplete u admin edit formi) ──
-const podniseAdminMapa = {
+const AdminMapa = {
   'Med': ['Bagremov med', 'Livadski med', 'Šumski med', 'Lipov med', 'Kestenov med', 'Borov med', 'Med sa saćem', 'Propolis'],
-  'Domaća radinost': ['Rakija', 'Likeri', 'Zimnica', 'Džemovi', 'Kolači', 'Testenine'],
+  'Domaća radinost': ['Rakija', 'Likeri', 'Zimnica', 'Džemovi', 'Kolači', 'Testenine', 'Ceđeni sokovi']
 };
 
 function popuniPodnisuAdmin() {
   const nisa = document.getElementById('edit-nisa').value;
   const list = document.getElementById('edit-podnisa-list');
   list.innerHTML = '';
-  (podniseAdminMapa[nisa] || []).forEach(p => {
+  (AdminMapa[nisa] || []).forEach(p => {
     const opt = document.createElement('option');
     opt.value = p;
     list.appendChild(opt);
