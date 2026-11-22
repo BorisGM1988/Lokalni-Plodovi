@@ -12,13 +12,21 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Uputstvo za prodavce • LokalniPlodovi.rs</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="mobile.css">
+  <title>Uputstvo za prodavce – LokalniPlodovi</title>
+  <meta name="description" content="Kako da postaneš prodavac na LokalniPlodovi za 2 minuta: registracija, podešavanje profila, dodavanje proizvoda, blog, aplikacija i obaveštenja."/>
+  <link rel="canonical" href="https://lokalniplodovi.rs/uputstvo-za-prodavce.html"/>
+  <meta property="og:title" content="Uputstvo za prodavce – LokalniPlodovi"/>
+  <meta property="og:description" content="Postani prodavac i počni da prodaješ domaće proizvode direktno kupcima. Uputstvo korak po korak."/>
+  <meta property="og:url" content="https://lokalniplodovi.rs/uputstvo-za-prodavce.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:locale" content="sr_RS"/>
+  <meta property="og:image" content="https://lokalniplodovi.rs/og-slika.jpg"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
     :root {
       --zelena: #2e7d32;
@@ -27,249 +35,101 @@
       --zlatna: #f5a623;
       --zlatna-svetla: #ffd166;
       --zemlja: #5d4037;
-      --siva: #757575;
-      --svetlo: #f8f9f5;
-      --belo: #ffffff;
+      --krem: #faf7f0;
+      --tekst: #25302a;
+      --ease: cubic-bezier(.2,.8,.2,1);
     }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--krem); color: var(--tekst); min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+    .pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 26px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.25s; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--zlatna); outline-offset: 3px; }
 
-    * { margin:0; padding:0; box-sizing:border-box; }
-
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: url('https://thumbs.dreamstime.com/b/serbian-rural-village-green-springtime-landscape-mountains-serbia-very-123806888.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #333;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(248, 249, 245, 0.78);
-      z-index: -1;
-    }
-
-    /* ===== Header — usklađen sa index.html ===== */
-    header {
-      background: linear-gradient(135deg, var(--zelena-tamna), var(--zelena));
-      color: white;
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-    }
-
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-    }
-
-    .logo-icon {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, #4caf50, #1b5e20);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem;
-      box-shadow: 0 2px 12px rgba(76,175,80,0.4);
-    }
-
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem; font-weight: 700;
-      color: white; letter-spacing: -0.3px;
-    }
-
+    /* ===== HEADER ===== */
+    header { position: sticky; top: 0; z-index: 1000; background: rgba(15,47,20,0.92); -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    nav { display: flex; justify-content: space-between; align-items: center; max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 76px; }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #4caf50, #1b5e20); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 2px 12px rgba(76,175,80,0.4); }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white; letter-spacing: -0.3px; }
     .logo-text span { color: var(--zlatna-svetla); }
-
-    nav ul {
-      display: flex; list-style: none;
-      gap: 0.3rem; align-items: center;
-    }
-
-    nav ul li a {
-      color: rgba(255,255,255,0.88);
-      text-decoration: none;
-      font-size: 0.9rem; font-weight: 500;
-      padding: 0.5rem 0.9rem;
-      border-radius: 50px;
-      transition: all 0.2s;
-      letter-spacing: 0.2px;
-    }
-
-    nav ul li a:hover { background: rgba(255,255,255,0.15); color: white; }
-
-    .nav-cta a {
-      background: var(--zlatna) !important;
-      color: #1b1b1b !important;
-      font-weight: 700 !important;
-      padding: 0.5rem 1.2rem !important;
-    }
-
+    nav ul { display: flex; list-style: none; gap: 4px; align-items: center; }
+    nav ul li a { color: rgba(255,255,255,0.88); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 0.55rem 0.95rem; border-radius: 50px; transition: all 0.2s; }
+    nav ul li a:hover { background: rgba(255,255,255,0.14); color: white; }
+    .nav-cta a { background: var(--zlatna) !important; color: #1b1b1b !important; font-weight: 700 !important; padding: 0.55rem 1.2rem !important; margin-left: 6px; }
     .nav-cta a:hover { background: var(--zlatna-svetla) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 26px; height: 2.5px; background: white; border-radius: 3px; display: block; }
 
-    .hamburger {
-      display: none; flex-direction: column;
-      gap: 5px; cursor: pointer; background: none; border: none;
+    /* ===== NASLOV ===== */
+    .naslov { color: white; padding: 64px 0 72px; background: radial-gradient(800px 380px at 90% 0%, rgba(245,166,35,0.2), transparent 60%), linear-gradient(160deg, #0f2f14, #1d5a27); }
+    .naslov h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; }
+    .naslov p { margin-top: 16px; max-width: 600px; font-size: 1.1rem; line-height: 1.65; color: #e3f0e4; }
+
+    /* ===== UPUTSTVO ===== */
+    .uputstvo { display: grid; grid-template-columns: 230px 1fr; gap: 56px; padding: 56px 0 0; align-items: start; }
+    .sadrzaj { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 2px; }
+    .sadrzaj-naslov { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--zemlja); margin-bottom: 8px; }
+    .sadrzaj a { text-decoration: none; padding: 9px 12px; border-radius: 12px; font-size: 0.92rem; color: #55625a; transition: background 0.2s, color 0.2s; }
+    .sadrzaj a:hover { background: #fff; color: var(--zelena-tamna); }
+
+    .korak { display: grid; grid-template-columns: 64px 1fr; gap: 20px; padding: 40px 0; border-bottom: 1px solid #e3dcc9; scroll-margin-top: 100px; }
+    .korak:first-child { padding-top: 0; }
+    .korak:last-of-type { border-bottom: none; }
+    .korak-broj { font-family: 'Playfair Display', serif; font-size: 3.6rem; font-weight: 700; line-height: 1; color: var(--zelena); }
+    .korak h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 2.6vw, 1.9rem); color: var(--zemlja); line-height: 1.2; margin-bottom: 14px; }
+    .korak p.uvod { color: #55625a; margin-bottom: 12px; line-height: 1.65; }
+    .nova { display: inline-block; vertical-align: middle; margin-left: 10px; padding: 3px 12px; border-radius: 999px; background: var(--zlatna); color: #1b1b1b; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 700; }
+    .lista { list-style: none; }
+    .lista li { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid #efe9d9; line-height: 1.6; }
+    .lista li:last-child { border-bottom: none; }
+    .lista li i { color: var(--zelena); margin-top: 5px; width: 18px; text-align: center; flex-shrink: 0; }
+    .lista a, .uvod a, .opcija a { color: var(--zelena); font-weight: 600; }
+    .napomena { margin-top: 18px; padding: 16px 20px; background: #e8f5e9; border-left: 4px solid var(--zelena); border-radius: 0 14px 14px 0; line-height: 1.6; font-weight: 500; }
+
+    .opcije { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 36px; }
+    .opcija { padding: 14px 0; border-bottom: 1px solid #efe9d9; }
+    .opcija h3 { font-size: 1.02rem; color: var(--zelena-tamna); margin-bottom: 4px; display: flex; gap: 10px; align-items: center; }
+    .opcija p { color: #55625a; line-height: 1.55; font-size: 0.95rem; }
+
+    .kraj { margin-top: 24px; padding: 32px 28px; border-radius: 28px; color: #fff; text-align: center; background: radial-gradient(420px 220px at 100% 0%, rgba(241,210,122,0.3), transparent 60%), linear-gradient(135deg, #0f3314, #2e7d32); }
+    .kraj p { color: #cfe3d0; margin-bottom: 18px; line-height: 1.6; }
+    .kraj a.pill { background: #f1d27a; color: #3b2a05; margin: 0 4px 4px; }
+    .kraj a.pill:hover { background: #ffe3a1; transform: translateY(-2px); }
+    .kraj a.pill.staklo { background: transparent; border: 1.5px solid rgba(255,255,255,0.4); color: #fff; }
+    .kraj a.pill.staklo:hover { background: rgba(255,255,255,0.12); }
+
+    /* ===== FOOTER ===== */
+    footer { background: #4a3128; color: #e9dccf; padding: 56px 0 40px; margin-top: 90px; }
+    .footer-inner { text-align: center; }
+    .footer-btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 36px; }
+    .footer-btn { padding: 0.8rem 1.5rem; border-radius: 999px; text-decoration: none; font-size: 0.95rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); transition: all 0.25s; }
+    .footer-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; margin-bottom: 0.5rem; }
+    .footer-tagline { opacity: 0.85; margin-bottom: 1.2rem; }
+    .footer-links { margin-top: 1rem; opacity: 0.9; font-size: 0.92rem; }
+    .footer-links a { color: #c8e6c9; text-decoration: underline; }
+
+    @media (max-width: 900px) {
+      .uputstvo { grid-template-columns: 1fr; gap: 0; }
+      .sadrzaj { display: none; }
+      .opcije { grid-template-columns: 1fr; }
     }
-
-    .hamburger span { width: 26px; height: 2.5px; background: white; border-radius: 3px; display: block; transition: all 0.3s; }
-
     @media (max-width: 768px) {
-      header { padding: 1rem 1.2rem; }
+      .wrap { padding: 0 16px; }
+      nav { padding: 0 16px; height: 68px; }
       .hamburger { display: flex; }
-
-      nav ul {
-        display: none;
-        position: absolute; top: 70px; left: 0; right: 0;
-        background: rgba(27,94,32,0.97);
-        backdrop-filter: blur(12px);
-        padding: 1.2rem 1.5rem 1.8rem;
-        flex-direction: column; gap: 0.4rem; z-index: 999;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-      }
-
+      nav ul { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(15,47,20,0.98); padding: 1.2rem 1.5rem 1.8rem; flex-direction: column; align-items: stretch; gap: 0.4rem; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.1); }
       nav ul.open { display: flex; }
       nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
+      .nav-cta a { margin-left: 0; text-align: center; }
+      .naslov { padding: 44px 0 52px; }
+      .uputstvo { padding-top: 40px; }
+      .korak { grid-template-columns: 1fr; gap: 6px; padding: 32px 0; }
+      .korak-broj { font-size: 2.6rem; }
     }
-
-    @media (min-width: 769px) { .hamburger { display: none; } }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 5rem;
-    }
-
-    h1 {
-      color: var(--zemlja);
-      text-align: center;
-      margin: 2rem 0 3rem;
-      font-size: 2.8rem;
-      font-weight: 700;
-    }
-
-    .step-card {
-      background: white;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      margin-bottom: 2rem;
-    }
-
-    .step-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 44px rgba(0,0,0,0.16);
-    }
-
-    .step-header {
-      background: linear-gradient(135deg, var(--zelena), var(--zelena-svetla));
-      color: white;
-      padding: 1.2rem 1.8rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .step-number {
-      background: rgba(255,255,255,0.3);
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .step-body {
-      padding: 2rem;
-    }
-
-    .step-body ul {
-      list-style: none;
-    }
-
-    .step-body li {
-      padding: 0.8rem 0;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .step-body li:last-child { border-bottom: none; }
-
-    .step-body i {
-      color: var(--zelena);
-      margin-top: 4px;
-      font-size: 1.3rem;
-    }
-
-    .highlight {
-      background: #e8f5e9;
-      border-left: 5px solid var(--zelena);
-      padding: 1rem;
-      border-radius: 8px;
-      margin: 1.5rem 0;
-      font-weight: 500;
-    }
-
-    .novo-badge {
-      background: var(--zlatna);
-      color: #1b1b1b;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.25rem 0.7rem;
-      border-radius: 50px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-left: 0.6rem;
-      vertical-align: middle;
-    }
-
-    .btn {
-      background: var(--zelena-svetla);
-      color: white;
-      padding: 0.9rem 2rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: 0.25s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn:hover { background: var(--zelena); transform: scale(1.05); }
-
-    footer {
-      background: var(--zemlja);
-      color: white;
-      text-align: center;
-      padding: 4rem 1rem 2.5rem;
-      margin-top: 6rem;
-    }
-
-    @media (max-width: 768px) {
-      h1 { font-size: 2.1rem; }
-      .step-header { flex-direction: column; text-align: center; }
-    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>
@@ -280,270 +140,200 @@
       <div class="logo-icon">🌿</div>
       <span class="logo-text">Lokalni<span>Plodovi</span></span>
     </a>
-
-    <button class="hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Meni">
-      <span></span><span></span><span></span>
-    </button>
-
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Meni"><span></span><span></span><span></span></button>
     <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
       <li><a href="blog.html">Blog</a></li>
-      <li id="moj-profil-li" style="display:none;">
-        <a href="moj-profil.html" id="moj-profil-link">Moj profil</a>
-      </li>
-      <li id="odjavi-se-li" style="display:none;">
-        <a href="#" onclick="odjaviSe()">Odjavi se</a>
-      </li>
-      <li id="prijavi-se-li">
-        <a href="login.html">Prijavi se</a>
-      </li>
-      <li id="postani-prodavac-li" class="nav-cta">
-        <a href="registracija.html">Registruj se</a>
-      </li>
+      <li><a href="oglasnik.html">Oglasnik</a></li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html" id="moj-profil-link">Moj profil</a></li>
+      <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
+      <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
+      <li id="postani-prodavac-li" class="nav-cta"><a href="registracija.html">Registruj se</a></li>
     </ul>
   </nav>
 </header>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const tip = localStorage.getItem('tip');
-
-    const mojProfilLi = document.getElementById('moj-profil-li');
-    const odjaviSeLi = document.getElementById('odjavi-se-li');
-    const prijaviSeLi = document.getElementById('prijavi-se-li');
-    const postaniProdavacLi = document.getElementById('postani-prodavac-li');
-    const profilLink = document.getElementById('moj-profil-link');
-
-    if (token) {
-      if (mojProfilLi) mojProfilLi.style.display = 'list-item';
-      if (odjaviSeLi) odjaviSeLi.style.display = 'list-item';
-      if (prijaviSeLi) prijaviSeLi.style.display = 'none';
-      if (profilLink) profilLink.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
-
-      if (postaniProdavacLi) {
-        if (tip === 'prodavac') {
-          postaniProdavacLi.style.display = 'list-item';
-          postaniProdavacLi.classList.add('nav-cta');
-          postaniProdavacLi.innerHTML = '<a href="moj-profil.html">➕ Dodaj proizvod</a>';
-        } else if (tip === 'kupac') {
-          postaniProdavacLi.style.display = 'list-item';
-          postaniProdavacLi.classList.remove('nav-cta');
-          postaniProdavacLi.innerHTML = '<a href="registracija-prodavca.html">🌿 Postani prodavac</a>';
-        } else {
-          postaniProdavacLi.style.display = 'none';
-        }
-      }
-    } else {
-      if (mojProfilLi) mojProfilLi.style.display = 'none';
-      if (odjaviSeLi) odjaviSeLi.style.display = 'none';
-      if (prijaviSeLi) prijaviSeLi.style.display = 'list-item';
-      if (postaniProdavacLi) {
-        postaniProdavacLi.style.display = 'list-item';
-        postaniProdavacLi.classList.add('nav-cta');
-        postaniProdavacLi.innerHTML = '<a href="registracija.html">Registruj se</a>';
-      }
-    }
-  });
-
-  function odjaviSe() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
-
-  function toggleMenu() {
-    document.getElementById('nav-menu').classList.toggle('open');
-  }
-</script>
-
-<div class="container">
-  <h1>📋 Uputstvo za prodavce  LokalniPlodovi.rs</h1>
-  <p style="text-align:center; font-size:1.4rem; max-width:800px; margin:0 auto 3rem; color:#444;">
-    Sve što treba da znaš da bi za samo 2 minuta postao prodavac i počeo da prodaješ svoje proizvode direktno sa imanja.
-  </p>
-
-  <!-- KORAK 1 -->
-  <div class="step-card">
-    <div class="step-header">
-      <div class="step-number">1</div>
-      <h2 style="margin:0; font-size:1.8rem;">Registracija i automatska prijava</h2>
-    </div>
-    <div class="step-body">
-      <ul>
-        <li><i class="fas fa-arrow-right"></i> Klikni na link <strong>„Postani prodavac“</strong> u gornjem meniju ili idi direktno na <a href="registracija.html" style="color:var(--zelena);">registracija.html</a></li>
-        <li><i class="fas fa-arrow-right"></i> Popuni obrazac: ime, prezime, email, telefon, lozinka i lokaciju</li>
-        <li><i class="fas fa-arrow-right"></i> <strong>VAŽNO:</strong> Nema čekanja na email poruku  posle klika na „Registruj se“ automatski te prijavljuje i prebacuje na stranicu <strong>„Moj profil“</strong></li>
-      </ul>
-      <div class="highlight">
-        ✅ Gotovo! Već si ulogovan i nalaziš se u svom prodavčevom panelu.
-      </div>
-    </div>
+<section class="naslov">
+  <div class="wrap">
+    <h1>Uputstvo za prodavce</h1>
+    <p>Sve što treba da znaš da bi za samo 2 minuta postao prodavac i počeo da prodaješ svoje proizvode direktno sa imanja.</p>
   </div>
+</section>
 
-  <!-- KORAK 2 -->
-  <div class="step-card">
-    <div class="step-header">
-      <div class="step-number">2</div>
-      <h2 style="margin:0; font-size:1.8rem;">Podešavanje profila (Izmeni profil)</h2>
-    </div>
-    <div class="step-body">
-      <p style="margin-bottom:1.5rem;">U <strong>Moj profil</strong> klikni veliko zeleno dugme <strong>„Izmeni profil“</strong></p>
-      <ul>
-        <li><i class="fas fa-arrow-right"></i> Dodaj <strong>profilnu sliku</strong> (tvoja fotografija ili logo)</li>
-        <li><i class="fas fa-arrow-right"></i> Dodaj <strong>naslovnu sliku</strong> (cover foto – najlepša slika sa imanja)</li>
-        <li><i class="fas fa-arrow-right"></i> Napiši kratak i lep opis domaćinstva</li>
-        <li><i class="fas fa-arrow-right"></i> Proveri telefon i lokaciju</li>
-        <li><i class="fas fa-arrow-right"></i> Klikni <strong>„Sačuvaj promene“</strong></li>
-      </ul>
-      <div class="highlight">
-        Što bolji profil = više poverenja kod kupaca!
+<main class="wrap uputstvo">
+  <aside class="sadrzaj" aria-label="Sadržaj">
+    <div class="sadrzaj-naslov">Na ovoj stranici</div>
+    <a href="#korak-1">1. Registracija</a>
+    <a href="#korak-2">2. Podešavanje profila</a>
+    <a href="#korak-3">3. Dodavanje proizvoda</a>
+    <a href="#korak-4">4. Blog i novosti</a>
+    <a href="#korak-5">5. Aplikacija i obaveštenja</a>
+    <a href="#korak-6">6. Ostale opcije</a>
+  </aside>
+
+  <div>
+    <section class="korak" id="korak-1">
+      <div class="korak-broj">1</div>
+      <div>
+        <h2>Registracija i automatska prijava</h2>
+        <ul class="lista">
+          <li><i class="fas fa-arrow-right"></i><span>Klikni na dugme <strong>„Registruj se“</strong> u gornjem meniju ili idi direktno na <a href="registracija.html">registracija.html</a></span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Popuni obrazac: ime, prezime, email, telefon, lozinka i lokacija</span></li>
+          <li><i class="fas fa-arrow-right"></i><span><strong>Važno:</strong> nema čekanja na email poruku. Posle klika na „Registruj se“ automatski si prijavljen i prebačen na stranicu <strong>„Moj profil“</strong></span></li>
+        </ul>
+        <div class="napomena">✅ Gotovo! Već si ulogovan i nalaziš se u svom prodavačkom panelu.</div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- KORAK 3 -->
-  <div class="step-card">
-    <div class="step-header">
-      <div class="step-number">3</div>
-      <h2 style="margin:0; font-size:1.8rem;">Dodavanje proizvoda</h2>
-    </div>
-    <div class="step-body">
-      <p style="margin-bottom:1.5rem;">U <strong>Moj profil</strong> klikni zeleno dugme <strong>„Dodaj proizvod“</strong></p>
-      <ul>
-        <li><i class="fas fa-arrow-right"></i> Naziv proizvoda</li>
-        <li><i class="fas fa-arrow-right"></i> Izaberi nišu (Povrće, Voće, Med, Jaja…)</li>
-        <li><i class="fas fa-arrow-right"></i> Cena + jedinica mere (kg, komad, litra…)</li>
-        <li><i class="fas fa-arrow-right"></i> Količina na stanju</li>
-        <li><i class="fas fa-arrow-right"></i> Detaljan opis + fotografija </li>
-        <li><i class="fas fa-arrow-right"></i> Klikni <strong>„Objavi proizvod“</strong></li>
-      </ul>
-      <div class="highlight">
-        ✅ Proizvod se <strong>odmah pojavljuje na glavnoj stranici</strong> u odgovarajućoj niši i na „tezgi“ (traci koja se skroluje na vrhu sajta).<br>
-        Kupci ga vide istog trenutka i mogu da te kontaktiraju preko chata ili telefona.
+    <section class="korak" id="korak-2">
+      <div class="korak-broj">2</div>
+      <div>
+        <h2>Podešavanje profila (Izmeni profil)</h2>
+        <p class="uvod">U <strong>Moj profil</strong> klikni veliko zeleno dugme <strong>„Izmeni profil“</strong>.</p>
+        <ul class="lista">
+          <li><i class="fas fa-arrow-right"></i><span>Dodaj <strong>profilnu sliku</strong> (tvoja fotografija ili logo)</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Dodaj <strong>naslovnu sliku</strong> (cover foto, najlepša slika sa imanja)</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Napiši kratak i lep opis domaćinstva</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Proveri telefon i lokaciju</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Klikni <strong>„Sačuvaj promene“</strong></span></li>
+        </ul>
+        <div class="napomena">Što bolji profil, više poverenja kod kupaca!</div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- KORAK 4 -->
-  <div class="step-card">
-    <div class="step-header">
-      <div class="step-number">4</div>
-      <h2 style="margin:0; font-size:1.8rem;">Blog i novosti <span class="novo-badge">Novo</span></h2>
-    </div>
-    <div class="step-body">
-      <ul>
-        <li><i class="fas fa-newspaper"></i> U <strong>Moj profil</strong> klikni <strong>„Objavi novost“</strong> za kratke vesti ili akcije (npr. „Sveže jagode sutra ujutru“) – prikazuju se kupcima koji te prate.</li>
-        <li><i class="fas fa-pen-nib"></i> Preko dugmeta <strong>„Blog“</strong> u meniju možeš da napišeš i <strong>ceo blog post</strong> – recept, priču sa imanja, savet za kupce i slično. Blog postovi se prikazuju na naslovnoj strani i na stranici <a href="blog.html" style="color:var(--zelena);">blog.html</a>.</li>
-        <li><i class="fab fa-facebook"></i> Svaki blog post ima dugme <strong>„Podeli“</strong> koje kopira link za deljenje na Facebook-u.</li>
-      </ul>
-      <div class="highlight">
-        ✅ Blog je odličan način da izgradiš poverenje i dovedeš nove kupce redovni tekstovi i recepti se dobro dele na društvenim mrežama.
+    <section class="korak" id="korak-3">
+      <div class="korak-broj">3</div>
+      <div>
+        <h2>Dodavanje proizvoda</h2>
+        <p class="uvod">U <strong>Moj profil</strong> klikni zeleno dugme <strong>„Dodaj proizvod“</strong>.</p>
+        <ul class="lista">
+          <li><i class="fas fa-arrow-right"></i><span>Naziv proizvoda</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Izaberi nišu (Povrće, Voće, Med, Jaja…)</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Cena + jedinica mere (kg, komad, litra…)</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Količina na stanju</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Detaljan opis + fotografija</span></li>
+          <li><i class="fas fa-arrow-right"></i><span>Klikni <strong>„Objavi proizvod“</strong></span></li>
+        </ul>
+        <div class="napomena">✅ Proizvod se <strong>odmah pojavljuje na glavnoj stranici</strong> u odgovarajućoj niši i na „tezgi“ (traci koja se skroluje na vrhu sajta).<br>Kupci ga vide istog trenutka i mogu da te kontaktiraju preko chata ili telefona.</div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- KORAK 5 -->
-  <div class="step-card">
-    <div class="step-header">
-      <div class="step-number">5</div>
-      <h2 style="margin:0; font-size:1.8rem;">Mobilna aplikacija i obaveštenja <span class="novo-badge">Novo</span></h2>
-    </div>
-    <div class="step-body">
-      <ul>
-        <li><i class="fas fa-download"></i> Na naslovnoj strani klikni dugme <strong>„Preuzmi aplikaciju“</strong> da instaliraš LokalniPlodovi kao aplikaciju na telefonu ili računaru (bez App Store-a).</li>
-        <li><i class="fab fa-apple"></i> Na iPhone-u instalacija ide preko dugmeta <strong>Podeli → Dodaj na Home Screen</strong> (sajt te vodi kroz korake).</li>
-        <li><i class="fas fa-bell"></i> Posle instalacije uključi <strong>obaveštenja (notifikacije)</strong> – dobićeš push poruku na telefon kad neko pošalje poruku, ostavi upit ili se nešto novo desi na tvom profilu.</li>
-      </ul>
-      <div class="highlight">
-        ✅ Sa uključenim obaveštenjima nikad ne propustiš upit kupca, čak i kad sajt nije otvoren.
+    <section class="korak" id="korak-4">
+      <div class="korak-broj">4</div>
+      <div>
+        <h2>Blog i novosti <span class="nova">Novo</span></h2>
+        <ul class="lista">
+          <li><i class="fas fa-newspaper"></i><span>U <strong>Moj profil</strong> klikni <strong>„Objavi novost“</strong> za kratke vesti ili akcije (npr. „Sveže jagode sutra ujutru“). Prikazuju se kupcima koji te prate.</span></li>
+          <li><i class="fas fa-pen-nib"></i><span>Preko dugmeta <strong>„Blog“</strong> u meniju možeš da napišeš i <strong>ceo blog post</strong>: recept, priču sa imanja, savet za kupce i slično. Blog postovi se prikazuju na naslovnoj strani i na stranici <a href="blog.html">blog.html</a>.</span></li>
+          <li><i class="fab fa-facebook"></i><span>Svaki blog post ima dugme <strong>„Podeli“</strong> koje kopira link za deljenje na Facebook-u.</span></li>
+        </ul>
+        <div class="napomena">✅ Blog je odličan način da izgradiš poverenje i dovedeš nove kupce. Redovni tekstovi i recepti se dobro dele na društvenim mrežama.</div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- KORAK 6 -->
-  <div class="step-card">
-    <div class="step-header">
-      <div class="step-number">6</div>
-      <h2 style="margin:0; font-size:1.8rem;">Ostale korisne opcije</h2>
-    </div>
-    <div class="step-body">
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:1.5rem;">
-        <div style="background:#f8f9f5; padding:1.5rem; border-radius:12px;">
-          <h4 style="color:var(--zelena);"><i class="fas fa-search"></i> Pretraga</h4>
-          <p>Kupci na naslovnoj strani mogu direktno da pretraže proizvode ili prodavce po nazivu ili mestu (npr. „med“, „Novi Sad“).</p>
-        </div>
-        <div style="background:#f8f9f5; padding:1.5rem; border-radius:12px;">
-          <h4 style="color:var(--zelena);"><i class="fas fa-comments"></i> Chat</h4>
-          <p>Otvori temu i razgovaraj direktno sa kupcima ili drugim prodavcima.</p>
-        </div>
-        <div style="background:#f8f9f5; padding:1.5rem; border-radius:12px;">
-          <h4 style="color:var(--zelena);"><i class="fas fa-map-marked-alt"></i> Mapa</h4>
-          <p>Kupci na mapi vide tačno gde se nalaziš i koji si im prodavac najbliži.</p>
-        </div>
-        <div style="background:#f8f9f5; padding:1.5rem; border-radius:12px;">
-          <h4 style="color:var(--zelena);"><i class="fas fa-route"></i> Roadmap</h4>
-          <p>Na stranici <a href="roadmap.html" style="color:var(--zelena);">roadmap.html</a> vidiš koje nove funkcije stižu na sajt.</p>
-        </div>
-        <div style="background:#f8f9f5; padding:1.5rem; border-radius:12px;">
-          <h4 style="color:var(--zelena);"><i class="fas fa-phone"></i> Kontakt</h4>
-          <p>Pitanje ili predlog? Piši nam preko stranice <a href="kontakt.html" style="color:var(--zelena);">kontakt.html</a>.</p>
+    <section class="korak" id="korak-5">
+      <div class="korak-broj">5</div>
+      <div>
+        <h2>Mobilna aplikacija i obaveštenja <span class="nova">Novo</span></h2>
+        <ul class="lista">
+          <li><i class="fas fa-download"></i><span>Na naslovnoj strani klikni dugme <strong>„Preuzmi aplikaciju“</strong> da instaliraš LokalniPlodovi kao aplikaciju na telefonu ili računaru (bez App Store-a).</span></li>
+          <li><i class="fab fa-apple"></i><span>Na iPhone-u instalacija ide preko dugmeta <strong>Podeli → Dodaj na Home Screen</strong> (sajt te vodi kroz korake).</span></li>
+          <li><i class="fas fa-bell"></i><span>Posle instalacije uključi <strong>obaveštenja (notifikacije)</strong>. Dobićeš push poruku na telefon kad neko pošalje poruku, ostavi upit ili se nešto novo desi na tvom profilu.</span></li>
+        </ul>
+        <div class="napomena">✅ Sa uključenim obaveštenjima nikad ne propustiš upit kupca, čak i kad sajt nije otvoren.</div>
+      </div>
+    </section>
+
+    <section class="korak" id="korak-6">
+      <div class="korak-broj">6</div>
+      <div>
+        <h2>Ostale korisne opcije</h2>
+        <div class="opcije">
+          <div class="opcija"><h3><i class="fas fa-search"></i> Pretraga</h3><p>Kupci na naslovnoj strani mogu direktno da pretraže proizvode ili prodavce po nazivu ili mestu (npr. „med“, „Novi Sad“).</p></div>
+          <div class="opcija"><h3><i class="fas fa-comments"></i> Chat</h3><p>Otvori temu i razgovaraj direktno sa kupcima ili drugim prodavcima.</p></div>
+          <div class="opcija"><h3><i class="fas fa-map-marked-alt"></i> Mapa</h3><p>Kupci na mapi vide tačno gde se nalaziš i koji su im prodavci najbliži.</p></div>
+          <div class="opcija"><h3><i class="fas fa-route"></i> Roadmap</h3><p>Na stranici <a href="roadmap.html">roadmap.html</a> vidiš koje nove funkcije stižu na sajt.</p></div>
+          <div class="opcija"><h3><i class="fas fa-phone"></i> Kontakt</h3><p>Pitanje ili predlog? Piši nam preko stranice <a href="kontakt.html">kontakt.html</a>.</p></div>
         </div>
       </div>
+    </section>
+
+    <div class="kraj">
+      <p>Treba ti pomoć oko profila ili proizvoda? Javi nam se, rado ćemo pomoći.</p>
+      <a href="index.html" class="pill"><i class="fas fa-home"></i> Na početnu stranicu</a>
+      <a href="kontakt.html" class="pill staklo"><i class="fas fa-envelope"></i> Kontakt</a>
     </div>
   </div>
-
-  <div style="text-align:center; margin-top:3rem;">
-    <a href="index.html" class="btn" style="font-size:1.3rem; padding:1rem 3rem;">
-      <i class="fas fa-home"></i> Vrati se na početnu stranicu
-    </a>
-  </div>
-
-  <p style="text-align:center; margin-top:3rem; opacity:0.7; font-size:1.1rem;">
-    Sve je spremno! Ako ti zatreba pomoć ili želiš da dodam još nešto u uputstvo samo piši.
-  </p>
-</div>
+</main>
 
 <footer>
-  <div class="container">
-    <h2>LokalniPlodovi</h2>
-    <p>Prirodno • Zdravo • Direktno sa imanja</p>
-    <p style="margin-top:2rem; opacity:0.9;">© 2026 LokalniPlodovi</p>
-    <p style="margin-top:0.5rem;">
-      <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
-      <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
-    </p>
+  <div class="wrap footer-inner">
+    <div class="footer-btns">
+      <a href="uputstvo-za-prodavce.html" class="footer-btn">📖 Uputstvo za prodavce</a>
+      <a href="kontakt.html" class="footer-btn">📞 Kontakt</a>
+      <a href="roadmap.html" class="footer-btn">🗺️ Roadmap</a>
+      <a href="o-nama.html" class="footer-btn">👥 O nama</a>
+    </div>
+    <div class="footer-logo">LokalniPlodovi</div>
+    <p class="footer-tagline">Prirodno • Zdravo • Direktno sa imanja</p>
+    <p style="opacity:0.75; margin-bottom:0.8rem;">© 2026 LokalniPlodovi</p>
+    <div class="footer-links">
+      <a href="politika-privatnosti.html">Politika privatnosti</a> •
+      <a href="uslovi-koriscenja.html">Uslovi korišćenja</a> •
+      <a href="podrzi-nas.html">💚 Podržite nas</a>
+    </div>
   </div>
 </footer>
 
-
-
 <!-- DISCLAIMER BANNER -->
-<div id="disclaimer-banner" style="display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(30, 30, 30, 0.97); color: white; z-index: 9999; padding: 1.5rem 2rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.3);">
-  <div style="max-width: 900px; margin: 0 auto;">
-    <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 1rem;">
-      ⚠️ <strong>Napomena:</strong> LokalniPlodovi je <strong>oglasnik</strong> koji povezuje lokalne proizvođače i kupce. 
-      Platforma <strong>nije posrednik</strong> u transakcijama i nije odgovorna za kvalitet, poreklo niti isporuku proizvoda. 
+<div id="disclaimer-banner" style="display:none; position:fixed; bottom:0; left:0; width:100%; background:rgba(20,20,20,0.97); color:white; z-index:9999; padding:1.5rem 2rem; box-shadow:0 -4px 20px rgba(0,0,0,0.3);">
+  <div style="max-width:900px; margin:0 auto;">
+    <p style="font-size:0.95rem; line-height:1.6; margin-bottom:1rem;">
+      ⚠️ <strong>Napomena:</strong> LokalniPlodovi je <strong>oglasnik</strong> koji povezuje lokalne proizvođače i kupce.
+      Platforma <strong>nije posrednik</strong> u transakcijama i nije odgovorna za kvalitet, poreklo niti isporuku proizvoda.
       Sve transakcije se odvijaju <strong>direktno između kupca i prodavca</strong>.
     </p>
-    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-      <button onclick="prihvatiDisclaimer()" style="background: #4caf50; color: white; border: none; padding: 0.8rem 2rem; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer;">✅ Razumem i prihvatam</button>
-    </div>
+    <button onclick="prihvatiDisclaimer()" style="background:#4caf50; color:white; border:none; padding:0.8rem 2rem; border-radius:50px; font-size:1rem; font-weight:600; cursor:pointer; font-family:inherit;">✅ Razumem i prihvatam</button>
   </div>
 </div>
 
 <script>
-  window.addEventListener('load', function() {
+  function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
+  function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
+  function prihvatiDisclaimer() { localStorage.setItem('disclaimer_prihvacen', 'true'); document.getElementById('disclaimer-banner').style.display = 'none'; }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
+    const mojProfilLi = document.getElementById('moj-profil-li');
+    const odjaviSeLi = document.getElementById('odjavi-se-li');
+    const prijaviSeLi = document.getElementById('prijavi-se-li');
+    const postaniLi = document.getElementById('postani-prodavac-li');
+    const profilLink = document.getElementById('moj-profil-link');
+
+    if (token) {
+      mojProfilLi.style.display = 'list-item';
+      odjaviSeLi.style.display = 'list-item';
+      prijaviSeLi.style.display = 'none';
+      if (profilLink) profilLink.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+      if (tip === 'prodavac') {
+        postaniLi.classList.add('nav-cta');
+        postaniLi.innerHTML = '<a href="moj-profil.html">➕ Dodaj proizvod</a>';
+      } else if (tip === 'kupac') {
+        postaniLi.classList.remove('nav-cta');
+        postaniLi.innerHTML = '<a href="registracija-prodavca.html">🌿 Postani prodavac</a>';
+      } else {
+        postaniLi.style.display = 'none';
+      }
+    }
+
     if (!localStorage.getItem('disclaimer_prihvacen')) {
       document.getElementById('disclaimer-banner').style.display = 'block';
     }
   });
-  function prihvatiDisclaimer() {
-    localStorage.setItem('disclaimer_prihvacen', 'true');
-    document.getElementById('disclaimer-banner').style.display = 'none';
-  }
 </script>
 
 </body>
