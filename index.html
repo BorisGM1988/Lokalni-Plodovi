@@ -382,6 +382,20 @@
     .reklama-prazno i { font-size: 1.6rem; color: var(--zelena); }
     .reklama-prazno strong { font-size: 1rem; }
     .reklama-prazno span { font-size: 0.85rem; color: #6f7a72; }
+    .reklama-wrap { position: relative; transition: transform 0.3s var(--ease); }
+    .reklama-wrap:hover { transform: translateY(-4px); }
+    .reklama-wrap .reklama-kvadrat:hover { transform: none; }
+    .reklama-info { position: absolute; top: 10px; right: 10px; z-index: 2; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(255,255,255,0.95); color: var(--zelena-tamna); font: italic 700 1.05rem 'Playfair Display', serif; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+    .reklama-info:hover { background: var(--zlatna-svetla); }
+    .reklama-modal { display: none; position: fixed; inset: 0; z-index: 5000; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; padding: 16px; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+    .reklama-modal.open { display: flex; }
+    .reklama-modal-box { background: #fff; width: 100%; max-width: 420px; border-radius: 24px; padding: 26px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .reklama-modal-oznaka { display: inline-block; padding: 3px 10px; border-radius: 999px; background: #f1ede2; color: #5d6b60; font-size: 0.7rem; font-weight: 700; }
+    .reklama-modal-box h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--zemlja); margin: 10px 0 8px; }
+    .reklama-modal-box p { color: #4b574e; line-height: 1.6; white-space: pre-line; }
+    .reklama-modal-akcije { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .reklama-modal-go { background: var(--zelena); color: #fff; }
+    .reklama-modal-x { background: #f1ede2; color: var(--tekst); border: none; cursor: pointer; font-family: inherit; }
     @media (max-width: 768px) {
       .reklame-section { padding-top: 44px; }
       .reklame-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -1046,12 +1060,69 @@
           s.textContent = 'Javite nam se';
           a.append(ic, t, s);
         }
-        grid.appendChild(a);
+        if (a.dataset.parcela) {
+          const wrap = document.createElement('div');
+          wrap.className = 'reklama-wrap';
+          wrap.appendChild(a);
+          if (r.opis) {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'reklama-info';
+            b.textContent = 'i';
+            b.setAttribute('aria-label', 'Više o oglašivaču: ' + r.oglasivac);
+            b.addEventListener('click', () => otvoriReklamuInfo(r, i));
+            wrap.appendChild(b);
+          }
+          grid.appendChild(wrap);
+        } else {
+          grid.appendChild(a);
+        }
       }
       sekcija.hidden = false;
     } catch (er) {
       console.log('Reklame nisu učitane:', er.message);
     }
+  }
+
+  // Prozor sa opisom oglašivača (otvara se klikom na „i“)
+  function otvoriReklamuInfo(r, parcela) {
+    let m = document.getElementById('reklama-info-modal');
+    if (!m) {
+      m = document.createElement('div');
+      m.id = 'reklama-info-modal';
+      m.className = 'reklama-modal';
+      m.addEventListener('click', ev => { if (ev.target === m) m.classList.remove('open'); });
+      document.addEventListener('keydown', ev => { if (ev.key === 'Escape') m.classList.remove('open'); });
+      document.body.appendChild(m);
+    }
+    m.textContent = '';
+    const box = document.createElement('div');
+    box.className = 'reklama-modal-box';
+    const oz = document.createElement('span');
+    oz.className = 'reklama-modal-oznaka';
+    oz.textContent = 'Reklama';
+    const h = document.createElement('h3');
+    h.textContent = r.oglasivac;
+    const p = document.createElement('p');
+    p.textContent = r.opis;
+    const akcije = document.createElement('div');
+    akcije.className = 'reklama-modal-akcije';
+    const go = document.createElement('a');
+    go.className = 'pill reklama-modal-go';
+    go.href = r.link;
+    go.target = '_blank';
+    go.rel = 'sponsored noopener noreferrer';
+    go.dataset.parcela = parcela;
+    go.textContent = 'Poseti →';
+    const x = document.createElement('button');
+    x.type = 'button';
+    x.className = 'pill reklama-modal-x';
+    x.textContent = 'Zatvori';
+    x.addEventListener('click', () => m.classList.remove('open'));
+    akcije.append(go, x);
+    box.append(oz, h, p, akcije);
+    m.appendChild(box);
+    m.classList.add('open');
   }
 
   // Brojač klikova na reklamni kvadrat
