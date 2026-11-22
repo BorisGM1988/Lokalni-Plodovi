@@ -429,6 +429,17 @@
     .btn-cestitka { background: linear-gradient(135deg,#f59e0b,#d97706); color:white; }
     .btn-cestitka:hover { opacity:.9; }
 
+    /* ── REKLAME (parcele) ── */
+    .rk-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1rem; }
+    .rk-kartica { background:var(--card-bg); border-radius:var(--radius); box-shadow:var(--shadow); padding:1rem; display:flex; flex-direction:column; gap:.7rem; }
+    .rk-gore { display:flex; justify-content:space-between; align-items:center; }
+    .rk-slika { aspect-ratio:1/1; border-radius:10px; background:var(--chip-bg); display:flex; align-items:center; justify-content:center; overflow:hidden; color:var(--muted); font-size:.85rem; }
+    .rk-slika img { width:100%; height:100%; object-fit:cover; }
+    .rk-info { display:flex; flex-direction:column; gap:.2rem; font-size:.8rem; color:var(--muted); min-height:4.2rem; }
+    .rk-info b { color:var(--text); }
+    .rk-info a { color:var(--green-700); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .rk-kartica .btn { justify-content:center; }
+
     @media (max-width:640px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid2 { grid-template-columns:1fr; }
@@ -551,6 +562,7 @@
     <button class="tab" onclick="prikaziSekciju('poruke',this);ucitajPlatformu()"><i class="fas fa-comments"></i> Poruke</button>
     <button class="tab" onclick="prikaziSekciju('oglasnik',this);ucitajOglase()"><i class="fas fa-bullhorn"></i> Oglasnik</button>
     <button class="tab" onclick="prikaziSekciju('baneri',this);ucitajBanere()"><i class="fas fa-ad"></i> Baneri</button>
+    <button class="tab" onclick="prikaziSekciju('reklame',this);ucitajReklame()"><i class="fas fa-th-large"></i> Reklame</button>
   </div>
 
   <!-- PRODAVAČI -->
@@ -759,6 +771,15 @@
     <div class="table-wrap"><div id="baneri-dani"></div></div>
   </div>
 
+  <!-- REKLAME (parcele) -->
+  <div id="sec-reklame" class="section">
+    <div class="toolbar">
+      <div class="toolbar-left"><span class="stat-note" style="margin:0">Reklamni kvadrati na početnoj stranici. Kliknite na parcelu da upišete oglašivača, sliku i link.</span></div>
+      <div class="toolbar-right"><button class="btn btn-primary btn-sm" onclick="ucitajReklame()"><i class="fas fa-sync-alt"></i> Osveži</button></div>
+    </div>
+    <div class="rk-grid" id="reklame-parcele"></div>
+  </div>
+
   <!-- PORUKE IZ SLUZBENOG NALOGA -->
   <div id="sec-poruke" class="section">
     <div class="email-card">
@@ -941,6 +962,44 @@
       <div class="modal-actions">
         <button class="btn btn-ghost" onclick="zatvoriModal('modal-cestitka')">Odustani</button>
         <button class="btn btn-cestitka" id="btn-posalji-cestitku" onclick="posaljiCestitku()"><i class="fas fa-paper-plane"></i> Pošalji</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REKLAMNA PARCELA -->
+<div class="modal-overlay" id="modal-reklama">
+  <div class="modal-box">
+    <div class="modal-header" style="background:linear-gradient(135deg,var(--green-900),var(--green-700))">
+      <h3 id="rk-naslov-modala">📣 Parcela</h3>
+      <button class="modal-close" onclick="zatvoriModal('modal-reklama')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="rk-parcela">
+      <div class="form-row">
+        <label>Ime oglašivača *</label>
+        <input type="text" id="rk-ime" maxlength="80" placeholder="npr. Pčelarstvo Petrović">
+      </div>
+      <div class="form-row">
+        <label>Link (sajt, firma ili Instagram) *</label>
+        <input type="text" id="rk-link" placeholder="https://www.instagram.com/...">
+      </div>
+      <div class="form-row">
+        <label>Slika (najbolje kvadrat, 600 × 600 px) *</label>
+        <div id="rk-slika-preview" style="width:140px;height:140px;border-radius:10px;overflow:hidden;background:var(--chip-bg);margin-bottom:.5rem;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.8rem;"></div>
+        <input type="file" id="rk-fajl" accept="image/*" onchange="izaberiSlikuReklame(event)" style="width:100%; padding:.6rem; border:2px dashed var(--border); border-radius:9px; font-size:.85rem; cursor:pointer;">
+        <span id="rk-status" style="font-size:.78rem; color:var(--muted);"></span>
+        <input type="hidden" id="rk-slika">
+        <input type="hidden" id="rk-slika-base64">
+      </div>
+      <div class="form-row">
+        <label>Važi do (prazno = bez isteka)</label>
+        <input type="date" id="rk-do">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-danger" id="rk-isprazni" onclick="isprazniReklamu()"><i class="fas fa-trash"></i> Isprazni</button>
+        <button class="btn btn-ghost" onclick="zatvoriModal('modal-reklama')">Odustani</button>
+        <button class="btn btn-primary" id="rk-sacuvaj" onclick="sacuvajReklamu()"><i class="fas fa-save"></i> Sačuvaj</button>
       </div>
     </div>
   </div>
@@ -2206,6 +2265,142 @@ async function ucitajBanere() {
       ? `<table><thead><tr><th>Dan</th><th>Baner</th><th>Klikova</th></tr></thead><tbody>${d.poDanima.map(x => `<tr><td>${fmt(x.dan)}</td><td>${BANER_IMENA[x.baner] || escH(x.baner)}</td><td style="font-weight:700">${x.klikova}</td></tr>`).join('')}</tbody></table>`
       : '<div style="padding:2rem;text-align:center;color:var(--muted)">Još nema klikova na baner.</div>';
   } catch (er) { tb.innerHTML = `<p style="color:red;padding:2rem">${escH(er.message)}</p>`; }
+}
+
+// ── REKLAME (parcele) ──
+let reklameParcele = [];
+
+async function ucitajReklame() {
+  const wrap = document.getElementById('reklame-parcele');
+  wrap.innerHTML = '<div style="padding:2rem;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Učitavam...</div>';
+  try {
+    const res = await fetch(`${backendUrl}/admin/reklame`, { headers:{ 'x-admin-password':adminLozinka } });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error || 'Greška');
+    reklameParcele = d.parcele || [];
+    renderReklame();
+  } catch (er) { wrap.innerHTML = `<p style="color:red;padding:2rem">${escH(er.message)}</p>`; }
+}
+
+function fmtDatumReklame(s) {
+  if (!s) return 'bez isteka';
+  const [g, m, d] = s.split('-');
+  return `${d}.${m}.${g}.`;
+}
+
+function renderReklame() {
+  document.getElementById('reklame-parcele').innerHTML = reklameParcele.map(p => {
+    const zauzeta = !!p.oglasivac;
+    const status = !zauzeta ? '<span class="badge badge-yellow">Slobodna</span>'
+      : p.istekla ? '<span class="badge badge-red">Istekla</span>' : '<span class="badge badge-green">Zauzeta</span>';
+    const info = zauzeta
+      ? `<b>${escH(p.oglasivac)}</b><a href="${escH(p.link)}" target="_blank" rel="noopener">${escH(p.link)}</a><span>Važi do: ${fmtDatumReklame(p.vaziDo)}</span><span>Klikova: <b>${p.klikova30}</b> (30 dana) · ${p.klikovaUkupno} ukupno</span>`
+      : '<span>Slobodno za oglašivača.</span>';
+    return `<div class="rk-kartica">
+      <div class="rk-gore"><b>Parcela ${p.parcela}</b>${status}</div>
+      <div class="rk-slika">${zauzeta ? `<img src="${escH(p.slika)}" alt="">` : 'Prazno'}</div>
+      <div class="rk-info">${info}</div>
+      <button class="btn ${zauzeta ? 'btn-edit' : 'btn-primary'}" onclick="otvoriReklamu(${p.parcela})"><i class="fas fa-${zauzeta ? 'pen' : 'plus'}"></i> ${zauzeta ? 'Izmeni' : 'Popuni'}</button>
+    </div>`;
+  }).join('');
+}
+
+function osveziPregledReklame() {
+  const url = document.getElementById('rk-slika-base64').value || document.getElementById('rk-slika').value;
+  document.getElementById('rk-slika-preview').innerHTML = url
+    ? `<img src="${escH(url)}" style="width:100%;height:100%;object-fit:cover;" alt="">` : 'Nema slike';
+}
+
+function otvoriReklamu(parcela) {
+  const p = reklameParcele.find(x => x.parcela === parcela);
+  if (!p) return;
+  document.getElementById('rk-parcela').value = parcela;
+  document.getElementById('rk-naslov-modala').textContent = `📣 Parcela ${parcela}`;
+  document.getElementById('rk-ime').value = p.oglasivac || '';
+  document.getElementById('rk-link').value = p.link || '';
+  document.getElementById('rk-do').value = p.vaziDo || '';
+  document.getElementById('rk-slika').value = p.slika || '';
+  document.getElementById('rk-slika-base64').value = '';
+  document.getElementById('rk-fajl').value = '';
+  document.getElementById('rk-status').textContent = '';
+  document.getElementById('rk-isprazni').style.display = p.oglasivac ? '' : 'none';
+  osveziPregledReklame();
+  otvoriModal('modal-reklama');
+}
+
+// Smanjuje sliku na najviše 800px; providna pozadina (PNG logo) postaje bela
+function komprimujReklamu(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > 800) { h = Math.round(h * 800 / w); w = 800; }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function izaberiSlikuReklame(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  document.getElementById('rk-status').textContent = 'Obrađujem sliku...';
+  try {
+    document.getElementById('rk-slika-base64').value = await komprimujReklamu(file);
+    document.getElementById('rk-status').textContent = 'Nova slika spremna za čuvanje ✓';
+    osveziPregledReklame();
+  } catch {
+    document.getElementById('rk-status').textContent = '';
+    toast('Greška pri obradi slike', 'error');
+  }
+}
+
+async function sacuvajReklamu() {
+  const parcela = document.getElementById('rk-parcela').value;
+  const oglasivac = document.getElementById('rk-ime').value.trim();
+  const link = document.getElementById('rk-link').value.trim();
+  const vaziDo = document.getElementById('rk-do').value;
+  const slika = document.getElementById('rk-slika').value;
+  const slikaBase64 = document.getElementById('rk-slika-base64').value;
+  if (oglasivac.length < 2) { toast('Upišite ime oglašivača!', 'warn'); return; }
+  if (!/^https:\/\//i.test(link)) { toast('Link mora početi sa https://', 'warn'); return; }
+  if (!slika && !slikaBase64) { toast('Dodajte sliku!', 'warn'); return; }
+  const btn = document.getElementById('rk-sacuvaj');
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${backendUrl}/admin/reklama/${parcela}`, {
+      method: 'PUT',
+      headers: { 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
+      body: JSON.stringify({ oglasivac, link, vaziDo, slika, slikaBase64: slikaBase64 || undefined })
+    });
+    const d = await res.json();
+    if (res.ok) { toast(d.message); zatvoriModal('modal-reklama'); ucitajReklame(); }
+    else toast(d.error || 'Greška pri čuvanju', 'error', 5000);
+  } catch { toast('Greška pri povezivanju', 'error'); }
+  btn.disabled = false;
+}
+
+function isprazniReklamu() {
+  const parcela = document.getElementById('rk-parcela').value;
+  confirm2('Isprazni parcelu ' + parcela, 'Reklama će odmah nestati sa sajta, a kvadrat će pozivati nove oglašivače.', async () => {
+    try {
+      const res = await fetch(`${backendUrl}/admin/reklama/${parcela}`, { method:'DELETE', headers:{ 'x-admin-password':adminLozinka } });
+      if (res.ok) { toast('Parcela je ispražnjena'); zatvoriModal('modal-reklama'); ucitajReklame(); }
+      else toast('Greška pri brisanju', 'error');
+    } catch { toast('Greška pri povezivanju', 'error'); }
+  }, '🗑️');
 }
 
 // ── PORUKE IZ SLUZBENOG NALOGA ──
