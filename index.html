@@ -370,6 +370,24 @@
     .og-tekst { margin-top: 8px; color: #cfe3d0; }
     .og-dugme { background: #f1d27a; color: #3b2a05; white-space: nowrap; }
 
+    /* ===== REKLAMNI KVADRATI ===== */
+    .reklame-section { padding-top: 56px; }
+    .reklame-naslov { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #8a948c; margin-bottom: 14px; }
+    .reklame-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .reklama-kvadrat { position: relative; display: block; aspect-ratio: 1 / 1; border-radius: 24px; overflow: hidden; background: #fff; border: 1px solid #e9e3d3; text-decoration: none; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease); }
+    .reklama-kvadrat:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(20,50,20,0.16); }
+    .reklama-kvadrat img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .reklama-oznaka { position: absolute; top: 10px; left: 10px; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,0.92); color: #5d6b60; font-size: 0.7rem; font-weight: 700; }
+    .reklama-prazno { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 16px; background: #f4efe3; border: 2px dashed #cfc6ae; color: var(--zemlja); }
+    .reklama-prazno i { font-size: 1.6rem; color: var(--zelena); }
+    .reklama-prazno strong { font-size: 1rem; }
+    .reklama-prazno span { font-size: 0.85rem; color: #6f7a72; }
+    @media (max-width: 768px) {
+      .reklame-section { padding-top: 44px; }
+      .reklame-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .reklama-kvadrat { border-radius: 18px; }
+    }
+
     /* ===== BLOG PREVIEW ===== */
     .blog-section { padding: 84px 0 0; }
 
@@ -728,6 +746,14 @@
   </div>
 </section>
 
+<!-- ===== REKLAMNI PROSTOR (kvadrati; popunjava se iz admin panela) ===== -->
+<section class="reklame-section" id="reklame-section" hidden>
+  <div class="wrap">
+    <div class="reklame-naslov">Reklamni prostor</div>
+    <div class="reklame-grid" id="reklame-grid"></div>
+  </div>
+</section>
+
 <!-- ===== BLOG PREVIEW ===== -->
 <section class="blog-section">
   <div class="wrap">
@@ -917,6 +943,7 @@
 
     ucitajBlogPreview();
     ucitajTraku();
+    ucitajReklame();
     ucitajStatistiku();
   });
 
@@ -970,6 +997,76 @@
   ['click', 'auxclick'].forEach(t => document.addEventListener(t, ev => {
     const a = ev.target.closest && ev.target.closest('a[data-baner]');
     if (a) prijaviBaner(a.dataset.baner);
+  }));
+
+  // ── Reklamni kvadrati: popunjene parcele + slobodna mesta koja pozivaju na kontakt ──
+  function reklamaSlika(url) {
+    return (url && url.includes('res.cloudinary.com') && url.includes('/upload/'))
+      ? url.replace('/upload/', '/upload/w_600,h_600,c_fill,q_auto,f_auto/') : url;
+  }
+
+  async function ucitajReklame() {
+    const sekcija = document.getElementById('reklame-section');
+    const grid = document.getElementById('reklame-grid');
+    if (!sekcija || !grid) return;
+    try {
+      const res = await fetch(`${backendUrl}/reklame`);
+      if (!res.ok) return;
+      const d = await res.json();
+      if (!d.ukupno) return;
+      const mapa = {};
+      (d.reklame || []).forEach(r => { mapa[r.parcela] = r; });
+      grid.textContent = '';
+      for (let i = 1; i <= d.ukupno; i++) {
+        const r = mapa[i];
+        const a = document.createElement('a');
+        if (r && r.slika && typeof r.link === 'string' && r.link.startsWith('https://')) {
+          a.className = 'reklama-kvadrat';
+          a.href = r.link;
+          a.target = '_blank';
+          a.rel = 'sponsored noopener noreferrer';
+          a.dataset.parcela = i;
+          a.setAttribute('aria-label', 'Reklama: ' + r.oglasivac);
+          const img = document.createElement('img');
+          img.src = reklamaSlika(r.slika);
+          img.alt = r.oglasivac;
+          img.loading = 'lazy';
+          const oz = document.createElement('span');
+          oz.className = 'reklama-oznaka';
+          oz.textContent = 'Reklama';
+          a.append(img, oz);
+        } else {
+          a.className = 'reklama-kvadrat reklama-prazno';
+          a.href = 'kontakt.html';
+          const ic = document.createElement('i');
+          ic.className = 'fas fa-bullhorn';
+          const t = document.createElement('strong');
+          t.textContent = 'Vaša reklama ovde';
+          const s = document.createElement('span');
+          s.textContent = 'Javite nam se';
+          a.append(ic, t, s);
+        }
+        grid.appendChild(a);
+      }
+      sekcija.hidden = false;
+    } catch (er) {
+      console.log('Reklame nisu učitane:', er.message);
+    }
+  }
+
+  // Brojač klikova na reklamni kvadrat
+  function prijaviReklamu(parcela) {
+    try {
+      if (localStorage.getItem('lp_admin_uredjaj') === '1') return;
+      let v = localStorage.getItem('lp_visitor_id');
+      if (!v) { v = 'v' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('lp_visitor_id', v); }
+      fetch(`${backendUrl}/reklama-klik`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true, body: JSON.stringify({ parcela: parseInt(parcela), visitor_id: v }) }).catch(() => {});
+    } catch (er) {}
+  }
+  ['click', 'auxclick'].forEach(t => document.addEventListener(t, ev => {
+    if (ev.type === 'auxclick' && ev.button !== 1) return;
+    const a = ev.target.closest && ev.target.closest('a[data-parcela]');
+    if (a) prijaviReklamu(a.dataset.parcela);
   }));
 
   // Registruj Service Worker odmah pri učitavanju stranice (potrebno da Chrome ponudi instalaciju)
