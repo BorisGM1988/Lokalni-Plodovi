@@ -985,6 +985,10 @@
         <input type="text" id="rk-link" placeholder="https://www.instagram.com/...">
       </div>
       <div class="form-row">
+        <label>Opis oglašivača (prikazuje se kad posetilac klikne na „i“; nije obavezno)</label>
+        <textarea id="rk-opis" maxlength="400" placeholder="npr. Domaći med i propolis iz Šumadije. Dostava u celoj Srbiji."></textarea>
+      </div>
+      <div class="form-row">
         <label>Slika (najbolje kvadrat, 600 × 600 px) *</label>
         <div id="rk-slika-preview" style="width:140px;height:140px;border-radius:10px;overflow:hidden;background:var(--chip-bg);margin-bottom:.5rem;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.8rem;"></div>
         <input type="file" id="rk-fajl" accept="image/*" onchange="izaberiSlikuReklame(event)" style="width:100%; padding:.6rem; border:2px dashed var(--border); border-radius:9px; font-size:.85rem; cursor:pointer;">
@@ -2294,7 +2298,7 @@ function renderReklame() {
     const status = !zauzeta ? '<span class="badge badge-yellow">Slobodna</span>'
       : p.istekla ? '<span class="badge badge-red">Istekla</span>' : '<span class="badge badge-green">Zauzeta</span>';
     const info = zauzeta
-      ? `<b>${escH(p.oglasivac)}</b><a href="${escH(p.link)}" target="_blank" rel="noopener">${escH(p.link)}</a><span>Važi do: ${fmtDatumReklame(p.vaziDo)}</span><span>Klikova: <b>${p.klikova30}</b> (30 dana) · ${p.klikovaUkupno} ukupno</span>`
+      ? `<b>${escH(p.oglasivac)}</b><a href="${escH(p.link)}" target="_blank" rel="noopener">${escH(p.link)}</a><span>Važi do: ${fmtDatumReklame(p.vaziDo)}</span><span>Opis: ${p.opis ? 'upisan ✓' : 'nije upisan'}</span><span>Klikova: <b>${p.klikova30}</b> (30 dana) · ${p.klikovaUkupno} ukupno</span>`
       : '<span>Slobodno za oglašivača.</span>';
     return `<div class="rk-kartica">
       <div class="rk-gore"><b>Parcela ${p.parcela}</b>${status}</div>
@@ -2318,6 +2322,7 @@ function otvoriReklamu(parcela) {
   document.getElementById('rk-naslov-modala').textContent = `📣 Parcela ${parcela}`;
   document.getElementById('rk-ime').value = p.oglasivac || '';
   document.getElementById('rk-link').value = p.link || '';
+  document.getElementById('rk-opis').value = p.opis || '';
   document.getElementById('rk-do').value = p.vaziDo || '';
   document.getElementById('rk-slika').value = p.slika || '';
   document.getElementById('rk-slika-base64').value = '';
@@ -2371,6 +2376,7 @@ async function sacuvajReklamu() {
   const parcela = document.getElementById('rk-parcela').value;
   const oglasivac = document.getElementById('rk-ime').value.trim();
   const link = document.getElementById('rk-link').value.trim();
+  const opis = document.getElementById('rk-opis').value.trim();
   const vaziDo = document.getElementById('rk-do').value;
   const slika = document.getElementById('rk-slika').value;
   const slikaBase64 = document.getElementById('rk-slika-base64').value;
@@ -2383,7 +2389,7 @@ async function sacuvajReklamu() {
     const res = await fetch(`${backendUrl}/admin/reklama/${parcela}`, {
       method: 'PUT',
       headers: { 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
-      body: JSON.stringify({ oglasivac, link, vaziDo, slika, slikaBase64: slikaBase64 || undefined })
+      body: JSON.stringify({ oglasivac, link, opis, vaziDo, slika, slikaBase64: slikaBase64 || undefined })
     });
     const d = await res.json();
     if (res.ok) { toast(d.message); zatvoriModal('modal-reklama'); ucitajReklame(); }
