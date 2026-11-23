@@ -439,6 +439,7 @@
     .rk-info b { color:var(--text); }
     .rk-info a { color:var(--green-700); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .rk-kartica .btn { justify-content:center; }
+    .rk-grupa { grid-column:1/-1; color:var(--green-700); font-size:.95rem; margin-top:.4rem; }
 
     @media (max-width:640px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -989,7 +990,7 @@
         <textarea id="rk-opis" maxlength="400" placeholder="npr. Domaći med i propolis iz Šumadije. Dostava u celoj Srbiji."></textarea>
       </div>
       <div class="form-row">
-        <label>Slika (najbolje kvadrat, 600 × 600 px) *</label>
+        <label id="rk-slika-uputstvo">Slika (najbolje kvadrat, 600 × 600 px) *</label>
         <div id="rk-slika-preview" style="width:140px;height:140px;border-radius:10px;overflow:hidden;background:var(--chip-bg);margin-bottom:.5rem;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.8rem;"></div>
         <input type="file" id="rk-fajl" accept="image/*" onchange="izaberiSlikuReklame(event)" style="width:100%; padding:.6rem; border:2px dashed var(--border); border-radius:9px; font-size:.85rem; cursor:pointer;">
         <span id="rk-status" style="font-size:.78rem; color:var(--muted);"></span>
@@ -2286,6 +2287,10 @@ async function ucitajReklame() {
   } catch (er) { wrap.innerHTML = `<p style="color:red;padding:2rem">${escH(er.message)}</p>`; }
 }
 
+function nazivParcele(n) {
+  return n <= 4 ? `Kvadrat ${n}` : ['Vrh: uspravna (levo)', 'Vrh: gore desno', 'Vrh: dole desno'][n - 5];
+}
+
 function fmtDatumReklame(s) {
   if (!s) return 'bez isteka';
   const [g, m, d] = s.split('-');
@@ -2300,8 +2305,10 @@ function renderReklame() {
     const info = zauzeta
       ? `<b>${escH(p.oglasivac)}</b><a href="${escH(p.link)}" target="_blank" rel="noopener">${escH(p.link)}</a><span>Važi do: ${fmtDatumReklame(p.vaziDo)}</span><span>Opis: ${p.opis ? 'upisan ✓' : 'nije upisan'}</span><span>Klikova: <b>${p.klikova30}</b> (30 dana) · ${p.klikovaUkupno} ukupno</span>`
       : '<span>Slobodno za oglašivača.</span>';
-    return `<div class="rk-kartica">
-      <div class="rk-gore"><b>Parcela ${p.parcela}</b>${status}</div>
+    const grupa = p.parcela === 1 ? '<h4 class="rk-grupa">Kvadrati na početnoj stranici</h4>'
+      : p.parcela === 5 ? '<h4 class="rk-grupa">Vrh početne stranice (prvo što posetilac vidi, umesto fotografija)</h4>' : '';
+    return `${grupa}<div class="rk-kartica">
+      <div class="rk-gore"><b>${nazivParcele(p.parcela)}</b>${status}</div>
       <div class="rk-slika">${zauzeta ? `<img src="${escH(p.slika)}" alt="">` : 'Prazno'}</div>
       <div class="rk-info">${info}</div>
       <button class="btn ${zauzeta ? 'btn-edit' : 'btn-primary'}" onclick="otvoriReklamu(${p.parcela})"><i class="fas fa-${zauzeta ? 'pen' : 'plus'}"></i> ${zauzeta ? 'Izmeni' : 'Popuni'}</button>
@@ -2319,7 +2326,8 @@ function otvoriReklamu(parcela) {
   const p = reklameParcele.find(x => x.parcela === parcela);
   if (!p) return;
   document.getElementById('rk-parcela').value = parcela;
-  document.getElementById('rk-naslov-modala').textContent = `📣 Parcela ${parcela}`;
+  document.getElementById('rk-naslov-modala').textContent = `📣 ${nazivParcele(parcela)}`;
+  document.getElementById('rk-slika-uputstvo').textContent = parcela === 5 ? 'Slika (uspravna, npr. 600 × 1200 px) *' : 'Slika (najbolje kvadrat, 600 × 600 px) *';
   document.getElementById('rk-ime').value = p.oglasivac || '';
   document.getElementById('rk-link').value = p.link || '';
   document.getElementById('rk-opis').value = p.opis || '';
