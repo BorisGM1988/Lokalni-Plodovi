@@ -396,6 +396,15 @@
     .reklama-modal-akcije { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
     .reklama-modal-go { background: var(--zelena); color: #fff; }
     .reklama-modal-x { background: #f1ede2; color: var(--tekst); border: none; cursor: pointer; font-family: inherit; }
+    /* Premium reklamni prostor na vrhu (umesto fotografija kad je parcela zauzeta) */
+    .hero-kolaz .k1, .hero-kolaz .k2, .hero-kolaz .k3 { position: relative; }
+    .hero-reklama { position: relative; display: block; width: 100%; height: 100%; }
+    .hero-reklama .reklama-oznaka { top: 12px; left: 12px; }
+    @media (max-width: 900px) {
+      .hero-kolaz.ima-reklame { display: flex; gap: 10px; margin-top: 26px; }
+      .hero-kolaz.ima-reklame > div { display: none; }
+      .hero-kolaz.ima-reklame > div.ima-ad { display: block; flex: 1 1 0; max-width: 170px; aspect-ratio: 1 / 1; border-radius: 20px; }
+    }
     @media (max-width: 768px) {
       .reklame-section { padding-top: 44px; }
       .reklame-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -606,7 +615,7 @@
       </div>
     </div>
 
-    <div class="hero-kolaz" aria-hidden="true">
+    <div class="hero-kolaz">
       <div class="k1"><img src="paprika.jpg" alt=""></div>
       <div class="k2"><img src="med-sa-sacom.jpg" alt=""></div>
       <div class="k3"><img src="jabuka.jpg" alt=""></div>
@@ -1030,6 +1039,7 @@
       if (!d.ukupno) return;
       const mapa = {};
       (d.reklame || []).forEach(r => { mapa[r.parcela] = r; });
+      prikaziHeroReklame(mapa);
       grid.textContent = '';
       for (let i = 1; i <= d.ukupno; i++) {
         const r = mapa[i];
@@ -1082,6 +1092,50 @@
     } catch (er) {
       console.log('Reklame nisu učitane:', er.message);
     }
+  }
+
+  // Premium prostor na vrhu početne: parcele 5, 6, 7 menjaju fotografije dok su zauzete
+  function reklamaSlikaDim(url, w, h) {
+    return (url && url.includes('res.cloudinary.com') && url.includes('/upload/'))
+      ? url.replace('/upload/', `/upload/w_${w},h_${h},c_fill,g_auto,q_auto,f_auto/`) : url;
+  }
+
+  function prikaziHeroReklame(mapa) {
+    const mesta = { 5: '.k1', 6: '.k2', 7: '.k3' };
+    let ima = false;
+    Object.keys(mesta).forEach(p => {
+      const r = mapa[p];
+      const okvir = document.querySelector('.hero-kolaz ' + mesta[p]);
+      if (!okvir || !r || !r.slika || typeof r.link !== 'string' || !r.link.startsWith('https://')) return;
+      const a = document.createElement('a');
+      a.className = 'hero-reklama';
+      a.href = r.link;
+      a.target = '_blank';
+      a.rel = 'sponsored noopener noreferrer';
+      a.dataset.parcela = p;
+      a.setAttribute('aria-label', 'Reklama: ' + r.oglasivac);
+      const img = document.createElement('img');
+      img.src = reklamaSlikaDim(r.slika, 480, p === '5' ? 960 : 480);
+      img.alt = r.oglasivac;
+      const oz = document.createElement('span');
+      oz.className = 'reklama-oznaka';
+      oz.textContent = 'Reklama';
+      a.append(img, oz);
+      okvir.textContent = '';
+      okvir.appendChild(a);
+      okvir.classList.add('ima-ad');
+      if (r.opis) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'reklama-info';
+        b.textContent = 'i';
+        b.setAttribute('aria-label', 'Više o oglašivaču: ' + r.oglasivac);
+        b.addEventListener('click', () => otvoriReklamuInfo(r, parseInt(p)));
+        okvir.appendChild(b);
+      }
+      ima = true;
+    });
+    if (ima) document.querySelector('.hero-kolaz').classList.add('ima-reklame');
   }
 
   // Prozor sa opisom oglašivača (otvara se klikom na „i“)
