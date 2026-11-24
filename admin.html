@@ -440,6 +440,10 @@
     .rk-info a { color:var(--green-700); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .rk-kartica .btn { justify-content:center; }
     .rk-grupa { grid-column:1/-1; color:var(--green-700); font-size:.95rem; margin-top:.4rem; }
+    #nise-lista { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+    .nise-opcija { display:flex; align-items:center; gap:.6rem; padding:.6rem .8rem; border:1.5px solid var(--border); border-radius:10px; cursor:pointer; font-size:.88rem; }
+    .nise-opcija:hover { background:var(--hover-bg); }
+    @media (max-width:640px) { #nise-lista { grid-template-columns:1fr; } }
 
     @media (max-width:640px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1010,6 +1014,25 @@
   </div>
 </div>
 
+<!-- MODAL: NIŠE PRODAVCA -->
+<div class="modal-overlay" id="modal-nise">
+  <div class="modal-box">
+    <div class="modal-header" style="background:linear-gradient(135deg,var(--green-900),var(--green-700))">
+      <h3>🏷️ Niše: <span id="nise-ime"></span></h3>
+      <button class="modal-close" onclick="zatvoriModal('modal-nise')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="nise-id">
+      <p class="stat-note" style="margin-top:0">Čekirane niše su ono što prodavac ima na profilu. Čuvanje menja celu listu.</p>
+      <div id="nise-lista"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="zatvoriModal('modal-nise')">Odustani</button>
+        <button class="btn btn-primary" id="nise-sacuvaj" onclick="sacuvajNise()"><i class="fas fa-save"></i> Sačuvaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: CONFIRM -->
 <div class="modal-overlay" id="modal-confirm">
   <div class="modal-box modal-sm">
@@ -1426,7 +1449,7 @@ function renderProdavaciTable(lista, tip) {
         <td class="cell-truncate" style="font-size:.8rem">${k.email}</td>
         <td>${k.telefon||'-'}</td>
         <td class="cell-truncate">${k.lokacija||'-'}</td>
-        <td>${parseNise(k.nise).slice(0,2).map(n=>`<span class="badge badge-green">${n}</span>`).join(' ')||'-'}</td>
+        <td>${parseNise(k.nise).map(n=>`<span class="badge badge-green">${n}</span>`).join(' ')||'-'}</td>
         <td style="min-width:180px">
           ${k.username
             ? `<span class="badge badge-green">@${k.username}</span>
@@ -1445,6 +1468,7 @@ function renderProdavaciTable(lista, tip) {
           <button class="btn btn-info btn-sm" onclick="detaljiKorisnika(${k.id})"><i class="fas fa-eye"></i></button>
           <button class="btn btn-warning btn-sm" onclick="resetujLozinku(${k.id},'${esc(k.ime)}')" title="Resetuj lozinku"><i class="fas fa-key"></i></button>
           <button class="btn btn-info btn-sm" onclick="izmeniEmail(${k.id},'${esc(k.ime)}','${esc(k.email)}')" title="Izmeni email"><i class="fas fa-at"></i></button>
+          <button class="btn btn-edit btn-sm" onclick="otvoriNise(${k.id})" title="Izmeni niše"><i class="fas fa-tags"></i></button>
           <button class="btn btn-danger btn-sm" onclick="potvrdiBrisanjeKorisnika(${k.id},'${esc(k.ime)}')"><i class="fas fa-trash"></i></button>
         </td>
       </tr>`).join('')}
@@ -2270,6 +2294,47 @@ async function ucitajBanere() {
       ? `<table><thead><tr><th>Dan</th><th>Baner</th><th>Klikova</th></tr></thead><tbody>${d.poDanima.map(x => `<tr><td>${fmt(x.dan)}</td><td>${BANER_IMENA[x.baner] || escH(x.baner)}</td><td style="font-weight:700">${x.klikova}</td></tr>`).join('')}</tbody></table>`
       : '<div style="padding:2rem;text-align:center;color:var(--muted)">Još nema klikova na baner.</div>';
   } catch (er) { tb.innerHTML = `<p style="color:red;padding:2rem">${escH(er.message)}</p>`; }
+}
+
+// ── NIŠE PRODAVCA ──
+const NISE_STANDARD = ['Povrće', 'Voće', 'Mlečni proizvodi', 'Meso i mesne prerađevine', 'Med i pčelinji proizvodi', 'Jaja', 'Bilje i zdravlje', 'Domaća radinost', 'Orašasti plodovi'];
+
+function otvoriNise(id) {
+  const k = state.prodavaci.data.find(x => x.id === id);
+  if (!k) return;
+  const trenutne = parseNise(k.nise);
+  // stari nazivi koji nisu na standardnoj listi ostaju vidljivi i čekirani, da se ne izgube slučajno
+  const sve = [...NISE_STANDARD, ...trenutne.filter(n => !NISE_STANDARD.includes(n))];
+  document.getElementById('nise-id').value = id;
+  document.getElementById('nise-ime').textContent = k.ime || ('#' + id);
+  document.getElementById('nise-lista').innerHTML = sve.map(n =>
+    `<label class="nise-opcija"><input type="checkbox" value="${escH(n)}" ${trenutne.includes(n) ? 'checked' : ''}> <span>${escH(n)}${NISE_STANDARD.includes(n) ? '' : ' <small style="color:var(--muted)">(stari naziv)</small>'}</span></label>`
+  ).join('');
+  otvoriModal('modal-nise');
+}
+
+async function sacuvajNise() {
+  const id = parseInt(document.getElementById('nise-id').value);
+  const nise = Array.from(document.querySelectorAll('#nise-lista input:checked')).map(cb => cb.value);
+  if (!nise.length) { toast('Izaberite bar jednu nišu!', 'warn'); return; }
+  const btn = document.getElementById('nise-sacuvaj');
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${backendUrl}/admin/korisnik/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type':'application/json', 'x-admin-password':adminLozinka },
+      body: JSON.stringify({ nise })
+    });
+    const d = await res.json();
+    if (res.ok) {
+      const k = state.prodavaci.data.find(x => x.id === id);
+      if (k) k.nise = JSON.stringify(nise);
+      applyFilter('prodavaci');
+      zatvoriModal('modal-nise');
+      toast('Niše su izmenjene');
+    } else toast(d.error || 'Greška pri čuvanju', 'error', 5000);
+  } catch { toast('Greška pri povezivanju', 'error'); }
+  btn.disabled = false;
 }
 
 // ── REKLAME (parcele) ──
