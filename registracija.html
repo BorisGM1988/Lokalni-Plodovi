@@ -1,245 +1,235 @@
 <!DOCTYPE html>
 <html lang="sr">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6PC0ET059B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6PC0ET059B');
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registruj se • LokalniPlodovi.rs</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
-  <link rel="stylesheet" href="mobile.css">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Registruj se | LokalniPlodovi.rs</title>
+  <meta name="description" content="Pridruži se zajednici LokalniPlodovi.rs: registruj se kao kupac ili prodavac domaćih proizvoda. Registracija je besplatna."/>
+  <link rel="canonical" href="https://lokalniplodovi.rs/registracija.html"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
     :root {
-      --zelena: #4caf50;
-      --zelena-svetla: #66bb6a;
-      --zelena-tamna: #2e7d32;
-      --plava: #1976d2;
+      --zelena: #2e7d32;
+      --zelena-svetla: #4caf50;
+      --zelena-tamna: #1b5e20;
+      --zlatna: #f5a623;
+      --zlatna-svetla: #ffd166;
       --zemlja: #5d4037;
+      --krem: #faf7f0;
+      --tekst: #25302a;
+      --ease: cubic-bezier(.2,.8,.2,1);
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #f8f9f5;
-      color: #333;
-      min-height: 100vh;
-    }
-    header {
-      background: rgba(46, 125, 50, 0.94);
-      color: white;
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .logo { font-size: 1.8rem; font-weight: 700; }
-    nav { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
-    nav ul { display: flex; list-style: none; gap: 2.5rem; margin: 0; padding: 0; }
-    nav a { color: white; text-decoration: none; font-weight: 500; transition: 0.2s; }
-    nav a:hover { color: #c8e6c9; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--krem); color: var(--tekst); min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--zlatna); outline-offset: 3px; }
 
-    .hero {
-      background: linear-gradient(135deg, rgba(46,125,50,0.92), rgba(93,64,55,0.88)),
-                  url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
-      color: white;
-      text-align: center;
-      padding: 6rem 1rem 8rem;
-    }
-    .hero h1 { font-size: 3rem; margin-bottom: 1rem; font-weight: 700; }
-    .hero p { font-size: 1.3rem; opacity: 0.92; max-width: 600px; margin: 0 auto; }
+    /* ===== HEADER ===== */
+    header { position: sticky; top: 0; z-index: 1000; background: rgba(15,47,20,0.92); -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    nav { display: flex; justify-content: space-between; align-items: center; max-width: 1240px; margin: 0 auto; padding: 0 28px; height: 76px; }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #4caf50, #1b5e20); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 2px 12px rgba(76,175,80,0.4); }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white; letter-spacing: -0.3px; }
+    .logo-text span { color: var(--zlatna-svetla); }
+    nav ul { display: flex; list-style: none; gap: 4px; align-items: center; }
+    nav ul li a { color: rgba(255,255,255,0.88); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 0.55rem 0.95rem; border-radius: 50px; transition: all 0.2s; }
+    nav ul li a:hover { background: rgba(255,255,255,0.14); color: white; }
+    .nav-cta a { background: var(--zlatna) !important; color: #1b1b1b !important; font-weight: 700 !important; padding: 0.55rem 1.2rem !important; margin-left: 6px; }
+    .nav-cta a:hover { background: var(--zlatna-svetla) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 26px; height: 2.5px; background: white; border-radius: 3px; display: block; }
 
-    .choice-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-      gap: 2.5rem;
-      max-width: 1100px;
-      margin: -80px auto 5rem;
-      padding: 0 1.5rem;
-      position: relative;
-      z-index: 2;
-    }
+    /* ===== NASLOV ===== */
+    .naslov { color: white; padding: 60px 0 110px; background: radial-gradient(800px 380px at 90% 0%, rgba(245,166,35,0.2), transparent 60%), linear-gradient(160deg, #0f2f14, #1d5a27); }
+    .naslov h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; }
+    .naslov p { margin-top: 16px; max-width: 560px; font-size: 1.1rem; line-height: 1.65; color: #e3f0e4; }
 
-    .choice-card {
-      background: white;
-      border-radius: 24px;
-      padding: 3rem 2.5rem;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.35s ease;
-      border: 3px solid transparent;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .choice-card:hover {
-      transform: translateY(-12px);
-      box-shadow: 0 25px 55px rgba(0,0,0,0.18);
-    }
-    .choice-card.kupac:hover { border-color: var(--plava); }
-    .choice-card.prodavac:hover { border-color: var(--zelena-tamna); }
+    /* ===== IZBOR ULOGE ===== */
+    .izbor { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: -64px; position: relative; z-index: 2; max-width: 1000px; }
+    .uloga { display: flex; flex-direction: column; padding: 38px 34px; border-radius: 32px; text-decoration: none; transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease); }
+    .uloga:hover { transform: translateY(-8px); }
+    .uloga-ikona { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 22px; }
+    .uloga h2 { font-family: 'Playfair Display', serif; font-size: 1.9rem; line-height: 1.15; margin-bottom: 10px; }
+    .uloga > p { line-height: 1.65; margin-bottom: 20px; }
+    .uloga ul { list-style: none; display: grid; gap: 10px; margin-bottom: 28px; flex: 1; }
+    .uloga li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
+    .uloga li i { margin-top: 4px; font-size: 0.85rem; }
+    .uloga .cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 999px; font-weight: 700; font-size: 1rem; transition: background 0.25s, transform 0.25s; }
 
-    .icon-circle {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 1.8rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-    }
-    .kupac .icon-circle { background: #e3f2fd; color: var(--plava); }
-    .prodavac .icon-circle { background: #e8f5e9; color: var(--zelena-tamna); }
+    .uloga.kupac { background: #fff; border: 1px solid #e3dcc9; box-shadow: 0 18px 44px rgba(20,50,20,0.1); }
+    .uloga.kupac:hover { box-shadow: 0 26px 56px rgba(20,50,20,0.18); }
+    .kupac .uloga-ikona { background: #e8f5e9; color: var(--zelena); }
+    .kupac h2 { color: var(--zemlja); }
+    .kupac > p { color: #55625a; }
+    .kupac li { color: #3c4a41; }
+    .kupac li i { color: var(--zelena); }
+    .kupac .cta { border: 2px solid var(--zelena); color: var(--zelena); }
+    .kupac:hover .cta { background: var(--zelena); color: #fff; }
 
-    .choice-card h2 { font-size: 1.9rem; margin-bottom: 1rem; }
-    .kupac h2 { color: var(--plava); }
-    .prodavac h2 { color: var(--zelena-tamna); }
+    .uloga.prodavac { color: #fff; border: 1px solid rgba(241,210,122,0.5); background: radial-gradient(420px 220px at 100% 0%, rgba(241,210,122,0.3), transparent 60%), linear-gradient(135deg, #0f3314, #2e7d32); box-shadow: 0 18px 44px rgba(15,51,20,0.3); }
+    .uloga.prodavac:hover { box-shadow: 0 26px 56px rgba(15,51,20,0.4); }
+    .prodavac .uloga-ikona { background: rgba(255,255,255,0.14); color: #f1d27a; }
+    .prodavac > p { color: #cfe3d0; }
+    .prodavac li { color: #eaf3ea; }
+    .prodavac li i { color: #f1d27a; }
+    .prodavac .cta { background: #f1d27a; color: #3b2a05; }
+    .prodavac:hover .cta { background: #ffe3a1; }
 
-    .choice-card p { color: #555; line-height: 1.7; margin-bottom: 2rem; font-size: 1.05rem; }
+    .prijava { text-align: center; margin-top: 36px; color: #6f7a72; font-size: 1.02rem; }
+    .prijava a { color: var(--zelena); font-weight: 700; }
 
-    .prednosti-lista {
-      text-align: left;
-      margin: 1.5rem 0 2rem;
-      padding: 0;
-      list-style: none;
-    }
-    .prednosti-lista li {
-      padding: 0.5rem 0;
-      color: #555;
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      font-size: 0.97rem;
-    }
-    .prednosti-lista li::before { font-size: 1.1rem; }
-    .kupac .prednosti-lista li::before { content: '✓'; color: var(--plava); font-weight: 700; }
-    .prodavac .prednosti-lista li::before { content: '✓'; color: var(--zelena-tamna); font-weight: 700; }
+    /* ===== FOOTER ===== */
+    footer { background: #4a3128; color: #e9dccf; padding: 56px 0 40px; margin-top: 90px; }
+    .footer-inner { text-align: center; }
+    .footer-btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 36px; }
+    .footer-btn { padding: 0.8rem 1.5rem; border-radius: 999px; text-decoration: none; font-size: 0.95rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); transition: all 0.25s; }
+    .footer-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; margin-bottom: 0.5rem; }
+    .footer-tagline { opacity: 0.85; margin-bottom: 1.2rem; }
+    .footer-links { margin-top: 1rem; opacity: 0.9; font-size: 0.92rem; }
+    .footer-links a { color: #c8e6c9; text-decoration: underline; }
 
-    .choice-btn {
-      display: inline-block;
-      padding: 1rem 2.5rem;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: 0.25s;
-      width: 100%;
+    @media (max-width: 860px) { .izbor { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      .wrap { padding: 0 16px; }
+      nav { padding: 0 16px; height: 68px; }
+      .hamburger { display: flex; }
+      nav ul { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(15,47,20,0.98); padding: 1.2rem 1.5rem 1.8rem; flex-direction: column; align-items: stretch; gap: 0.4rem; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      nav ul.open { display: flex; }
+      nav ul li a { display: block; padding: 0.7rem 1rem; font-size: 1rem; }
+      .nav-cta a { margin-left: 0; text-align: center; }
+      .naslov { padding: 40px 0 92px; }
+      .uloga { padding: 30px 24px; border-radius: 26px; }
     }
-    .kupac .choice-btn { background: var(--plava); }
-    .kupac .choice-btn:hover { background: #1558b0; }
-    .prodavac .choice-btn { background: var(--zelena-svetla); }
-    .prodavac .choice-btn:hover { background: var(--zelena-tamna); }
-
-    .login-link {
-      text-align: center;
-      margin-bottom: 4rem;
-      color: #666;
-      font-size: 1.05rem;
-    }
-    .login-link a { color: var(--zelena-tamna); font-weight: 600; text-decoration: none; }
-
-    footer {
-      background: var(--zemlja);
-      color: white;
-      text-align: center;
-      padding: 4rem 1rem 2.5rem;
-    }
-    footer h2 { margin-bottom: 0.5rem; }
-    footer p { opacity: 0.85; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>
 
 <header>
   <nav>
-    <div class="logo">LokalniPlodovi</div>
-    <button class="hamburger" onclick="this.classList.toggle('active'); document.querySelector('nav ul').classList.toggle('open');">
-      <span></span><span></span><span></span>
-    </button>
-    <ul>
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🌿</div>
+      <span class="logo-text">Lokalni<span>Plodovi</span></span>
+    </a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Meni"><span></span><span></span><span></span></button>
+    <ul id="nav-menu">
       <li><a href="index.html">Početna</a></li>
       <li><a href="Prodavci.html">Svi prodavci</a></li>
       <li><a href="mapa.html">Mapa</a></li>
       <li><a href="chat.html">Chat</a></li>
-      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html">Moj profil</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="oglasnik.html">Oglasnik</a></li>
+      <li id="moj-profil-li" style="display:none;"><a href="moj-profil.html" id="moj-profil-link">Moj profil</a></li>
       <li id="odjavi-se-li" style="display:none;"><a href="#" onclick="odjaviSe()">Odjavi se</a></li>
       <li id="prijavi-se-li"><a href="login.html">Prijavi se</a></li>
-      <li id="postani-prodavac-li"><a href="registracija.html">Registruj se</a></li>
+      <li id="postani-prodavac-li" class="nav-cta"><a href="registracija.html">Registruj se</a></li>
     </ul>
   </nav>
 </header>
 
-<div class="hero">
-  <h1>🌿 Dobrodošao!</h1>
-  <p>Izaberi svoju ulogu na LokalniPlodovi.rs i pridruži se zajednici!</p>
-</div>
+<section class="naslov">
+  <div class="wrap">
+    <h1>Dobrodošao!</h1>
+    <p>Izaberi svoju ulogu na LokalniPlodovi.rs i pridruži se zajednici!</p>
+  </div>
+</section>
 
-<div class="choice-grid">
+<main class="wrap">
+  <div class="izbor">
 
-  <!-- KUPAC -->
-  <a href="registracija-kupac.html" class="choice-card kupac">
-    <div class="icon-circle">
-      <i class="fas fa-shopping-basket"></i>
-    </div>
-    <h2>Postani kupac</h2>
-    <p>Pronađi sveže domaće proizvode i kontaktiraj proizvođače direktno.</p>
-    <ul class="prednosti-lista">
-      <li>Pošalji poruku prodavcu</li>
-      <li>Lista želja za omiljene proizvode</li>
-      <li>Oceni prodavce i pomozi drugima</li>
-      <li>Potpuno besplatno</li>
-    </ul>
-    <button class="choice-btn">🛒 Registruj se kao kupac</button>
-  </a>
+    <a href="registracija-kupac.html" class="uloga kupac">
+      <div class="uloga-ikona"><i class="fas fa-shopping-basket"></i></div>
+      <h2>Postani kupac</h2>
+      <p>Pronađi sveže domaće proizvode i kontaktiraj proizvođače direktno.</p>
+      <ul>
+        <li><i class="fas fa-check"></i>Pošalji poruku prodavcu</li>
+        <li><i class="fas fa-check"></i>Lista želja za omiljene proizvode</li>
+        <li><i class="fas fa-check"></i>Oceni prodavce i pomozi drugima</li>
+        <li><i class="fas fa-check"></i>Potpuno besplatno</li>
+      </ul>
+      <span class="cta"><i class="fas fa-shopping-basket"></i> Registruj se kao kupac</span>
+    </a>
 
-  <!-- PRODAVAC -->
-  <a href="registracija-prodavca.html" class="choice-card prodavac">
-    <div class="icon-circle">
-      <i class="fas fa-leaf"></i>
-    </div>
-    <h2>Postani prodavac</h2>
-    <p>Izloži svoje domaće proizvode i povežis se sa kupcima iz cele Srbije.</p>
-    <ul class="prednosti-lista">
-      <li>Dodaj proizvode na pijac</li>
-      <li>Pojavi se na mapi Srbije</li>
-      <li>Primi poruke od kupaca</li>
-      <li>Potpuno besplatno</li>
-    </ul>
-    <button class="choice-btn">🌿 Registruj se kao prodavac</button>
-  </a>
+    <a href="registracija-prodavca.html" class="uloga prodavac">
+      <div class="uloga-ikona"><i class="fas fa-leaf"></i></div>
+      <h2>Postani prodavac</h2>
+      <p>Izloži svoje domaće proizvode i poveži se sa kupcima iz cele Srbije.</p>
+      <ul>
+        <li><i class="fas fa-check"></i>Dodaj proizvode na pijacu</li>
+        <li><i class="fas fa-check"></i>Pojavi se na mapi Srbije</li>
+        <li><i class="fas fa-check"></i>Primi poruke od kupaca</li>
+        <li><i class="fas fa-check"></i>Potpuno besplatno</li>
+      </ul>
+      <span class="cta"><i class="fas fa-leaf"></i> Registruj se kao prodavac</span>
+    </a>
 
-</div>
+  </div>
 
-<div class="login-link">
-  Već imaš nalog? <a href="login.html">Prijavi se ovde</a>
-</div>
+  <p class="prijava">Već imaš nalog? <a href="login.html">Prijavi se ovde</a></p>
+</main>
 
 <footer>
-  <h2>LokalniPlodovi</h2>
-  <p>Prirodno • Sezonski • Direktno sa imanja Srbije</p>
-  <p style="margin-top:1.5rem; opacity:0.8;">© 2026 LokalniPlodovi • Sva prava zadržana</p>
-  <p style="margin-top:0.5rem;">
-    <a href="politika-privatnosti.html" style="color:#c8e6c9;">Politika privatnosti</a> • 
-    <a href="uslovi-koriscenja.html" style="color:#c8e6c9;">Uslovi korišćenja</a>
-  </p>
+  <div class="wrap footer-inner">
+    <div class="footer-btns">
+      <a href="uputstvo-za-prodavce.html" class="footer-btn">📖 Uputstvo za prodavce</a>
+      <a href="kontakt.html" class="footer-btn">📞 Kontakt</a>
+      <a href="roadmap.html" class="footer-btn">🗺️ Roadmap</a>
+      <a href="o-nama.html" class="footer-btn">👥 O nama</a>
+    </div>
+    <div class="footer-logo">LokalniPlodovi</div>
+    <p class="footer-tagline">Prirodno • Zdravo • Direktno sa imanja</p>
+    <p style="opacity:0.75; margin-bottom:0.8rem;">© 2026 LokalniPlodovi</p>
+    <div class="footer-links">
+      <a href="politika-privatnosti.html">Politika privatnosti</a> •
+      <a href="uslovi-koriscenja.html">Uslovi korišćenja</a> •
+      <a href="podrzi-nas.html">💚 Podržite nas</a>
+    </div>
+  </div>
 </footer>
 
 <script>
-  const token = localStorage.getItem('token');
-  if (token) {
-    document.getElementById('moj-profil-li').style.display = 'list-item';
-    document.getElementById('odjavi-se-li').style.display = 'list-item';
-    document.getElementById('prijavi-se-li').style.display = 'none';
-    document.getElementById('postani-prodavac-li').style.display = 'none';
-  }
-  function odjaviSe() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('tip');
-    window.location.href = 'index.html';
-  }
+  function toggleMenu() { document.getElementById('nav-menu').classList.toggle('open'); }
+  function odjaviSe() { localStorage.clear(); window.location.href = 'index.html'; }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const tip = localStorage.getItem('tip');
+    const postaniLi = document.getElementById('postani-prodavac-li');
+    if (token) {
+      document.getElementById('moj-profil-li').style.display = 'list-item';
+      document.getElementById('odjavi-se-li').style.display = 'list-item';
+      document.getElementById('prijavi-se-li').style.display = 'none';
+      const profilLink = document.getElementById('moj-profil-link');
+      if (profilLink) profilLink.href = (tip === 'kupac') ? 'kupac-profil.html' : 'moj-profil.html';
+      if (tip === 'prodavac') {
+        postaniLi.classList.add('nav-cta');
+        postaniLi.innerHTML = '<a href="moj-profil.html">➕ Dodaj proizvod</a>';
+      } else if (tip === 'kupac') {
+        postaniLi.classList.remove('nav-cta');
+        postaniLi.innerHTML = '<a href="registracija-prodavca.html">🌿 Postani prodavac</a>';
+      } else {
+        postaniLi.style.display = 'none';
+      }
+    }
+  });
 </script>
-  <script src="//code.tidio.co/nbwhjqeyhthkyi004qw4dzg3elzmqghi.js" async></script>
+
 </body>
 </html>
